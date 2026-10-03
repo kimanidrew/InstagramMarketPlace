@@ -1,7 +1,7 @@
 import { admin } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { connect, sync } from "@/lib/instagram";
+import { connect, replaceConnectionToken, sync } from "@/lib/instagram";
 import Link from "next/link";
 import { RefreshCw, ShieldCheck } from "lucide-react";
 
@@ -10,15 +10,29 @@ export const dynamic = "force-dynamic";
 async function go(formData: FormData) {
   "use server";
   await admin();
-
   try {
     await sync(String(formData.get("id")));
   } catch (error) {
     const message = error instanceof Error ? error.message : "Sync failed";
     redirect("/admin/instagram?error=" + encodeURIComponent(message));
   }
-
   redirect("/admin/instagram?synced=1");
+}
+
+async function replaceToken(formData: FormData) {
+  "use server";
+  await admin();
+  const id = String(formData.get("id") || "");
+  const token = String(formData.get("token") || "").trim();
+  if (!id || !token) redirect("/admin/instagram?error=" + encodeURIComponent("A connection and access token are required."));
+  try {
+    await replaceConnectionToken(id, token);
+    await sync(id);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not replace the Instagram access token.";
+    redirect("/admin/instagram?error=" + encodeURIComponent(message));
+  }
+  redirect("/admin/instagram?updated=1");
 }
 
 async function addToken(formData: FormData) {
@@ -59,6 +73,7 @@ export default async function IG({
     error?: string;
     synced?: string;
     connected?: string;
+    updated?: string;
   }>;
 }) {
   try {
@@ -93,7 +108,7 @@ export default async function IG({
           Connected seller accounts
         </h1>
         <p className="mt-4 text-sm leading-7 text-[#666]">
-          Add each seller's Instagram access token here. The token is validated
+          Each store can have multiple Instagram connections. Add the access token for each connection below; tokens are encrypted in Neon and are never exposed to sellers. The token is validated
           against Instagram, encrypted on the server, and saved in Neon. Once
           saved, the marketplace can sync that account without asking the seller
           to paste the token again.
@@ -112,11 +127,8 @@ export default async function IG({
         </p>
       )}
 
-      {query.connected && (
-        <p className="mt-5 rounded-xl bg-green-50 p-4 text-sm text-green-700">
-          Instagram account connected, token encrypted, and posts imported.
-        </p>
-      )}
+      {query.connected && <p className="mt-5 rounded-xl bg-green-50 p-4 text-sm text-green-700">Instagram account connected, token encrypted, and posts imported.</p>}
+      {query.updated && <p className="mt-5 rounded-xl bg-green-50 p-4 text-sm text-green-700">Connection token replaced, encrypted, and posts re-synced.</p>}
 
       <div className="card mt-7 max-w-3xl p-7">
         <div className="flex items-start gap-3">
@@ -223,13 +235,20 @@ export default async function IG({
               </div>
             </div>
 
-            <form action={go}>
-              <input type="hidden" name="id" value={connection.id} />
-              <button className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm">
-                <RefreshCw size={14} />
-                Sync posts
-              </button>
-            </form>
+            <div className="flex flex-col gap-2 sm:items-end">
+              <form action={go}>
+                <input type="hidden" name="id" value={connection.id} />
+                <button className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm">
+                  <RefreshCw size={14} />
+                  Sync posts
+                </button>
+              </form>
+              <form action={replaceToken} className="flex w-full max-w-sm gap-2">
+                <input type="hidden" name="id" value={connection.id} />
+                <input name="token" type="password" required autoComplete="off" placeholder="Replace access token" className="min-w-0 flex-1 rounded-full border px-4 py-2 text-xs outline-none focus:border-black" />
+                <button className="rounded-full bg-black px-4 py-2 text-xs font-semibold text-white">Save token</button>
+              </form>
+            </div>
           </div>
         ))}
       </div>
