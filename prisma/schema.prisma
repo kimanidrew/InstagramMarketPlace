@@ -1,0 +1,10 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") directUrl = env("DIRECT_URL") }
+enum Role { USER ADMIN }
+enum RequestStatus { PENDING APPROVED REJECTED }
+model User { id String @id @default(cuid()) email String @unique name String? passwordHash String role Role @default(USER) createdAt DateTime @default(now()) updatedAt DateTime @updatedAt requests StoreRequest[] likes ProductLike[] }
+model StoreRequest { id String @id @default(cuid()) userId String username String status RequestStatus @default(PENDING) createdAt DateTime @default(now()) reviewedAt DateTime? user User @relation(fields:[userId],references:[id],onDelete:Cascade) @@index([status]) }
+model InstagramConnection { id String @id @default(cuid()) igUserId String @unique username String @unique name String? biography String? profileImageUrl String? encryptedToken String expiresAt DateTime? lastSyncedAt DateTime? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt posts InstagramPost[] }
+model InstagramPost { id String @id connectionId String caption String? mediaType String mediaUrl String? thumbnailUrl String? permalink String? timestamp DateTime? instagramLikeCount Int @default(0) instagramCommentCount Int @default(0) isProduct Boolean @default(false) productTitle String? productSlug String? @unique createdAt DateTime @default(now()) updatedAt DateTime @updatedAt connection InstagramConnection @relation(fields:[connectionId],references:[id],onDelete:Cascade) tags ProductTag[] likes ProductLike[] @@index([connectionId,isProduct]) }
+model ProductTag { id String @id @default(cuid()) name String postId String post InstagramPost @relation(fields:[postId],references:[id],onDelete:Cascade) @@unique([name,postId]) @@index([name]) }
+model ProductLike { id String @id @default(cuid()) userId String postId String createdAt DateTime @default(now()) user User @relation(fields:[userId],references:[id],onDelete:Cascade) post InstagramPost @relation(fields:[postId],references:[id],onDelete:Cascade) @@unique([userId,postId]) }
