@@ -1,9 +1,9 @@
 import { admin } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { sync } from "@/lib/instagram";
+import { connect, sync } from "@/lib/instagram";
 import Link from "next/link";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +21,45 @@ async function go(formData: FormData) {
   redirect("/admin/instagram?synced=1");
 }
 
+async function addToken(formData: FormData) {
+  "use server";
+  await admin();
+
+  const token = String(formData.get("token") || "").trim();
+  const sellerEmail = String(formData.get("sellerEmail") || "").trim().toLowerCase();
+
+  if (!token) {
+    redirect("/admin/instagram?error=" + encodeURIComponent("Paste an Instagram access token."));
+  }
+
+  try {
+    const seller = sellerEmail
+      ? await db().user.findUnique({ where: { email: sellerEmail } })
+      : null;
+
+    if (sellerEmail && !seller) {
+      throw new Error("No marketplace user was found with that email.");
+    }
+
+    const connection = await connect(token, seller?.id);
+    await sync(connection.id);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Could not save Instagram connection.";
+    redirect("/admin/instagram?error=" + encodeURIComponent(message));
+  }
+
+  redirect("/admin/instagram?connected=1");
+}
+
 export default async function IG({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; synced?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    synced?: string;
+    connected?: string;
+  }>;
 }) {
   try {
     await admin();
@@ -58,10 +93,10 @@ export default async function IG({
           Connected seller accounts
         </h1>
         <p className="mt-4 text-sm leading-7 text-[#666]">
-          Sellers authorize Instagram through your Meta app. Their access
-          tokens are never pasted into the dashboard; the server encrypts each
-          token and saves it in Neon. Instagram posts are automatically
-          imported as marketplace products.
+          Add each seller's Instagram access token here. The token is validated
+          against Instagram, encrypted on the server, and saved in Neon. Once
+          saved, the marketplace can sync that account without asking the seller
+          to paste the token again.
         </p>
       </div>
 
@@ -76,6 +111,74 @@ export default async function IG({
           Instagram posts synced.
         </p>
       )}
+
+      {query.connected && (
+        <p className="mt-5 rounded-xl bg-green-50 p-4 text-sm text-green-700">
+          Instagram account connected, token encrypted, and posts imported.
+        </p>
+      )}
+
+      <div className="card mt-7 max-w-3xl p-7">
+        <div className="flex items-start gap-3">
+          <div className="rounded-full bg-green-50 p-2 text-green-700">
+            <ShieldCheck size={18} />
+          </div>
+          <div>
+            <h2 className="text-lg font-black">Add Instagram account manually</h2>
+            <p className="mt-2 text-sm leading-6 text-[#666]">
+              Paste the access token generated for this Instagram account. The
+              server will first call Instagram to identify the account, then
+              encrypt and save the token in the database.
+            </p>
+          </div>
+        </div>
+
+        <form action={addToken} className="mt-6 space-y-4">
+          <div>
+            <label className="text-sm font-semibold">Instagram access token</label>
+            <input
+              name="token"
+              type="password"
+              required
+              autoComplete="off"
+              placeholder="Paste the long-lived Instagram access token"
+              className="mt-2 w-full rounded-2xl border px-4 py-3 text-sm outline-none focus:border-black"
+            />
+            <p className="mt-2 text-xs leading-5 text-[#888]">
+              Never put this token in GitHub, frontend code, or a public env
+              variable. It is encrypted before it is stored.
+            </p>
+          </div>
+
+          <div>
+            <label className="text-sm font-semibold">
+              Marketplace seller email <span className="font-normal text-[#999]">(optional)</span>
+            </label>
+            <input
+              name="sellerEmail"
+              type="email"
+              autoComplete="off"
+              placeholder="seller@example.com"
+              className="mt-2 w-full rounded-2xl border px-4 py-3 text-sm outline-none focus:border-black"
+            />
+            <p className="mt-2 text-xs leading-5 text-[#888]">
+              If supplied, this connection is attached to that marketplace
+              account. Leave it empty for an admin-managed Instagram account.
+            </p>
+          </div>
+
+          <button className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white">
+            Save & import Instagram account
+          </button>
+        </form>
+
+        <div className="mt-6 rounded-2xl bg-[#f7f7f5] p-4 text-xs leading-5 text-[#666]">
+          <b className="text-black">About “permanent” tokens:</b> the database
+          connection is permanent until you replace or remove it, but Meta can
+          expire, revoke, or invalidate an access token. If that happens, add
+          the new token here.
+        </div>
+      </div>
 
       <div className="card mt-7 max-w-3xl p-7">
         <h2 className="text-lg font-black">Meta app configuration</h2>
@@ -114,7 +217,7 @@ export default async function IG({
                   {connection.posts.length} products ·{" "}
                   {connection.connectedBy?.name ||
                     connection.connectedBy?.email ||
-                    "seller"}{" "}
+                    "admin-managed"}{" "}
                   · {connection.lastSyncedAt ? "synced" : "never synced"}
                 </p>
               </div>
