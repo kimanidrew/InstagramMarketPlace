@@ -26,6 +26,7 @@ export default async function Account({
   });
   const connections = await db().instagramConnection.findMany({
     where: { connectedByUserId: u.id },
+    include: { posts: { where: { isProduct: true }, select: { id: true } } },
     orderBy: { createdAt: "desc" },
   });
   const approved = rs.find((r) => r.status === "APPROVED");
@@ -115,11 +116,11 @@ export default async function Account({
           </div>
         ) : approved ? (
           <div className="mt-6 rounded-2xl border p-5">
-            <p className="text-sm font-semibold">Store approved</p>
+            <p className="text-sm font-semibold">Waiting for Instagram connection</p>
             <p className="mt-2 text-sm leading-6 text-[#666]">
-              Your Instagram store request has been approved. The marketplace
-              admin still needs to add your Instagram access token before your
-              account will show as connected.
+              Your store request has been received. It will show as Approved
+              here only after the marketplace admin adds your Instagram access
+              token.
             </p>
           </div>
         ) : (
@@ -170,7 +171,7 @@ export default async function Account({
                     r.username.toLowerCase().replace(/^@/, "")
                 )
                   ? "APPROVED"
-                  : r.status}
+                  : "PENDING CONNECTION"}
               </span>
             </div>
           ))}
