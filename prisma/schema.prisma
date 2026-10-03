@@ -53,11 +53,11 @@ model InstagramConnection {
   encryptedToken    String
   expiresAt         DateTime?
   lastSyncedAt      DateTime?
-  connectedByUserId String
+  connectedByUserId String?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   posts             InstagramPost[]
-  connectedBy       User             @relation(fields: [connectedByUserId], references: [id], onDelete: Cascade)
+  connectedBy       User?            @relation(fields: [connectedByUserId], references: [id], onDelete: SetNull)
 
   @@index([connectedByUserId])
   @@unique([connectedByUserId, igUserId])
