@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Heart, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { ProductMedia } from "@/components/product-media";
+import { ProductInquiryButton } from "@/components/product-inquiry-button";
 
 export function ProductCard({ p }: { p: any }) {
   const [l, setL] = useState(false);
@@ -77,6 +78,14 @@ export function ProductCard({ p }: { p: any }) {
             </a>
           )}
         </div>
+
+        {p.permalink && (
+          <ProductInquiryButton
+            username={p.connection.username}
+            productTitle={p.productTitle || "this product"}
+            postUrl={p.permalink}
+          />
+        )}
       </div>
     </article>
   );
