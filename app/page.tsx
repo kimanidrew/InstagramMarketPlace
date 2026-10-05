@@ -225,45 +225,6 @@ export default async function Home() {
       </section>
 
       <section className="shell pb-24">
-        <Reveal className="overflow-hidden rounded-[36px] bg-[#e9e9e4]" y={36}>
-          <div className="grid lg:grid-cols-[1.15fr_.85fr]">
-            <div className="min-h-[430px]">
-              <img
-                src={editorialImages.shopping}
-                alt="Modern retail and shopping experience"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
-              <p className="eyebrow plain">For shoppers</p>
-              <h2 className="mt-5 text-4xl font-black tracking-[-.05em] sm:text-5xl">
-                Discover more than a product.
-              </h2>
-              <p className="mt-5 text-base leading-8 text-[#666]">
-                Find products through the people who share them, the stores
-                behind them and the communities around them.
-              </p>
-              <div className="mt-8 grid gap-3">
-                {[
-                  [Users, "Meet the stores behind the posts."],
-                  [Heart, "Save products you want to remember."],
-                  [ShieldCheck, "Discover approved connected sellers."],
-                ].map(([Icon, text]) => {
-                  const ItemIcon = Icon as typeof Users;
-                  return (
-                    <div key={text as string} className="flex items-center gap-3 rounded-2xl bg-white p-4 text-sm font-semibold">
-                      <ItemIcon size={18} />
-                      {text as string}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="shell pb-24">
         <Reveal className="rounded-[36px] border border-black/10 bg-white p-8 text-center shadow-[0_25px_80px_rgba(0,0,0,.06)] sm:p-14" y={30}>
           <Sparkles className="mx-auto" size={24} />
           <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-black tracking-[-.055em] sm:text-6xl">
