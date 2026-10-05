@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Instagram, Search, ShoppingBag } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -44,7 +43,7 @@ export function HowMarketWorks() {
 
       </div>
 
-      <div ref={railRef} onScroll={onScroll} className="how-works-rail mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5">
+      <div ref={railRef} onScroll={onScroll} className="how-works-rail flex snap-x snap-mandatory gap-4 overflow-x-auto">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
@@ -67,7 +66,7 @@ export function HowMarketWorks() {
           })}
       </div>
 
-      <div className="shell relative z-10 mt-4 flex items-center justify-between gap-4">
+      <div className="shell relative z-10 mt-5 flex items-center justify-between gap-4 pb-20 sm:pb-24">
           <div className="flex gap-1.5">
             {steps.map((step, index) => <button key={step.number} type="button" onClick={() => { const rail=railRef.current; const slide=rail?.querySelectorAll<HTMLElement>(".how-works-slide")[index]; if(rail && slide) rail.scrollTo({ left: slide.offsetLeft - rail.offsetLeft, behavior: "smooth" }); }} aria-label={"Go to step " + (index + 1)} className={"how-works-dot " + (active === index ? "is-active" : "")} />)}
           </div>
