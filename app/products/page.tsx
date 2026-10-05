@@ -14,24 +14,6 @@ export default async function Products({
   const text = params.q?.trim();
   const tag = params.tag?.toLowerCase();
 
-  const where: any = { isProduct: true };
-
-  if (text) {
-    where.OR = [
-      { productTitle: { contains: text, mode: "insensitive" } },
-      { caption: { contains: text, mode: "insensitive" } },
-      {
-        connection: {
-          username: { contains: text, mode: "insensitive" },
-        },
-      },
-    ];
-  }
-
-  if (tag) {
-    where.tags = { some: { name: tag } };
-  }
-
   const tags = await db().productTag.groupBy({
     by: ["name"],
     where: { post: { isProduct: true } },
