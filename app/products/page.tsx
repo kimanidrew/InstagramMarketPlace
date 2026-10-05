@@ -21,10 +21,10 @@ export default async function Products({
 
   const [tags, wishlistProducts] = await Promise.all([
     db().productTag.groupBy({
-    by: ["name"],
-    where: { post: { isProduct: true } },
-    _count: { name: true },
-    orderBy: { _count: { name: "desc" } },
+      by: ["name"],
+      where: { post: { isProduct: true } },
+      _count: { name: true },
+      orderBy: { _count: { name: "desc" } },
       take: 14,
     }),
     currentUser
@@ -55,9 +55,11 @@ export default async function Products({
               Find something you love, save it for later, or message the shop directly on Instagram. New products appear automatically as you keep browsing.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/wishlist" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black transition hover:-translate-y-0.5">
-                <Heart size={14} fill="currentColor" /> Continue from wishlist
-              </Link>
+              {wishlistProducts.length > 0 && (
+                <Link href="/wishlist" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black transition hover:-translate-y-0.5">
+                  <Heart size={14} fill="currentColor" /> Continue from wishlist
+                </Link>
+              )}
               <Link href="#shop-all" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-xs font-bold text-white transition hover:bg-white/15">
                 Browse everything <ArrowRight size={14} />
               </Link>
