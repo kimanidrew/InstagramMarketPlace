@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Grid2X2, LayoutList, Search, SlidersHorizontal } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
+import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,8 @@ export default async function Products({
     }),
   ]);
 
+  const availableProducts = await filterAvailableInstagramMedia(ps);
+
   return (
     <main className="shell py-10 md:py-14">
       <div className="rounded-[30px] bg-[#f5f5f2] p-6 md:p-8">
@@ -58,7 +61,7 @@ export default async function Products({
               Shop the Instagram feed.
             </h1>
             <p className="mt-3 text-sm text-[#777]">
-              {ps.length} products to discover
+              {availableProducts.length} products to discover
             </p>
           </div>
 
@@ -103,7 +106,7 @@ export default async function Products({
         <div className="flex items-center gap-2 text-xs font-bold">
           <SlidersHorizontal size={15} />
           Filters
-          <span className="font-normal text-[#999]">· {ps.length} results</span>
+          <span className="font-normal text-[#999]">· {availableProducts.length} results</span>
         </div>
 
         <div className="hidden items-center gap-2 text-xs text-[#999] sm:flex">
@@ -113,9 +116,9 @@ export default async function Products({
         </div>
       </div>
 
-      {ps.length > 0 ? (
+      {availableProducts.length > 0 ? (
         <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 md:gap-x-6 md:gap-y-12">
-          {ps.map((x) => (
+          {availableProducts.map((x) => (
             <ProductCard key={x.id} p={x} />
           ))}
         </div>
