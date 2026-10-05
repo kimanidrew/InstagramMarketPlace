@@ -1,57 +1,71 @@
 import Link from "next/link";
-import { ArrowDown, ArrowRight, Compass, Instagram, Play, ShieldCheck, Store, Tag, Zap } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowRight,
+  Check,
+  Heart,
+  Instagram,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Store,
+  Users,
+  Zap,
+} from "lucide-react";
 import { db } from "@/lib/prisma";
-import { ProductCard } from "@/components/product-card";
 
 export const dynamic = "force-dynamic";
+
+const editorialImages = {
+  hero: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=85",
+  people: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85",
+  seller: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=85",
+  shopping: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=85",
+};
 
 export default async function Home() {
   const prisma = db();
 
-  const [products, stores, tags] = await Promise.all([
+  const [products, stores] = await Promise.all([
     prisma.instagramPost.findMany({
       where: { isProduct: true },
       include: { connection: true, tags: true, likes: true },
       orderBy: { timestamp: "desc" },
-      take: 8,
+      take: 4,
     }),
     prisma.instagramConnection.findMany({
       include: { posts: { where: { isProduct: true }, select: { id: true } } },
       orderBy: { updatedAt: "desc" },
       take: 4,
     }),
-    prisma.productTag.groupBy({
-      by: ["name"],
-      where: { post: { isProduct: true } },
-      _count: { name: true },
-      orderBy: { _count: { name: "desc" } },
-      take: 8,
-    }),
   ]);
 
   return (
     <main className="bg-white">
       <section className="editorial-grid overflow-hidden border-b border-black/5">
-        <div className="shell grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.05fr_.95fr]">
+        <div className="shell grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.02fr_.98fr]">
           <div>
             <div className="eyebrow">
               <Instagram size={13} /> Instagram marketplace
             </div>
             <h1 className="mt-7 max-w-4xl text-6xl font-black leading-[.88] tracking-[-.075em] sm:text-7xl lg:text-[88px]">
-              Instagram posts.
+              Discover it.
               <br />
-              <span className="text-[#777]">Ready to shop.</span>
+              <span className="text-[#777]">Shop it.</span>
+              <br />
+              <span>Support it.</span>
             </h1>
             <p className="mt-8 max-w-xl text-base leading-8 text-[#666] sm:text-lg">
-              Instagram Market turns posts from approved Instagram stores into
-              beautiful, searchable products — automatically.
+              Instagram Market connects the inspiration you find on Instagram
+              with a simple way to discover and shop from the people and
+              businesses behind it.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/products"
                 className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white transition hover:scale-[1.02]"
               >
-                Start shopping <ArrowRight size={16} />
+                Start exploring <ArrowRight size={16} />
               </Link>
               <Link
                 href="/how-it-works"
@@ -60,166 +74,264 @@ export default async function Home() {
                 How it works <ArrowDown size={15} />
               </Link>
             </div>
-            <div className="mt-10 flex flex-wrap gap-5 text-xs font-semibold text-[#777]">
-              <span className="inline-flex items-center gap-2"><Zap size={14}/> Automatic product sync</span>
-              <span className="inline-flex items-center gap-2"><ShieldCheck size={14}/> Approved stores</span>
-            </div>
           </div>
 
-          <div className="relative min-h-[520px]">
-            <div className="absolute left-4 top-10 h-64 w-48 rotate-[-7deg] rounded-[28px] bg-[#ecece8] p-2 shadow-xl sm:left-10">
-              {products[0]?.mediaUrl && (
-                <img src={products[0].thumbnailUrl || products[0].mediaUrl} alt="" className="h-full w-full rounded-[22px] object-cover" />
-              )}
-            </div>
-            <div className="absolute right-2 top-2 h-72 w-52 rotate-[7deg] rounded-[28px] bg-[#111] p-2 shadow-2xl sm:right-8">
-              {products[1]?.mediaUrl && (
-                <img src={products[1].thumbnailUrl || products[1].mediaUrl} alt="" className="h-full w-full rounded-[22px] object-cover" />
-              )}
-            </div>
-            <div className="absolute bottom-2 left-1/2 h-72 w-56 -translate-x-1/2 rotate-[2deg] rounded-[28px] bg-white p-2 shadow-2xl">
-              {products[2]?.mediaUrl && (
-                <img src={products[2].thumbnailUrl || products[2].mediaUrl} alt="" className="h-full w-full rounded-[22px] object-cover" />
-              )}
-            </div>
-            <div className="absolute bottom-20 right-0 hidden rounded-2xl border border-black/10 bg-white px-4 py-3 text-xs font-bold shadow-xl sm:block">
-              <span className="block text-[#888]">LIVE FEED</span>
-              {products.length} products discovered
-            </div>
-            <div className="absolute bottom-5 left-0 rounded-2xl bg-black px-5 py-4 text-white shadow-xl">
-              <div className="flex items-center gap-2 text-xs font-bold"><Play size={13} fill="currentColor"/> SHOP THE POST</div>
-              <div className="mt-1 text-[10px] text-white/55">Open a product and discover its original Instagram post.</div>
+          <div className="relative min-h-[560px]">
+            <div className="absolute inset-4 overflow-hidden rounded-[36px] bg-[#eee] shadow-2xl">
+              <img
+                src={editorialImages.hero}
+                alt="People discovering products and shopping"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 rounded-[24px] border border-white/20 bg-white/90 p-5 backdrop-blur-xl">
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.16em]">
+                  <Sparkles size={13} /> From social inspiration to shopping
+                </div>
+                <p className="mt-2 text-sm leading-6 text-black/65">
+                  One place to discover products, find independent sellers and
+                  follow the story behind what you love.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="shell py-20">
-        <div className="max-w-2xl">
-          <p className="eyebrow plain">What is Instagram Market?</p>
-          <h2 className="mt-4 text-4xl font-black tracking-[-.055em] sm:text-6xl">
-            A storefront built from the content sellers already create.
-          </h2>
-          <p className="mt-6 text-base leading-8 text-[#666]">
-            Sellers connect an approved Instagram Business account. When they
-            publish a post, Instagram Market imports the media, caption,
-            engagement and hashtags. That post becomes a product shoppers can
-            discover without the seller manually rebuilding a catalogue.
-          </p>
-        </div>
-
-        <div className="mt-14 grid gap-4 md:grid-cols-3">
-          {[
-            ["01", "Connect", "An approved Instagram store connects its Business account securely."],
-            ["02", "Discover", "Posts are synced into the marketplace and hashtags become searchable categories."],
-            ["03", "Shop", "Customers browse products, save favourites and open the original Instagram post."],
-          ].map(([n, title, text]) => (
-            <div key={n} className="card p-7">
-              <span className="text-xs font-black text-[#999]">{n}</span>
-              <h3 className="mt-14 text-2xl font-black">{title}</h3>
-              <p className="mt-3 text-sm leading-7 text-[#777]">{text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-black/5 bg-[#f8f8f6] py-20">
-        <div className="shell">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div>
-              <p className="eyebrow plain">Built for easy discovery</p>
-              <h2 className="mt-3 text-4xl font-black tracking-[-.05em] sm:text-5xl">
-                Shop the way you browse Instagram.
-              </h2>
-            </div>
-            <Link href="/products" className="inline-flex items-center gap-2 text-sm font-bold">
-              Explore everything <ArrowRight size={15}/>
-            </Link>
-          </div>
-
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Link href="/products" className="card group p-6">
-              <Compass size={22}/>
-              <h3 className="mt-12 text-xl font-black">All products</h3>
-              <p className="mt-2 text-sm text-[#777]">Search and browse the full marketplace.</p>
-              <ArrowRight className="mt-6 transition group-hover:translate-x-1" size={18}/>
-            </Link>
-            <Link href="/stores" className="card group p-6">
-              <Store size={22}/>
-              <h3 className="mt-12 text-xl font-black">Stores</h3>
-              <p className="mt-2 text-sm text-[#777]">Discover connected Instagram sellers.</p>
-              <ArrowRight className="mt-6 transition group-hover:translate-x-1" size={18}/>
-            </Link>
-            <Link href="/categories" className="card group p-6">
-              <Tag size={22}/>
-              <h3 className="mt-12 text-xl font-black">Categories</h3>
-              <p className="mt-2 text-sm text-[#777]">Hashtags become shopping categories.</p>
-              <ArrowRight className="mt-6 transition group-hover:translate-x-1" size={18}/>
-            </Link>
-            <Link href="/wishlist" className="card group p-6">
-              <ShieldCheck size={22}/>
-              <h3 className="mt-12 text-xl font-black">Wishlist</h3>
-              <p className="mt-2 text-sm text-[#777]">Save products and return to them later.</p>
-              <ArrowRight className="mt-6 transition group-hover:translate-x-1" size={18}/>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="shell py-20">
-        <div className="flex items-end justify-between">
+      <section className="shell py-24">
+        <div className="grid gap-14 lg:grid-cols-[.85fr_1.15fr] lg:items-end">
           <div>
-            <p className="eyebrow plain">Fresh from connected stores</p>
-            <h2 className="mt-3 text-4xl font-black tracking-[-.05em]">New & noteworthy.</h2>
+            <p className="eyebrow plain">Why we exist</p>
+            <h2 className="mt-4 text-5xl font-black leading-[.95] tracking-[-.06em] sm:text-6xl">
+              Shopping should feel human.
+            </h2>
           </div>
-          <Link href="/products" className="hidden text-sm font-bold sm:block">View all →</Link>
-        </div>
-        <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-6">
-          {products.map((x) => <ProductCard key={x.id} p={x}/>)}
+          <div>
+            <p className="text-lg leading-8 text-[#555]">
+              Social media has already changed how people discover things.
+              Instagram Market takes that discovery one step further — making
+              it easier to find the product, understand who made or sells it,
+              and go directly to the original Instagram story.
+            </p>
+            <p className="mt-5 text-lg leading-8 text-[#555]">
+              We are building a marketplace around <b>real people, real
+              businesses and real content</b>, rather than anonymous product
+              catalogues.
+            </p>
+          </div>
         </div>
       </section>
 
-      {tags.length > 0 && (
-        <section className="shell pb-20">
-          <div className="rounded-[32px] border border-black/5 bg-[#111] p-7 text-white sm:p-10">
-            <p className="text-[10px] font-bold uppercase tracking-[.22em] text-white/45">Explore the edit</p>
-            <div className="mt-8 flex gap-3 overflow-x-auto pb-2">
-              {tags.map((x) => (
-                <Link key={x.name} href={"/products?tag=" + encodeURIComponent(x.name)} className="min-w-[170px] rounded-[22px] bg-white/10 p-5 transition hover:bg-white/15">
-                  <Tag size={16}/>
-                  <b className="mt-8 block">#{x.name}</b>
-                  <span className="mt-1 block text-xs text-white/45">{x._count.name} products</span>
-                </Link>
+      <section className="shell pb-24">
+        <div className="grid overflow-hidden rounded-[36px] bg-[#f4f4f1] lg:grid-cols-[1fr_1fr]">
+          <div className="min-h-[460px]">
+            <img
+              src={editorialImages.people}
+              alt="Friends discovering and sharing products"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
+            <p className="eyebrow plain">The idea</p>
+            <h2 className="mt-5 text-4xl font-black leading-tight tracking-[-.05em] sm:text-5xl">
+              Inspiration belongs with discovery.
+            </h2>
+            <p className="mt-6 text-base leading-8 text-[#666]">
+              A post can make you stop scrolling. A product can make you want
+              to learn more. A great seller can make you want to come back.
+              Instagram Market brings those moments together in one experience.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl bg-white p-5">
+                <Heart size={19} />
+                <b className="mt-7 block">Save what you love</b>
+                <span className="mt-2 block text-xs leading-5 text-[#777]">
+                  Keep favourites close while you explore.
+                </span>
+              </div>
+              <div className="rounded-2xl bg-white p-5">
+                <Search size={19} />
+                <b className="mt-7 block">Find it faster</b>
+                <span className="mt-2 block text-xs leading-5 text-[#777]">
+                  Discover products through stores and categories.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-black/5 bg-[#111] py-24 text-white">
+        <div className="shell">
+          <div className="max-w-3xl">
+            <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">
+              How Instagram Market works
+            </p>
+            <h2 className="mt-5 text-5xl font-black leading-[.95] tracking-[-.06em] sm:text-7xl">
+              No complicated catalogue.
+              <br />
+              Just better discovery.
+            </h2>
+          </div>
+
+          <div className="mt-16 grid gap-px overflow-hidden rounded-[30px] bg-white/10 md:grid-cols-3">
+            {[
+              {
+                n: "01",
+                icon: Instagram,
+                title: "Sellers connect",
+                text: "Approved Instagram Business accounts connect securely to the marketplace.",
+              },
+              {
+                n: "02",
+                icon: Zap,
+                title: "Posts become products",
+                text: "Published Instagram posts are automatically brought into the marketplace with their media and story.",
+              },
+              {
+                n: "03",
+                icon: Search,
+                title: "People discover",
+                text: "Shoppers browse, search, save favourites and open the original Instagram post.",
+              },
+            ].map(({ n, icon: Icon, title, text }) => (
+              <div key={n} className="bg-white/[.04] p-7 sm:p-9">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-white/35">{n}</span>
+                  <Icon size={21} />
+                </div>
+                <h3 className="mt-20 text-2xl font-black">{title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/55">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="shell py-24">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div>
+            <p className="eyebrow plain">For sellers</p>
+            <h2 className="mt-4 text-5xl font-black leading-[.95] tracking-[-.06em] sm:text-6xl">
+              Keep creating.
+              <br />
+              We handle the storefront.
+            </h2>
+            <p className="mt-7 max-w-xl text-base leading-8 text-[#666]">
+              Your Instagram already tells your story. Instead of maintaining
+              a second catalogue by hand, connect your approved account and let
+              your posts flow into a searchable marketplace.
+            </p>
+            <div className="mt-8 space-y-4">
+              {[
+                "Your Instagram content stays at the centre.",
+                "New posts can automatically appear as products.",
+                "Hashtags help shoppers discover your products.",
+                "Customers can open the original Instagram post.",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 text-sm font-semibold">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-white">
+                    <Check size={12} />
+                  </span>
+                  {item}
+                </div>
               ))}
             </div>
           </div>
-        </section>
-      )}
 
-      {stores.length > 0 && (
-        <section className="shell pb-24">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="eyebrow plain">The people behind the posts</p>
-              <h2 className="mt-3 text-4xl font-black tracking-[-.05em]">Featured stores.</h2>
+          <div className="relative min-h-[500px] overflow-hidden rounded-[36px]">
+            <img
+              src={editorialImages.seller}
+              alt="Small business team working together"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute bottom-6 left-6 max-w-xs rounded-[24px] bg-white p-6 shadow-2xl">
+              <Store size={21} />
+              <b className="mt-7 block text-xl">Your content. Your identity.</b>
+              <p className="mt-2 text-xs leading-5 text-[#777]">
+                The marketplace helps people discover the business already
+                living on Instagram.
+              </p>
             </div>
-            <Link href="/stores" className="text-sm font-bold">View stores →</Link>
           </div>
-          <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stores.map((s) => (
-              <Link href={"/store/" + s.username} key={s.id} className="card group p-5">
-                <div className="flex items-center gap-4">
-                  <div className="h-14 w-14 overflow-hidden rounded-full bg-[#eee]">
-                    {s.profileImageUrl && <img src={s.profileImageUrl} alt="" className="h-full w-full object-cover transition group-hover:scale-105"/>}
-                  </div>
-                  <div className="min-w-0">
-                    <b className="block truncate">@{s.username}</b>
-                    <span className="text-xs text-[#888]">{s.posts.length} products</span>
-                  </div>
-                </div>
-                <p className="mt-5 line-clamp-2 text-xs leading-5 text-[#777]">{s.biography || "Explore products from this Instagram store."}</p>
-              </Link>
-            ))}
+        </div>
+      </section>
+
+      <section className="shell pb-24">
+        <div className="overflow-hidden rounded-[36px] bg-[#e9e9e4]">
+          <div className="grid lg:grid-cols-[1.15fr_.85fr]">
+            <div className="min-h-[430px]">
+              <img
+                src={editorialImages.shopping}
+                alt="Modern retail and shopping experience"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
+              <p className="eyebrow plain">For shoppers</p>
+              <h2 className="mt-5 text-4xl font-black tracking-[-.05em] sm:text-5xl">
+                Discover more than a product.
+              </h2>
+              <p className="mt-5 text-base leading-8 text-[#666]">
+                Find products through the people who share them, the stores
+                behind them and the communities around them.
+              </p>
+              <div className="mt-8 grid gap-3">
+                {[
+                  [Users, "Meet the stores behind the posts."],
+                  [Heart, "Save products you want to remember."],
+                  [ShieldCheck, "Discover approved connected sellers."],
+                ].map(([Icon, text]) => {
+                  const ItemIcon = Icon as typeof Users;
+                  return (
+                    <div key={text as string} className="flex items-center gap-3 rounded-2xl bg-white p-4 text-sm font-semibold">
+                      <ItemIcon size={18} />
+                      {text as string}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="shell pb-24">
+        <div className="rounded-[36px] border border-black/10 bg-white p-8 text-center sm:p-14">
+          <Sparkles className="mx-auto" size={24} />
+          <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-black tracking-[-.055em] sm:text-6xl">
+            A new way to turn social discovery into meaningful shopping.
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#777]">
+            Instagram Market is designed to make the journey from “I love
+            this” to “I want to know more” simple, visual and human.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white"
+            >
+              Explore the marketplace <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/how-it-works"
+              className="inline-flex items-center gap-2 rounded-full border border-black/10 px-7 py-4 text-sm font-bold"
+            >
+              Learn more
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {(products.length > 0 || stores.length > 0) && (
+        <section className="border-t border-black/5 py-14">
+          <div className="shell flex flex-wrap items-center justify-between gap-4 text-xs text-[#888]">
+            <span>
+              {products.length > 0 ? "Fresh marketplace content is waiting for you." : "Discover connected Instagram stores."}
+            </span>
+            <Link href="/products" className="font-bold text-black">
+              Browse marketplace →
+            </Link>
           </div>
         </section>
       )}
