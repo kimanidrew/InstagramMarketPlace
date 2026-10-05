@@ -28,7 +28,7 @@ export default async function Home() {
 
   const [products, stores] = await Promise.all([
     prisma.instagramPost.findMany({
-      where: { isProduct: true },
+      where: { isProduct: true, mediaType: "IMAGE" },
       include: { connection: true, tags: true, likes: true },
       orderBy: { timestamp: "desc" },
       take: 4,
@@ -76,39 +76,43 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="relative min-h-[560px]">
-            <div className="absolute right-0 top-4 z-20 w-[58%] overflow-hidden rounded-[30px] border border-white bg-[#f2f2ef] shadow-2xl sm:w-[55%]">
-              {products[0]?.mediaUrl ? (
-                <img src={products[0].mediaUrl} alt={products[0].productTitle || "Marketplace product"} className="aspect-[4/5] w-full object-cover" />
-              ) : (
-                <img src={editorialImages.hero} alt="Marketplace discovery" className="aspect-[4/5] w-full object-cover" />
-              )}
+          <div className="relative min-h-[560px] overflow-visible">
+            <div className="absolute left-[8%] top-10 z-10 w-[34%] rotate-[-7deg] overflow-hidden rounded-[22px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_24px_60px_rgba(0,0,0,.18)] sm:left-[4%] sm:w-[36%]">
+              <img
+                src={products[1]?.mediaUrl || editorialImages.people}
+                alt={products[1]?.productTitle || "Instagram marketplace discovery"}
+                className="aspect-[4/5] w-full object-cover"
+              />
             </div>
-            <div className="absolute left-2 top-24 z-10 w-[46%] overflow-hidden rounded-[28px] border border-white bg-[#f2f2ef] shadow-xl sm:left-6 sm:w-[44%]">
-              {products[1]?.mediaUrl ? (
-                <img src={products[1].mediaUrl} alt={products[1].productTitle || "Marketplace product"} className="aspect-[4/5] w-full object-cover" />
-              ) : (
-                <img src={editorialImages.people} alt="People discovering products" className="aspect-[4/5] w-full object-cover" />
-              )}
+
+            <div className="absolute right-[4%] top-2 z-20 w-[42%] rotate-[6deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_28px_70px_rgba(0,0,0,.2)] sm:right-[7%] sm:w-[41%]">
+              <img
+                src={products[0]?.mediaUrl || editorialImages.hero}
+                alt={products[0]?.productTitle || "Marketplace product"}
+                className="aspect-[4/5] w-full object-cover"
+              />
             </div>
-            <div className="absolute bottom-4 left-[19%] z-30 w-[49%] overflow-hidden rounded-[28px] border border-white bg-white p-2 shadow-2xl sm:left-[21%] sm:w-[47%]">
-              <div className="overflow-hidden rounded-[22px] bg-[#111]">
-                {products[2]?.mediaUrl ? (
-                  <img src={products[2].mediaUrl} alt={products[2].productTitle || "Marketplace product"} className="aspect-[4/5] w-full object-cover" />
-                ) : (
-                  <img src={editorialImages.shopping} alt="Shopping experience" className="aspect-[4/5] w-full object-cover" />
-                )}
-              </div>
-              <div className="px-3 py-3">
-                <p className="text-[10px] font-black uppercase tracking-[.14em] text-[#999]">Instagram Market</p>
-                <p className="mt-1 text-xs font-bold">Real posts. Real products.</p>
-              </div>
+
+            <div className="absolute bottom-5 left-[27%] z-30 w-[43%] -rotate-[2deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_30px_80px_rgba(0,0,0,.22)] sm:left-[27%] sm:w-[42%]">
+              <img
+                src={products[2]?.mediaUrl || editorialImages.shopping}
+                alt={products[2]?.productTitle || "Marketplace product"}
+                className="aspect-[4/5] w-full object-cover"
+              />
             </div>
-            <div className="absolute bottom-12 right-0 z-40 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
+
+            <div className="absolute bottom-10 left-0 z-40 hidden w-[27%] rotate-[5deg] overflow-hidden rounded-[18px] border-[6px] border-white bg-[#f2f2ef] shadow-[0_20px_50px_rgba(0,0,0,.16)] sm:block">
+              <img
+                src={products[3]?.mediaUrl || editorialImages.seller}
+                alt={products[3]?.productTitle || "Instagram store"}
+                className="aspect-[4/5] w-full object-cover"
+              />
+            </div>
+
+            <div className="absolute right-0 bottom-20 z-50 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
               Discover · Shop · Support
             </div>
-          </div>
-        </div>
+          </div>       </div>
       </section>
 
       <section className="shell py-24">
