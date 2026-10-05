@@ -186,55 +186,42 @@ export default async function Home() {
 
       <HowMarketWorks />
 
-      <section className="shell py-24">
-        <Reveal>
-        <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
-          <div>
-            <p className="eyebrow plain">For sellers</p>
-            <h2 className="mt-4 text-5xl font-black leading-[.95] tracking-[-.06em] sm:text-6xl">
-              Keep creating.
-              <br />
-              We handle the storefront.
-            </h2>
-            <p className="mt-7 max-w-xl text-base leading-8 text-[#666]">
-              Your Instagram already tells your story. Instead of maintaining
-              a second catalogue by hand, connect your approved account and let
-              your posts flow into a searchable marketplace.
-            </p>
-            <div className="mt-8 space-y-4">
-              {[
-                "Your Instagram content stays at the centre.",
-                "New posts can automatically appear as products.",
-                "Hashtags help shoppers discover your products.",
-                "Customers can open the original Instagram post.",
-              ].map((item) => (
-                <div key={item} className="flex items-start gap-3 text-sm font-semibold">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-white">
-                    <Check size={12} />
-                  </span>
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative min-h-[500px] overflow-hidden rounded-[36px]">
-            <img
-              src={editorialImages.seller}
-              alt="Small business team working together"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute bottom-6 left-6 max-w-xs rounded-[24px] bg-white p-6 shadow-2xl">
-              <Store size={21} />
-              <b className="mt-7 block text-xl">Your content. Your identity.</b>
-              <p className="mt-2 text-xs leading-5 text-[#777]">
-                The marketplace helps people discover the business already
-                living on Instagram.
-              </p>
-            </div>
+      <section className="seller-showcase relative overflow-hidden py-24 sm:py-28">
+        <div className="seller-orb seller-orb-a" /><div className="seller-orb seller-orb-b" />
+        <div className="shell relative z-10">
+          <div className="grid gap-10 lg:grid-cols-[.95fr_1.05fr] lg:items-center">
+            <Reveal y={42}>
+              <div className="seller-kicker"><Store size={14} /> For sellers</div>
+              <h2 className="seller-title mt-6">Keep creating.<br /><span>We handle the storefront.</span></h2>
+              <p className="mt-7 max-w-xl text-base leading-8 text-white/65 sm:text-lg">Your Instagram already tells your story. Connect your approved account and let your posts flow into a searchable marketplace while you keep doing what you do best: creating.</p>
+              <div className="seller-points mt-8 grid gap-3 sm:grid-cols-2">
+                {["Your Instagram content stays at the centre.","New posts can automatically appear as products.","Hashtags help shoppers discover your products.","Customers can open the original Instagram post."].map((item) => <div key={item} className="seller-point"><span><Check size={13} /></span>{item}</div>)}
+              </div>
+            </Reveal>
+            <Reveal className="relative" y={52}>
+              <div className="seller-image-wrap"><img src={editorialImages.seller} alt="Small business team working together" /><div className="seller-image-glow" /><div className="seller-floating-card"><div className="flex items-center justify-between"><span className="seller-mini-label">LIVE FROM INSTAGRAM</span><Zap size={15} /></div><b>One post → marketplace</b><span>Your content. Your identity.</span></div></div>
+            </Reveal>
           </div>
         </div>
-        </Reveal>
+      </section>
+
+      <section className="shopper-showcase relative overflow-hidden py-24 sm:py-28">
+        <div className="shopper-grid" /><div className="shopper-orb shopper-orb-a" /><div className="shopper-orb shopper-orb-b" />
+        <div className="shell relative z-10">
+          <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
+            <Reveal className="order-2 lg:order-1" y={50}>
+              <div className="shopper-image-wrap"><img src={editorialImages.shopping} alt="Modern retail and shopping experience" /><div className="shopper-image-glow" /><div className="shopper-floating-card"><Heart size={15} fill="currentColor" /><div><span>Saved for later</span><b>Find something you love.</b></div></div></div>
+            </Reveal>
+            <Reveal className="order-1 lg:order-2" y={42}>
+              <div className="shopper-kicker"><Sparkles size={14} /> For shoppers</div>
+              <h2 className="shopper-title mt-6">Discover more.<br /><span>Shop with feeling.</span></h2>
+              <p className="mt-7 max-w-xl text-base leading-8 text-[#555] sm:text-lg">Find products through the people who share them, the stores behind them and the communities around them.</p>
+              <div className="shopper-points mt-8">
+                {[[Users,"Meet the stores behind the posts."],[Heart,"Save products you want to remember."],[ShieldCheck,"Discover approved connected sellers."]].map(([Icon,text]) => { const ItemIcon=Icon as typeof Users; return <div key={text as string} className="shopper-point"><span><ItemIcon size={17}/></span><b>{text as string}</b><ArrowRight size={14}/></div>; })}
+              </div>
+            </Reveal>
+          </div>
+        </div>
       </section>
 
       <section className="shell pb-24">
