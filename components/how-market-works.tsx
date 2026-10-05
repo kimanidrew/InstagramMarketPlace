@@ -72,7 +72,6 @@ export function HowMarketWorks() {
             {steps.map((step, index) => <button key={step.number} type="button" onClick={() => { const rail=railRef.current; if(rail) rail.scrollTo({ left: index * rail.clientWidth * .86, behavior: "smooth" }); }} aria-label={"Go to step " + (index + 1)} className={"how-works-dot " + (active === index ? "is-active" : "")} />)}
           </div>
           <span className="text-[8px] font-black uppercase tracking-[.18em] text-white/25">Swipe or use the arrows</span>
-        </div>
       </div>
     </section>
   );
