@@ -166,3 +166,31 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .how-works-section .text-white\/40{color:rgba(255,255,255,.62)!important}
 .how-works-section .text-white\/25{color:rgba(255,255,255,.5)!important}
 .how-works-section .how-works-slide .bg-gradient-to-t{color:#fff}
+
+
+.community-showcase{background:linear-gradient(135deg,#ff4d6d 0%,#ff7a3d 34%,#7c3aed 72%,#4f46e5 100%);color:#fff;isolation:isolate}
+.community-showcase:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.22),transparent 25%),radial-gradient(circle at 85% 75%,rgba(255,215,80,.2),transparent 28%);pointer-events:none}
+.community-kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.12);backdrop-filter:blur(14px);font-size:10px;font-weight:950;letter-spacing:.16em;text-transform:uppercase;color:#fff;box-shadow:0 12px 35px rgba(0,0,0,.12)}
+.community-title{font-size:clamp(3rem,6vw,6rem);font-weight:950;line-height:.86;letter-spacing:-.075em;color:#fff}
+.community-title span{color:#ffe7a3;text-shadow:0 0 35px rgba(255,231,163,.2)}
+.community-stats{max-width:520px}
+.community-stats div{display:flex;flex-direction:column;gap:7px;border:1px solid rgba(255,255,255,.2);border-radius:18px;background:rgba(255,255,255,.1);padding:14px;backdrop-filter:blur(12px)}
+.community-stats b{font-size:24px;line-height:1;font-weight:950}.community-stats span{font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.68)}
+.community-collage{position:relative;min-height:570px}
+.community-photo{position:absolute;overflow:hidden;border:7px solid rgba(255,255,255,.92);box-shadow:0 30px 80px rgba(0,0,0,.24);transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .4s ease}
+.community-photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.22,1,.36,1)}
+.community-photo:hover{box-shadow:0 40px 100px rgba(0,0,0,.32)}.community-photo:hover img{transform:scale(1.07)}
+.community-photo-main{left:15%;top:5%;width:62%;height:82%;border-radius:34px;transform:rotate(-3deg)}
+.community-photo-main:hover{transform:rotate(-1deg) translateY(-7px)}
+.community-photo-top{right:0;top:0;width:35%;height:42%;border-radius:26px;transform:rotate(7deg)}
+.community-photo-top:hover{transform:rotate(5deg) translateY(-7px)}
+.community-photo-bottom{left:0;bottom:1%;width:35%;height:39%;border-radius:26px;transform:rotate(5deg)}
+.community-photo-bottom:hover{transform:rotate(3deg) translateY(-7px)}
+.community-badge{position:absolute;right:4%;bottom:8%;display:flex;align-items:center;gap:10px;border-radius:999px;background:#111;color:#fff;padding:13px 17px;font-size:10px;font-weight:900;box-shadow:0 18px 45px rgba(0,0,0,.28);animation:communityFloat 5s ease-in-out infinite}
+.community-badge svg{color:#ff6b81}
+.community-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(1px);animation:communityOrb 9s ease-in-out infinite}.community-orb-a{width:250px;height:250px;left:-100px;bottom:-80px;background:rgba(255,255,255,.12)}.community-orb-b{width:190px;height:190px;right:-50px;top:-50px;background:rgba(255,230,130,.14);animation-delay:-4s}
+.community-ring{position:absolute;border:1px solid rgba(255,255,255,.18);border-radius:50%;pointer-events:none}.community-ring-a{width:420px;height:420px;right:-210px;top:18%}.community-ring-b{width:270px;height:270px;left:-135px;top:5%}
+@keyframes communityFloat{0%,100%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(0,-12px,0) rotate(-1deg)}}
+@keyframes communityOrb{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(18px,-14px,0) scale(1.06)}}
+@media(max-width:640px){.community-showcase{padding-top:72px;padding-bottom:72px}.community-title{font-size:clamp(2.8rem,14vw,4.4rem)}.community-collage{min-height:430px;margin-top:8px}.community-photo-main{left:14%;width:68%;height:82%}.community-photo-top{width:35%;height:40%}.community-photo-bottom{width:34%;height:38%}.community-badge{right:0;bottom:4%;font-size:8px;padding:11px 13px}.community-stats{gap:6px}.community-stats div{padding:11px}}
+@media(prefers-reduced-motion:reduce){.community-photo,.community-photo img,.community-badge,.community-orb{animation:none;transition:none}}
