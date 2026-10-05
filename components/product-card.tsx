@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ExternalLink, Video } from "lucide-react";
+import { Heart, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { ProductMedia } from "@/components/product-media";
 
@@ -38,12 +38,6 @@ export function ProductCard({ p }: { p: any }) {
               className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]"
             />
           )
-        )}
-
-        {isVideo && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur-md">
-            <Video size={12} /> VIDEO
-          </span>
         )}
 
         <button
