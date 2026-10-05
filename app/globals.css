@@ -194,3 +194,19 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 @keyframes communityOrb{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(18px,-14px,0) scale(1.06)}}
 @media(max-width:640px){.community-showcase{padding-top:72px;padding-bottom:72px}.community-title{font-size:clamp(2.8rem,14vw,4.4rem)}.community-collage{min-height:430px;margin-top:8px}.community-photo-main{left:14%;width:68%;height:82%}.community-photo-top{width:35%;height:40%}.community-photo-bottom{width:34%;height:38%}.community-badge{right:0;bottom:4%;font-size:8px;padding:11px 13px}.community-stats{gap:6px}.community-stats div{padding:11px}}
 @media(prefers-reduced-motion:reduce){.community-photo,.community-photo img,.community-badge,.community-orb{animation:none;transition:none}}
+
+
+/* Navbar search + bag polish */
+.desktop-search-wrap{min-width:260px;max-width:460px}
+.desktop-search{height:48px;gap:9px;border:1px solid #e2e2dc;border-radius:16px;background:linear-gradient(135deg,#fafaf8,#f1f1ed);padding:4px 6px 4px 7px;box-shadow:0 8px 28px rgba(0,0,0,.045),inset 0 1px 0 rgba(255,255,255,.9);transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease,background .25s ease}
+.desktop-search:focus-within{background:#fff;border-color:#c9c9c1;box-shadow:0 0 0 4px rgba(17,17,17,.055),0 14px 35px rgba(0,0,0,.08);transform:translateY(-1px)}
+.search-icon-wrap{display:flex;height:36px;width:36px;align-items:center;justify-content:center;border-radius:11px;background:#111;color:#fff;flex:none;transition:transform .25s ease}
+.desktop-search:focus-within .search-icon-wrap{transform:rotate(-8deg) scale(1.04)}
+.desktop-search input{height:38px;font-size:12px;font-weight:700;letter-spacing:-.01em}
+.desktop-search input::placeholder{color:#8b8b84;font-weight:600}
+.search-shortcut{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 8px;border:1px solid #dddcd6;border-radius:8px;background:#fff;color:#777;font-size:9px;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.navbar-bag-btn{position:relative}
+.bag-count{position:absolute;right:-3px;top:-4px;display:flex;min-width:19px;height:19px;align-items:center;justify-content:center;padding:0 5px;border:2px solid #fff;border-radius:999px;background:#ff4d6d;color:#fff;font-size:8px;font-weight:950;line-height:1;box-shadow:0 5px 12px rgba(255,77,109,.3)}
+@media(max-width:1023px){
+  .navbar-bag-btn{margin-left:1px}
+}
