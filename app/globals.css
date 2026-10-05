@@ -245,3 +245,10 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 
 /* Premium desktop search */
 @media(min-width:1024px){.desktop-search-wrap{min-width:280px;max-width:470px}.desktop-search{position:relative}.desktop-search:before{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.025),transparent 45%,rgba(255,255,255,.035));}.desktop-search input{position:relative;z-index:1}.desktop-search .search-shortcut{position:relative;z-index:1}.desktop-search .search-icon-wrap{position:relative;z-index:1}}
+
+/* Final navbar search refinement */
+.desktop-search{position:relative;overflow:hidden}
+.desktop-search .search-icon-wrap{margin-right:1px}
+.desktop-search input{padding:0 2px}
+.desktop-search input::placeholder{opacity:.9}
+@media(max-width:1023px){.desktop-search{height:44px}.desktop-search .search-icon-wrap{height:34px;width:34px}.desktop-search{padding-left:7px}}
