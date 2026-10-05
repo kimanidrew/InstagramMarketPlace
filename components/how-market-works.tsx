@@ -15,13 +15,13 @@ export function HowMarketWorks() {
   const [active, setActive] = useState(0);
 
   function move(direction: "left" | "right") {
-    railRef.current?.scrollBy({ left: direction === "right" ? railRef.current.clientWidth * 0.86 : -railRef.current.clientWidth * 0.86, behavior: "smooth" });
+    const rail = railRef.current;\n    if (!rail) return;\n    const step = rail.querySelector<HTMLElement>(".how-works-slide");\n    if (!step) return;\n    const target = Math.max(0, Math.min(steps.length - 1, active + (direction === "right" ? 1 : -1)));\n    rail.scrollTo({ left: step.offsetLeft - rail.offsetLeft, behavior: "smooth" });
   }
 
   function onScroll() {
     const rail = railRef.current;
     if (!rail) return;
-    const index = Math.round(rail.scrollLeft / Math.max(1, rail.clientWidth * 0.86));
+    const slides = Array.from(rail.querySelectorAll<HTMLElement>(".how-works-slide"));\n    const index = slides.reduce((best, slide, i) => Math.abs(slide.offsetLeft - rail.scrollLeft) < Math.abs(slides[best].offsetLeft - rail.scrollLeft) ? i : best, 0);
     setActive(Math.max(0, Math.min(steps.length - 1, index)));
   }
 
@@ -69,7 +69,7 @@ export function HowMarketWorks() {
 
       <div className="shell relative z-10 mt-4 flex items-center justify-between gap-4">
           <div className="flex gap-1.5">
-            {steps.map((step, index) => <button key={step.number} type="button" onClick={() => { const rail=railRef.current; if(rail) rail.scrollTo({ left: index * rail.clientWidth * .86, behavior: "smooth" }); }} aria-label={"Go to step " + (index + 1)} className={"how-works-dot " + (active === index ? "is-active" : "")} />)}
+            {steps.map((step, index) => <button key={step.number} type="button" onClick={() => { const rail=railRef.current; const slide=rail?.querySelectorAll<HTMLElement>(".how-works-slide")[index]; if(rail && slide) rail.scrollTo({ left: slide.offsetLeft - rail.offsetLeft, behavior: "smooth" }); }} aria-label={"Go to step " + (index + 1)} className={"how-works-dot " + (active === index ? "is-active" : "")} />)}
           </div>
           <span className="text-[8px] font-black uppercase tracking-[.18em] text-white/25">Swipe or use the arrows</span>
       </div>
