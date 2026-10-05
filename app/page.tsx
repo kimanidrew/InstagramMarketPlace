@@ -209,11 +209,10 @@ export default async function Home() {
               <Reveal key={store.username} y={30} delay={index * 0.06}>
                 <Link href={"/store/" + store.username} className="store-community-card group">
                   <div className="store-community-image">
-                    {store.profileImageUrl ? (
-                      <img src={store.profileImageUrl} alt={store.name || "@" + store.username} />
-                    ) : (
-                      <div className="store-community-placeholder"><Instagram size={34} /></div>
-                    )}
+                    <img
+                      src={store.profileImageUrl || editorialImages[index % 4 === 0 ? "hero" : index % 4 === 1 ? "people" : index % 4 === 2 ? "shopping" : "seller"]}
+                      alt={store.name || "@" + store.username}
+                    />
                     <div className="store-community-overlay" />
                     <div className="store-community-meta">
                       <span>@{store.username}</span>
