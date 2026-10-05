@@ -2,7 +2,7 @@ import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, LogOut, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, LogOut, ShieldCheck, Sparkles, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -65,10 +65,9 @@ export default async function Account({
     }),
   ]);
 
-  const latest = requests[0];
-  const connection = latest
-    ? connections.find(c => c.username.toLowerCase() === latest.username.toLowerCase())
-    : connections[0];
+  const selected = q.requestId ? requests.find(r => r.id === q.requestId) : requests[0];
+  const latest = selected || requests[0];
+  const connection = latest ? connections.find(c => c.username.toLowerCase() === latest.username.toLowerCase()) : undefined;
 
   const isConnected = Boolean(connection);
   const currentStep = isConnected ? 4 : latest?.status === "APPROVED" ? 3 : latest?.status === "PENDING" ? 2 : 1;
@@ -76,7 +75,7 @@ export default async function Account({
   const step = Math.min(4, Math.max(1, Number.isFinite(requestedStep) ? requestedStep : currentStep));
   const visibleStep = Math.min(step, currentStep);
 
-  const stepHref = (n: number) => "/account?step=" + n;
+  const stepHref = (n: number) => "/account?requestId=" + encodeURIComponent(latest?.id || "") + "&step=" + n;
 
   return (
     <main className="seller-onboarding">
@@ -121,8 +120,10 @@ export default async function Account({
           </div>
         </div>
 
+        <div className="seller-shop-switcher"><div><p className="seller-kicker light">Your Instagram shops</p><h2>{latest ? "Shop: @" + latest.username : "Start your first shop"}</h2></div><Link href="/account?new=1&step=1" className="seller-new-shop"><Plus size={15} /> Add another shop</Link></div>
+        <div className="seller-step-indicator-mobile">{[1,2,3,4].map(n => <span key={n} className={n < currentStep || isConnected ? "done" : n === visibleStep ? "active" : ""}>{n < currentStep || isConnected ? <Check size={12} /> : n}</span>)}</div>
         <div className="seller-stepper">
-          <StepCard number={1} title="Tell us your Instagram username" text="First, tell us which Instagram account you want to turn into your shop. That's it — no product list needed." image={guideImages.register} state={currentStep > 1 ? "done" : visibleStep === 1 ? "active" : "locked"}>
+          {visibleStep === 1 && <StepCard number={1} title="Tell us your Instagram username" text="First, tell us which Instagram account you want to turn into your shop. That's it — no product list needed." image={guideImages.register} state={currentStep > 1 ? "done" : visibleStep === 1 ? "active" : "locked"}>
             {currentStep === 1 ? (
               <form action="/api/store-requests" method="post" className="seller-form">
                 <label htmlFor="username">Your Instagram username</label>
@@ -132,9 +133,9 @@ export default async function Account({
             ) : (
               <div className="seller-done-note"><CheckCircle2 size={16} /> Username submitted</div>
             )}
-          </StepCard>
+          </StepCard>}
 
-          <StepCard number={2} title="Wait while we review it" text="Now our team checks your shop and sends the Instagram tester invitation through Meta. You do not need to do anything yet." image={guideImages.review} state={currentStep > 2 ? "done" : currentStep === 2 ? "active" : "locked"}>
+          {visibleStep === 2 && <StepCard number={2} title="Wait while we review it" text="Now our team checks your shop and sends the Instagram tester invitation through Meta. You do not need to do anything yet." image={guideImages.review} state={currentStep > 2 ? "done" : currentStep === 2 ? "active" : "locked"}>
             {latest?.status === "PENDING" && currentStep === 2 && (
               <div className="seller-status-box review">
                 <div><ShieldCheck size={17} /><div><b>Request in review</b><span>We are reviewing @{latest.username}. This step is saved.</span></div></div>
@@ -143,9 +144,9 @@ export default async function Account({
             )}
             {latest?.status === "APPROVED" && <div className="seller-done-note"><CheckCircle2 size={16} /> Approved — next step unlocked</div>}
             {latest?.status === "REJECTED" && <div className="seller-status-box error"><b>This request was not approved.</b><span>You can start again with another Instagram username.</span><Link href={stepHref(1)} className="seller-primary-button">Start again <ArrowRight size={15} /></Link></div>}
-          </StepCard>
+          </StepCard>}
 
-          <StepCard number={3} title="Accept the Instagram invitation" text="When your shop is approved, Instagram will show you a tester invitation. Open Instagram, approve it, then come back here." image={guideImages.tester} state={currentStep > 3 ? "done" : currentStep === 3 ? "active" : "locked"}>
+          {visibleStep === 3 && <StepCard number={3} title="Accept the Instagram invitation" text="When your shop is approved, Instagram will show you a tester invitation. Open Instagram, approve it, then come back here." image={guideImages.tester} state={currentStep > 3 ? "done" : currentStep === 3 ? "active" : "locked"}>
             {currentStep === 3 && latest?.status === "APPROVED" && !isConnected && (
               <div className="seller-action-stack">
                 <div className="seller-numbered-tip"><b>1</b><span>Open Instagram and find the tester invitation.</span></div>
@@ -154,9 +155,9 @@ export default async function Account({
                 <Link href={stepHref(4)} className="seller-next-button">I approved it — Next <ArrowRight size={16} /></Link>
               </div>
             )}
-          </StepCard>
+          </StepCard>}
 
-          <StepCard number={4} title="Connect Instagram" text="Last step! Connect the approved Instagram account. Instagram handles the secure sign-in for you." image={guideImages.connect} state={isConnected ? "done" : currentStep === 4 ? "active" : "locked"}>
+          {visibleStep === 4 && <StepCard number={4} title="Connect Instagram" text="Last step! Connect the approved Instagram account. Instagram handles the secure sign-in for you." image={guideImages.connect} state={isConnected ? "done" : currentStep === 4 ? "active" : "locked"}>
             {isConnected ? (
               <div className="seller-status-box success"><CheckCircle2 size={18} /><div><b>@{connection?.username} is connected</b><span>{connection?.posts.length || 0} marketplace products imported.</span></div></div>
             ) : currentStep === 4 && latest?.status === "APPROVED" ? (
@@ -165,20 +166,20 @@ export default async function Account({
                 <Link href={stepHref(3)} className="seller-back-button"><ArrowLeft size={14} /> Back to invitation step</Link>
               </div>
             ) : null}
-          </StepCard>
+          </StepCard>}
         </div>
 
         {!isConnected && currentStep === 2 && (
           <div className="seller-help-card"><div className="seller-help-icon">💡</div><div><b>Nothing to do yet.</b><span>Leave this page or come back later. When an admin approves your request, step 3 will unlock automatically.</span></div><Link href={stepHref(2)}>Keep me on step 2 <ArrowRight size={14} /></Link></div>
         )}
 
-        {requests.length > 0 && (
+        {requests.length > 0 && q.new !== "1" && (
           <section className="seller-history">
             <div className="seller-section-heading"><div><p className="seller-kicker light">Saved progress</p><h2>Your shop requests</h2></div><span>{requests.length}</span></div>
             <div className="seller-history-list">
               {requests.map(request => {
                 const connected = connections.some(c => c.username.toLowerCase() === request.username.toLowerCase());
-                return <div className="seller-history-row" key={request.id}><div className="seller-history-icon"><Instagram size={18} /></div><div><b>@{request.username}</b><span>{connected ? "Connected" : request.status === "PENDING" ? "Request in review" : request.status === "APPROVED" ? "Approved — continue to step 3" : "Not approved"}</span></div><Link href={stepHref(connected ? 4 : request.status === "APPROVED" ? 3 : request.status === "PENDING" ? 2 : 1)}>Continue <ArrowRight size={14} /></Link></div>;
+                return <div className="seller-history-row" key={request.id}><div className="seller-history-icon"><Instagram size={18} /></div><div><b>@{request.username}</b><span>{connected ? "Connected" : request.status === "PENDING" ? "Request in review" : request.status === "APPROVED" ? "Approved — continue to step 3" : "Not approved"}</span></div><Link href={"/account?requestId=" + encodeURIComponent(request.id) + "&step=" + (connected ? 4 : request.status === "APPROVED" ? 3 : request.status === "PENDING" ? 2 : 1)}>Continue <ArrowRight size={14} /></Link></div>;
               })}
             </div>
           </section>
