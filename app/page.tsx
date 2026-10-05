@@ -79,7 +79,7 @@ export default async function Home() {
             </div>
           </Reveal>
 
-          <Reveal className="relative min-h-[560px] overflow-visible" y={42} overflow-visible">
+          <Reveal className="relative min-h-[560px] overflow-visible" y={42}>
             <div className="hero-float hero-float-a absolute left-[8%] top-10 z-10 w-[34%] rotate-[-7deg] overflow-hidden rounded-[22px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_24px_60px_rgba(0,0,0,.18)] sm:left-[4%] sm:w-[36%]">
               <img
                 src={products[1]?.mediaUrl || editorialImages.people}
@@ -116,7 +116,6 @@ export default async function Home() {
               Discover · Shop · Support
             </div>
           </Reveal>
-          </div>
         </div>
       </section>
 
