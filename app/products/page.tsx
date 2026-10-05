@@ -41,7 +41,7 @@ export default async function Products({
   ]);
 
   return (
-    <main className="shell py-10 md:py-14">
+    <main className="products-page shell py-10 md:py-14">
       <section className="relative overflow-hidden rounded-[32px] bg-black p-7 text-white md:p-10 lg:p-12">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
