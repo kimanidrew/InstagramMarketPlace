@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, X } from "lucide-react";
 
@@ -28,8 +28,13 @@ function StepCard({ number,title,text,image,state,children }:{number:number;titl
 export default function SellerSetupModal({request,connection,initialStep=1}:{request:Request;connection?:Connection;initialStep?:number}){
   const connected=Boolean(connection);
   const currentStep=connected?4:request.status==="APPROVED"?3:request.status==="PENDING"?2:1;
-  const step=Math.min(4,Math.max(1,initialStep));
-  const visibleStep=step===4&&request.status==="APPROVED"&&!connected?4:Math.min(step,currentStep);
+  const [activeStep,setActiveStep]=useState(Math.min(4,Math.max(1,initialStep)));
+  useEffect(()=>{
+    if(connected){setActiveStep(4);return;}
+    if(request.status==="APPROVED") setActiveStep(step=>step<3?3:step);
+    if(request.status==="REJECTED") setActiveStep(1);
+  },[connected,request.status]);
+  const visibleStep=activeStep===4&&request.status==="APPROVED"&&!connected?4:Math.min(activeStep,currentStep);
   const displayStep=visibleStep;
   const href=(n:number)=>"/account?setup="+encodeURIComponent(request.id)+"&step="+n;
 
