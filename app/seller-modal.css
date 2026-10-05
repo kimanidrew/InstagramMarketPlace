@@ -1,0 +1,67 @@
+/* Seller setup modal — friendly, polished and easier to read */
+.seller-setup-modal{padding:20px}
+.seller-setup-backdrop{background:rgba(7,8,10,.76);backdrop-filter:blur(22px)}
+.seller-setup-window{width:min(1040px,100%);height:min(920px,calc(100vh - 40px));border:1px solid rgba(255,255,255,.32);border-radius:32px;background:#f8f8f5;box-shadow:0 42px 140px rgba(0,0,0,.48)}
+.seller-setup-topbar{padding:18px 25px;background:linear-gradient(110deg,#fff 0%,#f7f7f3 100%)}
+.seller-setup-topbar>div{gap:13px}
+.seller-setup-topbar b{font-size:15px;font-weight:900}
+.seller-setup-eyebrow{font-size:9px;padding:7px 10px;border-radius:999px;background:#f0f0ec;color:#666}
+.seller-setup-close{width:42px;height:42px;background:#171717}
+.seller-setup-progress{padding:20px 30px 16px;background:rgba(248,248,245,.96)}
+.seller-setup-progress-copy span{font-size:10px}
+.seller-setup-progress-copy b{font-size:13px}
+.seller-setup-progress-line{height:6px;margin-top:13px;background:#e4e4de}
+.seller-setup-progress-steps{margin-top:10px}
+.seller-setup-progress-steps span{width:27px;height:27px;font-size:10px}
+.seller-setup-scroll .seller-stepper{padding:25px 30px 36px}
+.seller-setup-scroll .seller-step-card{grid-template-columns: minmax(260px,34%) minmax(0,1fr);min-height:340px;border-radius:28px;border-color:#e4e4df;box-shadow:0 18px 55px rgba(0,0,0,.065)}
+.seller-setup-scroll .seller-step-card.seller-step-active{border-color:#d1d1c9;box-shadow:0 24px 70px rgba(0,0,0,.10)}
+.seller-setup-scroll .seller-step-media{min-height:340px;position:relative;overflow:hidden;background:#e9e9e4}
+.seller-setup-scroll .seller-step-media:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.18))}
+.seller-setup-scroll .seller-step-media img{transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.seller-setup-scroll .seller-step-card:hover .seller-step-media img{transform:scale(1.035)}
+.seller-setup-scroll .seller-step-number{left:calc(34% - 23px);top:24px;width:48px;height:48px;font-size:14px}
+.seller-setup-scroll .seller-step-body{padding:34px 36px}
+.seller-setup-scroll .seller-step-top span{font-size:9px}
+.seller-setup-scroll .seller-step-top b{font-size:10px;padding:8px 12px}
+.seller-setup-scroll .seller-step-body h2{font-size:clamp(1.85rem,3.1vw,2.65rem);line-height:1.02;letter-spacing:-.06em}
+.seller-setup-scroll .seller-step-text{margin-top:13px;font-size:14px;line-height:1.8;color:#62625d}
+.seller-setup-scroll .seller-form{margin-top:25px}
+.seller-setup-scroll .seller-form label{font-size:11px;letter-spacing:.09em}
+.seller-setup-scroll .seller-input-wrap{padding:6px}
+.seller-setup-scroll .seller-input-wrap>span{font-size:15px}
+.seller-setup-scroll .seller-input-wrap input{font-size:15px;padding:13px 9px}
+.seller-setup-scroll .seller-input-wrap button{font-size:12px;padding:13px 19px}
+.seller-setup-scroll .seller-form small{font-size:11px;margin-top:10px}
+.seller-setup-scroll .seller-status-box{padding:18px;border-radius:19px}
+.seller-setup-scroll .seller-status-box b{font-size:13px}
+.seller-setup-scroll .seller-status-box span{font-size:12px;line-height:1.65}
+.seller-setup-scroll .seller-done-note{font-size:12px;padding:12px 14px}
+.seller-setup-scroll .seller-numbered-tip{font-size:13px;line-height:1.6;gap:11px}
+.seller-setup-scroll .seller-numbered-tip b{width:27px;height:27px;font-size:11px;flex:none}
+.seller-setup-scroll .seller-primary-button,.seller-setup-scroll .seller-next-button,.seller-setup-scroll .seller-back-button,.seller-setup-scroll .seller-secondary-button{font-size:12px;padding:14px 18px}
+.seller-setup-scroll .seller-action-stack{gap:11px;margin-top:22px}
+.seller-setup-scroll .seller-modal-next{margin-top:17px}
+.seller-progress-open{font-size:11px;padding:12px 17px}
+@media(max-width:760px){
+ .seller-setup-modal{padding:0}
+ .seller-setup-window{height:100%;border-radius:0}
+ .seller-setup-topbar{padding:14px 16px}
+ .seller-setup-topbar b{font-size:14px}
+ .seller-setup-progress{padding:15px 18px 13px}
+ .seller-setup-progress-copy span{font-size:9px}
+ .seller-setup-progress-copy b{font-size:12px}
+ .seller-setup-scroll .seller-stepper{padding:15px 12px 28px}
+ .seller-setup-scroll .seller-step-card{grid-template-columns:1fr;min-height:0;border-radius:24px}
+ .seller-setup-scroll .seller-step-media{height:185px;min-height:185px}
+ .seller-setup-scroll .seller-step-number{left:16px;top:162px;width:45px;height:45px}
+ .seller-setup-scroll .seller-step-body{padding:25px 19px 24px}
+ .seller-setup-scroll .seller-step-body h2{font-size:1.85rem}
+ .seller-setup-scroll .seller-step-text{font-size:13px;line-height:1.75}
+ .seller-setup-scroll .seller-form label{font-size:10px}
+ .seller-setup-scroll .seller-input-wrap input{font-size:14px}
+ .seller-setup-scroll .seller-form small{font-size:10px}
+ .seller-setup-scroll .seller-numbered-tip{font-size:12px}
+ .seller-setup-scroll .seller-primary-button,.seller-setup-scroll .seller-next-button,.seller-setup-scroll .seller-back-button,.seller-setup-scroll .seller-secondary-button{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.seller-setup-scroll .seller-step-card,.seller-setup-scroll .seller-step-media img{animation:none;transition:none}}
