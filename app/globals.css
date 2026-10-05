@@ -23,22 +23,24 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .horizontal-scroll,.overflow-x-auto,.overflow-x-scroll{scrollbar-width:none;-ms-overflow-style:none}
 .horizontal-scroll::-webkit-scrollbar,.overflow-x-auto::-webkit-scrollbar,.overflow-x-scroll::-webkit-scrollbar{display:none}
 
-.site-header{background:rgba(0,0,0,.96);border-bottom:1px solid rgba(255,255,255,.09);color:#fff;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);transition:box-shadow .3s ease}
-.site-header:hover{box-shadow:0 12px 40px rgba(0,0,0,.28)}
-.brand{font-size:21px;font-weight:950;letter-spacing:-.075em;line-height:1}
-.brand span{color:#aaa}.brand sup{margin-left:2px;font-size:7px;vertical-align:top;font-weight:900}
-.nav-link{position:relative;padding:10px 12px;border-radius:999px;font-size:13px;font-weight:900;letter-spacing:-.015em;color:#222;transition:transform .2s ease,background .2s ease,color .2s ease}
+.site-header{background:rgba(0,0,0,.97);border-bottom:1px solid rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);transition:box-shadow .3s ease}
+.site-header:hover{box-shadow:0 12px 40px rgba(0,0,0,.32)}
+.brand{font-size:21px;font-weight:950;letter-spacing:-.075em;line-height:1;color:#fff}
+.brand span{color:#b8b8b8}.brand sup{margin-left:2px;font-size:7px;vertical-align:top;font-weight:900;color:#fff}
+.nav-link{position:relative;padding:10px 12px;border-radius:999px;font-size:12px;font-weight:850;letter-spacing:-.01em;color:#f5f5f5;transition:transform .2s ease,background .2s ease,color .2s ease}
 .nav-link:hover{background:#242424;color:#fff;transform:translateY(-1px)}
-.icon-btn{display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;color:#fff;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
-.icon-btn:hover,.icon-btn.active{background:#f2f2ef;transform:translateY(-1px)}
-.bag-btn{display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#111;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.16);transition:transform .2s ease,box-shadow .2s ease}
-.bag-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(0,0,0,.2)}
+.icon-btn{display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;color:#f5f5f5;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.icon-btn:hover,.icon-btn.active{background:#fff;color:#111;transform:translateY(-1px)}
+.bag-btn{display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#fff;color:#111;box-shadow:0 8px 20px rgba(0,0,0,.28);transition:transform .2s ease,box-shadow .2s ease}
+.bag-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(0,0,0,.35)}
 .desktop-search-wrap{min-width:240px;flex:1;max-width:430px}
-.desktop-search{display:flex;height:44px;align-items:center;gap:10px;border:1px solid #e8e8e4;border-radius:999px;background:#f7f7f5;padding:0 13px;color:#888;transition:.25s ease}
-.desktop-search:focus-within{background:#fff;border-color:#cfcfca;box-shadow:0 0 0 5px rgba(0,0,0,.045)}
-.desktop-search input{min-width:0;flex:1;border:0;outline:0;background:transparent;font-size:13px;color:#111;font-weight:600}
-.desktop-search input::placeholder{color:#888;font-weight:600}
-.desktop-search kbd{border:1px solid #ddd;border-radius:6px;background:#fff;padding:3px 6px;font-size:9px;color:#777;font-weight:800}
+.desktop-search{display:flex;height:44px;align-items:center;gap:10px;border:1px solid #3a3a3a;border-radius:999px;background:#181818;padding:0 13px;color:#aaa;transition:.25s ease}
+.desktop-search>svg{flex:0 0 auto;color:#aaa}
+.desktop-search:focus-within{background:#202020;border-color:#666;box-shadow:0 0 0 4px rgba(255,255,255,.08)}
+.desktop-search input{min-width:0;flex:1;border:0;outline:0;background:transparent;font-size:12px;color:#fff;font-weight:700}
+.desktop-search input::placeholder{color:#858585;font-weight:600}
+.desktop-search kbd{border:1px solid #3b3b3b;border-radius:6px;background:#242424;padding:3px 6px;font-size:9px;color:#aaa;font-weight:800}
+@media(max-width:1023px){.desktop-search-wrap{min-width:0;max-width:none;flex:1}.desktop-search{height:42px}.desktop-search input{font-size:12px}.search-shortcut{display:none}}
 .mobile-search-panel,.mobile-menu-panel{display:none}
 .mobile-strip{border-top:1px solid rgba(0,0,0,.05);background:rgba(255,255,255,.92)}
 .strip-pill{padding:7px 12px;border:1px solid #e8e8e4;border-radius:999px;background:#fff;font-size:11px;font-weight:800;color:#333}
