@@ -2,12 +2,27 @@
 
 import Link from "next/link";
 import { Heart, Menu, Search, ShoppingBag, Store, UserCircle, X, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SiteHeader({ user }: { user: any }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [bagCount, setBagCount] = useState(0);
+
+  useEffect(() => {
+    const readBag = () => {
+      try {
+        const raw = localStorage.getItem("instagram-market-bag");
+        const bag = raw ? JSON.parse(raw) : [];
+        setBagCount(Array.isArray(bag) ? bag.reduce((sum, item) => sum + Number(item?.quantity || 1), 0) : 0);
+      } catch { setBagCount(0); }
+    };
+    readBag();
+    window.addEventListener("storage", readBag);
+    window.addEventListener("bag-updated", readBag);
+    return () => { window.removeEventListener("storage", readBag); window.removeEventListener("bag-updated", readBag); };
+  }, []);
 
   function submitSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -31,7 +46,7 @@ export function SiteHeader({ user }: { user: any }) {
               placeholder="Search products, stores & categories..."
               aria-label="Search products, stores and categories"
             />
-            <kbd>⌘ K</kbd>
+            <span className="search-shortcut">⌘ K</span>
           </form>
         </div>
 
