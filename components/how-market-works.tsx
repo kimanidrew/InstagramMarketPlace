@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import { Instagram, Search, ShoppingBag, ArrowRight } from "lucide-react";
+import { ArrowDown, Instagram, Search, ShoppingBag } from "lucide-react";
 import { useRef, useState } from "react";
 
 const steps = [
@@ -37,101 +37,173 @@ const steps = [
 export function HowMarketWorks() {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
     const next = Math.min(steps.length - 1, Math.floor(value * steps.length));
     setActive(next);
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.04, 1]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-2%", "2%"]);
 
   return (
-    <section ref={ref} className="how-works-section relative bg-[#111] text-white" style={{ height: "300vh" }}>
+    <section
+      ref={ref}
+      className="how-works-section relative bg-[#111] text-white"
+      style={{ height: "300vh" }}
+    >
       <div className="sticky top-0 flex h-screen min-h-[680px] items-center overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_45%,rgba(255,255,255,.12),transparent_32%),linear-gradient(120deg,#0b0b0b,#171717)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_48%,rgba(255,255,255,.12),transparent_30%),linear-gradient(135deg,#090909,#171717)]" />
 
-        <div className="shell relative z-10 w-full py-12">
-          <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:items-center">
+        <div className="shell relative z-10 w-full py-10 sm:py-14">
+          <div className="mb-8 flex items-end justify-between gap-6 sm:mb-10">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/40">
+              <p className="text-[10px] font-black uppercase tracking-[.24em] text-white/40">
                 How Instagram Market works
               </p>
-              <h2 className="mt-5 max-w-xl text-5xl font-black leading-[.9] tracking-[-.07em] sm:text-6xl xl:text-7xl">
-                From scroll
-                <br />
-                to <span className="text-white/35">shop.</span>
+              <h2 className="mt-3 max-w-3xl text-4xl font-black leading-[.9] tracking-[-.07em] sm:text-6xl lg:text-7xl">
+                From your feed
+                <span className="text-white/35"> to your shop.</span>
               </h2>
-              <p className="mt-7 max-w-md text-sm leading-7 text-white/55 sm:text-base">
-                Keep scrolling. The experience stays with you while each step
-                changes — so you can see exactly how Instagram content becomes
-                a simple marketplace journey.
-              </p>
-
-              <div className="mt-9 flex gap-2">
-                {steps.map((step, index) => (
-                  <div
-                    key={step.number}
-                    className="flex items-center gap-2"
-                    aria-label={step.label}
-                  >
-                    <span className={"h-1 rounded-full transition-all duration-500 " + (active === index ? "w-14 bg-white" : "w-6 bg-white/20")} />
-                    <span className={"hidden text-[10px] font-bold uppercase tracking-[.14em] transition sm:block " + (active === index ? "text-white" : "text-white/30")}>
-                      {step.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[650px]">
-              <div className="relative aspect-[1.02/1] overflow-hidden rounded-[34px] border border-white/10 bg-white/5 shadow-[0_35px_100px_rgba(0,0,0,.45)]">
+            <div className="hidden items-center gap-2 pb-1 text-[10px] font-black uppercase tracking-[.18em] text-white/35 sm:flex">
+              <span>Keep scrolling</span>
+              <ArrowDown size={13} className="animate-bounce" />
+            </div>
+          </div>
+
+          <div className="grid gap-7 lg:grid-cols-[.72fr_1.28fr] lg:items-stretch">
+            <div className="flex min-h-0 flex-col justify-between rounded-[28px] border border-white/10 bg-white/[.035] p-3 sm:p-4">
+              <div className="space-y-2">
                 {steps.map((step, index) => {
                   const Icon = step.icon;
+                  const isActive = active === index;
+
                   return (
                     <motion.div
                       key={step.number}
                       animate={{
-                        opacity: active === index ? 1 : 0,
-                        scale: active === index ? 1 : 1.04,
+                        opacity: isActive ? 1 : 0.38,
+                        x: isActive ? 5 : 0,
                       }}
-                      transition={{ duration: .6, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute inset-0"
-                      aria-hidden={active !== index}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      className="relative overflow-hidden rounded-[22px] border border-white/10"
                     >
-                      <motion.img
-                        src={step.image}
-                        alt=""
-                        style={active === index ? { y: imageY } : undefined}
-                        className="h-[108%] w-full object-cover"
+                      <div
+                        className={
+                          "absolute inset-0 transition-opacity duration-500 " +
+                          (isActive
+                            ? "bg-white/[.09] opacity-100"
+                            : "opacity-0")
+                        }
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/10" />
 
-                      <div className="absolute left-6 top-6 flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 py-2 text-[10px] font-black uppercase tracking-[.14em] backdrop-blur-md">
-                        <Icon size={13} />
-                        {step.tag}
-                      </div>
+                      <div className="relative flex gap-4 p-4 sm:p-5">
+                        <div
+                          className={
+                            "flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-xs font-black transition " +
+                            (isActive
+                              ? "border-white bg-white text-black"
+                              : "border-white/15 bg-white/5 text-white/45")
+                          }
+                        >
+                          {step.number}
+                        </div>
 
-                      <div className="absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8">
-                        <span className="text-xs font-black text-white/45">{step.number}</span>
-                        <h3 className="mt-2 text-3xl font-black tracking-[-.05em] sm:text-4xl">
-                          {step.title}
-                        </h3>
-                        <p className="mt-3 max-w-xl text-sm leading-6 text-white/65">
-                          {step.text}
-                        </p>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Icon size={14} className="text-white/55" />
+                            <span className="text-[9px] font-black uppercase tracking-[.18em] text-white/40">
+                              {step.label}
+                            </span>
+                          </div>
+                          <h3 className="mt-2 text-xl font-black tracking-[-.045em] sm:text-2xl">
+                            {step.title}
+                          </h3>
+                          <motion.p
+                            animate={{
+                              height: isActive ? "auto" : 0,
+                              opacity: isActive ? 1 : 0,
+                              marginTop: isActive ? 10 : 0,
+                            }}
+                            transition={{ duration: 0.4 }}
+                            className="overflow-hidden text-sm leading-6 text-white/55"
+                          >
+                            {step.text}
+                          </motion.p>
+                        </div>
                       </div>
                     </motion.div>
                   );
                 })}
-
-                <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 rounded-full border border-white/15 bg-black/25 p-3 backdrop-blur-md sm:block">
-                  <ArrowRight size={17} />
-                </div>
               </div>
 
-              <div className="mt-4 flex items-center justify-between px-1 text-[10px] font-bold uppercase tracking-[.15em] text-white/30">
-                <span>Keep scrolling</span>
+              <div className="hidden px-3 pb-2 pt-5 text-[10px] font-bold uppercase tracking-[.16em] text-white/25 lg:block">
+                <span>{String(active + 1).padStart(2, "0")}</span>
+                <span className="mx-2">/</span>
+                <span>03</span>
+              </div>
+            </div>
+
+            <div className="relative min-w-0">
+              <motion.div
+                className="relative aspect-[1.42/1] overflow-hidden rounded-[30px] border border-white/10 bg-white/5 shadow-[0_40px_110px_rgba(0,0,0,.5)] sm:aspect-[1.5/1]"
+              >
+                {steps.map((step, index) => {
+                  const Icon = step.icon;
+                  const isActive = active === index;
+
+                  return (
+                    <motion.div
+                      key={step.number}
+                      animate={{
+                        opacity: isActive ? 1 : 0,
+                        scale: isActive ? 1 : 1.035,
+                      }}
+                      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute inset-0"
+                      aria-hidden={!isActive}
+                    >
+                      <motion.img
+                        src={step.image}
+                        alt=""
+                        style={isActive ? { scale: imageScale, y: imageY } : undefined}
+                        className="h-full w-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-black/5" />
+
+                      <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 py-2 text-[10px] font-black uppercase tracking-[.14em] backdrop-blur-md sm:left-7 sm:top-7">
+                        <Icon size={13} />
+                        {step.tag}
+                      </div>
+
+                      <div className="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7">
+                        <div className="flex items-end justify-between gap-5">
+                          <div>
+                            <span className="text-xs font-black text-white/45">
+                              {step.number}
+                            </span>
+                            <h3 className="mt-1 max-w-2xl text-3xl font-black leading-[.95] tracking-[-.055em] sm:text-5xl">
+                              {step.title}
+                            </h3>
+                          </div>
+                          <div className="hidden rounded-full border border-white/15 bg-black/30 px-4 py-2 text-[10px] font-black uppercase tracking-[.16em] text-white/65 backdrop-blur-md sm:block">
+                            {step.label}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+
+              <div className="mt-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[.15em] text-white/25">
+                <span>Instagram content, reimagined for discovery</span>
                 <span>{String(active + 1).padStart(2, "0")} / 03</span>
               </div>
             </div>
