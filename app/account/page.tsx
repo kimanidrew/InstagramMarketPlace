@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Instagram, LogOut, ShieldCheck, Sparkles, Plus } from "lucide-react";
 import SellerSetupModal from "@/components/seller-setup-modal";
+import { AccountLiveRefresh } from "@/components/account-live-refresh";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,7 @@ export default async function Account({
 
   return (
     <main className="seller-onboarding">
+      <AccountLiveRefresh />
       <section className="seller-onboarding-hero">
         <div className="shell">
           <div className="seller-hero-row">
