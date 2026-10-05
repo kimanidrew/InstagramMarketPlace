@@ -237,3 +237,6 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 @media(prefers-reduced-motion:reduce){.community-photo,.community-photo img{transition:none}}
 
 
+
+.community-copy-panel .community-stores-button{color:#111!important}
+.community-copy-panel .community-stores-button svg{color:#111!important}
