@@ -77,22 +77,35 @@ export default async function Home() {
           </div>
 
           <div className="relative min-h-[560px]">
-            <div className="absolute inset-4 overflow-hidden rounded-[36px] bg-[#eee] shadow-2xl">
-              <img
-                src={editorialImages.hero}
-                alt="People discovering products and shopping"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/5 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 rounded-[24px] border border-white/20 bg-white/90 p-5 backdrop-blur-xl">
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.16em]">
-                  <Sparkles size={13} /> From social inspiration to shopping
-                </div>
-                <p className="mt-2 text-sm leading-6 text-black/65">
-                  One place to discover products, find independent sellers and
-                  follow the story behind what you love.
-                </p>
+            <div className="absolute right-0 top-4 z-20 w-[58%] overflow-hidden rounded-[30px] border border-white bg-[#f2f2ef] shadow-2xl sm:w-[55%]">
+              {products[0]?.mediaUrl ? (
+                <img src={products[0].mediaUrl} alt={products[0].productTitle || "Marketplace product"} className="aspect-[4/5] w-full object-cover" />
+              ) : (
+                <img src={editorialImages.hero} alt="Marketplace discovery" className="aspect-[4/5] w-full object-cover" />
+              )}
+            </div>
+            <div className="absolute left-2 top-24 z-10 w-[46%] overflow-hidden rounded-[28px] border border-white bg-[#f2f2ef] shadow-xl sm:left-6 sm:w-[44%]">
+              {products[1]?.mediaUrl ? (
+                <img src={products[1].mediaUrl} alt={products[1].productTitle || "Marketplace product"} className="aspect-[4/5] w-full object-cover" />
+              ) : (
+                <img src={editorialImages.people} alt="People discovering products" className="aspect-[4/5] w-full object-cover" />
+              )}
+            </div>
+            <div className="absolute bottom-4 left-[19%] z-30 w-[49%] overflow-hidden rounded-[28px] border border-white bg-white p-2 shadow-2xl sm:left-[21%] sm:w-[47%]">
+              <div className="overflow-hidden rounded-[22px] bg-[#111]">
+                {products[2]?.mediaUrl ? (
+                  <img src={products[2].mediaUrl} alt={products[2].productTitle || "Marketplace product"} className="aspect-[4/5] w-full object-cover" />
+                ) : (
+                  <img src={editorialImages.shopping} alt="Shopping experience" className="aspect-[4/5] w-full object-cover" />
+                )}
               </div>
+              <div className="px-3 py-3">
+                <p className="text-[10px] font-black uppercase tracking-[.14em] text-[#999]">Instagram Market</p>
+                <p className="mt-1 text-xs font-bold">Real posts. Real products.</p>
+              </div>
+            </div>
+            <div className="absolute bottom-12 right-0 z-40 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
+              Discover · Shop · Support
             </div>
           </div>
         </div>
