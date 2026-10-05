@@ -62,15 +62,6 @@ export function SiteHeader({ user }: { user: any }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => { setSearchOpen((v) => !v); setMenuOpen(false); }}
-            className={"icon-btn search-trigger lg:hidden " + (searchOpen ? "active" : "")}
-            aria-label={searchOpen ? "Close search" : "Open search"}
-          >
-            {searchOpen ? <X size={20} /> : <Search size={20} />}
-          </button>
-
           <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist">
             <Heart size={19} />
           </Link>
