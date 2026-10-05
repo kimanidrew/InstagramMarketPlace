@@ -15,6 +15,14 @@ button,input,textarea{font:inherit}
 .editorial-grid{background-image:linear-gradient(#eee 1px,transparent 1px),linear-gradient(90deg,#eee 1px,transparent 1px);background-size:32px 32px}
 .soft-shadow{box-shadow:0 24px 80px rgba(0,0,0,.08)}
 
+a.bg-black,button.bg-black,a[class*="bg-[#111]"],button[class*="bg-[#111]"],a[class*="bg-black"],button[class*="bg-black"]{color:#fff}
+a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*="bg-[#111]"]:hover,a[class*="bg-black"]:hover,button[class*="bg-black"]:hover{color:#fff}
+
+.hide-scrollbar{scrollbar-width:none;-ms-overflow-style:none}
+.hide-scrollbar::-webkit-scrollbar{display:none}
+.horizontal-scroll,.overflow-x-auto,.overflow-x-scroll{scrollbar-width:none;-ms-overflow-style:none}
+.horizontal-scroll::-webkit-scrollbar,.overflow-x-auto::-webkit-scrollbar,.overflow-x-scroll::-webkit-scrollbar{display:none}
+
 .site-header{background:rgba(255,255,255,.86);border-bottom:1px solid rgba(0,0,0,.06);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);transition:box-shadow .3s ease}
 .site-header:hover{box-shadow:0 12px 40px rgba(0,0,0,.05)}
 .brand{font-size:20px;font-weight:900;letter-spacing:-.07em;line-height:1}
