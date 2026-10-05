@@ -263,7 +263,7 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 }
 
 
-/* How Instagram Market works — stronger section rhythm and a finished bottom edge */
+/* How Instagram Market works — refined carousel spacing and safe transform room */
 .how-works-section{
   padding-bottom:0;
   background:
@@ -271,19 +271,30 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
     linear-gradient(180deg,#171717 0%,#111 100%);
 }
 .how-works-section .how-works-rail{
-  margin-top:clamp(28px,4vw,48px);
-  padding-bottom:0;
+  margin-top:clamp(16px,2.5vw,30px);
+  padding-top:12px;
+  padding-bottom:12px;
 }
 .how-works-section .how-works-slide{
   box-shadow:0 28px 90px rgba(0,0,0,.34);
 }
 .how-works-section .how-works-slide.is-active{
-  transform:translateY(-4px);
+  transform:translateY(-2px) scale(1.01);
 }
 .how-works-section .how-works-slide:not(.is-active){
   opacity:.92;
 }
+.how-works-section .shell.relative.z-10.mt-5{
+  margin-top:32px;
+}
 @media(max-width:640px){
-  .how-works-section .how-works-rail{margin-top:28px}
-  .how-works-section .shell.relative.z-10.mt-5{padding-bottom:64px}
+  .how-works-section .how-works-rail{
+    margin-top:18px;
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+  .how-works-section .shell.relative.z-10.mt-5{
+    margin-top:30px;
+    padding-bottom:64px;
+  }
 }
