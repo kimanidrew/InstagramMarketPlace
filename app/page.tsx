@@ -273,7 +273,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="shell pb-24">
