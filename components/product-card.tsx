@@ -27,10 +27,10 @@ export function ProductCard({ p }: { p: any }) {
   const img = p.mediaUrl || p.thumbnailUrl;
 
   return (
-    <article>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-[#f4f4f2]">
+    <article className="mb-10 break-inside-avoid">
+      <div className="relative overflow-hidden rounded-[24px] bg-[#f4f4f2]">
         {isVideo && p.mediaUrl ? (
-          <ProductMedia src={p.mediaUrl} poster={p.thumbnailUrl} alt={p.productTitle || "Product video"} />
+          <div className="aspect-[4/5]"><ProductMedia src={p.mediaUrl} poster={p.thumbnailUrl} alt={p.productTitle || "Product video"} /></div>
         ) : (
           img && (
             <Link
@@ -41,7 +41,7 @@ export function ProductCard({ p }: { p: any }) {
               <img
                 src={img}
                 alt={p.productTitle || "Product"}
-                className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]"
+                className="block h-auto w-full object-cover transition duration-500 hover:scale-[1.03]"
               />
             </Link>
           )
