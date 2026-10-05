@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { db } from "@/lib/prisma";
+import { StoreCarousel } from "@/components/store-carousel";
 
 export const dynamic = "force-dynamic";
 
@@ -339,6 +340,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <StoreCarousel stores={stores} />
 
       {(products.length > 0 || stores.length > 0) && (
         <section className="border-t border-black/5 py-14">
