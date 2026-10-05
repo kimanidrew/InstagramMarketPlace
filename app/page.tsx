@@ -185,6 +185,30 @@ export default async function Home() {
 
       <HowMarketWorks />
 
+
+      <section className="connect-instagram-section">
+        <div className="shell">
+          <Reveal y={28}>
+            <div className="connect-instagram-card">
+              <div className="connect-instagram-icon">
+                <Instagram size={22} />
+              </div>
+              <div className="connect-instagram-copy">
+                <p className="connect-instagram-kicker">For Instagram sellers</p>
+                <h2>Turn your Instagram into a shop.</h2>
+                <p>
+                  Connect your approved Instagram Business account and your posts can
+                  become products on Instagram Market. No second catalogue to build.
+                </p>
+              </div>
+              <Link href="/account" className="connect-instagram-button">
+                Connect to Instagram <ArrowRight size={16} />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       <section className="community-showcase relative overflow-hidden py-24 sm:py-28">
         <div className="community-orb community-orb-a" />
         <div className="community-orb community-orb-b" />
