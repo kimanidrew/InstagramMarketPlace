@@ -15,6 +15,7 @@ import {
 import { db } from "@/lib/prisma";
 import { HowMarketWorks } from "@/components/how-market-works";
 import { Reveal } from "@/components/reveal";
+import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
 
@@ -33,14 +34,17 @@ export default async function Home() {
       where: { isProduct: true, mediaType: "IMAGE" },
       include: { connection: true, tags: true, likes: true },
       orderBy: { timestamp: "desc" },
-      take: 4,
+      take: 12,
     }),
     prisma.instagramConnection.findMany({
       include: { posts: { where: { isProduct: true }, select: { id: true, mediaUrl: true }, orderBy: { timestamp: "desc" }, take: 4 } },
       orderBy: { updatedAt: "desc" },
-      take: 4,
+      take: 12,
     }),
   ]);
+
+  const availableProducts = (await filterAvailableInstagramMedia(products)).slice(0, 4);
+  const availableStores = (await Promise.all(stores.map(async (store) => ({ store, posts: await filterAvailableInstagramMedia(store.posts) })))).filter((x) => x.posts.length > 0).slice(0, 4);
 
   return (
     <main className="home-page bg-white">
