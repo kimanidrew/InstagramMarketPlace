@@ -205,7 +205,7 @@ export default async function Home() {
                     href={"/store/" + store.username}
                     className={"community-photo community-photo-" + (index === 0 ? "main" : index === 1 ? "top" : index === 2 ? "bottom" : "side")}
                   >
-                    <img src={item.src} alt={item.alt} />
+                    <img src={src} alt={alt} />
                   </Link>
                 ))}
               </div>
