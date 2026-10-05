@@ -252,3 +252,12 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .desktop-search input{padding:0 2px}
 .desktop-search input::placeholder{opacity:.9}
 @media(max-width:1023px){.desktop-search{height:44px}.desktop-search .search-icon-wrap{height:34px;width:34px}.desktop-search{padding-left:7px}}
+
+/* How Market Works: one-card snapping with section-consistent vertical rhythm */
+.how-works-rail{scroll-snap-type:x mandatory;scroll-padding-inline:max(22px,calc((100vw - 1200px)/2));margin-top:0;padding-top:0;padding-bottom:0;}
+.how-works-slide{scroll-snap-align:start;scroll-snap-stop:always;}
+@media(max-width:640px){
+  .how-works-section .shell{padding-top:64px;padding-bottom:64px}
+  .how-works-rail{padding-inline:22px;scroll-padding-inline:22px}
+  .how-works-slide{width:calc(100vw - 44px);}
+}
