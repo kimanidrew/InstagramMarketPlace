@@ -230,3 +230,27 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .store-community-copy strong{display:flex;align-items:center;gap:6px;margin-top:15px;font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#ffe7a3}
 @media(max-width:900px){.store-community-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.store-community-grid{display:flex;overflow-x:auto;gap:12px;padding:4px 2px 12px;scroll-snap-type:x mandatory}.store-community-card{width:78vw;min-width:78vw;scroll-snap-align:center}.store-community-copy{padding:16px}.store-community-image{aspect-ratio:4/4.5}}
+
+
+/* Dark premium navbar */
+.site-header{background:rgba(10,10,10,.94);border-bottom:1px solid rgba(255,255,255,.09);color:#fff;box-shadow:0 10px 35px rgba(0,0,0,.14)}
+.site-header:hover{box-shadow:0 14px 45px rgba(0,0,0,.24)}
+.site-header .brand{color:#fff}
+.site-header .brand span{color:#aaa}
+.site-header .brand sup{color:#777}
+.site-header .nav-link{color:#f4f4f4}
+.site-header .nav-link:hover{background:#242424;color:#fff}
+.site-header .icon-btn{color:#fff}
+.site-header .icon-btn:hover,.site-header .icon-btn.active{background:#242424;color:#fff}
+.site-header .desktop-search{border-color:#333;background:linear-gradient(135deg,#1b1b1b,#111);box-shadow:0 8px 28px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.04)}
+.site-header .desktop-search:focus-within{background:#181818;border-color:#555;box-shadow:0 0 0 4px rgba(255,255,255,.06),0 14px 35px rgba(0,0,0,.3)}
+.site-header .desktop-search input{color:#fff}
+.site-header .desktop-search input::placeholder{color:#888}
+.site-header .search-shortcut{border-color:#3a3a3a;background:#242424;color:#aaa}
+.site-header .mobile-strip{border-top-color:rgba(255,255,255,.08);background:rgba(10,10,10,.96)}
+.site-header .strip-pill{border-color:#333;background:#181818;color:#ddd}
+.site-header .strip-pill.active{background:#fff;color:#111;border-color:#fff}
+.site-header .menu-label{color:#999}
+.site-header .menu-card{border-color:#333;background:#181818;color:#fff}
+.site-header .menu-card:hover{background:#fff;color:#111}
+.site-header .search-icon-wrap{background:#fff;color:#111}
