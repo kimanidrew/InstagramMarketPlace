@@ -14,13 +14,18 @@ export function HowMarketWorks() {
   const [active, setActive] = useState(0);
 
   function move(direction: "left" | "right") {
-    const rail = railRef.current;\n    if (!rail) return;\n    const step = rail.querySelector<HTMLElement>(".how-works-slide");\n    if (!step) return;\n    const target = Math.max(0, Math.min(steps.length - 1, active + (direction === "right" ? 1 : -1)));\n    rail.scrollTo({ left: step.offsetLeft - rail.offsetLeft, behavior: "smooth" });
+    const rail = railRef.current;
+    if (!rail) return;
+    const step = rail.querySelector<HTMLElement>(".how-works-slide");
+        const target = Math.max(0, Math.min(steps.length - 1, active + (direction === "right" ? 1 : -1)));
+    rail.scrollTo({ left: slides[target].offsetLeft - rail.offsetLeft, behavior: "smooth" });
   }
 
   function onScroll() {
     const rail = railRef.current;
     if (!rail) return;
-    const slides = Array.from(rail.querySelectorAll<HTMLElement>(".how-works-slide"));\n    const index = slides.reduce((best, slide, i) => Math.abs(slide.offsetLeft - rail.scrollLeft) < Math.abs(slides[best].offsetLeft - rail.scrollLeft) ? i : best, 0);
+    const slides = Array.from(rail.querySelectorAll<HTMLElement>(".how-works-slide"));
+    const index = slides.reduce((best, slide, i) => Math.abs(slide.offsetLeft - rail.scrollLeft) < Math.abs(slides[best].offsetLeft - rail.scrollLeft) ? i : best, 0);
     setActive(Math.max(0, Math.min(steps.length - 1, index)));
   }
 
