@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Heart, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { ProductMedia } from "@/components/product-media";
-import { ProductInquiryButton } from "@/components/product-inquiry-button";
+import { ProductInquiryButton } from "./product-inquiry-button";
 
 export function ProductCard({ p }: { p: any }) {
   const [l, setL] = useState(false);
