@@ -186,6 +186,35 @@ export default async function Home() {
 
       <HowMarketWorks />
 
+      <section className="community-showcase relative overflow-hidden py-24 sm:py-32">
+        <div className="community-orb community-orb-a" />
+        <div className="community-orb community-orb-b" />
+        <div className="community-ring community-ring-a" />
+        <div className="community-ring community-ring-b" />
+        <div className="shell relative z-10">
+          <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+            <Reveal y={42}>
+              <div className="community-kicker"><Users size={14} /> Meet the community</div>
+              <h2 className="community-title mt-6">More than a marketplace.<br /><span>A community in motion.</span></h2>
+              <p className="mt-7 max-w-xl text-base leading-8 text-white/75 sm:text-lg">Discover independent stores, follow the people behind the products and find inspiration from a marketplace that feels alive.</p>
+              <div className="community-stats mt-9 grid grid-cols-3 gap-3">
+                <div><b>01</b><span>Discover</span></div>
+                <div><b>02</b><span>Connect</span></div>
+                <div><b>03</b><span>Support</span></div>
+              </div>
+            </Reveal>
+            <Reveal className="relative" y={54}>
+              <div className="community-collage">
+                <div className="community-photo community-photo-main"><img src={editorialImages.people} alt="Community discovering products together" /></div>
+                <div className="community-photo community-photo-top"><img src={editorialImages.hero} alt="People discovering products" /></div>
+                <div className="community-photo community-photo-bottom"><img src={editorialImages.shopping} alt="Shopping and discovery" /></div>
+                <div className="community-badge"><Heart size={15} fill="currentColor" /><span>Find something worth sharing.</span></div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       <section className="seller-showcase relative overflow-hidden py-24 sm:py-28">
         <div className="seller-orb seller-orb-a" /><div className="seller-orb seller-orb-b" />
         <div className="shell relative z-10">
