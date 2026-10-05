@@ -15,6 +15,7 @@ import {
 import { db } from "@/lib/prisma";
 import { StoreCarousel } from "@/components/store-carousel";
 import { HowMarketWorks } from "@/components/how-market-works";
+import { Reveal } from "@/components/reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -114,7 +115,7 @@ export default async function Home() {
             <div className="absolute right-0 bottom-20 z-50 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
               Discover · Shop · Support
             </div>
-          </div>       </div>
+          </Reveal>\n        </div>
       </section>
 
       <section className="shell py-24">
@@ -142,7 +143,7 @@ export default async function Home() {
       </section>
 
       <section className="shell pb-24">
-        <div className="grid overflow-hidden rounded-[36px] bg-[#f4f4f1] lg:grid-cols-[1fr_1fr]">
+        <Reveal className="grid overflow-hidden rounded-[36px] bg-[#f4f4f1] lg:grid-cols-[1fr_1fr]" y={36}>
           <div className="min-h-[460px]">
             <img
               src={editorialImages.people}
@@ -232,7 +233,7 @@ export default async function Home() {
       </section>
 
       <section className="shell pb-24">
-        <div className="overflow-hidden rounded-[36px] bg-[#e9e9e4]">
+        <Reveal className="overflow-hidden rounded-[36px] bg-[#e9e9e4]" y={36}>
           <div className="grid lg:grid-cols-[1.15fr_.85fr]">
             <div className="min-h-[430px]">
               <img
@@ -271,7 +272,7 @@ export default async function Home() {
       </section>
 
       <section className="shell pb-24">
-        <div className="rounded-[36px] border border-black/10 bg-white p-8 text-center sm:p-14">
+        <Reveal className="rounded-[36px] border border-black/10 bg-white p-8 text-center shadow-[0_25px_80px_rgba(0,0,0,.06)] sm:p-14" y={30}>
           <Sparkles className="mx-auto" size={24} />
           <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-black tracking-[-.055em] sm:text-6xl">
             A new way to turn social discovery into meaningful shopping.
