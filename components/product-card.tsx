@@ -1,27 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { ExternalLink, Instagram } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 
 export function ProductCard({ p }: { p: any }) {
-  const [l, setL] = useState(false);
-  const [n, setN] = useState(p.likes?.length || 0);
-
-  async function like() {
-    const r = await fetch("/api/products/" + p.id + "/like", { method: "POST" });
-    if (r.status === 401) {
-      location.href = "/login?next=" + encodeURIComponent(location.pathname);
-      return;
-    }
-    if (r.ok) {
-      const d = await r.json();
-      setL(d.liked);
-      setN(d.localLikes);
-    }
-  }
-
   const isVideo = String(p.mediaType || "").toUpperCase() === "VIDEO";
   const img = p.mediaUrl || p.thumbnailUrl;
 
@@ -52,16 +35,9 @@ export function ProductCard({ p }: { p: any }) {
           )
         )}
 
-        <button
-          onClick={like}
-          aria-label={l ? "Unlike product" : "Like product"}
-          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-sm transition hover:scale-105"
-        >
-          <Heart size={17} fill={l ? "currentColor" : "none"} />
-        </button>
-
-        <span className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold">
-          {p.instagramLikeCount.toLocaleString()} IG likes
+        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold text-black shadow-sm backdrop-blur-sm">
+          <Instagram size={13} strokeWidth={2.2} />
+          {Number(p.instagramLikeCount || 0).toLocaleString()} likes
         </span>
       </div>
 
@@ -69,12 +45,19 @@ export function ProductCard({ p }: { p: any }) {
         <Link href={"/product/" + p.productSlug} className="font-bold">
           {p.productTitle}
         </Link>
+
         <Link
           href={"/store/" + p.connection.username}
           className="mt-1 block text-xs text-[#777]"
         >
           @{p.connection.username}
         </Link>
+
+        {p.caption && (
+          <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#555]">
+            {p.caption}
+          </p>
+        )}
 
         <div className="mt-3 flex flex-wrap gap-1">
           {p.tags
@@ -92,7 +75,7 @@ export function ProductCard({ p }: { p: any }) {
         </div>
 
         <div className="mt-3 flex justify-between text-xs text-[#777]">
-          <span>{n} marketplace likes</span>
+          <span>{p.likes?.length || 0} marketplace likes</span>
           {p.permalink && (
             <a
               href={p.permalink}
