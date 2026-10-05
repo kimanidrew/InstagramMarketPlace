@@ -36,7 +36,7 @@ export default async function Home() {
       take: 4,
     }),
     prisma.instagramConnection.findMany({
-      include: { posts: { where: { isProduct: true }, select: { id: true } } },
+      include: { posts: { where: { isProduct: true }, select: { id: true, mediaUrl: true }, orderBy: { timestamp: "desc" }, take: 4 } },
       orderBy: { updatedAt: "desc" },
       take: 4,
     }),
@@ -210,7 +210,7 @@ export default async function Home() {
                 <Link href={"/store/" + store.username} className="store-community-card group">
                   <div className="store-community-image">
                     <img
-                      src={store.profileImageUrl || editorialImages[index % 4 === 0 ? "hero" : index % 4 === 1 ? "people" : index % 4 === 2 ? "shopping" : "seller"]}
+                      src={store.posts[0]?.mediaUrl || store.profileImageUrl || editorialImages[index % 4 === 0 ? "hero" : index % 4 === 1 ? "people" : index % 4 === 2 ? "shopping" : "seller"]}
                       alt={store.name || "@" + store.username}
                     />
                     <div className="store-community-overlay" />
