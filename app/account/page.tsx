@@ -107,10 +107,22 @@ export default async function Account({
           </div>
         ) : approved ? (
           <div className="mt-6 rounded-2xl border p-5">
-            <p className="text-sm font-semibold">Waiting for Instagram connection</p>
-            <p className="mt-2 text-sm leading-6 text-[#666]">
-              Your store request has been received. Once the marketplace admin approves it, you will be able to connect your Instagram account here. No access token needs to be copied or pasted.
+            <div className="flex items-center gap-3">
+              <div className="rounded-full bg-green-50 p-2 text-green-700">
+                <CheckCircle2 size={18} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold">Your store request is approved</p>
+                <p className="mt-1 text-xs text-[#888]">@{approved.username}</p>
+              </div>
+            </div>
+            <p className="mt-4 text-sm leading-6 text-[#666]">
+              Connect the approved Instagram Business account directly through Instagram. You do not need to generate or paste an access token.
             </p>
+            <a href="/api/instagram/connect" className="mt-5 inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-semibold text-white">
+              <Instagram size={16} />
+              Connect Instagram
+            </a>
           </div>
         ) : (
           <div className="mt-6 rounded-2xl bg-[#f7f7f5] p-5 text-sm text-[#666]">
