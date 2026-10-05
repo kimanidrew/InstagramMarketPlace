@@ -446,3 +446,15 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
   .seller-empty-progress{display:block;padding:19px}.seller-empty-progress h2{font-size:21px}
   .seller-empty-history{align-items:flex-start;flex-wrap:wrap}.seller-empty-history a{width:100%;margin-left:0}
 }
+
+/* Admin store removal */
+.admin-request-danger{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px;padding-top:15px;border-top:1px solid #f0e2e2}
+.admin-request-danger>div{min-width:0}
+.admin-request-danger b{display:block;color:#9b2c2c;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em}
+.admin-request-danger span{display:block;margin-top:4px;color:#999;font-size:9px;line-height:1.45}
+.admin-remove-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:none;border:1px solid #efcaca;border-radius:999px;background:#fff7f7;color:#a22;padding:10px 14px;font-size:10px;font-weight:900;transition:.2s ease}
+.admin-remove-button:hover:not(:disabled){background:#a22;color:#fff;border-color:#a22;transform:translateY(-1px)}
+.admin-remove-button:disabled{cursor:wait;opacity:.65}
+.admin-remove-spinner{animation:adminRemoveSpin .8s linear infinite}
+@keyframes adminRemoveSpin{to{transform:rotate(360deg)}}
+@media(max-width:760px){.admin-request-danger{align-items:flex-start;flex-direction:column}.admin-remove-button{width:100%}}
