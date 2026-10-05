@@ -194,15 +194,15 @@ export default async function Home() {
           <div className="community-layout">
             <Reveal className="community-collage-wrap" y={38}>
               <div className="community-collage">
-                {[
-                  { src: stores[0]?.posts[0]?.mediaUrl || stores[0]?.profileImageUrl || editorialImages.hero, alt: stores[0]?.name || "Instagram store" },
-                  { src: stores[1]?.posts[0]?.mediaUrl || stores[1]?.profileImageUrl || editorialImages.people, alt: stores[1]?.name || "Instagram store" },
-                  { src: stores[2]?.posts[0]?.mediaUrl || stores[2]?.profileImageUrl || editorialImages.shopping, alt: stores[2]?.name || "Instagram store" },
-                  { src: stores[3]?.posts[0]?.mediaUrl || stores[3]?.profileImageUrl || editorialImages.seller, alt: stores[3]?.name || "Instagram store" },
-                ].map((item, index) => (
+                {stores.filter((store) => store.profileImageUrl).slice(0, 4).map((store, index) => ({
+                  store,
+                  index,
+                  src: store.profileImageUrl as string,
+                  alt: store.name || "Instagram store",
+                })).map(({ store, index, src, alt }) => (
                   <Link
                     key={index}
-                    href={stores[index] ? "/store/" + stores[index].username : "/stores"}
+                    href={"/store/" + store.username}
                     className={"community-photo community-photo-" + (index === 0 ? "main" : index === 1 ? "top" : index === 2 ? "bottom" : "side")}
                   >
                     <img src={item.src} alt={item.alt} />
@@ -217,7 +217,7 @@ export default async function Home() {
               <p className="mt-7 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
                 Every store on Instagram Market starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.
               </p>
-              <Link href="/stores" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 text-xs font-black text-black transition hover:-translate-y-1">
+              <Link href="/stores" className="community-stores-button mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 text-xs font-black transition hover:-translate-y-1">
                 Explore all stores <ArrowRight size={14} />
               </Link>
               <div className="mt-8 flex flex-wrap gap-3">
