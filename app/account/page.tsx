@@ -50,7 +50,7 @@ function StepCard({
 export default async function Account({
   searchParams,
 }: {
-  searchParams: Promise<{ step?: string; instagram?: string; instagram_error?: string; requested?: string; error?: string }>;
+  searchParams: Promise<{ step?: string; instagram?: string; instagram_error?: string; requested?: string; error?: string; requestId?: string; new?: string }>;
 }) {
   const u = await user();
   if (!u) redirect("/");
