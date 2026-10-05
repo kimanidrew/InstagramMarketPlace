@@ -1,2 +1,242 @@
-import{db}from"@/lib/prisma";import{ProductCard}from"@/components/product-card";import Link from"next/link";import{ArrowRight,Instagram,Compass,Store,Tag,ShieldCheck}from"lucide-react";export const dynamic="force-dynamic";
-export default async function Home(){const p=db();const[products,stores,tags]=await Promise.all([p.instagramPost.findMany({where:{isProduct:true},include:{connection:true,tags:true,likes:true},orderBy:{timestamp:"desc"},take:8}),p.instagramConnection.findMany({include:{posts:{where:{isProduct:true},select:{id:true}}},orderBy:{updatedAt:"desc"},take:4}),p.productTag.groupBy({by:["name"],where:{post:{isProduct:true}},_count:{name:true},orderBy:{_count:{name:"desc"}},take:8})]);return <main><section className="overflow-hidden border-b bg-[#f6f6f3]"><div className="shell grid min-h-[590px] items-center gap-12 py-16 lg:grid-cols-[1.15fr_.85fr]"><div><span className="eyebrow"><Instagram size={13}/> Instagram-powered shopping</span><h1 className="mt-7 max-w-3xl text-5xl font-black leading-[.92] tracking-[-.07em] sm:text-7xl">Discover what’s <span className="text-[#777]">worth shopping</span> on Instagram.</h1><p className="mt-7 max-w-xl text-base leading-8 text-[#666]">One place to discover products from connected Instagram stores. Browse by shop, category or what’s trending right now.</p><div className="mt-8 flex flex-wrap gap-3"><Link href="/products" className="rounded-full bg-black px-6 py-3.5 text-sm font-bold text-white">Start shopping <ArrowRight className="ml-1 inline" size={15}/></Link><Link href="/stores" className="rounded-full border border-black/10 bg-white px-6 py-3.5 text-sm font-bold">Explore stores</Link></div><div className="mt-10 flex flex-wrap gap-5 text-xs font-semibold text-[#777]"><span className="inline-flex items-center gap-2"><ShieldCheck size={15}/> Connected stores</span><span className="inline-flex items-center gap-2"><Compass size={15}/> Instagram discovery</span></div></div><div className="relative"><div className="rounded-[36px] bg-black p-7 text-white shadow-2xl sm:p-9"><p className="text-[10px] font-bold uppercase tracking-[.25em] text-white/40">Shop the feed</p><div className="mt-8 grid grid-cols-2 gap-3">{products.slice(0,4).map((x,i)=><Link href={"/product/"+x.productSlug} key={x.id} className={"group overflow-hidden rounded-[22px] bg-white/10 "+(i===0?"row-span-2":"")}><div className={(i===0?"aspect-[4/5]":"aspect-square")+" overflow-hidden"}>{x.mediaUrl&&<img src={x.thumbnailUrl||x.mediaUrl} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/>}</div></Link>)}</div></div></div></div></section><section className="shell py-14"><div className="grid gap-3 sm:grid-cols-3"><Link href="/products" className="card group p-6"><Compass size={22}/><h2 className="mt-8 text-xl font-black">Shop all</h2><p className="mt-2 text-sm text-[#777]">Browse the complete product feed.</p><ArrowRight className="mt-5 transition group-hover:translate-x-1" size={18}/></Link><Link href="/stores" className="card group p-6"><Store size={22}/><h2 className="mt-8 text-xl font-black">Shop by store</h2><p className="mt-2 text-sm text-[#777]">Find your next favourite Instagram shop.</p><ArrowRight className="mt-5 transition group-hover:translate-x-1" size={18}/></Link><Link href="/categories" className="card group p-6"><Tag size={22}/><h2 className="mt-8 text-xl font-black">Shop by category</h2><p className="mt-2 text-sm text-[#777]">Explore hashtags turned into categories.</p><ArrowRight className="mt-5 transition group-hover:translate-x-1" size={18}/></Link></div></section><section className="shell pb-8"><div className="flex items-end justify-between"><div><p className="eyebrow plain">Fresh from Instagram</p><h2 className="mt-2 text-3xl font-black tracking-[-.04em]">New & noteworthy</h2></div><Link href="/products" className="text-sm font-bold">View all →</Link></div><div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-6">{products.map(x=><ProductCard key={x.id} p={x}/>)}</div></section>{tags.length>0&&<section className="bg-[#f7f7f5] py-16"><div className="shell"><div className="flex items-end justify-between"><div><p className="eyebrow plain">Browse the edit</p><h2 className="mt-2 text-3xl font-black">Popular categories</h2></div><Link href="/categories" className="text-sm font-bold">All categories →</Link></div><div className="mt-7 flex gap-3 overflow-x-auto pb-2">{tags.map(x=><Link key={x.name} href={"/products?tag="+x.name} className="min-w-[150px] rounded-[22px] bg-white p-5 shadow-sm transition hover:-translate-y-0.5"><Tag size={16}/><b className="mt-7 block">#{x.name}</b><span className="mt-1 block text-xs text-[#888]">{x._count.name} products</span></Link>)}</div></div></section>}{stores.length>0&&<section className="shell py-16"><div className="flex items-end justify-between"><div><p className="eyebrow plain">Meet the sellers</p><h2 className="mt-2 text-3xl font-black">Featured stores</h2></div><Link href="/stores" className="text-sm font-bold">View stores →</Link></div><div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{stores.map(s=><Link href={"/store/"+s.username} key={s.id} className="card group p-5"><div className="flex items-center gap-4"><div className="h-14 w-14 overflow-hidden rounded-full bg-[#eee]">{s.profileImageUrl&&<img src={s.profileImageUrl} alt="" className="h-full w-full object-cover transition group-hover:scale-105"/>}</div><div className="min-w-0"><b className="block truncate">@{s.username}</b><span className="text-xs text-[#888]">{s.posts.length} products</span></div></div><p className="mt-5 line-clamp-2 text-xs leading-5 text-[#777]">{s.biography||"Explore products from this Instagram store."}</p></Link>)}</div></section>}</main>
+import Link from "next/link";
+import { ArrowRight, Compass, Instagram, ShieldCheck, Store, Tag } from "lucide-react";
+import { db } from "@/lib/prisma";
+import { ProductCard } from "@/components/product-card";
+
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const prisma = db();
+
+  const [products, stores, tags] = await Promise.all([
+    prisma.instagramPost.findMany({
+      where: { isProduct: true },
+      include: { connection: true, tags: true, likes: true },
+      orderBy: { timestamp: "desc" },
+      take: 8,
+    }),
+    prisma.instagramConnection.findMany({
+      include: {
+        posts: {
+          where: { isProduct: true },
+          select: { id: true },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 4,
+    }),
+    prisma.productTag.groupBy({
+      by: ["name"],
+      where: { post: { isProduct: true } },
+      _count: { name: true },
+      orderBy: { _count: { name: "desc" } },
+      take: 8,
+    }),
+  ]);
+
+  return (
+    <main>
+      <section className="overflow-hidden border-b bg-[#f6f6f3]">
+        <div className="shell grid min-h-[590px] items-center gap-12 py-16 lg:grid-cols-[1.15fr_.85fr]">
+          <div>
+            <span className="eyebrow">
+              <Instagram size={13} /> Instagram-powered shopping
+            </span>
+            <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[.92] tracking-[-.07em] sm:text-7xl">
+              Discover what’s <span className="text-[#777]">worth shopping</span> on Instagram.
+            </h1>
+            <p className="mt-7 max-w-xl text-base leading-8 text-[#666]">
+              One place to discover products from connected Instagram stores.
+              Browse by shop, category or what’s trending right now.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/products"
+                className="rounded-full bg-black px-6 py-3.5 text-sm font-bold text-white"
+              >
+                Start shopping <ArrowRight className="ml-1 inline" size={15} />
+              </Link>
+              <Link
+                href="/stores"
+                className="rounded-full border border-black/10 bg-white px-6 py-3.5 text-sm font-bold"
+              >
+                Explore stores
+              </Link>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-5 text-xs font-semibold text-[#777]">
+              <span className="inline-flex items-center gap-2">
+                <ShieldCheck size={15} /> Connected stores
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Compass size={15} /> Instagram discovery
+              </span>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="rounded-[36px] bg-black p-7 text-white shadow-2xl sm:p-9">
+              <p className="text-[10px] font-bold uppercase tracking-[.25em] text-white/40">
+                Shop the feed
+              </p>
+              <div className="mt-8 grid grid-cols-2 gap-3">
+                {products.slice(0, 4).map((x, i) => (
+                  <Link
+                    href={"/product/" + x.productSlug}
+                    key={x.id}
+                    className={
+                      "group overflow-hidden rounded-[22px] bg-white/10 " +
+                      (i === 0 ? "row-span-2" : "")
+                    }
+                  >
+                    <div
+                      className={
+                        (i === 0 ? "aspect-[4/5]" : "aspect-square") +
+                        " overflow-hidden"
+                      }
+                    >
+                      {(x.thumbnailUrl || x.mediaUrl) && (
+                        <img
+                          src={x.thumbnailUrl || x.mediaUrl || ""}
+                          alt=""
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="shell py-14">
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Link href="/products" className="card group p-6">
+            <Compass size={22} />
+            <h2 className="mt-8 text-xl font-black">Shop all</h2>
+            <p className="mt-2 text-sm text-[#777]">
+              Browse the complete product feed.
+            </p>
+            <ArrowRight className="mt-5 transition group-hover:translate-x-1" size={18} />
+          </Link>
+
+          <Link href="/stores" className="card group p-6">
+            <Store size={22} />
+            <h2 className="mt-8 text-xl font-black">Shop by store</h2>
+            <p className="mt-2 text-sm text-[#777]">
+              Find your next favourite Instagram shop.
+            </p>
+            <ArrowRight className="mt-5 transition group-hover:translate-x-1" size={18} />
+          </Link>
+
+          <Link href="/categories" className="card group p-6">
+            <Tag size={22} />
+            <h2 className="mt-8 text-xl font-black">Shop by category</h2>
+            <p className="mt-2 text-sm text-[#777]">
+              Explore hashtags turned into categories.
+            </p>
+            <ArrowRight className="mt-5 transition group-hover:translate-x-1" size={18} />
+          </Link>
+        </div>
+      </section>
+
+      <section className="shell pb-8">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="eyebrow plain">Fresh from Instagram</p>
+            <h2 className="mt-2 text-3xl font-black tracking-[-.04em]">
+              New & noteworthy
+            </h2>
+          </div>
+          <Link href="/products" className="text-sm font-bold">
+            View all →
+          </Link>
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-6">
+          {products.map((x) => (
+            <ProductCard key={x.id} p={x} />
+          ))}
+        </div>
+      </section>
+
+      {tags.length > 0 && (
+        <section className="bg-[#f7f7f5] py-16">
+          <div className="shell">
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="eyebrow plain">Browse the edit</p>
+                <h2 className="mt-2 text-3xl font-black">Popular categories</h2>
+              </div>
+              <Link href="/categories" className="text-sm font-bold">
+                All categories →
+              </Link>
+            </div>
+
+            <div className="mt-7 flex gap-3 overflow-x-auto pb-2">
+              {tags.map((x) => (
+                <Link
+                  key={x.name}
+                  href={"/products?tag=" + encodeURIComponent(x.name)}
+                  className="min-w-[150px] rounded-[22px] bg-white p-5 shadow-sm transition hover:-translate-y-0.5"
+                >
+                  <Tag size={16} />
+                  <b className="mt-7 block">#{x.name}</b>
+                  <span className="mt-1 block text-xs text-[#888]">
+                    {x._count.name} products
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {stores.length > 0 && (
+        <section className="shell py-16">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="eyebrow plain">Meet the sellers</p>
+              <h2 className="mt-2 text-3xl font-black">Featured stores</h2>
+            </div>
+            <Link href="/stores" className="text-sm font-bold">
+              View stores →
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {stores.map((s) => (
+              <Link
+                href={"/store/" + s.username}
+                key={s.id}
+                className="card group p-5"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="h-14 w-14 overflow-hidden rounded-full bg-[#eee]">
+                    {s.profileImageUrl && (
+                      <img
+                        src={s.profileImageUrl}
+                        alt=""
+                        className="h-full w-full object-cover transition group-hover:scale-105"
+                      />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <b className="block truncate">@{s.username}</b>
+                    <span className="text-xs text-[#888]">
+                      {s.posts.length} products
+                    </span>
+                  </div>
+                </div>
+                <p className="mt-5 line-clamp-2 text-xs leading-5 text-[#777]">
+                  {s.biography || "Explore products from this Instagram store."}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}
