@@ -39,7 +39,7 @@ export function SiteHeader({ user }: { user: any }) {
 
         <div className={"desktop-search-wrap " + (searchOpen ? "is-open" : "")}>
           <form onSubmit={submitSearch} className="desktop-search">
-            <Search size={17} />
+            <span className="search-icon-wrap"><Search size={16} strokeWidth={2.5} /></span>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
