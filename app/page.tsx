@@ -300,7 +300,7 @@ export default async function Home() {
               Learn more
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <StoreCarousel stores={stores} />
