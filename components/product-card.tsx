@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Heart, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { ProductMedia } from "@/components/product-media";
-import { ProductInquiryButton } from "./product-inquiry-button";
 
 export function ProductCard({ p }: { p: any }) {
   const [l, setL] = useState(false);
@@ -30,7 +29,13 @@ export function ProductCard({ p }: { p: any }) {
     <article className="mb-10 break-inside-avoid">
       <div className="relative overflow-hidden rounded-[24px] bg-[#f4f4f2]">
         {isVideo && p.mediaUrl ? (
-          <div className="aspect-[4/5]"><ProductMedia src={p.mediaUrl} poster={p.thumbnailUrl} alt={p.productTitle || "Product video"} /></div>
+          <div className="aspect-[4/5]">
+            <ProductMedia
+              src={p.mediaUrl}
+              poster={p.thumbnailUrl}
+              alt={p.productTitle || "Product video"}
+            />
+          </div>
         ) : (
           img && (
             <Link
@@ -64,34 +69,41 @@ export function ProductCard({ p }: { p: any }) {
         <Link href={"/product/" + p.productSlug} className="font-bold">
           {p.productTitle}
         </Link>
-        <Link href={"/store/" + p.connection.username} className="mt-1 block text-xs text-[#777]">
+        <Link
+          href={"/store/" + p.connection.username}
+          className="mt-1 block text-xs text-[#777]"
+        >
           @{p.connection.username}
         </Link>
 
         <div className="mt-3 flex flex-wrap gap-1">
-          {p.tags?.filter((t: any) => t.name !== "instagrammarket").slice(0, 3).map((t: any) => (
-            <Link href={"/products?tag=" + t.name} key={t.name} className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px]">
-              #{t.name}
-            </Link>
-          ))}
+          {p.tags
+            ?.filter((t: any) => t.name !== "instagrammarket")
+            .slice(0, 3)
+            .map((t: any) => (
+              <Link
+                href={"/products?tag=" + t.name}
+                key={t.name}
+                className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px]"
+              >
+                #{t.name}
+              </Link>
+            ))}
         </div>
 
         <div className="mt-3 flex justify-between text-xs text-[#777]">
           <span>{n} marketplace likes</span>
           {p.permalink && (
-            <a href={p.permalink} target="_blank" rel="noreferrer" className="inline-flex gap-1 font-semibold text-black">
+            <a
+              href={p.permalink}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex gap-1 font-semibold text-black"
+            >
               Instagram <ExternalLink size={12} />
             </a>
           )}
         </div>
-
-        {p.permalink && (
-          <ProductInquiryButton
-            username={p.connection.username}
-            productTitle={p.productTitle || "this product"}
-            postUrl={p.permalink}
-          />
-        )}
       </div>
     </article>
   );
