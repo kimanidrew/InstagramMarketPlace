@@ -108,7 +108,7 @@ export default async function IG({
           Connected seller accounts
         </h1>
         <p className="mt-4 text-sm leading-7 text-[#666]">
-          Each store can have multiple Instagram connections. Add the access token for each connection below; tokens are encrypted in Neon and are never exposed to sellers. The token is validated
+          Each store can have multiple Instagram connections. Sellers normally authorize Instagram themselves from their Account page. This admin area keeps manual token tools only for recovery or admin-managed connections. Tokens are encrypted in Neon and are never exposed to sellers. The token is validated
           against Instagram, encrypted on the server, and saved in Neon. Once
           saved, the marketplace can sync that account without asking the seller
           to paste the token again.
@@ -136,11 +136,9 @@ export default async function IG({
             <ShieldCheck size={18} />
           </div>
           <div>
-            <h2 className="text-lg font-black">Add Instagram account manually</h2>
+            <h2 className="text-lg font-black">Admin recovery: add Instagram account manually</h2>
             <p className="mt-2 text-sm leading-6 text-[#666]">
-              Paste the access token generated for this Instagram account. The
-              server will first call Instagram to identify the account, then
-              encrypt and save the token in the database.
+              Use this only when an admin needs to recover or manage a connection without the seller OAuth flow. The server validates the token, encrypts it, and saves it in the database.
             </p>
           </div>
         </div>
