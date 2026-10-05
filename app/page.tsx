@@ -220,10 +220,6 @@ export default async function Home() {
               <Link href="/stores" className="community-stores-button mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 text-xs font-black transition hover:-translate-y-1">
                 Explore all stores <ArrowRight size={14} />
               </Link>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <span className="community-mini-stat"><b>{stores.length || "—"}</b> connected stores</span>
-                <span className="community-mini-stat"><b>{products.length || "—"}</b> fresh products</span>
-              </div>
             </Reveal>
           </div>
         </div>
