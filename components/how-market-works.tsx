@@ -16,11 +16,22 @@ export function HowMarketWorks() {
   function move(direction: "left" | "right") {
     const rail = railRef.current;
     if (!rail) return;
-    const step = rail.querySelector<HTMLElement>(".how-works-slide");
-        const target = Math.max(0, Math.min(steps.length - 1, active + (direction === "right" ? 1 : -1)));
-    rail.scrollTo({ left: slides[target].offsetLeft - rail.offsetLeft, behavior: "smooth" });
-  }
 
+    const slides = Array.from(rail.querySelectorAll<HTMLElement>(".how-works-slide"));
+    if (!slides.length) return;
+
+    const target = Math.max(
+      0,
+      Math.min(steps.length - 1, active + (direction === "right" ? 1 : -1))
+    );
+    const slide = slides[target];
+    if (!slide) return;
+
+    rail.scrollTo({
+      left: slide.offsetLeft - rail.offsetLeft,
+      behavior: "smooth",
+    });
+  }
   function onScroll() {
     const rail = railRef.current;
     if (!rail) return;
