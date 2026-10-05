@@ -29,7 +29,8 @@ export default function SellerSetupModal({request,connection,initialStep=1}:{req
   const connected=Boolean(connection);
   const currentStep=connected?4:request.status==="APPROVED"?3:request.status==="PENDING"?2:1;
   const step=Math.min(4,Math.max(1,initialStep));
-  const visibleStep=Math.min(step,currentStep);
+  const visibleStep=step===4&&request.status==="APPROVED"&&!connected?4:Math.min(step,currentStep);
+  const displayStep=visibleStep;
   const href=(n:number)=>"/account?setup="+encodeURIComponent(request.id)+"&step="+n;
 
   useEffect(()=>{
@@ -47,9 +48,9 @@ export default function SellerSetupModal({request,connection,initialStep=1}:{req
       </div>
       <div className="seller-setup-scroll">
         <div className="seller-setup-progress">
-          <div className="seller-setup-progress-copy"><span>Setup progress</span><b>{connected?"Complete":"Step "+currentStep+" of 4"}</b></div>
-          <div className="seller-setup-progress-line"><i style={{width:(connected?100:((currentStep-1)/3)*100)+"%"}} /></div>
-          <div className="seller-setup-progress-steps">{[1,2,3,4].map(n=><span key={n} className={n<currentStep||connected?"done":n===visibleStep?"active":""}>{n<currentStep||connected?<Check size={12}/>:n}</span>)}</div>
+          <div className="seller-setup-progress-copy"><span>Setup progress</span><b>{connected?"Complete":"Step "+displayStep+" of 4"}</b></div>
+          <div className="seller-setup-progress-line"><i style={{width:(connected?100:((displayStep-1)/3)*100)+"%"}} /></div>
+          <div className="seller-setup-progress-steps">{[1,2,3,4].map(n=><span key={n} className={n<displayStep||connected?"done":n===displayStep?"active":""}>{n<currentStep||connected?<Check size={12}/>:n}</span>)}</div>
         </div>
 
         <div className="seller-stepper">
