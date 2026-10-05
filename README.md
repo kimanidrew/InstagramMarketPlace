@@ -58,3 +58,8 @@ Instagram like counts are synced from Instagram where available. Marketplace lik
 
 ## Security
 Access tokens are encrypted with AES-256-GCM before being stored in Neon. OAuth state is signed and expires quickly to protect the callback from CSRF/replay attempts.
+
+## Automatic Instagram synchronization
+The marketplace treats each Instagram post as the product identity. A scheduled reconciliation calls the connected Instagram accounts, follows pagination through the media list, updates changed captions/media/engagement/profile data, imports newly published posts, and removes marketplace products whose Instagram media IDs are no longer returned by Instagram. The deletion pass only runs after a complete successful media read, so a temporary Instagram API failure will not wipe the store.
+
+Set `CRON_SECRET` in Vercel. The scheduled route `/api/cron/instagram-sync` requires `Authorization: Bearer <CRON_SECRET>`. Vercel runs the reconciliation hourly with the included cron configuration. For more frequent synchronization, increase the cron frequency on a Vercel plan that supports it.
