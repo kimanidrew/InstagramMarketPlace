@@ -298,3 +298,23 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
     padding-bottom:64px;
   }
 }
+
+
+/* Simple seller connection CTA */
+.connect-instagram-section{padding:72px 0;background:#fafaf8}
+.connect-instagram-card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:24px;border:1px solid rgba(0,0,0,.08);border-radius:30px;background:#fff;padding:28px 30px;box-shadow:0 18px 60px rgba(0,0,0,.055)}
+.connect-instagram-icon{display:flex;width:56px;height:56px;align-items:center;justify-content:center;border-radius:18px;background:#111;color:#fff;box-shadow:0 10px 24px rgba(0,0,0,.12)}
+.connect-instagram-copy{min-width:0}
+.connect-instagram-kicker{margin:0;font-size:9px;font-weight:950;letter-spacing:.16em;text-transform:uppercase;color:#888}
+.connect-instagram-copy h2{margin:7px 0 0;font-size:clamp(1.55rem,3vw,2.35rem);font-weight:950;line-height:1;letter-spacing:-.055em;color:#111}
+.connect-instagram-copy p:not(.connect-instagram-kicker){margin:9px 0 0;max-width:650px;font-size:13px;line-height:1.7;color:#6d6d6d}
+.connect-instagram-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;border-radius:999px;background:#111;color:#fff;padding:14px 20px;font-size:12px;font-weight:900;transition:transform .25s ease,box-shadow .25s ease}
+.connect-instagram-button:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.16)}
+@media(max-width:760px){
+  .connect-instagram-section{padding:56px 0}
+  .connect-instagram-card{grid-template-columns:auto 1fr;gap:17px;padding:22px;border-radius:25px}
+  .connect-instagram-button{grid-column:1/-1;width:100%}
+  .connect-instagram-copy h2{font-size:1.65rem}
+  .connect-instagram-copy p:not(.connect-instagram-kicker){font-size:12px;line-height:1.6}
+  .connect-instagram-icon{width:50px;height:50px;border-radius:16px}
+}
