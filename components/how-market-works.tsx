@@ -42,7 +42,9 @@ export function HowMarketWorks() {
           </div>
         </div>
 
-        <div ref={railRef} onScroll={onScroll} className="how-works-rail mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5">
+      </div>
+
+      <div ref={railRef} onScroll={onScroll} className="how-works-rail mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-5">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
@@ -63,9 +65,9 @@ export function HowMarketWorks() {
               </article>
             );
           })}
-        </div>
+      </div>
 
-        <div className="mt-4 flex items-center justify-between gap-4">
+      <div className="shell relative z-10 mt-4 flex items-center justify-between gap-4">
           <div className="flex gap-1.5">
             {steps.map((step, index) => <button key={step.number} type="button" onClick={() => { const rail=railRef.current; if(rail) rail.scrollTo({ left: index * rail.clientWidth * .86, behavior: "smooth" }); }} aria-label={"Go to step " + (index + 1)} className={"how-works-dot " + (active === index ? "is-active" : "")} />)}
           </div>
