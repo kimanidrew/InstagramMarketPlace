@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Grid2X2, LayoutList, Search, SlidersHorizontal } from "lucide-react";
 import { db } from "@/lib/prisma";
-import { ProductCard } from "@/components/product-card";
-import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
+import { ProductMasonry } from "@/components/product-masonry";
 
 export const dynamic = "force-dynamic";
 
@@ -33,23 +32,13 @@ export default async function Products({
     where.tags = { some: { name: tag } };
   }
 
-  const [ps, tags] = await Promise.all([
-    db().instagramPost.findMany({
-      where,
-      include: { connection: true, tags: true, likes: true },
-      orderBy: { timestamp: "desc" },
-      take: 100,
-    }),
-    db().productTag.groupBy({
-      by: ["name"],
-      where: { post: { isProduct: true } },
-      _count: { name: true },
-      orderBy: { _count: { name: "desc" } },
-      take: 14,
-    }),
-  ]);
-
-  const availableProducts = await filterAvailableInstagramMedia(ps);
+  const tags = await db().productTag.groupBy({
+    by: ["name"],
+    where: { post: { isProduct: true } },
+    _count: { name: true },
+    orderBy: { _count: { name: "desc" } },
+    take: 14,
+  });
 
   return (
     <main className="shell py-10 md:py-14">
@@ -61,7 +50,7 @@ export default async function Products({
               Shop the Instagram feed.
             </h1>
             <p className="mt-3 text-sm text-[#777]">
-              {availableProducts.length} products to discover
+              Discover products as you scroll
             </p>
           </div>
 
@@ -106,7 +95,7 @@ export default async function Products({
         <div className="flex items-center gap-2 text-xs font-bold">
           <SlidersHorizontal size={15} />
           Filters
-          <span className="font-normal text-[#999]">· {availableProducts.length} results</span>
+          <span className="font-normal text-[#999]">· New products load automatically as you scroll</span>
         </div>
 
         <div className="hidden items-center gap-2 text-xs text-[#999] sm:flex">
@@ -116,26 +105,9 @@ export default async function Products({
         </div>
       </div>
 
-      {availableProducts.length > 0 ? (
-        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 md:gap-x-6 md:gap-y-12">
-          {availableProducts.map((x) => (
-            <ProductCard key={x.id} p={x} />
-          ))}
-        </div>
-      ) : (
-        <div className="py-24 text-center">
-          <h2 className="text-2xl font-black">Nothing found</h2>
-          <p className="mt-2 text-sm text-[#777]">
-            Try another search or browse all products.
-          </p>
-          <Link
-            href="/products"
-            className="mt-6 inline-block rounded-full bg-black px-6 py-3 text-sm font-bold text-white"
-          >
-            Clear search
-          </Link>
-        </div>
-      )}
+      <div className="mt-8">
+        <ProductMasonry q={text || ""} tag={tag || ""} />
+      </div>
     </main>
   );
 }
