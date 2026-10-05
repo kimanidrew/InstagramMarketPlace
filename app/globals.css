@@ -59,3 +59,34 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
   .mobile-menu-panel.is-open{max-height:260px;opacity:1;border-top:1px solid rgba(0,0,0,.05)}
 }
 @media(max-width:640px){.shell{width:calc(100% - 22px)}.brand{font-size:18px}.icon-btn{height:40px;width:40px}.bag-btn{height:40px;width:40px}}
+
+
+/* Homepage motion + stronger editorial typography */
+.home-page h1,.home-page h2,.home-page h3{font-weight:950;color:#111}
+.home-page .eyebrow{font-weight:900}
+.home-page .eyebrow.plain{color:#4a4a46}
+.home-page .text-\[\#666\],.home-page .text-\[\#555\]{color:#3f3f3b}
+.home-page .hero-float{will-change:transform;animation-duration:6.5s;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+.home-page .hero-float-a{animation-name:heroFloatA;animation-delay:-1.2s}
+.home-page .hero-float-b{animation-name:heroFloatB;animation-delay:-3s}
+.home-page .hero-float-c{animation-name:heroFloatC;animation-delay:-2s}
+.home-page .hero-float-d{animation-name:heroFloatD;animation-delay:-4s}
+.home-page .hero-pill{animation:heroPill 4.5s ease-in-out infinite;box-shadow:0 18px 50px rgba(0,0,0,.14)}
+.home-page .hero-float img{transition:transform .8s cubic-bezier(.22,1,.36,1),filter .4s ease}
+.home-page .hero-float:hover img{transform:scale(1.06);filter:saturate(1.08)}
+.home-page .rounded-2xl{transition:transform .35s ease,box-shadow .35s ease}
+.home-page .rounded-2xl:hover{transform:translateY(-6px);box-shadow:0 18px 45px rgba(0,0,0,.08)}
+.how-works-card{box-shadow:0 28px 80px rgba(0,0,0,.42)}
+.how-works-visual{transition:transform .5s ease}
+.how-works-visual:hover{transform:translateY(-4px)}
+
+@keyframes heroFloatA{0%,100%{transform:translate3d(0,0,0) rotate(-7deg)}50%{transform:translate3d(0,-13px,0) rotate(-5deg)}}
+@keyframes heroFloatB{0%,100%{transform:translate3d(0,0,0) rotate(6deg)}50%{transform:translate3d(0,15px,0) rotate(8deg)}}
+@keyframes heroFloatC{0%,100%{transform:translate3d(0,0,0) rotate(-2deg)}50%{transform:translate3d(0,-10px,0) rotate(1deg)}}
+@keyframes heroFloatD{0%,100%{transform:translate3d(0,0,0) rotate(5deg)}50%{transform:translate3d(0,11px,0) rotate(7deg)}}
+@keyframes heroPill{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+@media(prefers-reduced-motion:reduce){
+  .home-page .hero-float,.home-page .hero-pill{animation:none}
+  .home-page .hero-float img{transition:none}
+}
