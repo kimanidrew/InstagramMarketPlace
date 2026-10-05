@@ -1,9 +1,17 @@
 import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Instagram, Plus, ShieldCheck, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, LogOut, Plus, ShieldCheck, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+const guideImages = {
+  register: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=900&q=85",
+  review: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85",
+  tester: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=900&q=85",
+  connect: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=85",
+};
 
 async function out() {
   "use server";
@@ -11,16 +19,33 @@ async function out() {
   redirect("/");
 }
 
+function Step({ number, title, text, image, active, done, children }: {
+  number: string; title: string; text: string; image: string; active?: boolean; done?: boolean; children?: React.ReactNode;
+}) {
+  return (
+    <div className={"account-step " + (active ? "is-active" : "") + (done ? " is-done" : "")}>
+      <div className="account-step-media"><img src={image} alt="" /></div>
+      <div className="account-step-number">{done ? <Check size={16} /> : number}</div>
+      <div className="account-step-body">
+        <p className="account-step-label">{done ? "Completed" : active ? "Your next step" : "Step " + number}</p>
+        <h3>{title}</h3>
+        <p>{text}</p>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export default async function Account({
   searchParams,
 }: {
-  searchParams: Promise<{ instagram?: string; instagram_error?: string; requested?: string; error?: string; connect?: string }>;
+  searchParams: Promise<{ instagram?: string; instagram_error?: string; requested?: string; error?: string }>;
 }) {
   const u = await user();
   if (!u) redirect("/");
 
   const q = await searchParams;
-  const [rs, connections] = await Promise.all([
+  const [requests, connections] = await Promise.all([
     db().storeRequest.findMany({ where: { userId: u.id }, orderBy: { createdAt: "desc" } }),
     db().instagramConnection.findMany({
       where: { connectedByUserId: u.id },
@@ -29,134 +54,115 @@ export default async function Account({
     }),
   ]);
 
-  const connectRequest = q.connect ? rs.find((r) => r.id === q.connect && r.status === "APPROVED") : null;
-
   return (
-    <main className="shell py-14">
-      <div className="flex justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[.2em] text-[#888]">Account</p>
-          <h1 className="mt-2 text-4xl font-black">{u.name}</h1>
-          <p className="text-sm text-[#777]">{u.email}</p>
+    <main className="account-page">
+      <section className="account-hero">
+        <div className="shell">
+          <div className="account-hero-top">
+            <div>
+              <p className="account-kicker"><Sparkles size={13} /> Seller account</p>
+              <h1>Bring your Instagram<br /><span>into the marketplace.</span></h1>
+              <p className="account-hero-copy">
+                We keep the process simple. Register your Instagram username, wait for approval,
+                accept the tester invitation, then connect your account securely.
+              </p>
+            </div>
+            <form action={out}>
+              <button className="account-signout"><LogOut size={15} /> Sign out</button>
+            </form>
+          </div>
+          <div className="account-user-pill"><span>{u.name || "Seller"}</span><span>{u.email}</span></div>
         </div>
-        <form action={out}><button className="rounded-full border px-4 py-2 text-sm">Sign out</button></form>
-      </div>
+      </section>
 
-      <section className="card mt-10 p-7">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <section className="shell account-content">
+        {q.instagram === "connected" && <div className="account-alert success"><CheckCircle2 size={19} /><span><b>You're connected.</b> Your Instagram shop is now linked and its eligible posts can flow into the marketplace.</span></div>}
+        {q.instagram_error && <div className="account-alert error"><ShieldCheck size={19} /><span>{q.instagram_error}</span></div>}
+        {q.error === "invalid" && <div className="account-alert error"><ShieldCheck size={19} /><span>Please enter a valid Instagram username.</span></div>}
+        {q.requested && <div className="account-alert success"><CheckCircle2 size={19} /><span><b>Shop request received.</b> We'll review it and guide you through the next step here.</span></div>}
+
+        <div className="account-intro">
           <div>
-            <h2 className="text-2xl font-black">Your Instagram shops</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#666]">
-              Register multiple Instagram Business shops under one marketplace account. Each approved Instagram account becomes its own shop and its posts become products automatically.
-            </p>
+            <p className="account-kicker dark">How it works</p>
+            <h2>Four friendly steps.</h2>
           </div>
-          <span className="w-fit rounded-full bg-[#f7f7f5] px-4 py-2 text-xs font-semibold">
-            {rs.length} {rs.length === 1 ? "shop" : "shops"} registered
-          </span>
+          <p>Nothing complicated. Each step unlocks the next one so you always know what to do.</p>
         </div>
 
-        {q.instagram === "connected" && <p className="mt-5 rounded-xl bg-green-50 p-4 text-sm text-green-700">Instagram shop connected and posts imported.</p>}
-        {q.instagram_error && <p className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-600">{q.instagram_error}</p>}
-        {q.error === "invalid" && <p className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-600">Please enter a valid Instagram username.</p>}
-
-        {connectRequest && (
-          <div className="mt-6 rounded-3xl border-2 border-black bg-white p-6 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="rounded-2xl bg-black p-3 text-white"><ShieldCheck size={22} /></div>
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[.14em] text-[#999]">One quick step before Instagram</p>
-                <h3 className="mt-1 text-xl font-black">Accept the Instagram Tester invitation</h3>
-                <p className="mt-2 text-sm leading-6 text-[#666]">
-                  To connect @{connectRequest.username}, the Instagram account must first accept the tester invitation from our Meta/Instagram app.
-                  Open Instagram's access page, accept the invitation, then return here to continue.
-                </p>
+        <div className="account-guide">
+          <Step number="01" title="Register your Instagram shop" image={guideImages.register} active={requests.length === 0} text="Enter the Instagram username you want to use as your marketplace shop. You don't need to add products separately — your Instagram posts become the content shoppers discover.">
+            {requests.length === 0 && <p className="account-step-note"><Instagram size={14} /> Start below with your Instagram username.</p>}
+          </Step>
+          <Step number="02" title="Our team reviews your shop" image={guideImages.review} active={requests.some(r => r.status === "PENDING")} done={requests.some(r => r.status === "APPROVED")} text="After you submit the username, a marketplace admin reviews the request and requests the Instagram account as a tester through Meta for Developers.">
+            <p className="account-step-note"><ShieldCheck size={14} /> This part is handled by our team.</p>
+          </Step>
+          <Step number="03" title="Accept the Instagram tester invitation" image={guideImages.tester} active={requests.some(r => r.status === "APPROVED" && !connections.some(c => c.username.toLowerCase() === r.username.toLowerCase()))} text="Once your shop is approved, open Instagram's access page in a new tab. Find the tester invitation, tap it, and choose Approve. Then come back here.">
+            {requests.filter(r => r.status === "APPROVED" && !connections.some(c => c.username.toLowerCase() === r.username.toLowerCase())).map(r => (
+              <div className="account-action-box" key={r.id}>
+                <b>@{r.username} is ready</b>
+                <p>Open Instagram in a new tab, switch to the Tester invitations tab, and approve the invitation for this app.</p>
+                <a href="https://www.instagram.com/accounts/manage_access/" target="_blank" rel="noopener noreferrer" className="account-primary-button">
+                  Open Instagram access <ExternalLink size={15} />
+                </a>
               </div>
+            ))}
+          </Step>
+          <Step number="04" title="Connect Instagram" image={guideImages.connect} done={connections.length > 0} text="After approving the tester invitation, return here and connect the approved Instagram account. Instagram handles the authorization securely — you don't need to paste an access token.">
+            {requests.filter(r => r.status === "APPROVED" && !connections.some(c => c.username.toLowerCase() === r.username.toLowerCase())).map(r => (
+              <Link key={r.id} href={"/api/instagram/connect?requestId=" + encodeURIComponent(r.id)} className="account-primary-button">
+                Connect @{r.username} <Instagram size={15} />
+              </Link>
+            ))}
+          </Step>
+        </div>
+
+        <section className="account-shops-card">
+          <div className="account-section-head">
+            <div>
+              <p className="account-kicker dark">Your shops</p>
+              <h2>Instagram shop requests</h2>
             </div>
-            <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-4 text-sm text-[#555]">
-              <p className="font-bold text-black">Before you continue</p>
-              <ol className="mt-2 list-decimal space-y-1 pl-5">
-                <li>Make sure you are logged into the approved Instagram account: <b>@{connectRequest.username}</b>.</li>
-                <li>Click <b>Accept Tester Invitation</b> and accept the marketplace app invitation on Instagram.</li>
-                <li>Return here and click <b>Continue to Instagram</b>.</li>
-              </ol>
-            </div>
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-              <a
-                href="https://www.instagram.com/accounts/manage_access/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-black px-5 py-3 text-sm font-semibold"
-              >
-                <ExternalLink size={16} /> Accept Tester Invitation
-              </a>
-              <a href={"/api/instagram/connect?requestId=" + encodeURIComponent(connectRequest.id)} className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">
-                <Instagram size={16} /> I accepted — Continue to Instagram
-              </a>
-              <a href="/account" className="inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold">
-                Not yet
-              </a>
-            </div>
+            <span>{requests.length} {requests.length === 1 ? "shop" : "shops"}</span>
           </div>
-        )}
 
-        {rs.length > 0 ? (
-          <div className="mt-6 space-y-4">
-            {rs.map((request) => {
-              const connection = connections.find((c) => c.username.toLowerCase() === request.username.toLowerCase());
+          {requests.length > 0 ? <div className="account-shop-list">
+            {requests.map((request) => {
+              const connection = connections.find(c => c.username.toLowerCase() === request.username.toLowerCase());
+              const connected = Boolean(connection);
               return (
-                <div key={request.id} className="rounded-2xl border p-5">
-                  <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[.14em] text-[#999]">Instagram shop</p>
-                      <b className="mt-1 block text-lg">@{request.username}</b>
-                      <p className="mt-1 text-xs text-[#888]">
-                        {connection ? connection.posts.length + " products imported" : "Instagram connection not completed yet"}
-                      </p>
-                    </div>
-                    <span className={"inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold " + (connection ? "bg-green-50 text-green-700" : request.status === "APPROVED" ? "bg-green-50 text-green-700" : request.status === "REJECTED" ? "bg-red-50 text-red-600" : "bg-[#f7f7f5] text-[#666]")}>
-                      {request.status === "APPROVED" && <CheckCircle2 size={16} />}
-                      {connection ? "Connected" : request.status}
-                    </span>
+                <div className="account-shop" key={request.id}>
+                  <div className="account-shop-avatar"><Instagram size={19} /></div>
+                  <div className="account-shop-main">
+                    <b>@{request.username}</b>
+                    <span>{connected ? connection!.posts.length + " marketplace products imported" : request.status === "PENDING" ? "Waiting for admin review and Meta tester invitation" : request.status === "REJECTED" ? "Request was not approved" : "Approved — ready for tester acceptance"}</span>
                   </div>
-
-                  {request.status === "APPROVED" && !connection && (
-                    <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-5">
-                      <p className="text-sm font-bold">Connect this shop</p>
-                      <p className="mt-2 text-sm leading-6 text-[#666]">
-                        First accept the Instagram Tester invitation, then authorize @{request.username}. You do not need to generate or paste an access token.
-                      </p>
-                      <a href={"/account?connect=" + encodeURIComponent(request.id)} className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">
-                        <Instagram size={16} /> Connect Instagram
-                      </a>
-                    </div>
-                  )}
-
-                  {request.status === "PENDING" && <p className="mt-4 text-sm text-[#777]">Waiting for marketplace admin approval. You can register other shops while this request is being reviewed.</p>}
-                  {request.status === "REJECTED" && <p className="mt-4 text-sm text-[#777]">This shop request was rejected. You can submit another shop request below.</p>}
-                  {connection && <div className="mt-5 rounded-2xl bg-green-50 p-5 text-sm text-green-800">This shop is connected and its Instagram posts are being used as marketplace products.</div>}
+                  <div className={"account-status " + (connected ? "connected" : request.status.toLowerCase())}>
+                    {connected ? <CheckCircle2 size={14} /> : request.status === "APPROVED" ? <CheckCircle2 size={14} /> : null}
+                    {connected ? "Connected" : request.status}
+                  </div>
                 </div>
               );
             })}
-          </div>
-        ) : (
-          <div className="mt-6 rounded-2xl bg-[#f7f7f5] p-5 text-sm text-[#666]">
-            You have not registered a shop yet. Register your first Instagram shop below.
-          </div>
-        )}
-      </section>
+          </div> : <div className="account-empty">Your first shop will appear here after you register it below.</div>}
+        </section>
 
-      <section className="card mt-8 p-7">
-        <div className="flex items-center gap-3">
-          <div className="rounded-full bg-black p-2 text-white"><Plus size={17} /></div>
+        <section className="account-register-card">
           <div>
-            <h2 className="text-xl font-black">Register another shop</h2>
-            <p className="text-sm text-[#777]">Add another Instagram Business username to this same account.</p>
+            <div className="account-register-icon"><Plus size={20} /></div>
+            <p className="account-kicker dark">Step 01</p>
+            <h2>Register an Instagram shop</h2>
+            <p>Use the exact Instagram username you want shoppers to see. Start with one shop and add more later.</p>
           </div>
-        </div>
-        <form action="/api/store-requests" method="post" className="mt-5 flex max-w-xl gap-2">
-          <input name="username" required placeholder="@shopname" className="min-w-0 flex-1 rounded-full border px-5 py-3" />
-          <button className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white">Add shop</button>
-        </form>
+          <form action="/api/store-requests" method="post" className="account-register-form">
+            <label htmlFor="username">Instagram username</label>
+            <div>
+              <span>@</span>
+              <input id="username" name="username" required placeholder="yourshopname" autoComplete="off" />
+              <button type="submit">Register shop <ArrowRight size={16} /></button>
+            </div>
+            <small>Example: yourbrand — don't include the @ symbol.</small>
+          </form>
+        </section>
       </section>
     </main>
   );
