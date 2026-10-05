@@ -191,48 +191,41 @@ export default async function Home() {
         <div className="community-ring community-ring-a" />
         <div className="community-ring community-ring-b" />
         <div className="shell relative z-10">
-          <Reveal y={38}>
-            <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <div className="community-kicker"><Store size={14} /> Meet the stores</div>
-                <h2 className="community-title mt-6">Discover the people<br /><span>behind the posts.</span></h2>
+          <div className="community-layout">
+            <Reveal className="community-collage-wrap" y={38}>
+              <div className="community-collage">
+                {[
+                  { src: stores[0]?.posts[0]?.mediaUrl || stores[0]?.profileImageUrl || editorialImages.hero, alt: stores[0]?.name || "Instagram store" },
+                  { src: stores[1]?.posts[0]?.mediaUrl || stores[1]?.profileImageUrl || editorialImages.people, alt: stores[1]?.name || "Instagram store" },
+                  { src: stores[2]?.posts[0]?.mediaUrl || stores[2]?.profileImageUrl || editorialImages.shopping, alt: stores[2]?.name || "Instagram store" },
+                  { src: stores[3]?.posts[0]?.mediaUrl || stores[3]?.profileImageUrl || editorialImages.seller, alt: stores[3]?.name || "Instagram store" },
+                ].map((item, index) => (
+                  <Link
+                    key={index}
+                    href={stores[index] ? "/store/" + stores[index].username : "/stores"}
+                    className={"community-photo community-photo-" + (index === 0 ? "main" : index === 1 ? "top" : index === 2 ? "bottom" : "side")}
+                  >
+                    <img src={item.src} alt={item.alt} />
+                  </Link>
+                ))}
               </div>
-              <div className="max-w-xl">
-                <p className="text-base leading-8 text-white/80 sm:text-lg">Every store on Instagram Market starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.</p>
-                <Link href="/stores" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black transition hover:-translate-y-1">Explore all stores <ArrowRight size={14} /></Link>
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <div className="store-community-grid mt-12">
-            {stores.map((store, index) => (
-              <Reveal key={store.username} y={30} delay={index * 0.06}>
-                <Link href={"/store/" + store.username} className="store-community-card group">
-                  <div className="store-community-image">
-                    <img
-                      src={store.posts[0]?.mediaUrl || store.profileImageUrl || editorialImages[index % 4 === 0 ? "hero" : index % 4 === 1 ? "people" : index % 4 === 2 ? "shopping" : "seller"]}
-                      alt={store.name || "@" + store.username}
-                    />
-                    <div className="store-community-overlay" />
-                    <div className="store-community-meta">
-                      <span>@{store.username}</span>
-                      <b>{store.posts.length} {store.posts.length === 1 ? "product" : "products"}</b>
-                    </div>
-                  </div>
-                  <div className="store-community-copy">
-                    <span>Instagram store</span>
-                    <h3>{store.name || "Instagram Store"}</h3>
-                    <p>{store.biography || "Discover products, stories and inspiration from this connected store."}</p>
-                    <strong>Visit store <ArrowRight size={14} /></strong>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
+            <Reveal className="community-copy-panel" y={38} delay={0.08}>
+              <div className="community-kicker"><Store size={14} /> Meet the stores</div>
+              <h2 className="community-title mt-6">Discover the people<br /><span>behind the posts.</span></h2>
+              <p className="mt-7 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
+                Every store on Instagram Market starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.
+              </p>
+              <Link href="/stores" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 text-xs font-black text-black transition hover:-translate-y-1">
+                Explore all stores <ArrowRight size={14} />
+              </Link>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <span className="community-mini-stat"><b>{stores.length || "—"}</b> connected stores</span>
+                <span className="community-mini-stat"><b>{products.length || "—"}</b> fresh products</span>
+              </div>
+            </Reveal>
           </div>
-
-          {!stores.length && (
-            <div className="mt-10 rounded-[28px] border border-white/15 bg-white/10 p-8 text-white/75">Connected stores will appear here as they join Instagram Market.</div>
-          )}
         </div>
       </section>
 
