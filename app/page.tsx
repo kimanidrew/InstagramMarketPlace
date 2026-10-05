@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { StoreCarousel } from "@/components/store-carousel";
+import { HowMarketWorks } from "@/components/how-market-works";
 
 export const dynamic = "force-dynamic";
 
@@ -179,52 +180,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-y border-black/5 bg-[#111] py-24 text-white">
-        <div className="shell">
-          <div className="max-w-3xl">
-            <p className="text-[10px] font-black uppercase tracking-[.22em] text-white/45">
-              How Instagram Market works
-            </p>
-            <h2 className="mt-5 text-5xl font-black leading-[.95] tracking-[-.06em] sm:text-7xl">
-              No complicated catalogue.
-              <br />
-              Just better discovery.
-            </h2>
-          </div>
-
-          <div className="mt-16 grid gap-px overflow-hidden rounded-[30px] bg-white/10 md:grid-cols-3">
-            {[
-              {
-                n: "01",
-                icon: Instagram,
-                title: "Sellers connect",
-                text: "Approved Instagram Business accounts connect securely to the marketplace.",
-              },
-              {
-                n: "02",
-                icon: Zap,
-                title: "Posts become products",
-                text: "Published Instagram posts are automatically brought into the marketplace with their media and story.",
-              },
-              {
-                n: "03",
-                icon: Search,
-                title: "People discover",
-                text: "Shoppers browse, search, save favourites and open the original Instagram post.",
-              },
-            ].map(({ n, icon: Icon, title, text }) => (
-              <div key={n} className="bg-white/[.04] p-7 sm:p-9">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black text-white/35">{n}</span>
-                  <Icon size={21} />
-                </div>
-                <h3 className="mt-20 text-2xl font-black">{title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/55">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowMarketWorks />
 
       <section className="shell py-24">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
