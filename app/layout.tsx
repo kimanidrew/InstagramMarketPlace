@@ -1,3 +1,167 @@
-import type{Metadata}from"next";import"./globals.css";import Link from"next/link";import{UserCircle,Store,ShoppingBag,Heart,Search,Menu}from"lucide-react";import{user}from"@/lib/auth";
-export const metadata:Metadata={title:"Instagram Market",description:"Shop products discovered from Instagram stores."};
-export default async function Layout({children}:{children:React.ReactNode}){const u=await user();return <html lang="en"><body><header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur-xl"><div className="shell flex h-[72px] items-center gap-5"><Link href="/" className="shrink-0 text-xl font-black tracking-[-.07em]">instagram<span className="text-[#777]">market</span><sup className="ml-0.5 text-[8px]">®</sup></Link><form action="/products" className="hidden min-w-0 flex-1 md:flex md:max-w-xl"><div className="flex w-full items-center rounded-full bg-[#f5f5f3] px-4"><Search size={17} className="text-[#888]"/><input name="q" placeholder="Search products, stores & categories..." className="w-full bg-transparent px-3 py-3 text-sm outline-none"/></div></form><nav className="hidden items-center gap-6 text-sm font-semibold lg:flex"><Link href="/products">Shop</Link><Link href="/stores">Stores</Link><Link href="/categories">Categories</Link><Link href="/how-it-works">How it works</Link></nav><div className="ml-auto flex items-center gap-1"><Link href="/products" className="rounded-full p-2.5 md:hidden" aria-label="Search"><Search size={20}/></Link><Link href={u?"/wishlist":"/login"} className="hidden rounded-full p-2.5 sm:block" aria-label="Wishlist"><Heart size={20}/></Link><Link href={u?"/account":"/login"} className="rounded-full p-2.5" aria-label="Account"><UserCircle size={20}/></Link>{u?.role==="ADMIN"&&<Link href="/admin" className="hidden rounded-full p-2.5 md:block" aria-label="Admin"><Store size={20}/></Link>}<Link href="/products" className="rounded-full bg-black p-2.5 text-white" aria-label="Shop"><ShoppingBag size={19}/></Link><button className="rounded-full p-2.5 lg:hidden" aria-label="Menu"><Menu size={21}/></button></div></div><div className="border-t border-black/5 lg:hidden"><div className="shell flex gap-5 overflow-x-auto py-3 text-xs font-bold whitespace-nowrap"><Link href="/products">Shop all</Link><Link href="/stores">Stores</Link><Link href="/categories">Categories</Link><Link href="/products?tag=new">New arrivals</Link><Link href="/how-it-works">How it works</Link></div></div></header>{children}<footer className="mt-24 border-t border-black/5 bg-[#fafaf8]"><div className="shell grid gap-10 py-14 md:grid-cols-4"><div className="md:col-span-2"><Link href="/" className="text-2xl font-black tracking-[-.06em]">instagram<span className="text-[#777]">market</span><sup className="text-[8px]">®</sup></Link><p className="mt-4 max-w-md text-sm leading-7 text-[#777]">A curated shopping experience built from real Instagram stores. Discover products, explore shops and jump straight to the original post.</p></div><div><p className="text-xs font-bold uppercase tracking-[.18em]">Shop</p><div className="mt-4 space-y-3 text-sm text-[#666]"><Link className="block" href="/products">All products</Link><Link className="block" href="/stores">Stores</Link><Link className="block" href="/categories">Categories</Link><Link className="block" href="/wishlist">Wishlist</Link></div></div><div><p className="text-xs font-bold uppercase tracking-[.18em]">About</p><div className="mt-4 space-y-3 text-sm text-[#666]"><Link className="block" href="/how-it-works">How it works</Link><Link className="block" href="/signup">Create account</Link><Link className="block" href="/account">My account</Link></div></div></div><div className="shell border-t border-black/5 py-5 text-xs text-[#999]">Instagram Market © 2026 · Instagram-powered marketplace</div></footer></body></html>
+import type { Metadata } from "next";
+import "./globals.css";
+import Link from "next/link";
+import { Heart, Menu, Search, ShoppingBag, Store, UserCircle } from "lucide-react";
+import { user } from "@/lib/auth";
+
+export const metadata: Metadata = {
+  title: "Instagram Market",
+  description: "Shop products discovered from Instagram stores.",
+};
+
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const u = await user();
+
+  return (
+    <html lang="en">
+      <body>
+        <header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur-xl">
+          <div className="shell flex h-[72px] items-center gap-5">
+            <Link
+              href="/"
+              className="shrink-0 text-xl font-black tracking-[-.07em]"
+            >
+              instagram<span className="text-[#777]">market</span>
+              <sup className="ml-0.5 text-[8px]">®</sup>
+            </Link>
+
+            <form
+              action="/products"
+              className="hidden min-w-0 flex-1 md:flex md:max-w-xl"
+            >
+              <div className="flex w-full items-center rounded-full bg-[#f5f5f3] px-4">
+                <Search size={17} className="text-[#888]" />
+                <input
+                  name="q"
+                  placeholder="Search products, stores & categories..."
+                  className="w-full bg-transparent px-3 py-3 text-sm outline-none"
+                />
+              </div>
+            </form>
+
+            <nav className="hidden items-center gap-6 text-sm font-semibold lg:flex">
+              <Link href="/products">Shop</Link>
+              <Link href="/stores">Stores</Link>
+              <Link href="/categories">Categories</Link>
+              <Link href="/how-it-works">How it works</Link>
+            </nav>
+
+            <div className="ml-auto flex items-center gap-1">
+              <Link
+                href="/products"
+                className="rounded-full p-2.5 md:hidden"
+                aria-label="Search"
+              >
+                <Search size={20} />
+              </Link>
+
+              <Link
+                href={u ? "/wishlist" : "/login"}
+                className="hidden rounded-full p-2.5 sm:block"
+                aria-label="Wishlist"
+              >
+                <Heart size={20} />
+              </Link>
+
+              <Link
+                href={u ? "/account" : "/login"}
+                className="rounded-full p-2.5"
+                aria-label="Account"
+              >
+                <UserCircle size={20} />
+              </Link>
+
+              {u?.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  className="hidden rounded-full p-2.5 md:block"
+                  aria-label="Admin"
+                >
+                  <Store size={20} />
+                </Link>
+              )}
+
+              <Link
+                href="/products"
+                className="rounded-full bg-black p-2.5 text-white"
+                aria-label="Shop"
+              >
+                <ShoppingBag size={19} />
+              </Link>
+
+              <button
+                className="rounded-full p-2.5 lg:hidden"
+                aria-label="Menu"
+                type="button"
+              >
+                <Menu size={21} />
+              </button>
+            </div>
+          </div>
+
+          <div className="border-t border-black/5 lg:hidden">
+            <div className="shell flex gap-5 overflow-x-auto whitespace-nowrap py-3 text-xs font-bold">
+              <Link href="/products">Shop all</Link>
+              <Link href="/stores">Stores</Link>
+              <Link href="/categories">Categories</Link>
+              <Link href="/products?tag=new">New arrivals</Link>
+              <Link href="/how-it-works">How it works</Link>
+            </div>
+          </div>
+        </header>
+
+        {children}
+
+        <footer className="mt-24 border-t border-black/5 bg-[#fafaf8]">
+          <div className="shell grid gap-10 py-14 md:grid-cols-4">
+            <div className="md:col-span-2">
+              <Link
+                href="/"
+                className="text-2xl font-black tracking-[-.06em]"
+              >
+                instagram<span className="text-[#777]">market</span>
+                <sup className="text-[8px]">®</sup>
+              </Link>
+              <p className="mt-4 max-w-md text-sm leading-7 text-[#777]">
+                A curated shopping experience built from real Instagram
+                stores. Discover products, explore shops and jump straight to
+                the original post.
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[.18em]">
+                Shop
+              </p>
+              <div className="mt-4 space-y-3 text-sm text-[#666]">
+                <Link className="block" href="/products">All products</Link>
+                <Link className="block" href="/stores">Stores</Link>
+                <Link className="block" href="/categories">Categories</Link>
+                <Link className="block" href="/wishlist">Wishlist</Link>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[.18em]">
+                About
+              </p>
+              <div className="mt-4 space-y-3 text-sm text-[#666]">
+                <Link className="block" href="/how-it-works">How it works</Link>
+                <Link className="block" href="/signup">Create account</Link>
+                <Link className="block" href="/account">My account</Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="shell border-t border-black/5 py-5 text-xs text-[#999]">
+            Instagram Market © 2026 · Instagram-powered marketplace
+          </div>
+        </footer>
+      </body>
+    </html>
+  );
+}
