@@ -198,10 +198,10 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 
 /* Navbar search + bag polish */
 .desktop-search-wrap{min-width:260px;max-width:460px}
-.desktop-search{height:48px;gap:9px;border:1px solid #333;border-radius:999px;background:linear-gradient(135deg,#1c1c1c,#101010);padding:4px 6px 4px 7px;box-shadow:0 8px 28px rgba(0,0,0,.045),inset 0 1px 0 rgba(255,255,255,.9);transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease,background .25s ease}
-.desktop-search:focus-within{background:#181818;border-color:#666;box-shadow:0 0 0 4px rgba(17,17,17,.055),0 14px 35px rgba(0,0,0,.08);transform:translateY(-1px)}
-.search-icon-wrap{display:flex;height:36px;width:36px;align-items:center;justify-content:center;border-radius:11px;background:#111;color:#fff;flex:none;transition:transform .25s ease}
-.desktop-search:focus-within .search-icon-wrap{transform:rotate(-8deg) scale(1.04)}
+.desktop-search{height:50px;gap:10px;border:1px solid #353535;border-radius:999px;background:linear-gradient(135deg,#202020,#111);padding:5px 7px 5px 8px;box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06);transition:border-color .25s ease,box-shadow .25s ease,transform .25s ease,background .25s ease}
+.desktop-search:focus-within{background:#191919;border-color:#777;box-shadow:0 0 0 4px rgba(255,255,255,.07),0 16px 38px rgba(0,0,0,.35);transform:translateY(-1px)}
+.search-icon-wrap{display:flex;height:36px;width:36px;align-items:center;justify-content:center;border-radius:50%;background:#fff;color:#111;flex:none;transition:transform .25s ease,box-shadow .25s ease}
+.desktop-search:focus-within .search-icon-wrap{transform:scale(1.06);box-shadow:0 4px 14px rgba(0,0,0,.22)}
 .desktop-search input{height:38px;font-size:12px;font-weight:700;color:#fff;letter-spacing:-.01em}
 .desktop-search input::placeholder{color:#888;font-weight:600}
 .search-shortcut{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 8px;border:1px solid #3a3a3a;border-radius:8px;background:#242424;color:#aaa;font-size:9px;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,.04)}
@@ -240,3 +240,6 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 
 .community-copy-panel .community-stores-button{color:#111!important}
 .community-copy-panel .community-stores-button svg{color:#111!important}
+
+/* Premium desktop search */
+@media(min-width:1024px){.desktop-search-wrap{min-width:280px;max-width:470px}.desktop-search{position:relative}.desktop-search:before{content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,.025),transparent 45%,rgba(255,255,255,.035));}.desktop-search input{position:relative;z-index:1}.desktop-search .search-shortcut{position:relative;z-index:1}.desktop-search .search-icon-wrap{position:relative;z-index:1}}
