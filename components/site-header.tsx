@@ -65,7 +65,7 @@ export function SiteHeader({ user }: { user: any }) {
           <button
             type="button"
             onClick={() => { setSearchOpen((v) => !v); setMenuOpen(false); }}
-            className={"icon-btn search-trigger " + (searchOpen ? "active" : "")}
+            className={"icon-btn search-trigger lg:hidden " + (searchOpen ? "active" : "")}
             aria-label={searchOpen ? "Close search" : "Open search"}
           >
             {searchOpen ? <X size={20} /> : <Search size={20} />}
