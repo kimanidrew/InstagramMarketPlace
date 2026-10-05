@@ -47,7 +47,7 @@ export default async function Home() {
     <main className="bg-white">
       <section className="editorial-grid overflow-hidden border-b border-black/5">
         <div className="shell grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.02fr_.98fr]">
-          <div>
+          <Reveal y={34}>
             <div className="eyebrow">
               <Instagram size={13} /> Instagram marketplace
             </div>
@@ -115,10 +115,13 @@ export default async function Home() {
             <div className="absolute right-0 bottom-20 z-50 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
               Discover · Shop · Support
             </div>
-          </Reveal>\n        </div>
+          </Reveal>
+          </div>
+        </div>
       </section>
 
       <section className="shell py-24">
+        <Reveal>
         <div className="grid gap-14 lg:grid-cols-[.85fr_1.15fr] lg:items-end">
           <div>
             <p className="eyebrow plain">Why we exist</p>
@@ -140,6 +143,7 @@ export default async function Home() {
             </p>
           </div>
         </div>
+        </Reveal>
       </section>
 
       <section className="shell pb-24">
@@ -184,6 +188,7 @@ export default async function Home() {
       <HowMarketWorks />
 
       <section className="shell py-24">
+        <Reveal>
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div>
             <p className="eyebrow plain">For sellers</p>
@@ -230,6 +235,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
+        </Reveal>
       </section>
 
       <section className="shell pb-24">
