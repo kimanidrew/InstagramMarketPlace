@@ -2,15 +2,15 @@ import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, LogOut, Plus, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, LogOut, ShieldCheck, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 const guideImages = {
-  register: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=900&q=85",
-  review: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85",
-  tester: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=900&q=85",
-  connect: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=85",
+  register: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1200&q=85",
+  review: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=85",
+  tester: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=85",
+  connect: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=85",
 };
 
 async function out() {
@@ -19,27 +19,38 @@ async function out() {
   redirect("/");
 }
 
-function Step({ number, title, text, image, active, done, children }: {
-  number: string; title: string; text: string; image: string; active?: boolean; done?: boolean; children?: React.ReactNode;
+function StepCard({
+  number, title, text, image, state, children,
+}: {
+  number: number;
+  title: string;
+  text: string;
+  image: string;
+  state: "done" | "active" | "locked";
+  children?: React.ReactNode;
 }) {
   return (
-    <div className={"account-step " + (active ? "is-active" : "") + (done ? " is-done" : "")}>
-      <div className="account-step-media"><img src={image} alt="" /></div>
-      <div className="account-step-number">{done ? <Check size={16} /> : number}</div>
-      <div className="account-step-body">
-        <p className="account-step-label">{done ? "Completed" : active ? "Your next step" : "Step " + number}</p>
-        <h3>{title}</h3>
-        <p>{text}</p>
+    <article className={"seller-step-card seller-step-" + state}>
+      <div className="seller-step-line" aria-hidden="true" />
+      <div className="seller-step-media"><img src={image} alt="" /></div>
+      <div className="seller-step-number">{state === "done" ? <Check size={17} /> : number}</div>
+      <div className="seller-step-body">
+        <div className="seller-step-top">
+          <span>{state === "done" ? "DONE" : state === "active" ? "YOUR NEXT STEP" : "COMING NEXT"}</span>
+          {state === "active" && <b>Step {number} of 4</b>}
+        </div>
+        <h2>{title}</h2>
+        <p className="seller-step-text">{text}</p>
         {children}
       </div>
-    </div>
+    </article>
   );
 }
 
 export default async function Account({
   searchParams,
 }: {
-  searchParams: Promise<{ instagram?: string; instagram_error?: string; requested?: string; error?: string }>;
+  searchParams: Promise<{ step?: string; instagram?: string; instagram_error?: string; requested?: string; error?: string }>;
 }) {
   const u = await user();
   if (!u) redirect("/");
@@ -54,115 +65,124 @@ export default async function Account({
     }),
   ]);
 
+  const latest = requests[0];
+  const connection = latest
+    ? connections.find(c => c.username.toLowerCase() === latest.username.toLowerCase())
+    : connections[0];
+
+  const isConnected = Boolean(connection);
+  const currentStep = isConnected ? 4 : latest?.status === "APPROVED" ? 3 : latest?.status === "PENDING" ? 2 : 1;
+  const requestedStep = Number(q.step || currentStep);
+  const step = Math.min(4, Math.max(1, Number.isFinite(requestedStep) ? requestedStep : currentStep));
+  const visibleStep = Math.min(step, currentStep);
+
+  const stepHref = (n: number) => "/account?step=" + n;
+
   return (
-    <main className="account-page">
-      <section className="account-hero">
+    <main className="seller-onboarding">
+      <section className="seller-onboarding-hero">
         <div className="shell">
-          <div className="account-hero-top">
+          <div className="seller-hero-row">
             <div>
-              <p className="account-kicker"><Sparkles size={13} /> Seller account</p>
-              <h1>Bring your Instagram<br /><span>into the marketplace.</span></h1>
-              <p className="account-hero-copy">
-                We keep the process simple. Register your Instagram username, wait for approval,
-                accept the tester invitation, then connect your account securely.
+              <p className="seller-kicker"><Sparkles size={13} /> Seller setup</p>
+              <h1>Let's get your<br /><span>Instagram shop ready.</span></h1>
+              <p className="seller-hero-copy">
+                Think of this like a little checklist. Do one step, tap Next, and we will remember where you stopped.
               </p>
             </div>
             <form action={out}>
-              <button className="account-signout"><LogOut size={15} /> Sign out</button>
+              <button className="seller-signout"><LogOut size={15} /> Sign out</button>
             </form>
           </div>
-          <div className="account-user-pill"><span>{u.name || "Seller"}</span><span>{u.email}</span></div>
+          <div className="seller-trust-row">
+            <span><ShieldCheck size={14} /> Simple 4-step setup</span>
+            <span><Instagram size={14} /> Instagram seller</span>
+            <span><CheckCircle2 size={14} /> Your progress is saved</span>
+          </div>
         </div>
       </section>
 
-      <section className="shell account-content">
-        {q.instagram === "connected" && <div className="account-alert success"><CheckCircle2 size={19} /><span><b>You're connected.</b> Your Instagram shop is now linked and its eligible posts can flow into the marketplace.</span></div>}
-        {q.instagram_error && <div className="account-alert error"><ShieldCheck size={19} /><span>{q.instagram_error}</span></div>}
-        {q.error === "invalid" && <div className="account-alert error"><ShieldCheck size={19} /><span>Please enter a valid Instagram username.</span></div>}
-        {q.requested && <div className="account-alert success"><CheckCircle2 size={19} /><span><b>Shop request received.</b> We'll review it and guide you through the next step here.</span></div>}
+      <section className="shell seller-onboarding-content">
+        {q.instagram === "connected" && <div className="seller-alert success"><CheckCircle2 size={19} /><div><b>You are connected!</b><span>Your Instagram shop is now linked and eligible posts can become marketplace products.</span></div></div>}
+        {q.instagram_error && <div className="seller-alert error"><ShieldCheck size={19} /><div>{q.instagram_error}</div></div>}
+        {q.error === "invalid" && <div className="seller-alert error"><ShieldCheck size={19} /><div>Please enter a valid Instagram username.</div></div>}
+        {q.requested && <div className="seller-alert success"><CheckCircle2 size={19} /><div><b>Step 1 is complete.</b><span>Your request is now waiting for review.</span></div></div>}
 
-        <div className="account-intro">
-          <div>
-            <p className="account-kicker dark">How it works</p>
-            <h2>Four friendly steps.</h2>
+        <div className="seller-progress">
+          <div className="seller-progress-head">
+            <div>
+              <p className="seller-kicker light">Your progress</p>
+              <h2>{isConnected ? "All done! 🎉" : "You are on step " + currentStep + " of 4."}</h2>
+            </div>
+            <span>{isConnected ? "4 / 4" : currentStep + " / 4"}</span>
           </div>
-          <p>Nothing complicated. Each step unlocks the next one so you always know what to do.</p>
+          <div className="seller-progress-track">
+            {[1, 2, 3, 4].map(n => <Link key={n} href={stepHref(Math.min(n, currentStep))} className={"seller-progress-dot " + (n < currentStep || isConnected ? "done" : n === currentStep ? "active" : "")}>{n < currentStep || isConnected ? <Check size={14} /> : n}</Link>)}
+          </div>
         </div>
 
-        <div className="account-guide">
-          <Step number="01" title="Register your Instagram shop" image={guideImages.register} active={requests.length === 0} text="Enter the Instagram username you want to use as your marketplace shop. You don't need to add products separately — your Instagram posts become the content shoppers discover.">
-            {requests.length === 0 && <p className="account-step-note"><Instagram size={14} /> Start below with your Instagram username.</p>}
-          </Step>
-          <Step number="02" title="Our team reviews your shop" image={guideImages.review} active={requests.some(r => r.status === "PENDING")} done={requests.some(r => r.status === "APPROVED")} text="After you submit the username, a marketplace admin reviews the request and requests the Instagram account as a tester through Meta for Developers.">
-            <p className="account-step-note"><ShieldCheck size={14} /> This part is handled by our team.</p>
-          </Step>
-          <Step number="03" title="Accept the Instagram tester invitation" image={guideImages.tester} active={requests.some(r => r.status === "APPROVED" && !connections.some(c => c.username.toLowerCase() === r.username.toLowerCase()))} text="Once your shop is approved, open Instagram's access page in a new tab. Find the tester invitation, tap it, and choose Approve. Then come back here.">
-            {requests.filter(r => r.status === "APPROVED" && !connections.some(c => c.username.toLowerCase() === r.username.toLowerCase())).map(r => (
-              <div className="account-action-box" key={r.id}>
-                <b>@{r.username} is ready</b>
-                <p>Open Instagram in a new tab, switch to the Tester invitations tab, and approve the invitation for this app.</p>
-                <a href="https://www.instagram.com/accounts/manage_access/" target="_blank" rel="noopener noreferrer" className="account-primary-button">
-                  Open Instagram access <ExternalLink size={15} />
-                </a>
+        <div className="seller-stepper">
+          <StepCard number={1} title="Tell us your Instagram username" text="First, tell us which Instagram account you want to turn into your shop. That's it — no product list needed." image={guideImages.register} state={currentStep > 1 ? "done" : visibleStep === 1 ? "active" : "locked"}>
+            {currentStep === 1 ? (
+              <form action="/api/store-requests" method="post" className="seller-form">
+                <label htmlFor="username">Your Instagram username</label>
+                <div className="seller-input-wrap"><span>@</span><input id="username" name="username" required placeholder="yourshopname" autoComplete="off" /><button type="submit">Next <ArrowRight size={16} /></button></div>
+                <small>Use the exact username. Example: <b>yourbrand</b> — do not type @.</small>
+              </form>
+            ) : (
+              <div className="seller-done-note"><CheckCircle2 size={16} /> Username submitted</div>
+            )}
+          </StepCard>
+
+          <StepCard number={2} title="Wait while we review it" text="Now our team checks your shop and sends the Instagram tester invitation through Meta. You do not need to do anything yet." image={guideImages.review} state={currentStep > 2 ? "done" : currentStep === 2 ? "active" : "locked"}>
+            {latest?.status === "PENDING" && currentStep === 2 && (
+              <div className="seller-status-box review">
+                <div><ShieldCheck size={17} /><div><b>Request in review</b><span>We are reviewing @{latest.username}. This step is saved.</span></div></div>
+                <Link href={stepHref(2)} className="seller-secondary-button">Continue registration <ArrowRight size={15} /></Link>
               </div>
-            ))}
-          </Step>
-          <Step number="04" title="Connect Instagram" image={guideImages.connect} done={connections.length > 0} text="After approving the tester invitation, return here and connect the approved Instagram account. Instagram handles the authorization securely — you don't need to paste an access token.">
-            {requests.filter(r => r.status === "APPROVED" && !connections.some(c => c.username.toLowerCase() === r.username.toLowerCase())).map(r => (
-              <Link key={r.id} href={"/api/instagram/connect?requestId=" + encodeURIComponent(r.id)} className="account-primary-button">
-                Connect @{r.username} <Instagram size={15} />
-              </Link>
-            ))}
-          </Step>
+            )}
+            {latest?.status === "APPROVED" && <div className="seller-done-note"><CheckCircle2 size={16} /> Approved — next step unlocked</div>}
+            {latest?.status === "REJECTED" && <div className="seller-status-box error"><b>This request was not approved.</b><span>You can start again with another Instagram username.</span><Link href={stepHref(1)} className="seller-primary-button">Start again <ArrowRight size={15} /></Link></div>}
+          </StepCard>
+
+          <StepCard number={3} title="Accept the Instagram invitation" text="When your shop is approved, Instagram will show you a tester invitation. Open Instagram, approve it, then come back here." image={guideImages.tester} state={currentStep > 3 ? "done" : currentStep === 3 ? "active" : "locked"}>
+            {currentStep === 3 && latest?.status === "APPROVED" && !isConnected && (
+              <div className="seller-action-stack">
+                <div className="seller-numbered-tip"><b>1</b><span>Open Instagram and find the tester invitation.</span></div>
+                <div className="seller-numbered-tip"><b>2</b><span>Tap the invitation and choose <strong>Approve</strong>.</span></div>
+                <a href="https://www.instagram.com/accounts/manage_access/" target="_blank" rel="noopener noreferrer" className="seller-primary-button">Open Instagram <ExternalLink size={15} /></a>
+                <Link href={stepHref(4)} className="seller-next-button">I approved it — Next <ArrowRight size={16} /></Link>
+              </div>
+            )}
+          </StepCard>
+
+          <StepCard number={4} title="Connect Instagram" text="Last step! Connect the approved Instagram account. Instagram handles the secure sign-in for you." image={guideImages.connect} state={isConnected ? "done" : currentStep === 4 ? "active" : "locked"}>
+            {isConnected ? (
+              <div className="seller-status-box success"><CheckCircle2 size={18} /><div><b>@{connection?.username} is connected</b><span>{connection?.posts.length || 0} marketplace products imported.</span></div></div>
+            ) : currentStep === 4 && latest?.status === "APPROVED" ? (
+              <div className="seller-action-stack">
+                <Link href={"/api/instagram/connect?requestId=" + encodeURIComponent(latest.id)} className="seller-primary-button">Connect @{latest.username} <Instagram size={16} /></Link>
+                <Link href={stepHref(3)} className="seller-back-button"><ArrowLeft size={14} /> Back to invitation step</Link>
+              </div>
+            ) : null}
+          </StepCard>
         </div>
 
-        <section className="account-shops-card">
-          <div className="account-section-head">
-            <div>
-              <p className="account-kicker dark">Your shops</p>
-              <h2>Instagram shop requests</h2>
-            </div>
-            <span>{requests.length} {requests.length === 1 ? "shop" : "shops"}</span>
-          </div>
+        {!isConnected && currentStep === 2 && (
+          <div className="seller-help-card"><div className="seller-help-icon">💡</div><div><b>Nothing to do yet.</b><span>Leave this page or come back later. When an admin approves your request, step 3 will unlock automatically.</span></div><Link href={stepHref(2)}>Keep me on step 2 <ArrowRight size={14} /></Link></div>
+        )}
 
-          {requests.length > 0 ? <div className="account-shop-list">
-            {requests.map((request) => {
-              const connection = connections.find(c => c.username.toLowerCase() === request.username.toLowerCase());
-              const connected = Boolean(connection);
-              return (
-                <div className="account-shop" key={request.id}>
-                  <div className="account-shop-avatar"><Instagram size={19} /></div>
-                  <div className="account-shop-main">
-                    <b>@{request.username}</b>
-                    <span>{connected ? connection!.posts.length + " marketplace products imported" : request.status === "PENDING" ? "Waiting for admin review and Meta tester invitation" : request.status === "REJECTED" ? "Request was not approved" : "Approved — ready for tester acceptance"}</span>
-                  </div>
-                  <div className={"account-status " + (connected ? "connected" : request.status.toLowerCase())}>
-                    {connected ? <CheckCircle2 size={14} /> : request.status === "APPROVED" ? <CheckCircle2 size={14} /> : null}
-                    {connected ? "Connected" : request.status}
-                  </div>
-                </div>
-              );
-            })}
-          </div> : <div className="account-empty">Your first shop will appear here after you register it below.</div>}
-        </section>
-
-        <section className="account-register-card">
-          <div>
-            <div className="account-register-icon"><Plus size={20} /></div>
-            <p className="account-kicker dark">Step 01</p>
-            <h2>Register an Instagram shop</h2>
-            <p>Use the exact Instagram username you want shoppers to see. Start with one shop and add more later.</p>
-          </div>
-          <form action="/api/store-requests" method="post" className="account-register-form">
-            <label htmlFor="username">Instagram username</label>
-            <div>
-              <span>@</span>
-              <input id="username" name="username" required placeholder="yourshopname" autoComplete="off" />
-              <button type="submit">Register shop <ArrowRight size={16} /></button>
+        {requests.length > 0 && (
+          <section className="seller-history">
+            <div className="seller-section-heading"><div><p className="seller-kicker light">Saved progress</p><h2>Your shop requests</h2></div><span>{requests.length}</span></div>
+            <div className="seller-history-list">
+              {requests.map(request => {
+                const connected = connections.some(c => c.username.toLowerCase() === request.username.toLowerCase());
+                return <div className="seller-history-row" key={request.id}><div className="seller-history-icon"><Instagram size={18} /></div><div><b>@{request.username}</b><span>{connected ? "Connected" : request.status === "PENDING" ? "Request in review" : request.status === "APPROVED" ? "Approved — continue to step 3" : "Not approved"}</span></div><Link href={stepHref(connected ? 4 : request.status === "APPROVED" ? 3 : request.status === "PENDING" ? 2 : 1)}>Continue <ArrowRight size={14} /></Link></div>;
+              })}
             </div>
-            <small>Example: yourbrand — don't include the @ symbol.</small>
-          </form>
-        </section>
+          </section>
+        )}
       </section>
     </main>
   );
