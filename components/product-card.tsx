@@ -33,11 +33,17 @@ export function ProductCard({ p }: { p: any }) {
           <ProductMedia src={p.mediaUrl} poster={p.thumbnailUrl} alt={p.productTitle || "Product video"} />
         ) : (
           img && (
-            <img
-              src={img}
-              alt={p.productTitle || "Product"}
-              className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]"
-            />
+            <Link
+              href={"/product/" + p.productSlug}
+              aria-label={"View " + (p.productTitle || "product")}
+              className="block h-full w-full"
+            >
+              <img
+                src={img}
+                alt={p.productTitle || "Product"}
+                className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]"
+              />
+            </Link>
           )
         )}
 
