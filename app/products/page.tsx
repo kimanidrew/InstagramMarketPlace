@@ -1,6 +1,9 @@
 import Link from "next/link";
-import { Grid2X2, LayoutList, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Heart, Grid2X2, LayoutList, Search, SlidersHorizontal, Sparkles } from "lucide-react";
+import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
+import { ProductCard } from "@/components/product-card";
+import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 import { ProductMasonry } from "@/components/product-masonry";
 
 export const dynamic = "force-dynamic";
@@ -14,31 +17,56 @@ export default async function Products({
   const text = params.q?.trim();
   const tag = params.tag?.toLowerCase();
 
-  const tags = await db().productTag.groupBy({
+  const currentUser = await user();
+
+  const [tags, wishlistProducts] = await Promise.all([
+    db().productTag.groupBy({
     by: ["name"],
     where: { post: { isProduct: true } },
     _count: { name: true },
     orderBy: { _count: { name: "desc" } },
-    take: 14,
-  });
+      take: 14,
+    }),
+    currentUser
+      ? db().instagramPost.findMany({
+          where: {
+            isProduct: true,
+            likes: { some: { userId: currentUser.id } },
+          },
+          include: { connection: true, tags: true, likes: true },
+          orderBy: { timestamp: "desc" },
+          take: 8,
+        }).then((items) => filterAvailableInstagramMedia(items))
+      : Promise.resolve([]),
+  ]);
 
   return (
     <main className="shell py-10 md:py-14">
-      <div className="rounded-[30px] bg-[#f5f5f2] p-6 md:p-8">
+      <section className="relative overflow-hidden rounded-[32px] bg-black p-7 text-white md:p-10 lg:p-12">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="eyebrow plain">The marketplace</p>
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[.16em] text-white/75">
+              <Sparkles size={13} /> Discover & shop
+            </div>
             <h1 className="mt-2 text-4xl font-black tracking-[-.055em] md:text-5xl">
               Shop the Instagram feed.
             </h1>
-            <p className="mt-3 text-sm text-[#777]">
-              Discover products as you scroll
+            <p className="mt-4 max-w-xl text-sm leading-7 text-white/65 md:text-base">
+              Find something you love, save it for later, or message the shop directly on Instagram. New products appear automatically as you keep browsing.
             </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/wishlist" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black transition hover:-translate-y-0.5">
+                <Heart size={14} fill="currentColor" /> Continue from wishlist
+              </Link>
+              <Link href="#shop-all" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-xs font-bold text-white transition hover:bg-white/15">
+                Browse everything <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
 
           <form
             action="/products"
-            className="flex w-full max-w-xl rounded-full border border-black/10 bg-white p-1 shadow-sm"
+            className="mt-1 flex w-full max-w-xl rounded-full border border-black/10 bg-white p-1 shadow-sm lg:mt-0"
           >
             <Search className="ml-3 mt-2.5 shrink-0 text-[#888]" size={17} />
             <input
@@ -52,9 +80,29 @@ export default async function Products({
             </button>
           </form>
         </div>
-      </div>
+      </section>
 
-      <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
+      {wishlistProducts.length > 0 && (
+        <section className="mt-10 rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="eyebrow plain">Pick up where you left off</p>
+              <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Still loving these?</h2>
+              <p className="mt-2 text-sm text-[#777]">Your saved products are ready whenever you are.</p>
+            </div>
+            <Link href="/wishlist" className="inline-flex items-center gap-2 text-xs font-black">
+              View full wishlist <ArrowRight size={14} />
+            </Link>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+            {wishlistProducts.slice(0, 4).map((x) => (
+              <ProductCard key={x.id} p={x} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div id="shop-all" className="mt-10 flex gap-2 overflow-x-auto pb-2">
         <Link
           href="/products"
           className={"chip " + (!tag ? "chip-active" : "")}
@@ -73,11 +121,11 @@ export default async function Products({
         ))}
       </div>
 
-      <div className="mt-8 flex items-center justify-between border-y border-black/5 py-4">
+      <div className="mt-5 flex items-center justify-between border-y border-black/5 py-4">
         <div className="flex items-center gap-2 text-xs font-bold">
           <SlidersHorizontal size={15} />
           Filters
-          <span className="font-normal text-[#999]">· New products load automatically as you scroll</span>
+          <span className="hidden font-normal text-[#999] sm:inline">· New products load automatically as you scroll</span>
         </div>
 
         <div className="hidden items-center gap-2 text-xs text-[#999] sm:flex">
