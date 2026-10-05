@@ -1,7 +1,7 @@
 import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Instagram, Plus, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Instagram, Plus, ShieldCheck, ExternalLink } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +68,7 @@ export default async function Account({
                 <h3 className="mt-1 text-xl font-black">Accept the Instagram Tester invitation</h3>
                 <p className="mt-2 text-sm leading-6 text-[#666]">
                   To connect @{connectRequest.username}, the Instagram account must first accept the tester invitation from our Meta/Instagram app.
-                  Check the Instagram account for the tester invitation and accept it. This is required by Meta while the marketplace app is in development.
+                  Open Instagram's access page, accept the invitation, then return here to continue.
                 </p>
               </div>
             </div>
@@ -76,13 +76,21 @@ export default async function Account({
               <p className="font-bold text-black">Before you continue</p>
               <ol className="mt-2 list-decimal space-y-1 pl-5">
                 <li>Make sure you are logged into the approved Instagram account: <b>@{connectRequest.username}</b>.</li>
-                <li>Find and accept the tester invitation for the marketplace Instagram app.</li>
-                <li>Come back here and click <b>Continue to Instagram</b>.</li>
+                <li>Click <b>Accept Tester Invitation</b> and accept the marketplace app invitation on Instagram.</li>
+                <li>Return here and click <b>Continue to Instagram</b>.</li>
               </ol>
             </div>
-            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              <a
+                href="https://www.instagram.com/accounts/manage_access/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-black px-5 py-3 text-sm font-semibold"
+              >
+                <ExternalLink size={16} /> Accept Tester Invitation
+              </a>
               <a href={"/api/instagram/connect?requestId=" + encodeURIComponent(connectRequest.id)} className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">
-                <Instagram size={16} /> I accepted the invitation — Continue to Instagram
+                <Instagram size={16} /> I accepted — Continue to Instagram
               </a>
               <a href="/account" className="inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold">
                 Not yet
