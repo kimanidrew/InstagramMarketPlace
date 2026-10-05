@@ -1,7 +1,7 @@
 import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Instagram } from "lucide-react";
+import { CheckCircle2, Instagram, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +29,6 @@ export default async function Account({
     include: { posts: { where: { isProduct: true }, select: { id: true } } },
     orderBy: { createdAt: "desc" },
   });
-  const approved = rs.find((r) => r.status === "APPROVED");
 
   return (
     <main className="shell py-14">
@@ -50,7 +49,7 @@ export default async function Account({
       </div>
 
       <section className="card mt-10 p-7">
-        <h2 className="text-2xl font-black">Instagram store</h2>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between"><div><h2 className="text-2xl font-black">Your Instagram shops</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#666]">You can register and connect more than one Instagram Business shop from the same marketplace account. Each approved Instagram account becomes its own shop and its posts become products automatically.</p></div><span className="w-fit rounded-full bg-[#f7f7f5] px-4 py-2 text-xs font-semibold">{rs.length} {rs.length === 1 ? "shop" : "shops"} registered</span></div>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-[#666]">
           Connect your own Instagram Business account directly. Instagram handles the authorization, while the marketplace securely stores the resulting token on the server.
         </p>
@@ -67,35 +66,33 @@ export default async function Account({
           </p>
         )}
 
-        {connections.length > 0 ? (
+        {rs.length > 0 ? (
           <div className="mt-6 space-y-5">
-            {connections.map((connection) => (
-              <div key={connection.id} className="rounded-2xl border p-5">
+            {rs.map((request) => { const connection = connections.find((c) => c.username.toLowerCase() === request.username.toLowerCase()); return (
+              <div key={request.id} className="rounded-2xl border p-5">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-sm text-[#777]">Connected Instagram</p>
-                    <b className="text-lg">@{connection.username}</b>
+                    <p className="text-xs font-bold uppercase tracking-[.14em] text-[#999]">Instagram shop</p>
+                    <b className="mt-1 block text-lg">@{request.username}</b>
                     <p className="mt-1 text-xs text-[#888]">
                       {connection.posts?.length ?? 0} products ·{" "}
-                      {connection.lastSyncedAt
-                        ? "Posts synced"
-                        : "Ready to sync"}
+                      {connection?.lastSyncedAt ? "Posts synced" : "Ready to connect"}
                     </p>
                   </div>
 
-                  <div className="inline-flex w-fit items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-sm font-semibold text-green-700">
-                    <CheckCircle2 size={16} />
-                    Approved
+                  <div className={"inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold " + (connection ? "bg-green-50 text-green-700" : request.status === "APPROVED" ? "bg-green-50 text-green-700" : "bg-[#f7f7f5] text-[#666]")}>
+                    {request.status === "APPROVED" && <CheckCircle2 size={16} />}
+                    {connection ? "Connected" : request.status}
                   </div>
                 </div>
 
-                <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-5">
+                {request.status === "APPROVED" && !connection && <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-5">
                   <p className="text-sm font-bold">Instagram authorization</p>
                   <p className="mt-2 text-sm leading-6 text-[#666]">
-                    Your store request is approved. Connect the requested Instagram account from here and the marketplace will import its posts automatically.
+                    Authorize @{request.username} through Instagram. You do not need to generate or paste an access token.
                   </p>
                   <a
-                    href="/api/instagram/connect"
+                    href={"/api/instagram/connect?requestId=" + encodeURIComponent(request.id)}
                     className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white"
                   >
                     <Instagram size={16} />
@@ -105,8 +102,8 @@ export default async function Account({
               </div>
             ))}
           </div>
-        ) : approved ? (
-          <div className="mt-6 rounded-2xl border p-5">
+        ) : (
+          <div className="mt-6 rounded-2xl bg-[#f7f7f5] p-5">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-green-50 p-2 text-green-700">
                 <CheckCircle2 size={18} />
