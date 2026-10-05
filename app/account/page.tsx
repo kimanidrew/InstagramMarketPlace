@@ -1,7 +1,7 @@
 import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { ExternalLink, Instagram, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Instagram } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ async function out() {
 export default async function Account({
   searchParams,
 }: {
-  searchParams: Promise<{ instagram?: string; instagram_error?: string }>;
+  searchParams: Promise<{ instagram?: string; instagram_error?: string; requested?: string }>;
 }) {
   const u = await user();
   if (!u) redirect("/");
@@ -52,8 +52,7 @@ export default async function Account({
       <section className="card mt-10 p-7">
         <h2 className="text-2xl font-black">Instagram store</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-[#666]">
-          Your Instagram account is connected by the marketplace admin. You do
-          not need to paste an access token or connect through an OAuth button.
+          Connect your own Instagram Business account directly. Instagram handles the authorization, while the marketplace securely stores the resulting token on the server.
         </p>
 
         {q.instagram === "connected" && (
@@ -91,24 +90,16 @@ export default async function Account({
                 </div>
 
                 <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-5">
-                  <p className="text-sm font-bold">
-                    One final Instagram step
-                  </p>
+                  <p className="text-sm font-bold">Instagram authorization</p>
                   <p className="mt-2 text-sm leading-6 text-[#666]">
-                    The marketplace has already added your Instagram account.
-                    Open Instagram&apos;s access page and, under{" "}
-                    <b>Tester invites</b>, click <b>Approve</b> for{" "}
-                    <b>Marketplace-IG</b>.
+                    Your store request is approved. Connect the requested Instagram account from here and the marketplace will import its posts automatically.
                   </p>
-
                   <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href="https://www.instagram.com/accounts/manage_access/"
+                    href="/api/instagram/connect"
                     className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white"
                   >
-                    Open Instagram access
-                    <ExternalLink size={14} />
+                    <Instagram size={16} />
+                    Connect Instagram
                   </a>
                 </div>
               </div>
@@ -118,15 +109,12 @@ export default async function Account({
           <div className="mt-6 rounded-2xl border p-5">
             <p className="text-sm font-semibold">Waiting for Instagram connection</p>
             <p className="mt-2 text-sm leading-6 text-[#666]">
-              Your store request has been received. It will show as Approved
-              here only after the marketplace admin adds your Instagram access
-              token.
+              Your store request has been received. Once the marketplace admin approves it, you will be able to connect your Instagram account here. No access token needs to be copied or pasted.
             </p>
           </div>
         ) : (
           <div className="mt-6 rounded-2xl bg-[#f7f7f5] p-5 text-sm text-[#666]">
-            Submit your Instagram username below. The store will show as
-            approved after the marketplace admin adds the account access token.
+            Submit your Instagram username below. After the request is approved, you can connect the Instagram account yourself through Instagram OAuth.
           </div>
         )}
       </section>
