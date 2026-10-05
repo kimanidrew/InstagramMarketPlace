@@ -62,6 +62,13 @@ export default async function Home() {
               with a simple way to discover and shop from the people and
               businesses behind it.
             </p>
+            <div className="instamart-hero-tip mt-7 max-w-xl">
+              <div className="instamart-hero-hashtag">#instamart</div>
+              <div>
+                <b>Post it. Tag it. Sell it.</b>
+                <p>Use <strong>#instamart</strong> in your Instagram post and, when your account is connected, that post can appear here as a product.</p>
+              </div>
+            </div>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/products"
