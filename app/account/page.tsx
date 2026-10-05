@@ -1,7 +1,7 @@
 import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Instagram, Plus } from "lucide-react";
+import { CheckCircle2, Instagram, Plus, ShieldCheck } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ async function out() {
 export default async function Account({
   searchParams,
 }: {
-  searchParams: Promise<{ instagram?: string; instagram_error?: string; requested?: string; error?: string }>;
+  searchParams: Promise<{ instagram?: string; instagram_error?: string; requested?: string; error?: string; connect?: string }>;
 }) {
   const u = await user();
   if (!u) redirect("/");
@@ -28,6 +28,8 @@ export default async function Account({
       orderBy: { createdAt: "desc" },
     }),
   ]);
+
+  const connectRequest = q.connect ? rs.find((r) => r.id === q.connect && r.status === "APPROVED") : null;
 
   return (
     <main className="shell py-14">
@@ -57,6 +59,38 @@ export default async function Account({
         {q.instagram_error && <p className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-600">{q.instagram_error}</p>}
         {q.error === "invalid" && <p className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-600">Please enter a valid Instagram username.</p>}
 
+        {connectRequest && (
+          <div className="mt-6 rounded-3xl border-2 border-black bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="rounded-2xl bg-black p-3 text-white"><ShieldCheck size={22} /></div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[.14em] text-[#999]">One quick step before Instagram</p>
+                <h3 className="mt-1 text-xl font-black">Accept the Instagram Tester invitation</h3>
+                <p className="mt-2 text-sm leading-6 text-[#666]">
+                  To connect @{connectRequest.username}, the Instagram account must first accept the tester invitation from our Meta/Instagram app.
+                  Check the Instagram account for the tester invitation and accept it. This is required by Meta while the marketplace app is in development.
+                </p>
+              </div>
+            </div>
+            <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-4 text-sm text-[#555]">
+              <p className="font-bold text-black">Before you continue</p>
+              <ol className="mt-2 list-decimal space-y-1 pl-5">
+                <li>Make sure you are logged into the approved Instagram account: <b>@{connectRequest.username}</b>.</li>
+                <li>Find and accept the tester invitation for the marketplace Instagram app.</li>
+                <li>Come back here and click <b>Continue to Instagram</b>.</li>
+              </ol>
+            </div>
+            <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+              <a href={"/api/instagram/connect?requestId=" + encodeURIComponent(connectRequest.id)} className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">
+                <Instagram size={16} /> I accepted the invitation — Continue to Instagram
+              </a>
+              <a href="/account" className="inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-semibold">
+                Not yet
+              </a>
+            </div>
+          </div>
+        )}
+
         {rs.length > 0 ? (
           <div className="mt-6 space-y-4">
             {rs.map((request) => {
@@ -81,9 +115,9 @@ export default async function Account({
                     <div className="mt-5 rounded-2xl bg-[#f7f7f5] p-5">
                       <p className="text-sm font-bold">Connect this shop</p>
                       <p className="mt-2 text-sm leading-6 text-[#666]">
-                        Authorize @{request.username} through Instagram. You do not need to generate or paste an access token.
+                        First accept the Instagram Tester invitation, then authorize @{request.username}. You do not need to generate or paste an access token.
                       </p>
-                      <a href={"/api/instagram/connect?requestId=" + encodeURIComponent(request.id)} className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">
+                      <a href={"/account?connect=" + encodeURIComponent(request.id)} className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">
                         <Instagram size={16} /> Connect Instagram
                       </a>
                     </div>
