@@ -27,7 +27,7 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .site-header:hover{box-shadow:0 12px 40px rgba(0,0,0,.32)}
 .brand{font-size:21px;font-weight:950;letter-spacing:-.075em;line-height:1;color:#fff}
 .brand span{color:#b8b8b8}.brand sup{margin-left:2px;font-size:7px;vertical-align:top;font-weight:900;color:#fff}
-.nav-link{position:relative;padding:10px 12px;border-radius:999px;font-size:12px;font-weight:850;letter-spacing:-.01em;color:#f5f5f5;transition:transform .2s ease,background .2s ease,color .2s ease}
+.nav-link{position:relative;padding:10px 12px;border-radius:999px;font-size:13px;font-weight:850;letter-spacing:-.01em;color:#f5f5f5;transition:transform .2s ease,background .2s ease,color .2s ease}
 .nav-link:hover{background:#242424;color:#fff;transform:translateY(-1px)}
 .icon-btn{display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;color:#f5f5f5;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
 .icon-btn:hover,.icon-btn.active{background:#fff;color:#111;transform:translateY(-1px)}
