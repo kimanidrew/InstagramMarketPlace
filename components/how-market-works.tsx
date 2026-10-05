@@ -47,7 +47,7 @@ export function HowMarketWorks() {
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "-7%"]);
 
   return (
-    <section ref={ref} className="relative bg-[#111] text-white" style={{ height: "300vh" }}>
+    <section ref={ref} className="how-works-section relative bg-[#111] text-white" style={{ height: "300vh" }}>
       <div className="sticky top-0 flex h-screen min-h-[680px] items-center overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_45%,rgba(255,255,255,.12),transparent_32%),linear-gradient(120deg,#0b0b0b,#171717)]" />
 
