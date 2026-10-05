@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   title: "Instagram Market",
@@ -14,7 +22,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <html lang="en">
-      <body>
+      <body className={plusJakarta.variable}>
         <SiteHeader user={u} />
         {children}
 
