@@ -44,7 +44,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="bg-white">
+    <main className="home-page bg-white">
       <section className="editorial-grid overflow-hidden border-b border-black/5">
         <div className="shell grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.02fr_.98fr]">
           <Reveal y={34}>
@@ -80,7 +80,7 @@ export default async function Home() {
           </div>
 
           <div className="relative min-h-[560px] overflow-visible">
-            <div className="absolute left-[8%] top-10 z-10 w-[34%] rotate-[-7deg] overflow-hidden rounded-[22px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_24px_60px_rgba(0,0,0,.18)] sm:left-[4%] sm:w-[36%]">
+            <div className="hero-float hero-float-a absolute left-[8%] top-10 z-10 w-[34%] rotate-[-7deg] overflow-hidden rounded-[22px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_24px_60px_rgba(0,0,0,.18)] sm:left-[4%] sm:w-[36%]">
               <img
                 src={products[1]?.mediaUrl || editorialImages.people}
                 alt={products[1]?.productTitle || "Instagram marketplace discovery"}
@@ -88,7 +88,7 @@ export default async function Home() {
               />
             </div>
 
-            <div className="absolute right-[4%] top-2 z-20 w-[42%] rotate-[6deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_28px_70px_rgba(0,0,0,.2)] sm:right-[7%] sm:w-[41%]">
+            <div className="hero-float hero-float-b absolute right-[4%] top-2 z-20 w-[42%] rotate-[6deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_28px_70px_rgba(0,0,0,.2)] sm:right-[7%] sm:w-[41%]">
               <img
                 src={products[0]?.mediaUrl || editorialImages.hero}
                 alt={products[0]?.productTitle || "Marketplace product"}
@@ -96,7 +96,7 @@ export default async function Home() {
               />
             </div>
 
-            <div className="absolute bottom-5 left-[27%] z-30 w-[43%] -rotate-[2deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_30px_80px_rgba(0,0,0,.22)] sm:left-[27%] sm:w-[42%]">
+            <div className="hero-float hero-float-c absolute bottom-5 left-[27%] z-30 w-[43%] -rotate-[2deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_30px_80px_rgba(0,0,0,.22)] sm:left-[27%] sm:w-[42%]">
               <img
                 src={products[2]?.mediaUrl || editorialImages.shopping}
                 alt={products[2]?.productTitle || "Marketplace product"}
@@ -104,7 +104,7 @@ export default async function Home() {
               />
             </div>
 
-            <div className="absolute bottom-10 left-0 z-40 hidden w-[27%] rotate-[5deg] overflow-hidden rounded-[18px] border-[6px] border-white bg-[#f2f2ef] shadow-[0_20px_50px_rgba(0,0,0,.16)] sm:block">
+            <div className="hero-float hero-float-d absolute bottom-10 left-0 z-40 hidden w-[27%] rotate-[5deg] overflow-hidden rounded-[18px] border-[6px] border-white bg-[#f2f2ef] shadow-[0_20px_50px_rgba(0,0,0,.16)] sm:block">
               <img
                 src={products[3]?.mediaUrl || editorialImages.seller}
                 alt={products[3]?.productTitle || "Instagram store"}
@@ -112,7 +112,7 @@ export default async function Home() {
               />
             </div>
 
-            <div className="absolute right-0 bottom-20 z-50 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
+            <div className="hero-pill absolute right-0 bottom-20 z-50 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
               Discover · Shop · Support
             </div>
           </Reveal>
