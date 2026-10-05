@@ -13,7 +13,6 @@ import {
   Zap,
 } from "lucide-react";
 import { db } from "@/lib/prisma";
-import { StoreCarousel } from "@/components/store-carousel";
 import { HowMarketWorks } from "@/components/how-market-works";
 import { Reveal } from "@/components/reveal";
 
@@ -186,32 +185,55 @@ export default async function Home() {
 
       <HowMarketWorks />
 
-      <section className="community-showcase relative overflow-hidden py-24 sm:py-32">
+      <section className="community-showcase relative overflow-hidden py-24 sm:py-28">
         <div className="community-orb community-orb-a" />
         <div className="community-orb community-orb-b" />
         <div className="community-ring community-ring-a" />
         <div className="community-ring community-ring-b" />
         <div className="shell relative z-10">
-          <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
-            <Reveal y={42}>
-              <div className="community-kicker"><Users size={14} /> Meet the community</div>
-              <h2 className="community-title mt-6">More than a marketplace.<br /><span>A community in motion.</span></h2>
-              <p className="mt-7 max-w-xl text-base leading-8 text-white/75 sm:text-lg">Discover independent stores, follow the people behind the products and find inspiration from a marketplace that feels alive.</p>
-              <div className="community-stats mt-9 grid grid-cols-3 gap-3">
-                <div><b>01</b><span>Discover</span></div>
-                <div><b>02</b><span>Connect</span></div>
-                <div><b>03</b><span>Support</span></div>
+          <Reveal y={38}>
+            <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="community-kicker"><Store size={14} /> Meet the stores</div>
+                <h2 className="community-title mt-6">Discover the people<br /><span>behind the posts.</span></h2>
               </div>
-            </Reveal>
-            <Reveal className="relative" y={54}>
-              <div className="community-collage">
-                <div className="community-photo community-photo-main"><img src={editorialImages.people} alt="Community discovering products together" /></div>
-                <div className="community-photo community-photo-top"><img src={editorialImages.hero} alt="People discovering products" /></div>
-                <div className="community-photo community-photo-bottom"><img src={editorialImages.shopping} alt="Shopping and discovery" /></div>
-                <div className="community-badge"><Heart size={15} fill="currentColor" /><span>Find something worth sharing.</span></div>
+              <div className="max-w-xl">
+                <p className="text-base leading-8 text-white/80 sm:text-lg">Every store on Instagram Market starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.</p>
+                <Link href="/stores" className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black transition hover:-translate-y-1">Explore all stores <ArrowRight size={14} /></Link>
               </div>
-            </Reveal>
+            </div>
+          </Reveal>
+
+          <div className="store-community-grid mt-12">
+            {stores.map((store, index) => (
+              <Reveal key={store.username} y={30} delay={index * 0.06}>
+                <Link href={"/store/" + store.username} className="store-community-card group">
+                  <div className="store-community-image">
+                    {store.profileImageUrl ? (
+                      <img src={store.profileImageUrl} alt={store.name || "@" + store.username} />
+                    ) : (
+                      <div className="store-community-placeholder"><Instagram size={34} /></div>
+                    )}
+                    <div className="store-community-overlay" />
+                    <div className="store-community-meta">
+                      <span>@{store.username}</span>
+                      <b>{store.posts.length} {store.posts.length === 1 ? "product" : "products"}</b>
+                    </div>
+                  </div>
+                  <div className="store-community-copy">
+                    <span>Instagram store</span>
+                    <h3>{store.name || "Instagram Store"}</h3>
+                    <p>{store.biography || "Discover products, stories and inspiration from this connected store."}</p>
+                    <strong>Visit store <ArrowRight size={14} /></strong>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
           </div>
+
+          {!stores.length && (
+            <div className="mt-10 rounded-[28px] border border-white/15 bg-white/10 p-8 text-white/75">Connected stores will appear here as they join Instagram Market.</div>
+          )}
         </div>
       </section>
 
@@ -280,7 +302,6 @@ export default async function Home() {
         </Reveal>
       </section>
 
-      <StoreCarousel stores={stores} />
 
       {(products.length > 0 || stores.length > 0) && (
         <section className="border-t border-black/5 py-14">
