@@ -261,3 +261,29 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
   .how-works-rail{padding-inline:22px;scroll-padding-inline:22px}
   .how-works-slide{width:calc(100vw - 44px);}
 }
+
+
+/* How Instagram Market works — stronger section rhythm and a finished bottom edge */
+.how-works-section{
+  padding-bottom:0;
+  background:
+    radial-gradient(circle at 50% 100%,rgba(255,255,255,.045),transparent 34%),
+    linear-gradient(180deg,#171717 0%,#111 100%);
+}
+.how-works-section .how-works-rail{
+  margin-top:clamp(28px,4vw,48px);
+  padding-bottom:0;
+}
+.how-works-section .how-works-slide{
+  box-shadow:0 28px 90px rgba(0,0,0,.34);
+}
+.how-works-section .how-works-slide.is-active{
+  transform:translateY(-4px);
+}
+.how-works-section .how-works-slide:not(.is-active){
+  opacity:.92;
+}
+@media(max-width:640px){
+  .how-works-section .how-works-rail{margin-top:28px}
+  .how-works-section .shell.relative.z-10.mt-5{padding-bottom:64px}
+}
