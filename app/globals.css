@@ -134,13 +134,13 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 @media(max-width:640px){.seller-showcase,.shopper-showcase{padding-top:72px;padding-bottom:72px}.seller-floating-card{right:10px;bottom:18px;width:205px;padding:13px}.shopper-floating-card{left:10px;bottom:18px}.seller-image-wrap img,.shopper-image-wrap img{aspect-ratio:1.15/1}.seller-title,.shopper-title{font-size:clamp(2.8rem,14vw,4.3rem)}}
 @media(prefers-reduced-motion:reduce){.seller-orb,.shopper-orb,.seller-image-glow,.shopper-image-glow,.seller-floating-card,.shopper-floating-card{animation:none}.seller-image-wrap img,.shopper-image-wrap img{transition:none}}
 
-.how-works-section{min-height:0;background:#0d0d0d}
+.how-works-section{min-height:0;background:#171717;color:#fff}
 .how-works-glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px);animation:howWorksFloat 9s ease-in-out infinite}
 .how-works-glow-a{width:420px;height:420px;left:-180px;top:15%;background:radial-gradient(circle,rgba(255,255,255,.08),transparent 68%)}
 .how-works-glow-b{width:500px;height:500px;right:-220px;bottom:-25%;background:radial-gradient(circle,rgba(255,255,255,.07),transparent 68%);animation-delay:-4s}
-.how-works-kicker{display:inline-flex;border:1px solid rgba(255,255,255,.13);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.045);font-size:9px;font-weight:950;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.how-works-kicker{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.07);font-size:9px;font-weight:950;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9)}
 .how-works-heading{font-size:clamp(3rem,7vw,6.5rem);font-weight:950;line-height:.84;letter-spacing:-.08em}
-.how-works-heading span{color:#666}
+.how-works-heading span{color:#bdbdbd}
 .how-works-rail{scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth}
 .how-works-rail::-webkit-scrollbar{display:none}
 .how-works-slide{width:min(78vw,850px);height:clamp(390px,52vh,560px);box-shadow:0 30px 100px rgba(0,0,0,.35);transition:transform .5s cubic-bezier(.22,1,.36,1),border-color .4s ease,box-shadow .5s ease}
@@ -155,3 +155,14 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 @keyframes howWorksFloat{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(20px,-15px,0) scale(1.05)}}
 @media(max-width:640px){.how-works-section .shell{width:calc(100% - 22px);padding-top:64px;padding-bottom:64px}.how-works-slide{width:88vw;height:420px}.how-works-slide h3{font-size:2.1rem}.how-works-rail{margin-top:28px}.how-works-slide{scroll-snap-align:center}}
 @media(prefers-reduced-motion:reduce){.how-works-glow{animation:none}.how-works-slide-image{transition:none}}
+
+
+/* Homepage contrast guard: dark sections and image overlays always use readable light typography. */
+.seller-showcase,.how-works-section{color:#fff}
+.seller-showcase h1,.seller-showcase h2,.seller-showcase h3,.seller-showcase p,.seller-showcase span,.seller-showcase b,
+.how-works-section h1,.how-works-section h2,.how-works-section h3,.how-works-section p,.how-works-section span{color:inherit}
+.how-works-section .text-white\/45{color:rgba(255,255,255,.68)!important}
+.how-works-section .text-white\/55{color:rgba(255,255,255,.76)!important}
+.how-works-section .text-white\/40{color:rgba(255,255,255,.62)!important}
+.how-works-section .text-white\/25{color:rgba(255,255,255,.5)!important}
+.how-works-section .how-works-slide .bg-gradient-to-t{color:#fff}
