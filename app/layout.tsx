@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <html lang="en">
       <body className={plusJakarta.variable}>
+        <ScrollToTop />
         <SiteHeader user={u} />
         {children}
 
