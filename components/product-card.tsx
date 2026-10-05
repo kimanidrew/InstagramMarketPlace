@@ -42,9 +42,9 @@ export function ProductCard({ p }: { p: any }) {
       </div>
 
       <div className="pt-4">
-        <Link href={"/product/" + p.productSlug} className="font-bold">
+        <p className="line-clamp-3 text-sm font-bold leading-6 text-black">
           {p.productTitle}
-        </Link>
+        </p>
 
         <Link
           href={"/store/" + p.connection.username}
@@ -52,12 +52,6 @@ export function ProductCard({ p }: { p: any }) {
         >
           @{p.connection.username}
         </Link>
-
-        {p.caption && (
-          <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#555]">
-            {p.caption}
-          </p>
-        )}
 
         <div className="mt-3 flex flex-wrap gap-1">
           {p.tags
