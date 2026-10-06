@@ -44,7 +44,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
         </Link>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(390px,.92fr)] lg:items-start">
-          <div className="min-w-0">
+          <div className="product-gallery-sticky min-w-0">
             <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
 
@@ -116,14 +116,8 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 function ProductGallery({ mediaUrl, thumbnailUrl, isVideo, title, mediaItems }: { mediaUrl?: string | null; thumbnailUrl?: string | null; isVideo: boolean; title: string; mediaItems?: Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }> | null }) {
   return (
     <div className="product-gallery-panel rounded-[30px] border border-black/[0.07] bg-[#f5f5f1] p-3 shadow-[0_20px_70px_rgba(0,0,0,0.06)] sm:p-5">
-      <div className="relative overflow-hidden rounded-[24px] bg-white">
-        <div className="aspect-[4/5]">
-          <ProductCarousel items={mediaItems} fallback={{ mediaType: isVideo ? "VIDEO" : "IMAGE", mediaUrl, thumbnailUrl }} title={title} />
-        </div>
-        <span className="absolute left-4 top-4 rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-black shadow-sm backdrop-blur-md">{isVideo ? "Video" : "Instagram post"}</span>
-      </div>
-      <div className="flex items-center justify-between px-1 pt-4 text-[10px] font-bold uppercase tracking-[.13em] text-[#999]">
-        <span>{isVideo ? "Video post" : "Photo post"}</span><span>Original Instagram media</span>
+      <div className="product-gallery-frame">
+        <ProductCarousel items={mediaItems} fallback={{ mediaType: isVideo ? "VIDEO" : "IMAGE", mediaUrl, thumbnailUrl }} title={title} />
       </div>
     </div>
   );
