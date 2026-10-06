@@ -35,7 +35,7 @@ export function ProductCard({ p }: { p: any }) {
           )
         )}
 
-        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold text-black shadow-sm backdrop-blur-sm">
+        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">{p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2.5 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}{p.connection?.verifiedAt && new Date(p.connection.verifiedAt) <= new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}</div>\n        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold text-black shadow-sm backdrop-blur-sm">
           <Instagram size={13} strokeWidth={2.2} />
           {Number(p.instagramLikeCount || 0).toLocaleString()} likes
         </span>
