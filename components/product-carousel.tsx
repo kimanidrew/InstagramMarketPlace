@@ -84,10 +84,6 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
         </div>
       )}
 
-      <div className="flex items-center justify-between px-1 pt-4 text-[10px] font-bold uppercase tracking-[.13em] text-[#999]">
-        <span>{media.length > 1 ? media.length + " media items" : isVideo ? "Video post" : "Photo post"}</span>
-        <span>Original Instagram media</span>
-      </div>
     </div>
   );
 }
