@@ -235,15 +235,24 @@ export async function connect(token: string, connectedByUserId?: string) {
     profileImageUrl: m.profile_picture_url,
     encryptedToken: enc(stored.token),
     expiresAt: stored.expiresAt,
-    ...(connectedByUserId ? { connectedBy: { connect: { id: connectedByUserId } } } : {}),
+    ...(connectedByUserId
+      ? { connectedBy: { connect: { id: connectedByUserId } } }
+      : {}),
   };
 
-  return existing
-    ? db().instagramConnection.update({
-        where: { id: existing.id },
-        data,
-      })
-    : db().instagramConnection.create({ data });
+  if (existing) {
+    return db().instagramConnection.update({
+      where: { id: existing.id },
+      data,
+    });
+  }
+
+  return db().instagramConnection.create({
+    data: {
+      id,
+      ...data,
+    },
+  });
 }
 
 export async function replaceConnectionToken(
