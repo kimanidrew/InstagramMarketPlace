@@ -116,7 +116,7 @@ export function SiteHeader({ user }: { user: any }) {
             <Link href="/products" className="menu-card" onClick={() => setMenuOpen(false)}>Shop all</Link>
             <Link href="/stores" className="menu-card" onClick={() => setMenuOpen(false)}>Stores</Link>
             <Link href="/categories" className="menu-card" onClick={() => setMenuOpen(false)}>Categories</Link>
-            <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>
+            <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>\n            {user && <Link href="/account" className="menu-card" onClick={() => setMenuOpen(false)}>Grow your shop</Link>}
           </div>
         </div>
       </div>
