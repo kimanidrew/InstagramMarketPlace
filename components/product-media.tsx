@@ -1,6 +1,7 @@
 "use client";
 
 import { Play, Volume2, VolumeX } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export function ProductMedia({
@@ -11,10 +12,16 @@ export function ProductMedia({
   src?: string | null;
   poster?: string | null;
   alt?: string;
+  href?: string;
 }) {
+  const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
+
+  function openProduct() {
+    if (href) router.push(href);
+  }
 
   function togglePlay() {
     const video = videoRef.current;
@@ -48,14 +55,15 @@ export function ProductMedia({
         aria-label={alt || "Product video"}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        className="h-full w-full object-cover"
+        onClick={openProduct}
+        className="h-full w-full cursor-pointer object-cover"
       />
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/5" />
 
       <button
         type="button"
-        onClick={togglePlay}
+        onClick={(event) => { event.stopPropagation(); togglePlay(); }}
         aria-label={playing ? "Pause video" : "Play video"}
         className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-black shadow-xl transition duration-200 hover:scale-105"
       >
@@ -64,7 +72,7 @@ export function ProductMedia({
 
       <button
         type="button"
-        onClick={toggleMute}
+        onClick={(event) => { event.stopPropagation(); toggleMute(); }}
         aria-label={muted ? "Unmute video" : "Mute video"}
         className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-black/70"
       >
