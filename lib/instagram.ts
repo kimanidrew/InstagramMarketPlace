@@ -438,6 +438,26 @@ export async function sync(id: string) {
         "-" +
         String(x.id).slice(-8);
 
+      let mediaItems: Array<{ mediaType: string; mediaUrl: string | null; thumbnailUrl: string | null }> | null = null;
+
+      if (String(x.media_type || "").toUpperCase() === "CAROUSEL_ALBUM") {
+        try {
+          const children = await ig<{ data?: any[] }>(token, `${x.id}/children`, {
+            fields: "id,media_type,media_url,thumbnail_url",
+            limit: "100",
+          });
+          mediaItems = (children.data || [])
+            .filter((child) => child?.media_url || child?.thumbnail_url)
+            .map((child) => ({
+              mediaType: String(child.media_type || "IMAGE").toUpperCase(),
+              mediaUrl: child.media_url || null,
+              thumbnailUrl: child.thumbnail_url || null,
+            }));
+        } catch {
+          mediaItems = null;
+        }
+      }
+
       const post = await p.instagramPost.upsert({
         where: { id: x.id },
         create: {
@@ -447,6 +467,7 @@ export async function sync(id: string) {
           mediaType: x.media_type || "IMAGE",
           mediaUrl: x.media_url,
           thumbnailUrl: x.thumbnail_url,
+          mediaItems: mediaItems || undefined,
           permalink: x.permalink,
           timestamp: x.timestamp ? new Date(x.timestamp) : null,
           instagramLikeCount: x.like_count || 0,
