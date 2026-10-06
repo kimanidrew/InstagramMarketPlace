@@ -8,6 +8,7 @@ export function ProductMedia({
   src,
   poster,
   alt,
+  href,
 }: {
   src?: string | null;
   poster?: string | null;
