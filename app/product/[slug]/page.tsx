@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Instagram, Sparkles, Star } from "lucide-react";
 import { LikeButton } from "@/components/like-button";
-import { ProductMedia } from "@/components/product-media";
+import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { ReviewSection } from "@/components/review-section";
 
@@ -29,6 +29,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
   const isVideo = String(product.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = product.mediaUrl || product.thumbnailUrl;
+  const carouselItems = Array.isArray(product.mediaItems) ? (product.mediaItems as Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>) : null;
   const cleanCaption = product.caption ? product.caption.replace(/#[\p{L}\p{N}_]+/gu, "").trim() : "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
   const average = product.reviews.length
@@ -44,7 +45,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(390px,.92fr)] lg:items-start">
           <div className="min-w-0">
-            <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} />
+            <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
 
           <aside className="lg:sticky lg:top-24">
@@ -112,12 +113,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   );
 }
 
-function ProductGallery({ mediaUrl, thumbnailUrl, isVideo, title }: { mediaUrl?: string | null; thumbnailUrl?: string | null; isVideo: boolean; title: string }) {
+function ProductGallery({ mediaUrl, thumbnailUrl, isVideo, title, mediaItems }: { mediaUrl?: string | null; thumbnailUrl?: string | null; isVideo: boolean; title: string; mediaItems?: Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }> | null }) {
   return (
     <div className="product-gallery-panel rounded-[30px] border border-black/[0.07] bg-[#f5f5f1] p-3 shadow-[0_20px_70px_rgba(0,0,0,0.06)] sm:p-5">
       <div className="relative overflow-hidden rounded-[24px] bg-white">
         <div className="aspect-[4/5]">
-          {isVideo && mediaUrl ? <ProductMedia src={mediaUrl} poster={thumbnailUrl} alt={title} /> : mediaUrl ? <img src={mediaUrl} alt={title} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-sm text-[#999]">No media available</div>}
+          {isVideo && mediaUrl ? <ProductCarousel items={mediaItems} fallback={{ mediaType: isVideo ? "VIDEO" : "IMAGE", mediaUrl, thumbnailUrl }} title={title} />}
         </div>
         <span className="absolute left-4 top-4 rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-black shadow-sm backdrop-blur-md">{isVideo ? "Video" : "Instagram post"}</span>
       </div>
