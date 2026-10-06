@@ -118,7 +118,7 @@ export function ReviewSection({
             )}
           </div>
           <div className="mt-2 flex items-center gap-2">
-            <div className="flex gap-0.5 text-black">
+            <div className="flex gap-0.5 text-[#d4a72c]">
               {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={15} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
             </div>
             <span className="text-sm font-semibold text-[#666]">
@@ -181,7 +181,7 @@ export function ReviewSection({
               <div>
                 <p className="font-bold">{review.user?.name || "Marketplace shopper"}</p>
                 <div className="mt-1 flex items-center gap-2">
-                  <span className="flex gap-0.5 text-black">{[1,2,3,4,5].map((star) => <Star key={star} size={12} fill={star <= review.rating ? "currentColor" : "none"} />)}</span>
+                  <span className="flex gap-0.5 text-[#d4a72c]">{[1,2,3,4,5].map((star) => <Star key={star} size={12} fill={star <= review.rating ? "currentColor" : "none"} />)}</span>
                   <span className="text-[11px] text-[#999]">{new Date(review.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
