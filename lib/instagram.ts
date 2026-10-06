@@ -510,6 +510,8 @@ export async function sync(id: string) {
           instagramCommentCount: x.comments_count || 0,
           isProduct: true,
           productTitle: t,
+          category: classification.category,
+          subcategory: classification.subcategory,
           productSlug: slug,
         },
       });
