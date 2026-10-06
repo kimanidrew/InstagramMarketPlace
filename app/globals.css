@@ -475,9 +475,12 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 
 
 /* Product media carousel */
-.product-carousel{width:100%}
-.product-carousel-stage{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:24px;background:#111;touch-action:pan-y}
-.product-carousel-stage>img,.product-carousel-stage>video{display:block}
+.product-gallery-sticky{position:sticky;top:74px;height:calc(100vh - 74px);width:min(100%,calc(100vh - 74px));margin-inline:auto}
+.product-gallery-frame{height:100%;width:100%;overflow:hidden;border:1px solid rgba(0,0,0,.07);border-radius:30px;background:#f5f5f1;padding:12px;box-shadow:0 20px 70px rgba(0,0,0,.06)}
+.product-carousel{height:100%;width:100%;display:flex;flex-direction:column}
+.product-carousel-stage{position:relative;flex:1;min-height:0;overflow:hidden;border-radius:24px;background:#f5f5f1;touch-action:pan-y;display:flex;align-items:center;justify-content:center}
+.product-carousel-stage>img,.product-carousel-stage>video{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.product-carousel-stage>img{max-width:100%;max-height:100%}
 .product-carousel-arrow{position:absolute;top:50%;z-index:10;display:flex;height:44px;width:44px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.22);border-radius:50%;background:rgba(0,0,0,.48);color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.2);backdrop-filter:blur(12px);transition:transform .2s ease,background .2s ease}
 .product-carousel-arrow:hover{background:rgba(0,0,0,.75);transform:translateY(-50%) scale(1.06)}
 .product-carousel-arrow-left{left:16px;transform:translateY(-50%)}
@@ -490,6 +493,12 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .product-carousel-dot:hover{transform:scale(1.08);border-color:#111;color:#111}
 .product-carousel-dot.active{border-color:#111;background:#111;color:#fff;transform:scale(1.12)}
 .product-carousel-count{font-size:10px;font-weight:900;color:#999}
+@media(max-width:1023px){
+  .product-gallery-sticky{position:relative;top:auto;height:auto;width:100%;margin:0}
+  .product-gallery-frame{height:auto}
+  .product-carousel{height:auto}
+  .product-carousel-stage{aspect-ratio:1/1}
+}
 @media(max-width:640px){
   .product-carousel-stage{border-radius:20px}
   .product-carousel-arrow{height:40px;width:40px}
