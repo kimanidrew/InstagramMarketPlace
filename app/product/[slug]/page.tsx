@@ -118,7 +118,7 @@ function ProductGallery({ mediaUrl, thumbnailUrl, isVideo, title, mediaItems }: 
     <div className="product-gallery-panel rounded-[30px] border border-black/[0.07] bg-[#f5f5f1] p-3 shadow-[0_20px_70px_rgba(0,0,0,0.06)] sm:p-5">
       <div className="relative overflow-hidden rounded-[24px] bg-white">
         <div className="aspect-[4/5]">
-          {isVideo && mediaUrl ? <ProductCarousel items={mediaItems} fallback={{ mediaType: isVideo ? "VIDEO" : "IMAGE", mediaUrl, thumbnailUrl }} title={title} />}
+          <ProductCarousel items={mediaItems} fallback={{ mediaType: isVideo ? "VIDEO" : "IMAGE", mediaUrl, thumbnailUrl }} title={title} />
         </div>
         <span className="absolute left-4 top-4 rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-black shadow-sm backdrop-blur-md">{isVideo ? "Video" : "Instagram post"}</span>
       </div>
