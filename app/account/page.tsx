@@ -107,7 +107,9 @@ export default async function Account({
         </section>
       </section>
 
-      <SellerGrowth connections={connections.map(c => ({ id: c.id, username: c.username, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts }))} />
+      <div className="shell"><SellerGrowth connections={connections.map(c => ({ id: c.id, username: c.username, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts }))} />
+
+      </div>
 
       {setupRequest && <SellerSetupModal request={setupRequest} connection={setupConnection ? {username:setupConnection.username,postsCount:setupConnection.posts.length} : undefined} initialStep={setupStep} />}
       {q.setup === "new" && <SellerSetupModal request={{id:"new",username:"new shop",status:"REJECTED"}} initialStep={1} />}
