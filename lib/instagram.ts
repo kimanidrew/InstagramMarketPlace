@@ -442,11 +442,30 @@ export async function sync(id: string) {
 
       if (String(x.media_type || "").toUpperCase() === "CAROUSEL_ALBUM") {
         try {
-          const children = await ig<{ data?: any[] }>(token, `${x.id}/children`, {
-            fields: "id,media_type,media_url,thumbnail_url",
-            limit: "100",
-          });
-          mediaItems = (children.data || [])
+          const children: Array<any> = [];
+          let childrenNext: string | null = null;
+
+          do {
+            const childPage: { data?: any[]; paging?: { next?: string } } =
+              childrenNext
+                ? await igNext<{ data?: any[]; paging?: { next?: string } }>(
+                    childrenNext,
+                    token
+                  )
+                : await ig<{ data?: any[]; paging?: { next?: string } }>(
+                    token,
+                    `${x.id}/children`,
+                    {
+                      fields: "id,media_type,media_url,thumbnail_url",
+                      limit: "100",
+                    }
+                  );
+
+            children.push(...(childPage.data || []));
+            childrenNext = childPage.paging?.next || null;
+          } while (childrenNext);
+
+          mediaItems = children
             .filter((child) => child?.media_url || child?.thumbnail_url)
             .map((child) => ({
               mediaType: String(child.media_type || "IMAGE").toUpperCase(),
@@ -467,6 +486,7 @@ export async function sync(id: string) {
           mediaType: x.media_type || "IMAGE",
           mediaUrl: x.media_url,
           thumbnailUrl: x.thumbnail_url,
+          mediaItems: mediaItems,
           mediaItems: mediaItems || undefined,
           permalink: x.permalink,
           timestamp: x.timestamp ? new Date(x.timestamp) : null,
@@ -481,6 +501,7 @@ export async function sync(id: string) {
           mediaType: x.media_type || "IMAGE",
           mediaUrl: x.media_url,
           thumbnailUrl: x.thumbnail_url,
+          mediaItems: mediaItems,
           permalink: x.permalink,
           timestamp: x.timestamp ? new Date(x.timestamp) : null,
           instagramLikeCount: x.like_count || 0,
