@@ -235,7 +235,7 @@ export async function connect(token: string, connectedByUserId?: string) {
     profileImageUrl: m.profile_picture_url,
     encryptedToken: enc(stored.token),
     expiresAt: stored.expiresAt,
-    ...(connectedByUserId ? { connectedByUserId } : {}),
+    ...(connectedByUserId ? { connectedBy: { connect: { id: connectedByUserId } } } : {}),
   };
 
   return existing
