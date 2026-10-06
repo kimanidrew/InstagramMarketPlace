@@ -75,6 +75,8 @@ model InstagramConnection {
   connectedBy       User?           @relation(fields: [connectedByUserId], references: [id], onDelete: SetNull)
   reviews           StoreReview[]
   growthRequests     GrowthRequest[]
+  verifiedAt        DateTime?
+  proUntil          DateTime?
 
   @@index([connectedByUserId])
   @@unique([connectedByUserId, igUserId])
