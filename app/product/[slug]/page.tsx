@@ -46,12 +46,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
             <section className="flex flex-col justify-center p-6 sm:p-9 md:p-12 lg:p-16">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><Sparkles size={11} /> Instagram Market</span>
-                <Link href={"/store/" + product.connection.username} className="rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#666] transition hover:border-black hover:text-black">
+                {product.connection.verifiedAt && <span className="rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">✓ Verified</span>}{product.connection.proUntil && new Date(product.connection.proUntil)>new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}<Link href={"/store/" + product.connection.username} className="rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#666] transition hover:border-black hover:text-black">
                   @{product.connection.username}
                 </Link>
               </div>
 
-              <h1 className="mt-6 max-w-2xl text-4xl font-black leading-[.94] tracking-[-.065em] sm:text-5xl md:text-6xl lg:text-[4.6rem]">{product.productTitle}</h1>
+              <div className="mt-6 flex flex-wrap gap-2">{product.boostUntil && new Date(product.boostUntil)>new Date() && <span className="rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Boosted product</span>}</div><h1 className="mt-3 max-w-2xl text-4xl font-black leading-[.94] tracking-[-.065em] sm:text-5xl md:text-6xl lg:text-[4.6rem]">{product.productTitle}</h1>
 
               {cleanCaption ? (
                 <p className="mt-6 max-w-2xl whitespace-pre-line text-[15px] leading-7 text-[#666]">{cleanCaption}</p>
