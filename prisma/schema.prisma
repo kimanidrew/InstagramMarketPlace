@@ -87,7 +87,8 @@ model InstagramPost {
   connectionId          String
   caption               String?
   mediaType             String
-  mediaUrl              String?\n  mediaItems            Json?
+  mediaUrl              String?
+  mediaItems            Json?
   thumbnailUrl          String?
   permalink             String?
   timestamp             DateTime?
