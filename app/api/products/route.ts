@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   const posts = await db().instagramPost.findMany({
     where,
     include: { connection: true, tags: true, likes: true },
-    orderBy: [{ timestamp: "desc" }, { id: "desc" }],
+    orderBy: [{ boostUntil: "desc" }, { timestamp: "desc" }, { id: "desc" }],
     skip,
     take: limit,
   });
