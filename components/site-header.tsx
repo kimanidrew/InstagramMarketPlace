@@ -59,6 +59,7 @@ export function SiteHeader({ user }: { user: any }) {
           ].map(([href, label]) => (
             <Link key={href} href={href} className="nav-link">{label}</Link>
           ))}
+          {user && <Link href="/account" className="nav-link">Grow your shop</Link>}
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
@@ -116,7 +117,8 @@ export function SiteHeader({ user }: { user: any }) {
             <Link href="/products" className="menu-card" onClick={() => setMenuOpen(false)}>Shop all</Link>
             <Link href="/stores" className="menu-card" onClick={() => setMenuOpen(false)}>Stores</Link>
             <Link href="/categories" className="menu-card" onClick={() => setMenuOpen(false)}>Categories</Link>
-            <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>\n            {user && <Link href="/account" className="menu-card" onClick={() => setMenuOpen(false)}>Grow your shop</Link>}
+            <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>
+            {user && <Link href="/account" className="menu-card" onClick={() => setMenuOpen(false)}>Grow your shop</Link>}
           </div>
         </div>
       </div>
