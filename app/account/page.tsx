@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, CheckCircle2, Instagram, LogOut, ShieldCheck, Sparkles, Plus } from "lucide-react";
 import SellerSetupModal from "@/components/seller-setup-modal";
 import { AccountLiveRefresh } from "@/components/account-live-refresh";
+import { SellerGrowth } from "@/components/seller-growth";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ export default async function Account({
     db().storeRequest.findMany({ where: { userId: u.id }, orderBy: { createdAt: "desc" } }),
     db().instagramConnection.findMany({
       where: { connectedByUserId: u.id },
-      include: { posts: { where: { isProduct: true }, select: { id: true } } },
+      include: { posts: { where: { isProduct: true }, select: { id: true, productTitle: true } } },
       orderBy: { createdAt: "desc" },
     }),
   ]);
@@ -105,6 +106,8 @@ export default async function Account({
           </div>
         </section>
       </section>
+
+      <SellerGrowth connections={connections.map(c => ({ id: c.id, username: c.username, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts }))} />
 
       {setupRequest && <SellerSetupModal request={setupRequest} connection={setupConnection ? {username:setupConnection.username,postsCount:setupConnection.posts.length} : undefined} initialStep={setupStep} />}
       {q.setup === "new" && <SellerSetupModal request={{id:"new",username:"new shop",status:"REJECTED"}} initialStep={1} />}
