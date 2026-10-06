@@ -18,6 +18,18 @@ enum RequestStatus {
   REJECTED
 }
 
+enum GrowthRequestType {
+  BOOST
+  VERIFIED
+  PRO
+}
+
+enum GrowthRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id                   String                @id @default(cuid())
   email                String                @unique
@@ -31,6 +43,7 @@ model User {
   instagramConnections InstagramConnection[]
   storeReviews         StoreReview[]
   productReviews       ProductReview[]
+  growthRequests       GrowthRequest[]
 }
 
 model StoreRequest {
@@ -61,6 +74,7 @@ model InstagramConnection {
   posts             InstagramPost[]
   connectedBy       User?           @relation(fields: [connectedByUserId], references: [id], onDelete: SetNull)
   reviews           StoreReview[]
+  growthRequests     GrowthRequest[]
 
   @@index([connectedByUserId])
   @@unique([connectedByUserId, igUserId])
@@ -86,6 +100,8 @@ model InstagramPost {
   tags                  ProductTag[]
   likes                 ProductLike[]
   reviews               ProductReview[]
+  boostUntil            DateTime?
+  growthRequests        GrowthRequest[]
 
   @@index([connectionId, isProduct])
 }
@@ -139,4 +155,23 @@ model ProductReview {
 
   @@unique([userId, postId])
   @@index([postId, createdAt])
+}
+
+
+model GrowthRequest {
+  id           String              @id @default(cuid())
+  userId       String
+  connectionId String
+  postId       String?
+  type         GrowthRequestType
+  status       GrowthRequestStatus @default(PENDING)
+  amount       Int
+  createdAt    DateTime            @default(now())
+  reviewedAt   DateTime?
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection   InstagramConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  post         InstagramPost?      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@index([userId, createdAt])
+  @@index([connectionId, status])
+  @@index([postId, status])
 }
