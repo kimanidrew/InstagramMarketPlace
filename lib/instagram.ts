@@ -431,8 +431,9 @@ export async function sync(id: string) {
       if (!x?.id) continue;
 
       seenIds.add(String(x.id));
-      const hs = tags(x.caption || "");\n      const aiTags = await classifyProductTags(hs, t, x.caption || "");
+      const hs = tags(x.caption || "");
       const t = title(x.caption || "");
+      const classification = classifyProductTags(hs, t, x.caption || "");
       const slug =
         t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") +
         "-" +
@@ -493,6 +494,8 @@ export async function sync(id: string) {
           instagramCommentCount: x.comments_count || 0,
           isProduct: true,
           productTitle: t,
+          category: classification.category,
+          subcategory: classification.subcategory,
           productSlug: slug,
         },
         update: {
@@ -513,10 +516,11 @@ export async function sync(id: string) {
 
       await p.productTag.deleteMany({ where: { postId: post.id } });
 
-      if (hs.length) {
+      if (classification.tags.length) {
         await p.productTag.createMany({
-          data: [...new Set(hs)].map((name) => ({
+          data: classification.tags.map(({ name, type }) => ({
             name,
+            type,
             postId: post.id,
           })),
         });
