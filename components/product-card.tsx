@@ -109,19 +109,21 @@ export function ProductCard({ p }: { p: any }) {
             ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[#777]">
-          <span className="inline-flex items-center gap-1">
-            <span className={"interaction-stat " + (likeFlash ? "is-updated" : "")}>
-              <Heart size={12} /> {likeCount} likes
+        <div className="product-card-stats mt-4">
+          <div className={"product-card-stat " + (likeFlash ? "is-updated" : "")}>
+            <span className="product-card-stat-icon"><Heart size={13} strokeWidth={2.4} /></span>
+            <span className="product-card-stat-copy">
+              <b className="interaction-stat-value">{likeCount.toLocaleString()}</b>
+              <small>Likes</small>
             </span>
-            <span aria-hidden="true">·</span>
-            <span className={"interaction-stat" + (wishlistFlash ? " is-updated" : "")}>
-              <Bookmark size={12} /> {wishlistCount} saved
+          </div>
+          <div className={"product-card-stat " + (wishlistFlash ? "is-updated" : "")}>
+            <span className="product-card-stat-icon"><Bookmark size={13} strokeWidth={2.4} /></span>
+            <span className="product-card-stat-copy">
+              <b className="interaction-stat-value">{wishlistCount.toLocaleString()}</b>
+              <small>Saved</small>
             </span>
-          </span>
-          <span className="shrink-0 rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-bold text-[#555]">
-            {isService ? "Service" : "Product"}
-          </span>
+          </div>
         </div>
       </div>
     </article>
