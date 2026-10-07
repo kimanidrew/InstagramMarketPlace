@@ -1,1 +1,154 @@
-import{db}from"@/lib/prisma";import{user}from"@/lib/auth";import{ProductCard}from"@/components/product-card";import{ReviewSection}from"@/components/review-section";import{notFound}from"next/navigation";import{filterAvailableInstagramMedia}from"@/lib/instagram-media";export const dynamic="force-dynamic";export default async function Store({params}:{params:Promise<{username:string}>}){const{username}=await params;const[s,currentUser]=await Promise.all([db().instagramConnection.findUnique({where:{username},include:{reviews:{include:{user:{select:{id:true,name:true}}},orderBy:{createdAt:"desc"}},posts:{where:{isProduct:true},include:{connection:true,tags:true,likes:true},orderBy:{timestamp:"desc"}}}}),user()]);if(!s)notFound();const posts=await filterAvailableInstagramMedia(s.posts);if(posts.length===0)notFound();return <main><section className="border-b bg-[#fafafa]"><div className="shell py-14"><div className="flex items-center gap-5"><div className="h-24 w-24 overflow-hidden rounded-full bg-[#eee]">{s.profileImageUrl&&<img src={s.profileImageUrl} className="h-full w-full object-cover" alt=""/>}</div><div><div className="flex flex-wrap items-center gap-2"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#888]">Instagram store</p>{s.verifiedAt && <span className="rounded-full bg-black px-2.5 py-1 text-[9px] font-black uppercase tracking-[.12em] text-white">✓ Verified</span>}{s.proUntil && new Date(s.proUntil)>new Date() && <span className="rounded-full bg-[#f0e7ff] px-2.5 py-1 text-[9px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}</div><h1 className="mt-2 text-4xl font-black">@{s.username}</h1><p className="text-sm text-[#777]">{posts.length} products</p></div></div>{s.biography&&<p className="mt-7 max-w-2xl text-sm leading-7 text-[#666]">{s.biography}</p>}</div></section><section className="shell py-12"><div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-6">{posts.map(x=><ProductCard key={x.id} p={x}/>)}</div><ReviewSection type="store" targetId={s.id} reviews={s.reviews} currentUserId={currentUser?.id} title={"Reviews for @"+s.username}/></section></main>}
+import Link from "next/link";
+import { BadgeCheck, Instagram, MessageCircle, Star, ArrowUpRight } from "lucide-react";
+import { db } from "@/lib/prisma";
+import { user } from "@/lib/auth";
+import { ProductCard } from "@/components/product-card";
+import { StoreReviewsDrawer } from "@/components/store-reviews-drawer";
+import { notFound } from "next/navigation";
+import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
+
+export const dynamic = "force-dynamic";
+
+export default async function Store({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ username: string }>;
+  searchParams: Promise<{ reviews?: string }>;
+}) {
+  const { username } = await params;
+  const { reviews: reviewsParam } = await searchParams;
+
+  const [store, currentUser] = await Promise.all([
+    db().instagramConnection.findUnique({
+      where: { username },
+      include: {
+        reviews: {
+          include: { user: { select: { id: true, name: true } } },
+          orderBy: { createdAt: "desc" },
+        },
+        posts: {
+          where: { isProduct: true },
+          include: { connection: true, tags: true, likes: true, wishlistItems: true },
+          orderBy: { timestamp: "desc" },
+        },
+      },
+    }),
+    user(),
+  ]);
+
+  if (!store) notFound();
+
+  const posts = await filterAvailableInstagramMedia(store.posts);
+  const average =
+    store.reviews.length > 0
+      ? store.reviews.reduce((sum, review) => sum + review.rating, 0) / store.reviews.length
+      : 0;
+  const isPro = !!store.proUntil && new Date(store.proUntil) > new Date();
+  const isVerified = !!store.verifiedAt;
+  const hasGrowth = isVerified || isPro;
+
+  return (
+    <main className="store-page">
+      <section className="store-hero">
+        <div className="store-hero-orb store-hero-orb-a" />
+        <div className="store-hero-orb store-hero-orb-b" />
+        <div className="shell store-hero-inner">
+          <div className="store-profile">
+            <div className="store-avatar-wrap">
+              <div className="store-avatar">
+                {store.profileImageUrl ? (
+                  <img src={store.profileImageUrl} alt={"@" + store.username} />
+                ) : (
+                  <span>@</span>
+                )}
+              </div>
+              {hasGrowth && <span className="store-avatar-check"><BadgeCheck size={15} /></span>}
+            </div>
+
+            <div className="store-hero-copy">
+              <div className="store-kicker-row">
+                <span className="store-kicker"><Instagram size={13} /> Instagram shop</span>
+                {isVerified && <span className="store-badge store-badge-dark"><BadgeCheck size={12} /> Verified</span>}
+                {isPro && <span className="store-badge store-badge-pro">Pro Seller</span>}
+              </div>
+              <h1>@{store.username}</h1>
+              <p className="store-hero-bio">
+                {store.biography || "Discover products and services from this Instagram business on Instagram Market."}
+              </p>
+              <div className="store-hero-stats">
+                <span><b>{posts.length}</b> {posts.length === 1 ? "listing" : "listings"}</span>
+                <span><b>{store.reviews.length}</b> reviews</span>
+                {average > 0 && <span><Star size={13} fill="currentColor" /> <b>{average.toFixed(1)}</b></span>}
+              </div>
+            </div>
+
+            <div className="store-hero-actions">
+              <Link href={"/store/" + store.username + "?reviews=1"} className="store-review-button">
+                <Star size={15} fill="currentColor" /> Reviews
+              </Link>
+              <a href={"https://www.instagram.com/" + store.username + "/"} target="_blank" rel="noreferrer" className="store-instagram-button">
+                Visit Instagram <ArrowUpRight size={15} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="shell store-content">
+        <div className="store-content-head">
+          <div>
+            <span className="store-section-kicker">The collection</span>
+            <h2>Shop from @{store.username}</h2>
+            <p>Products and services shared by this store on Instagram.</p>
+          </div>
+          <Link href="/products" className="store-browse-link">Browse marketplace <ArrowUpRight size={14} /></Link>
+        </div>
+
+        {posts.length > 0 ? (
+          <div className="store-product-grid">
+            {posts.map((post: any) => <ProductCard key={post.id} p={post} />)}
+          </div>
+        ) : (
+          <div className="store-empty">
+            <div className="store-empty-icon"><Instagram size={20} /></div>
+            <h3>More from this shop is on the way.</h3>
+            <p>This store is connected, but there are no available marketplace listings right now.</p>
+            <a href={"https://www.instagram.com/" + store.username + "/"} target="_blank" rel="noreferrer">See @{store.username} on Instagram <ArrowUpRight size={14} /></a>
+          </div>
+        )}
+
+        <div className="store-review-teaser">
+          <div className="store-review-teaser-rating">
+            <div className="store-review-stars">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star key={star} size={16} fill={star <= Math.round(average) ? "currentColor" : "none"} />
+              ))}
+            </div>
+            <b>{average ? average.toFixed(1) : "New"}</b>
+          </div>
+          <div className="store-review-teaser-copy">
+            <span>Shopper feedback</span>
+            <strong>{store.reviews.length ? store.reviews.length + " reviews from the community" : "Be the first to share your experience"}</strong>
+          </div>
+          <Link href={"/store/" + store.username + "?reviews=1"} className="store-review-open">
+            <MessageCircle size={15} /> Open reviews <ArrowUpRight size={14} />
+          </Link>
+        </div>
+      </section>
+
+      {reviewsParam === "1" && (
+        <StoreReviewsDrawer
+          username={store.username}
+          storeId={store.id}
+          reviews={store.reviews.map((review) => ({
+            ...review,
+            createdAt: review.createdAt.toISOString(),
+            updatedAt: review.updatedAt.toISOString(),
+          }))}
+          currentUserId={currentUser?.id}
+        />
+      )}
+    </main>
+  );
+}
