@@ -157,11 +157,11 @@ export default async function Products({
 
           <div className="products-hero-actions mt-5 flex flex-wrap items-center justify-center gap-3">
             {wishlistProducts.length > 0 && (
-              <Link href="/wishlist" className="products-hero-light-button">
-                <Heart size={14} fill="currentColor" /> Continue from wishlist
+              <Link href="/wishlist" className="products-hero-light-button text-sm font-black">
+                <Bookmark size={17} fill="currentColor" /> Continue from saved
               </Link>
             )}
-            <Link href="#shop-all" className="products-hero-ghost-button">
+            <Link href="#shop-all" className="products-hero-ghost-button text-sm font-black">
               Browse everything <ArrowRight size={14} />
             </Link>
           </div>
