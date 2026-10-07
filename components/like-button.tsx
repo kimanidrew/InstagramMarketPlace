@@ -1,1 +1,49 @@
-"use client";import{Heart}from"lucide-react";import{useState}from"react";export function LikeButton({id,count}:{id:string;count:number}){const[l,setL]=useState(false),[n,setN]=useState(count);async function go(){const r=await fetch("/api/products/"+id+"/like",{method:"POST"});if(r.status===401){location.href="/login?next="+encodeURIComponent(location.pathname);return}if(r.ok){const d=await r.json();setL(d.liked);setN(d.localLikes)}}return <button onClick={go} className={"inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold "+(l?"bg-black text-white":"border")}><Heart size={16} fill={l?"currentColor":"none"}/>{n} likes</button>}
+"use client";
+
+import { Heart } from "lucide-react";
+import { useState } from "react";
+
+export function LikeButton({
+  id,
+  count,
+  compact = false,
+  initialLiked = false,
+}: {
+  id: string;
+  count: number;
+  compact?: boolean;
+  initialLiked?: boolean;
+}) {
+  const [liked, setLiked] = useState(initialLiked);
+  const [n, setN] = useState(count);
+
+  async function go() {
+    const r = await fetch("/api/products/" + id + "/like", { method: "POST" });
+    if (r.status === 401) {
+      location.href = "/login?next=" + encodeURIComponent(location.pathname);
+      return;
+    }
+    if (r.ok) {
+      const d = await r.json();
+      setLiked(d.liked);
+      setN(d.localLikes);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={(e) => { e.stopPropagation(); go(); }}
+      aria-label={liked ? "Unlike listing" : "Like listing"}
+      title={liked ? "Unlike listing" : "Like listing"}
+      className={
+        "inline-flex items-center justify-center gap-2 rounded-full border transition hover:-translate-y-0.5 " +
+        (compact ? "h-10 w-10 bg-white/95 shadow-sm" : "px-5 py-3 text-sm font-semibold ") +
+        (liked ? "border-black bg-black text-white" : "border-black/10 bg-white text-black")
+      }
+    >
+      <Heart size={compact ? 17 : 16} fill={liked ? "currentColor" : "none"} />
+      {!compact && <span>{n} likes</span>}
+    </button>
+  );
+}
