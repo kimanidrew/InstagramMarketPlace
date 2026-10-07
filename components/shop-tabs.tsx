@@ -72,6 +72,18 @@ export function ShopTabs({
         product.tags?.some((t: any) => String(t.name).toLowerCase() === selectedTag),
     );
 
+  const filteredTrendingProducts = filterProducts(trendingProducts);
+  const filteredFeaturedProducts = filterProducts(featuredProducts);
+  const filteredFeaturedStores = selectedTag
+    ? featuredStores.filter(({ posts }: any) =>
+        posts?.some((post: any) =>
+          post.tags?.some((t: any) => String(t.name).toLowerCase() === selectedTag),
+        ),
+      )
+    : featuredStores;
+
+  const emptyFilteredMessage = "No listings are available in #" + selectedTag + " for this section yet.";
+
   return (
     <div className="shop-tabs-wrap mt-10">
       <div className="shop-tabs" role="tablist" aria-label="Shop discovery">
@@ -246,10 +258,10 @@ export function ShopTabs({
                   <div><p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.</p></div>
                   <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
                 </div>
-                {trendingProducts.length > 0 ? (
-                  <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{trendingProducts.map((product: any) => <ProductCard key={product.id} p={product} />)}</div>
+                {filteredTrendingProducts.length > 0 ? (
+                  <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{filteredTrendingProducts.map((product: any) => <ProductCard key={product.id} p={product} />)}</div>
                 ) : (
-                  <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Trending picks will appear as shoppers interact with listings.</div>
+                  <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{selectedTag ? emptyFilteredMessage : "Trending picks will appear as shoppers interact with listings."}</div>
                 )}
               </section>
             )}
@@ -262,7 +274,7 @@ export function ShopTabs({
                     <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /> </Link>
                   </div>
                   <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {featuredStores.map(({ store, posts }: any) => (
+                    {filteredFeaturedStores.map(({ store, posts }: any) => (
                       <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]">
                         <div className="flex items-center gap-3">
                           <div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}</div>
@@ -272,14 +284,17 @@ export function ShopTabs({
                       </Link>
                     ))}
                   </div>
+                  {selectedTag && filteredFeaturedStores.length === 0 && (
+                    <div className="col-span-full rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{emptyFilteredMessage}</div>
+                  )}
                 </section>
 
                 <section>
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow plain"><Sparkles size={13} /> Featured products</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Put the spotlight on.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Only listings with an approved Boost running now appear here.</p></div><span className="inline-flex items-center gap-2 self-start rounded-full bg-black px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-white sm:self-auto"><Sparkles size={12} /> Boosted now</span></div>
-                  {featuredProducts.length > 0 ? (
-                    <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{featuredProducts.map((product: any) => <ProductCard key={product.id} p={product} />)}</div>
+                  {filteredFeaturedProducts.length > 0 ? (
+                    <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{filteredFeaturedProducts.map((product: any) => <ProductCard key={product.id} p={product} />)}</div>
                   ) : (
-                    <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Featured products appear here when a seller has an approved Boost running.</div>
+                    <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{selectedTag ? emptyFilteredMessage : "Featured products appear here when a seller has an approved Boost running."}</div>
                   )}
                 </section>
               </div>
