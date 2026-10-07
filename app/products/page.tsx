@@ -91,7 +91,6 @@ export default async function Products({
         include: {
           connection: true,
           tags: true,
-          likes: currentUser ? { where: { userId: currentUser.id } } : false,
           likes: true,
           wishlistItems: true,
           _count: { select: { likes: true, wishlistItems: true } },
