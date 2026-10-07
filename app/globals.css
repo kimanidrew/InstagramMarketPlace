@@ -715,5 +715,12 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 @media(max-width:760px){.store-hero-copy h1{max-width:50%;font-size:1.45rem}}
 
 /* Give the compact store username more vertical breathing room */
-.store-hero-copy h1{line-height:1.15}
-@media(max-width:760px){.store-hero-copy h1{line-height:1.2}}
+.store-hero-copy h1{line-height:1.35}
+@media(max-width:760px){.store-hero-copy h1{line-height:1.4}}
+
+/* Reviews drawer owns the viewport while open */
+.store-reviews-overlay{position:fixed;inset:0;z-index:9999;overflow:hidden;isolation:isolate}
+.store-reviews-drawer{position:relative;z-index:2;height:100dvh;max-height:100dvh;overflow:hidden}
+.store-reviews-scroll{min-height:0;flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+body:has(.store-reviews-overlay){overflow:hidden}
+html:has(.store-reviews-overlay){overflow:hidden}
