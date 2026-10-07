@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
+import { user } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,7 @@ export async function GET(request: Request) {
   const page = Math.max(0, Number(searchParams.get("page") || 0));
   const limit = Math.min(24, Math.max(1, Number(searchParams.get("limit") || 12)));
   const skip = page * limit;
+  const currentUser = await user();
 
   const where: any = { isProduct: true };
 
@@ -28,7 +30,12 @@ export async function GET(request: Request) {
 
   const posts = await db().instagramPost.findMany({
     where,
-    include: { connection: true, tags: true, likes: true },
+    include: {
+      connection: true,
+      tags: true,
+      likes: true,
+      wishlistItems: currentUser ? { where: { userId: currentUser.id } } : true,
+    },
     orderBy: [{ boostUntil: "desc" }, { timestamp: "desc" }, { id: "desc" }],
     skip,
     take: limit,
