@@ -2,7 +2,7 @@
 
 import { Play, Volume2, VolumeX } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function ProductMedia({
   src,
@@ -20,6 +20,24 @@ export function ProductMedia({
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
 
+  useEffect(() => {
+    if (!playing) return;
+
+    const handleOtherVideoPlay = (event: Event) => {
+      const otherVideo = event.target;
+      if (otherVideo instanceof HTMLVideoElement && otherVideo !== videoRef.current) {
+        videoRef.current?.pause();
+      }
+    };
+
+    window.addEventListener("product-video-play", handleOtherVideoPlay);
+    window.dispatchEvent(new Event("product-video-play"));
+
+    return () => {
+      window.removeEventListener("product-video-play", handleOtherVideoPlay);
+    };
+  }, [playing]);
+
   function openProduct() {
     if (href) router.push(href);
   }
@@ -29,7 +47,12 @@ export function ProductMedia({
     if (!video) return;
 
     if (video.paused) {
-      video.play().then(() => setPlaying(true)).catch(() => undefined);
+      video.play()
+        .then(() => {
+          setPlaying(true);
+          window.dispatchEvent(new Event("product-video-play"));
+        })
+        .catch(() => undefined);
     } else {
       video.pause();
       setPlaying(false);
