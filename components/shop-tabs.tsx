@@ -156,7 +156,7 @@ export function ShopTabs({
       </div>
 
       <div className="shop-tab-panel" role="tabpanel" id={"shop-tab-panel-" + active}>
-        {selectedTag ? (
+        {selectedTag && active === "discover" ? (
           <section className="shop-category-selection">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
