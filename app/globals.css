@@ -709,3 +709,7 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
   .store-hero-bio{margin-top:15px}
   .store-reviews-header h2{font-size:24px}
 }
+
+/* Keep store username compact within half of its content area */
+.store-hero-copy h1{max-width:50%;font-size:clamp(1.35rem,2.7vw,2.5rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:760px){.store-hero-copy h1{max-width:50%;font-size:1.45rem}}
