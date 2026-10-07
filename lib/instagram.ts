@@ -1,6 +1,7 @@
 import "server-only";
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
-import { db } from "@/lib/prisma";\nimport { classifyProductTags } from "@/lib/ai-tags";
+import { db } from "@/lib/prisma";
+import { classifyProductTags } from "@/lib/ai-tags";
 
 const V = () => process.env.INSTAGRAM_GRAPH_API_VERSION || "v24.0";
 const key = () =>
