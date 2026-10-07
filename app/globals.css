@@ -462,11 +462,11 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 
 
 /* Products page contrast guard: light buttons use dark type, dark buttons use light type. */
-.products-page a.bg-white,.products-page button.bg-white,.products-page a[class*="bg-white"],.products-page button[class*="bg-white"]{color:#111!important}
-.products-page a.bg-black,.products-page button.bg-black,.products-page a[class*="bg-black"],.products-page button[class*="bg-black"]{color:#fff!important}
-.products-page a[class*="bg-[#111]"],.products-page button[class*="bg-[#111]"]{color:#fff!important}
-.products-page .chip{color:#111!important;background:#fff}
-.products-page .chip-active{color:#fff!important;background:#111}
+.shop-page a.bg-white,.shop-page button.bg-white,.shop-page a[class*="bg-white"],.shop-page button[class*="bg-white"]{color:#111!important}
+.shop-page a.bg-black,.shop-page button.bg-black,.shop-page a[class*="bg-black"],.shop-page button[class*="bg-black"]{color:#fff!important}
+.shop-page a[class*="bg-[#111]"],.shop-page button[class*="bg-[#111]"]{color:#fff!important}
+.shop-page .chip{color:#111!important;background:#fff}
+.shop-page .chip-active{color:#fff!important;background:#111}
 
 /* Seller growth monetization */
 .seller-growth{margin:34px 0 18px;padding:28px;border-radius:30px;background:#111;color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.14)}
