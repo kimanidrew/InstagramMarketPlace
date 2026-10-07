@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 import { ArrowLeft, Star, X } from "lucide-react";
 import { ReviewSection } from "@/components/review-section";
 
@@ -15,6 +16,17 @@ export function StoreReviewsDrawer({
   reviews: any[];
   currentUserId?: string | null;
 }) {
+  useEffect(() => {
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, []);
+
   return (
     <AnimatePresence>
       <motion.div
