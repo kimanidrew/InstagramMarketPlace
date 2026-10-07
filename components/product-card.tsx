@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, ExternalLink, Heart, Instagram } from "lucide-react";
+import { Bookmark, Heart, Instagram } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -99,18 +99,11 @@ export function ProductCard({ p }: { p: any }) {
             ))}
         </div>
 
-        <div className="mt-3 flex justify-between text-xs text-[#777]">
+        <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[#777]">
           <span className="inline-flex items-center gap-1"><Heart size={12} /> {likeCount} likes · <Bookmark size={12} /> {wishlistCount} saved</span>
-          {p.permalink && (
-            <a
-              href={p.permalink}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex gap-1 font-semibold text-black"
-            >
-              Instagram <ExternalLink size={12} />
-            </a>
-          )}
+          <span className="shrink-0 rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-bold text-[#555]">
+            {isService ? "Service" : "Product"}
+          </span>
         </div>
       </div>
     </article>
