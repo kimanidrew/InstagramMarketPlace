@@ -54,6 +54,7 @@ model User {
   storeReviews         StoreReview[]
   productReviews       ProductReview[]
   growthRequests       GrowthRequest[]
+  wishlistItems        WishlistItem[]
 }
 
 model StoreRequest {
@@ -118,6 +119,7 @@ model InstagramPost {
   reviews               ProductReview[]
   boostUntil            DateTime?
   growthRequests        GrowthRequest[]
+  wishlistItems          WishlistItem[]
 
   @@index([connectionId, isProduct])
 }
