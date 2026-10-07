@@ -160,7 +160,7 @@ export default async function Products({
         <div className="flex items-center gap-2 text-xs font-bold">
           <SlidersHorizontal size={15} />
           Filters
-          <span className="hidden font-normal text-[#999] sm:inline">· New products load automatically as you scroll</span>
+          <span className="hidden font-normal text-[#999] sm:inline">· Fresh finds, picked for you</span>
         </div>
 
         <div className="hidden items-center gap-2 text-xs text-[#999] sm:flex">
