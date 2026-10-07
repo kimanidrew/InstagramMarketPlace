@@ -31,9 +31,9 @@ export default async function Products({
       ? db().instagramPost.findMany({
           where: {
             isProduct: true,
-            likes: { some: { userId: currentUser.id } },
+            wishlistItems: { some: { userId: currentUser.id } },
           },
-          include: { connection: true, tags: true, likes: true },
+          include: { connection: true, tags: true, likes: true, wishlistItems: { where: { userId: currentUser.id } } },
           orderBy: { timestamp: "desc" },
           take: 8,
         }).then((items) => filterAvailableInstagramMedia(items))
@@ -90,7 +90,7 @@ export default async function Products({
             <div>
               <p className="eyebrow plain">Pick up where you left off</p>
               <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Still loving these?</h2>
-              <p className="mt-2 text-sm text-[#777]">Your saved products are ready whenever you are.</p>
+              <p className="mt-2 text-sm text-[#777]">Your saved products and services are ready whenever you are.</p>
             </div>
             <Link href="/wishlist" className="inline-flex items-center gap-2 text-xs font-black">
               View full wishlist <ArrowRight size={14} />
