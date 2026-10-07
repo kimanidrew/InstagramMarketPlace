@@ -24,7 +24,12 @@ enum GrowthRequestType {
   PRO
 }
 
-enum ProductTagType {\n  PRODUCT\n  CATEGORY\n}\n\nenum GrowthRequestStatus {
+enum ProductTagType {
+  PRODUCT
+  CATEGORY
+}
+
+enum GrowthRequestStatus {
   PENDING
   APPROVED
   REJECTED
