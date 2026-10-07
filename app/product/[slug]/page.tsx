@@ -74,10 +74,8 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <span className="text-sm text-[#999]">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</span>
               </div>
 
-              {cleanCaption ? (
+              {cleanCaption && (
                 <p className="mt-6 whitespace-pre-line text-[15px] leading-7 text-[#666]">{cleanCaption}</p>
-              ) : (
-                <p className="mt-6 text-sm leading-6 text-[#888]">Discover this product from @{product.connection.username} and contact the shop directly on Instagram for current details, pricing and availability.</p>
               )}
 
               {tags.length > 0 && (
