@@ -10,15 +10,25 @@ import { useEffect, useState } from "react";
 export function ProductCard({ p }: { p: any }) {
   const [likeCount, setLikeCount] = useState(p.likes?.length || 0);
   const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
+  const [likeFlash, setLikeFlash] = useState(false);
+  const [wishlistFlash, setWishlistFlash] = useState(false);
 
   useEffect(() => {
     const onLike = (event: Event) => {
       const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
-      if (detail?.id === p.id) setLikeCount(detail.count);
+      if (detail?.id === p.id) {
+        setLikeCount(detail.count);
+        setLikeFlash(true);
+        window.setTimeout(() => setLikeFlash(false), 450);
+      }
     };
     const onWishlist = (event: Event) => {
       const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
-      if (detail?.id === p.id) setWishlistCount(detail.count);
+      if (detail?.id === p.id) {
+        setWishlistCount(detail.count);
+        setWishlistFlash(true);
+        window.setTimeout(() => setWishlistFlash(false), 450);
+      }
     };
     window.addEventListener("listing-like-updated", onLike);
     window.addEventListener("listing-wishlist-updated", onWishlist);
@@ -100,7 +110,15 @@ export function ProductCard({ p }: { p: any }) {
         </div>
 
         <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[#777]">
-          <span className="inline-flex items-center gap-1"><Heart size={12} /> {likeCount} likes · <Bookmark size={12} /> {wishlistCount} saved</span>
+          <span className="inline-flex items-center gap-1">
+            <span className={"interaction-stat " + (likeFlash ? "is-updated" : "")}>
+              <Heart size={12} /> {likeCount} likes
+            </span>
+            <span aria-hidden="true">·</span>
+            <span className={"interaction-stat" + (wishlistFlash ? " is-updated" : "")}>
+              <Bookmark size={12} /> {wishlistCount} saved
+            </span>
+          </span>
           <span className="shrink-0 rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px] font-bold text-[#555]">
             {isService ? "Service" : "Product"}
           </span>
