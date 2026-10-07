@@ -713,3 +713,7 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 /* Keep store username compact within half of its content area */
 .store-hero-copy h1{max-width:50%;font-size:clamp(1.35rem,2.7vw,2.5rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:760px){.store-hero-copy h1{max-width:50%;font-size:1.45rem}}
+
+/* Give the compact store username more vertical breathing room */
+.store-hero-copy h1{line-height:1.15}
+@media(max-width:760px){.store-hero-copy h1{line-height:1.2}}
