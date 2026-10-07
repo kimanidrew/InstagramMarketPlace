@@ -58,7 +58,7 @@ export default async function Wishlist() {
       </div>
 
       {ps.length > 0 ? (
-        <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+        <div className="mt-10 columns-2 [column-gap:1rem] md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
           {ps.map((x) => (
             <ProductCard key={x.id} p={x} />
           ))}
