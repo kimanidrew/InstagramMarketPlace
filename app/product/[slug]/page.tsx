@@ -30,7 +30,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   const isVideo = String(product.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = product.mediaUrl || product.thumbnailUrl;
   const carouselItems = Array.isArray(product.mediaItems) ? (product.mediaItems as Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>) : null;
-  const cleanCaption = product.caption ? product.caption.replace(/#[\p{L}\p{N}_]+/gu, "").trim() : "";
+  const cleanCaption = product.caption ? product.caption.replace(/#[\\p{L}\\p{N}_]+/gu, "").trim() : "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
   const average = product.reviews.length
     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
@@ -39,7 +39,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   return (
     <main className="product-detail-page min-h-screen bg-white">
       <div className="shell py-6 md:py-10">
-        <Link href="/products" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#666] transition hover:text-black">
+        <Link href="/shop" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#666] transition hover:text-black">
           <ArrowLeft size={15} /> Back to shop
         </Link>
 
