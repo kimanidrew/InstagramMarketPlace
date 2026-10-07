@@ -49,8 +49,8 @@ export default async function Products({
         include: {
           connection: true,
           tags: true,
-          likes: currentUser ? { where: { userId: currentUser.id } } : false,
-          wishlistItems: currentUser ? { where: { userId: currentUser.id } } : false,
+          likes: true,
+          wishlistItems: true,
         },
         orderBy: { boostUntil: "desc" },
         take: 8,
@@ -78,8 +78,8 @@ export default async function Products({
         include: {
           connection: true,
           tags: true,
-          likes: currentUser ? { where: { userId: currentUser.id } } : false,
-          wishlistItems: currentUser ? { where: { userId: currentUser.id } } : false,
+          likes: true,
+          wishlistItems: true,
           _count: { select: { likes: true, wishlistItems: true } },
         },
         orderBy: { likes: { _count: "desc" } },
