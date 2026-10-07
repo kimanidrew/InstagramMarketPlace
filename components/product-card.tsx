@@ -99,9 +99,24 @@ export function ProductCard({ p }: { p: any }) {
 
         <Link
           href={"/store/" + p.connection.username}
-          className="mt-1 block text-xs text-[#777]"
+          className="mt-2 flex min-w-0 max-w-[50%] items-center gap-2.5"
         >
-          @{p.connection.username}
+          <span className="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-[#ecece8] ring-1 ring-black/5">
+            {p.connection.profileImageUrl ? (
+              <img
+                src={p.connection.profileImageUrl}
+                alt={"@" + p.connection.username}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span className="flex h-full w-full items-center justify-center text-[10px] font-black text-[#777]">
+                {(p.connection.username || "?").slice(0, 1).toUpperCase()}
+              </span>
+            )}
+          </span>
+          <span className="min-w-0 truncate text-xs font-semibold leading-5 text-[#555]">
+            @{p.connection.username}
+          </span>
         </Link>
 
         <div className="mt-3 flex flex-wrap gap-1">
