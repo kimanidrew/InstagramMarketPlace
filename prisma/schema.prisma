@@ -29,6 +29,11 @@ enum ProductTagType {
   CATEGORY
 }
 
+enum ListingType {
+  PRODUCT
+  SERVICE
+}
+
 enum GrowthRequestStatus {
   PENDING
   APPROVED
@@ -100,6 +105,7 @@ model InstagramPost {
   instagramLikeCount    Int                 @default(0)
   instagramCommentCount Int                 @default(0)
   isProduct             Boolean             @default(false)
+  listingType           ListingType          @default(PRODUCT)
   productTitle          String?
   category              String?
   subcategory           String?
@@ -185,4 +191,18 @@ model GrowthRequest {
   @@index([userId, createdAt])
   @@index([connectionId, status])
   @@index([postId, status])
+}
+
+
+model WishlistItem {
+  id        String        @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime      @default(now())
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      InstagramPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([userId, createdAt])
+  @@index([postId])
 }
