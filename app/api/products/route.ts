@@ -42,9 +42,14 @@ export async function GET(request: Request) {
   });
 
   const availableProducts = await filterAvailableInstagramMedia(posts);
+  const products = availableProducts.map((post: any) => ({
+    ...post,
+    likedByCurrentUser: currentUser ? post.likes.some((like: any) => like.userId === currentUser.id) : false,
+    wishlistedByCurrentUser: currentUser ? post.wishlistItems.some((item: any) => item.userId === currentUser.id) : false,
+  }));
 
   return NextResponse.json({
-    products: availableProducts,
+    products,
     hasMore: posts.length === limit,
     page,
   });
