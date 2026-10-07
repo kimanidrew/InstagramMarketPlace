@@ -123,7 +123,7 @@ export default async function Products({
     )
     .slice(0, 8);
 
-  const showDiscovery = !text && !tag;
+  const showDiscovery = !text;
 
   return (
     <main className="shop-page shell py-10 md:py-14">
@@ -292,9 +292,11 @@ export default async function Products({
         />
       )}
 
-      <div className="mt-8">
-        <ProductMasonry q={text || ""} tag={tag || ""} />
-      </div>
+      {text && (
+        <div className="mt-8">
+          <ProductMasonry q={text} tag="" />
+        </div>
+      )}
     </main>
   );
 }
