@@ -5,29 +5,39 @@ import { Bookmark, Heart, Instagram } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function ProductCard({ p }: { p: any }) {
   const [likeCount, setLikeCount] = useState(p.likes?.length || 0);
   const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
   const [likeFlash, setLikeFlash] = useState(false);
   const [wishlistFlash, setWishlistFlash] = useState(false);
+  const likeCountRef = useRef(likeCount);
+  const wishlistCountRef = useRef(wishlistCount);
 
   useEffect(() => {
     const onLike = (event: Event) => {
       const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
       if (detail?.id === p.id) {
+        const changed = detail.count !== likeCountRef.current;
+        likeCountRef.current = detail.count;
         setLikeCount(detail.count);
-        setLikeFlash(true);
-        window.setTimeout(() => setLikeFlash(false), 450);
+        if (changed) {
+          setLikeFlash(true);
+          window.setTimeout(() => setLikeFlash(false), 450);
+        }
       }
     };
     const onWishlist = (event: Event) => {
       const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
       if (detail?.id === p.id) {
+        const changed = detail.count !== wishlistCountRef.current;
+        wishlistCountRef.current = detail.count;
         setWishlistCount(detail.count);
-        setWishlistFlash(true);
-        window.setTimeout(() => setWishlistFlash(false), 450);
+        if (changed) {
+          setWishlistFlash(true);
+          window.setTimeout(() => setWishlistFlash(false), 450);
+        }
       }
     };
     window.addEventListener("listing-like-updated", onLike);
