@@ -34,12 +34,13 @@ export default async function Wishlist() {
   const ps = await db().instagramPost.findMany({
     where: {
       isProduct: true,
-      likes: { some: { userId: u.id } },
+      wishlistItems: { some: { userId: u.id } },
     },
     include: {
       connection: true,
       tags: true,
       likes: true,
+      wishlistItems: { where: { userId: u.id } },
     },
     orderBy: { timestamp: "desc" },
   });
@@ -52,7 +53,7 @@ export default async function Wishlist() {
           Your wishlist.
         </h1>
         <p className="mt-3 text-sm text-[#777]">
-          {ps.length} saved {ps.length === 1 ? "product" : "products"}
+          {ps.length} saved {ps.length === 1 ? "listing" : "listings"}
         </p>
       </div>
 
@@ -65,9 +66,9 @@ export default async function Wishlist() {
       ) : (
         <div className="mt-10 rounded-[30px] bg-[#f6f6f3] py-20 text-center">
           <Heart className="mx-auto" size={25} />
-          <h2 className="mt-5 text-xl font-black">No saved products yet</h2>
+          <h2 className="mt-5 text-xl font-black">No saved listings yet</h2>
           <p className="mt-2 text-sm text-[#777]">
-            Tap the heart on a product to keep it here.
+            Tap the bookmark on a product or service to keep it here.
           </p>
           <Link
             href="/products"
