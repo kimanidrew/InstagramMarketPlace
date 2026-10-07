@@ -5,9 +5,30 @@ import { Bookmark, ExternalLink, Heart, Instagram } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
+import { useEffect, useState } from "react";
 
 export function ProductCard({ p }: { p: any }) {
-  const [likeCount, setLikeCount] = useState(p.likes?.length || 0);\n  const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);\n\n  useEffect(() => {\n    const onLike = (event: Event) => {\n      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;\n      if (detail?.id === p.id) setLikeCount(detail.count);\n    };\n    const onWishlist = (event: Event) => {\n      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;\n      if (detail?.id === p.id) setWishlistCount(detail.count);\n    };\n    window.addEventListener("listing-like-updated", onLike);\n    window.addEventListener("listing-wishlist-updated", onWishlist);\n    return () => {\n      window.removeEventListener("listing-like-updated", onLike);\n      window.removeEventListener("listing-wishlist-updated", onWishlist);\n    };\n  }, [p.id]);\n\n  const isVideo = String(p.mediaType || "").toUpperCase() === "VIDEO";
+  const [likeCount, setLikeCount] = useState(p.likes?.length || 0);
+  const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
+
+  useEffect(() => {
+    const onLike = (event: Event) => {
+      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
+      if (detail?.id === p.id) setLikeCount(detail.count);
+    };
+    const onWishlist = (event: Event) => {
+      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
+      if (detail?.id === p.id) setWishlistCount(detail.count);
+    };
+    window.addEventListener("listing-like-updated", onLike);
+    window.addEventListener("listing-wishlist-updated", onWishlist);
+    return () => {
+      window.removeEventListener("listing-like-updated", onLike);
+      window.removeEventListener("listing-wishlist-updated", onWishlist);
+    };
+  }, [p.id]);
+
+  const isVideo = String(p.mediaType || "").toUpperCase() === "VIDEO";
   const img = p.mediaUrl || p.thumbnailUrl;
   const isService = String(p.listingType || "").toUpperCase() === "SERVICE";
   const href = "/" + (isService ? "service" : "product") + "/" + p.productSlug;
