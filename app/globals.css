@@ -544,3 +544,15 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
   .product-carousel-arrow-right{right:10px}
   .product-carousel-dot{height:23px;width:23px}
 }
+
+/* Instant marketplace stat number animation */
+.product-card-stat-copy b.interaction-stat-value{display:inline-block;transform-origin:center;will-change:transform,opacity}
+.product-card-stat-copy b.interaction-stat-value.is-count-updated{animation:productStatNumberPop .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes productStatNumberPop{
+  0%{opacity:.35;transform:translateY(5px) scale(.82)}
+  45%{opacity:1;transform:translateY(-2px) scale(1.16)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .product-card-stat-copy b.interaction-stat-value.is-count-updated{animation:none}
+}
