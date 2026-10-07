@@ -42,45 +42,44 @@ export default async function Products({
 
   return (
     <main className="products-page shell py-10 md:py-14">
-      <section className="relative overflow-hidden rounded-[32px] bg-black p-7 text-white md:p-10 lg:p-12">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[.16em] text-white/75">
-              <Sparkles size={13} /> Discover & shop
-            </div>
-            <h1 className="mt-2 text-4xl font-black tracking-[-.055em] md:text-5xl">
-              Shop the Instagram feed.
-            </h1>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-white/65 md:text-base">
-              Find something you love, save it for later, or message the shop directly on Instagram. New products appear automatically as you keep browsing.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              {wishlistProducts.length > 0 && (
-                <Link href="/wishlist" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black transition hover:-translate-y-0.5">
-                  <Heart size={14} fill="currentColor" /> Continue from wishlist
-                </Link>
-              )}
-              <Link href="#shop-all" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-xs font-bold text-white transition hover:bg-white/15">
-                Browse everything <ArrowRight size={14} />
-              </Link>
-            </div>
+      <section className="products-hero relative overflow-hidden rounded-[32px] text-white">
+        <div className="products-hero-glass absolute inset-0" aria-hidden="true" />
+        <div className="products-hero-content relative z-10 mx-auto flex min-h-[430px] max-w-4xl flex-col items-center justify-center px-5 py-12 text-center md:min-h-[500px] md:px-10">
+          <div className="products-hero-kicker">
+            <Sparkles size={13} /> Discover · Shop · Support
           </div>
 
-          <form
-            action="/products"
-            className="mt-1 flex w-full max-w-xl rounded-full border border-black/10 bg-white p-1 shadow-sm lg:mt-0"
-          >
-            <Search className="ml-3 mt-2.5 shrink-0 text-[#888]" size={17} />
+          <h1 className="products-hero-title mt-6 max-w-3xl">
+            Unique finds from <span>real Instagram shops.</span>
+          </h1>
+
+          <p className="products-hero-copy mt-5 max-w-2xl">
+            Explore products and services from creators, brands and small businesses — all in one place.
+          </p>
+
+          <form action="/products" className="products-hero-search mt-8 w-full max-w-2xl">
+            <Search className="shrink-0" size={18} />
             <input
               name="q"
               defaultValue={text}
-              placeholder="Search products, stores & captions..."
-              className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm outline-none"
+              placeholder="Search products, stores or categories..."
+              aria-label="Search products, stores or categories"
             />
-            <button className="rounded-full bg-black px-5 py-2.5 text-xs font-bold text-white">
-              Search
+            <button type="submit">
+              Search <ArrowRight size={14} />
             </button>
           </form>
+
+          <div className="products-hero-actions mt-5 flex flex-wrap items-center justify-center gap-3">
+            {wishlistProducts.length > 0 && (
+              <Link href="/wishlist" className="products-hero-light-button">
+                <Heart size={14} fill="currentColor" /> Continue from wishlist
+              </Link>
+            )}
+            <Link href="#shop-all" className="products-hero-ghost-button">
+              Browse everything <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </section>
 
