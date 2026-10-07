@@ -140,8 +140,8 @@ export function ShopTabs({
                   </div>
                   <Link href="/wishlist" className="inline-flex items-center gap-2 text-xs font-black">View full wishlist <ArrowRight size={14} /></Link>
                 </div>
-                <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-6">
-                  {wishlistProducts.slice(0, 6).map((x: any) => {
+                <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
+                  {wishlistProducts.slice(0, 7).map((x: any) => {
                     const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                     const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
                     const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
