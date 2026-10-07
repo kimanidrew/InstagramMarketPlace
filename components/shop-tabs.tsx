@@ -62,6 +62,7 @@ export function ShopTabs({
                 <b>{label}</b>
                 <small>{copy}</small>
               </span>
+              <span className="shop-tab-indicator" aria-hidden="true" />
             </button>
           );
         })}
