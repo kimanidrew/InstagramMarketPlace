@@ -590,3 +590,18 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
   .products-hero-light-button,.products-hero-ghost-button{justify-content:center}
 }
 @media(prefers-reduced-motion:reduce){.products-hero-search,.products-hero-search button,.products-hero-light-button,.products-hero-ghost-button{transition:none}}
+
+.shop-tabs-wrap{position:relative}
+.shop-tabs{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #e7e7e2;border-radius:24px;background:#f7f7f4;box-shadow:0 12px 35px rgba(0,0,0,.05);overflow-x:auto}
+.shop-tab{position:relative;display:flex;align-items:center;gap:10px;min-width:0;flex:1;padding:11px 14px;border:1px solid transparent;border-radius:18px;background:transparent;color:#777;text-align:left;transition:transform .25s ease,background .25s ease,color .25s ease,box-shadow .25s ease}
+.shop-tab:hover{color:#111;transform:translateY(-1px)}
+.shop-tab-active{background:#111;color:#fff;box-shadow:0 10px 25px rgba(0,0,0,.13)}
+.shop-tab-icon{display:flex;height:34px;width:34px;flex:none;align-items:center;justify-content:center;border-radius:12px;background:#fff;color:#111;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+.shop-tab-copy{display:flex;min-width:0;flex-direction:column;gap:2px}
+.shop-tab-copy b{font-size:11px;font-weight:900;letter-spacing:-.02em}
+.shop-tab-copy small{font-size:9px;font-weight:700;color:#999;white-space:nowrap}
+.shop-tab-active .shop-tab-copy small{color:rgba(255,255,255,.58)}
+.shop-tab-panel{padding-top:10px;animation:shopTabIn .35s cubic-bezier(.22,1,.36,1) both}
+@keyframes shopTabIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){.shop-tabs{border-radius:20px}.shop-tab{flex:0 0 auto;padding:9px 11px}.shop-tab-icon{height:32px;width:32px}.shop-tab-copy small{display:none}}
+@media(prefers-reduced-motion:reduce){.shop-tab,.shop-tab-panel{transition:none;animation:none}}
