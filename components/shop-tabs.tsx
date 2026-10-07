@@ -12,9 +12,9 @@ export function ShopTabs({
   tags = [],
   initialTag = "",
 }: {
-  discover: (tag: string) => ReactNode;
-  trending: (tag: string) => ReactNode;
-  featured: (tag: string) => ReactNode;
+  discover: ReactNode | ((tag: string) => ReactNode);
+  trending: ReactNode | ((tag: string) => ReactNode);
+  featured: ReactNode | ((tag: string) => ReactNode);
   tags?: string[];
   initialTag?: string;
 }) {
@@ -76,7 +76,11 @@ export function ShopTabs({
       </div>
 
       <div className="shop-tab-panel" role="tabpanel" id={"shop-tab-panel-" + active}>
-        {active === "discover" ? discover(selectedTag) : active === "trending" ? trending(selectedTag) : featured(selectedTag)}
+        {active === "discover"
+          ? typeof discover === "function" ? discover(selectedTag) : discover
+          : active === "trending"
+            ? typeof trending === "function" ? trending(selectedTag) : trending
+            : typeof featured === "function" ? featured(selectedTag) : featured}
       </div>
     </div>
   );
