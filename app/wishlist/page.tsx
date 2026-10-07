@@ -71,7 +71,7 @@ export default async function Wishlist() {
             Tap the bookmark on a product or service to keep it here.
           </p>
           <Link
-            href="/products"
+            href="/shop"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-bold text-white"
           >
             Start shopping <ArrowRight size={15} />
