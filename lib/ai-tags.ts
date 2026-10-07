@@ -103,7 +103,7 @@ function classifyTaxonomy(text: string): Taxonomy | null {
   return TAXONOMY
     .map((item) => ({ item, score: scoreTaxonomy(text, item) }))
     .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)[0]?.item || null;
+    .sort((a, b) => b.score - a.score || Number(Boolean(b.item.listingType === "SERVICE")) - Number(Boolean(a.item.listingType === "SERVICE")))[0]?.item || null;
 }
 
 export function classifyProductTags(hashtags: string[], productTitle: string, caption: string): ProductClassification {
