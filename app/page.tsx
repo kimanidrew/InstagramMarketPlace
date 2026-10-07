@@ -75,7 +75,7 @@ export default async function Home() {
             </div>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
-                href="/products"
+                href="/shop"
                 className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white transition hover:scale-[1.02]"
               >
                 Start exploring <ArrowRight size={16} />
@@ -310,7 +310,7 @@ export default async function Home() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
-              href="/products"
+              href="/shop"
               className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white"
             >
               Explore the marketplace <ArrowRight size={16} />
@@ -332,7 +332,7 @@ export default async function Home() {
             <span>
               {products.length > 0 ? "Fresh marketplace content is waiting for you." : "Discover connected Instagram stores."}
             </span>
-            <Link href="/products" className="font-bold text-black">
+            <Link href="/shop" className="font-bold text-black">
               Browse marketplace →
             </Link>
           </div>
