@@ -183,24 +183,59 @@ export function ShopTabs({
                     </div>
                     <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /></Link>
                   </div>
-                  <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {featuredStores.length > 0 ? featuredStores.slice(0, 4).map(({ store, posts }: any) => (
-                      <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]">
-                        <div className="flex items-center gap-3">
-                          <div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">
-                            {store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-1.5">
-                              <b className="truncate text-sm">@{store.username}</b>
-                              {(store.verifiedAt || (store.proUntil && new Date(store.proUntil) > currentNow)) && <BadgeCheck size={14} className="shrink-0" />}
+                  <div className="mt-7 grid gap-5 lg:grid-cols-2">
+                    {featuredStores.filter(({ posts }: any) => posts?.length > 3).slice(0, 4).map(({ store, posts }: any) => {
+                      const previewPosts = posts.slice(0, 3);
+                      return (
+                        <article key={store.id} className="group overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,.09)]">
+                          <Link href={"/store/" + store.username} className="flex items-center justify-between gap-4 px-2 py-2">
+                            <div className="flex min-w-0 items-center gap-3">
+                              <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white shadow-sm">
+                                {store.profileImageUrl ? (
+                                  <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" />
+                                ) : (
+                                  <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <b className="truncate text-sm font-black">@{store.username}</b>
+                                  {(store.verifiedAt || (store.proUntil && new Date(store.proUntil) > currentNow)) && <BadgeCheck size={14} className="shrink-0" />}
+                                </div>
+                                <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} listings · Instagram shop</p>
+                              </div>
                             </div>
-                            <p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} listings</p>
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-black shadow-sm transition group-hover:translate-x-0.5">
+                              <ArrowRight size={14} />
+                            </span>
+                          </Link>
+
+                          <div className="grid grid-cols-3 gap-2.5">
+                            {previewPosts.map((post: any) => {
+                              const isVideo = String(post.mediaType || "").toUpperCase() === "VIDEO";
+                              const image = post.thumbnailUrl || post.mediaUrl;
+                              const isService = String(post.listingType || "").toUpperCase() === "SERVICE";
+                              const href = "/" + (isService ? "service" : "product") + "/" + post.productSlug;
+                              return (
+                                <Link key={post.id} href={href} className="group/media relative aspect-[4/5] overflow-hidden rounded-[20px] bg-[#e9e9e5]">
+                                  {image ? (
+                                    <img src={image} alt={post.productTitle || "Store listing"} className="h-full w-full object-cover transition duration-500 group-hover/media:scale-[1.05]" />
+                                  ) : isVideo && post.mediaUrl ? (
+                                    <video src={post.mediaUrl} muted playsInline className="h-full w-full object-cover" />
+                                  ) : (
+                                    <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-[#999]">No media</div>
+                                  )}
+                                  <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent px-2 pb-2 pt-7 text-[10px] font-bold text-white">
+                                    {post.productTitle || "View listing"}
+                                  </span>
+                                </Link>
+                              );
+                            })}
                           </div>
-                        </div>
-                        <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><span>Instagram shop</span><ArrowRight size={13} className="transition-transform group-hover:translate-x-1" /></div>
-                      </Link>
-                    )) : (
+                        </article>
+                      );
+                    })}
+                    {featuredStores.filter(({ posts }: any) => posts?.length > 3).length === 0 && (
                       <Link href="/stores" className="col-span-full rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-8 text-center">
                         <Store className="mx-auto" size={20} />
                         <b className="mt-3 block text-sm">Explore marketplace stores</b>
