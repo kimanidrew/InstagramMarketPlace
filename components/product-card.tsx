@@ -7,7 +7,7 @@ import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 
 export function ProductCard({ p }: { p: any }) {
-  const isVideo = String(p.mediaType || "").toUpperCase() === "VIDEO";
+  const [likeCount, setLikeCount] = useState(p.likes?.length || 0);\n  const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);\n\n  useEffect(() => {\n    const onLike = (event: Event) => {\n      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;\n      if (detail?.id === p.id) setLikeCount(detail.count);\n    };\n    const onWishlist = (event: Event) => {\n      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;\n      if (detail?.id === p.id) setWishlistCount(detail.count);\n    };\n    window.addEventListener("listing-like-updated", onLike);\n    window.addEventListener("listing-wishlist-updated", onWishlist);\n    return () => {\n      window.removeEventListener("listing-like-updated", onLike);\n      window.removeEventListener("listing-wishlist-updated", onWishlist);\n    };\n  }, [p.id]);\n\n  const isVideo = String(p.mediaType || "").toUpperCase() === "VIDEO";
   const img = p.mediaUrl || p.thumbnailUrl;
   const isService = String(p.listingType || "").toUpperCase() === "SERVICE";
   const href = "/" + (isService ? "service" : "product") + "/" + p.productSlug;
@@ -42,8 +42,8 @@ export function ProductCard({ p }: { p: any }) {
 
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">{p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2.5 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}{p.connection?.verifiedAt && new Date(p.connection.verifiedAt) <= new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}</div>
         <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
-          <LikeButton id={p.id} count={p.likes?.length || 0} compact initialLiked={Boolean(p.likedByCurrentUser)} />
-          <WishlistButton id={p.id} count={p.wishlistItems?.length || 0} compact wishlisted={Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length)} />
+          <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
+          <WishlistButton id={p.id} count={wishlistCount} compact wishlisted={Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length)} />
         </div>
         <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold text-black shadow-sm backdrop-blur-sm">
           <Instagram size={13} strokeWidth={2.2} />
@@ -79,7 +79,7 @@ export function ProductCard({ p }: { p: any }) {
         </div>
 
         <div className="mt-3 flex justify-between text-xs text-[#777]">
-          <span className="inline-flex items-center gap-1"><Heart size={12} /> {p.likes?.length || 0} likes · <Bookmark size={12} /> {p.wishlistItems?.length || 0} saved</span>
+          <span className="inline-flex items-center gap-1"><Heart size={12} /> {likeCount} likes · <Bookmark size={12} /> {wishlistCount} saved</span>
           {p.permalink && (
             <a
               href={p.permalink}
