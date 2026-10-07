@@ -3,6 +3,7 @@ import "server-only";
 type ClassifiedTag = { name: string; type: "PRODUCT" | "CATEGORY" };
 
 export type ProductClassification = {
+  listingType: "PRODUCT" | "SERVICE";
   category: string;
   subcategory: string;
   tags: ClassifiedTag[];
@@ -15,7 +16,7 @@ const EXCLUDED_TAGS = new Set([
   "discount", "offer", "offers", "promo", "promotion", "newarrival", "newarrivals",
 ]);
 
-type Taxonomy = { category: string; subcategory: string; terms: string[] };
+type Taxonomy = { category: string; subcategory: string; terms: string[]; listingType?: "PRODUCT" | "SERVICE" };
 
 const TAXONOMY: Taxonomy[] = [
   { category: "Fashion", subcategory: "Dresses", terms: ["dress","dresses","gown","maxi dress","midi dress","mini dress","bodycon","cocktail dress","evening dress","party dress","summer dress","shirt dress","wrap dress","jumpsuit","romper"] },
@@ -69,12 +70,12 @@ const TAXONOMY: Taxonomy[] = [
   { category: "Office & Stationery", subcategory: "Stationery", terms: ["stationery","notebook","notebooks","journal","planner","pen","pens","pencil","pencils","marker","markers","diary","sticker","stickers"] },
   { category: "Office & Stationery", subcategory: "Office Equipment", terms: ["office","office chair","filing cabinet","printer","scanner","projector","desk organizer","whiteboard"] },
   { category: "Books & Media", subcategory: "Books", terms: ["book","books","novel","textbook","textbooks","magazine","magazines","comic","comics","children book","cookbook"] },
-  { category: "Services", subcategory: "Beauty Services", terms: ["salon","barber","barbershop","nails","manicure","pedicure","makeup artist","hair stylist","braiding","massage","spa"] },
+  { listingType: "SERVICE", category: "Services", subcategory: "Beauty Services", terms: ["salon","barber","barbershop","nails","manicure","pedicure","makeup artist","hair stylist","braiding","massage","spa"] },
   { category: "Services", subcategory: "Events", terms: ["events","event","wedding","birthday","party","event planner","decorator","catering","photobooth","venue"] },
   { category: "Services", subcategory: "Professional", terms: ["photographer","photography","videographer","video production","design","designer","graphic design","consulting","accounting","legal","cleaning","repair","printing","marketing"] },
   { category: "Services", subcategory: "Transport & Delivery", terms: ["transport","taxi","cab","ride","delivery service","courier","moving service","logistics"] },
-  { category: "Real Estate", subcategory: "Property", terms: ["house","home","apartment","apartments","flat","flats","land","property","plot","office space","commercial property","villa","townhouse"] },
-  { category: "Travel & Experiences", subcategory: "Travel", terms: ["travel","tour","tours","safari","hotel","resort","holiday","vacation","flight","airbnb","accommodation"] },
+  { listingType: "SERVICE", category: "Real Estate", subcategory: "Property", terms: ["house","home","apartment","apartments","flat","flats","land","property","plot","office space","commercial property","villa","townhouse"] },
+  { listingType: "SERVICE", category: "Travel & Experiences", subcategory: "Travel", terms: ["travel","tour","tours","safari","hotel","resort","holiday","vacation","flight","airbnb","accommodation"] },
   { category: "Art & Crafts", subcategory: "Handmade", terms: ["handmade","handcrafted","craft","crafts","crochet","knitting","beads","beaded","woodwork","pottery","ceramics","artwork","painting"] },
   { category: "Agriculture", subcategory: "Farm Products", terms: ["farm","farming","farmer","vegetables","fruits","fresh produce","eggs","milk","honey","flowers","seedlings","plants"] },
 ];
@@ -139,6 +140,7 @@ export function classifyProductTags(hashtags: string[], productTitle: string, ca
   }
 
   return {
+    listingType: classification?.listingType || "PRODUCT",
     category: classification?.category || "Other",
     subcategory: classification?.subcategory || "Other",
     tags: tags.slice(0, 10),
