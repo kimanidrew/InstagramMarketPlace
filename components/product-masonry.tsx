@@ -34,6 +34,35 @@ function ProductShimmers({ count = 8 }: { count?: number }) {
   );
 }
 
+function LazyProductCard({ product }: { product: any }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || visible) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "120px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [visible]);
+
+  return (
+    <div ref={ref} className="break-inside-avoid">
+      {visible ? <ProductCard p={product} /> : <ProductShimmer compact />}
+    </div>
+  );
+}
+
 export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +88,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
       try {
         const params = new URLSearchParams({
           page: "0",
-          limit: "12",
+          limit: "8",
         });
         if (q) params.set("q", q);
         if (tag) params.set("tag", tag);
@@ -164,12 +193,12 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
     <>
       <div className="columns-2 [column-gap:1rem] md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
         {products.map((product) => (
-          <ProductCard key={product.id} p={product} />
+          <LazyProductCard key={product.id} product={product} />
         ))}
       </div>
 
       <div ref={sentinelRef} className="min-h-20 pt-3">
-        {loadingMore && <ProductShimmers count={4} />}
+        {loadingMore && <ProductShimmers count={2} />}
         {!hasMore && (
           <p className="pb-4 pt-2 text-center text-xs font-semibold text-[#999]">
             You've reached the end of the marketplace.
