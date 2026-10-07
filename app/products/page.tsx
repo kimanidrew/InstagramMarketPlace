@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Bookmark, Heart, Grid2X2, LayoutList, Search, SlidersHorizontal, Sparkles, Store, TrendingUp, BadgeCheck } from "lucide-react";
+import { ArrowRight, Bookmark, Heart, Grid2X2, Search, Sparkles, Store, TrendingUp, BadgeCheck } from "lucide-react";
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
@@ -170,7 +170,9 @@ export default async function Products({
 
       {showDiscovery && (
         <ShopTabs
-          discover={
+          tags={tags.map((x) => x.name)}
+          initialTag={tag || ""}
+          discover={(selectedTag) => (
             <div className="space-y-12">
               <section>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -198,44 +200,6 @@ export default async function Products({
                   )) : <Link href="/stores" className="col-span-full rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-8 text-center"><Store className="mx-auto" size={20} /><b className="mt-3 block text-sm">Explore marketplace stores</b><span className="mt-1 block text-xs text-[#888]">Browse the businesses currently selling through Instagram Market.</span></Link>}
                 </div>
               </section>
-              <section id="shop-all">
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                  <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
-                  <span className="text-xs font-bold text-[#999]">Products & services</span>
-                </div>
-                <div className="mt-6"><ProductMasonry q="" tag="" /></div>
-              </section>
-            </div>
-          }
-          trending={
-            <section>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div><p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.</p></div>
-                <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
-              </div>
-              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{trendingProducts.map((product: any) => <ProductCard key={product.id} p={{ ...product, likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false, wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false }} />)}</div>
-              {trendingProducts.length === 0 && <div className="rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Trending picks will appear as shoppers interact with listings.</div>}
-            </section>
-          }
-          featured={
-            <div className="space-y-12">
-              <section>
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                  <div><p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Featured store placement is reserved for approved marketplace growth through Verified or Pro.</p></div>
-                  <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /></Link>
-                </div>
-                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{featuredStores.map(({ store, posts }) => <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]"><div className="flex items-center gap-3"><div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}</div><div className="min-w-0"><div className="flex items-center gap-1.5"><b className="truncate text-sm">@{store.username}</b><BadgeCheck size={14} className="shrink-0" /></div><p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} featured listings</p></div></div><div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><span>Growth member</span><ArrowRight size={13} className="transition-transform group-hover:translate-x-1" /></div></Link>)}</div>
-              </section>
-              <section>
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow plain"><Sparkles size={13} /> Featured products</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Put the spotlight on.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Only listings with an approved Boost running now appear here.</p></div><span className="inline-flex items-center gap-2 self-start rounded-full bg-black px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-white sm:self-auto"><Sparkles size={12} /> Boosted now</span></div>
-                <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{featuredProductsRaw.map((product: any) => <ProductCard key={product.id} p={{ ...product, likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false, wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false }} />)}</div>
-                {featuredProductsRaw.length === 0 && <div className="rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Featured products appear here when a seller has an approved Boost running.</div>}
-              </section>
-            </div>
-          }
-        />
-      )}
-
       {!text && wishlistProducts.length > 0 && (
         <section className="mt-12 rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -290,32 +254,43 @@ export default async function Products({
         </section>
       )}
 
-      <div id="shop-all" className="mt-12 flex gap-2 overflow-x-auto pb-2">
-        <Link href="/shop" className={"chip " + (!tag ? "chip-active" : "")}>All</Link>
-        {tags.map((x) => (
-          <Link
-            key={x.name}
-            href={"/shop?tag=" + encodeURIComponent(x.name)}
-            className={"chip " + (tag === x.name ? "chip-active" : "")}
-          >
-            #{x.name}
-          </Link>
-        ))}
-      </div>
-
-      <div className="mt-5 flex items-center justify-between border-y border-black/5 py-4">
-        <div className="flex items-center gap-2 text-xs font-bold">
-          <SlidersHorizontal size={15} />
-          Filters
-          <span className="hidden font-normal text-[#999] sm:inline">· Fresh finds, picked for you</span>
-        </div>
-
-        <div className="hidden items-center gap-2 text-xs text-[#999] sm:flex">
-          <Grid2X2 size={15} />
-          Shop the latest
-          <LayoutList size={15} />
-        </div>
-      </div>
+              <section id="shop-all">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
+                  <span className="text-xs font-bold text-[#999]">Products & services</span>
+                </div>
+                <div className="mt-6"><ProductMasonry q="" tag={selectedTag} /></div>
+              </section>
+            </div>
+          )}
+          trending={(selectedTag) => (
+            <section>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div><p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.</p></div>
+                <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
+              </div>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{trendingProducts.filter((product: any) => !selectedTag || product.tags.some((t: any) => String(t.name).toLowerCase() === selectedTag)).map((product: any) => <ProductCard key={product.id} p={{ ...product, likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false, wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false }} />)}</div>
+              {trendingProducts.filter((product: any) => !selectedTag || product.tags.some((t: any) => String(t.name).toLowerCase() === selectedTag)).length === 0 && <div className="rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Trending picks will appear as shoppers interact with listings.</div>}
+            </section>
+          )}
+          featured={(selectedTag) => (
+            <div className="space-y-12">
+              <section>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div><p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Featured store placement is reserved for approved marketplace growth through Verified or Pro.</p></div>
+                  <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /></Link>
+                </div>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{featuredStores.map(({ store, posts }) => <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]"><div className="flex items-center gap-3"><div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}</div><div className="min-w-0"><div className="flex items-center gap-1.5"><b className="truncate text-sm">@{store.username}</b><BadgeCheck size={14} className="shrink-0" /></div><p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} featured listings</p></div></div><div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><span>Growth member</span><ArrowRight size={13} className="transition-transform group-hover:translate-x-1" /></div></Link>)}</div>
+              </section>
+              <section>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow plain"><Sparkles size={13} /> Featured products</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Put the spotlight on.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Only listings with an approved Boost running now appear here.</p></div><span className="inline-flex items-center gap-2 self-start rounded-full bg-black px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-white sm:self-auto"><Sparkles size={12} /> Boosted now</span></div>
+                <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{featuredProductsRaw.filter((product: any) => !selectedTag || product.tags.some((t: any) => String(t.name).toLowerCase() === selectedTag)).map((product: any) => <ProductCard key={product.id} p={{ ...product, likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false, wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false }} />)}</div>
+                {featuredProductsRaw.filter((product: any) => !selectedTag || product.tags.some((t: any) => String(t.name).toLowerCase() === selectedTag)).length === 0 && <div className="rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Featured products appear here when a seller has an approved Boost running.</div>}
+              </section>
+            </div>
+          )}
+        />
+      )}
 
       <div className="mt-8">
         <ProductMasonry q={text || ""} tag={tag || ""} />
