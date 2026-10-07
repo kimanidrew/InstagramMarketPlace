@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Menu, Search, ShoppingBag, Store, UserCircle, X, ArrowRight } from "lucide-react";
+import { Bookmark, Menu, Search, ShoppingBag, Store, UserCircle, X, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function SiteHeader({ user }: { user: any }) {
@@ -63,8 +63,8 @@ export function SiteHeader({ user }: { user: any }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist">
-            <Heart size={19} />
+          <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
+            <Bookmark size={19} />
           </Link>
           <Link href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
             <UserCircle size={19} />
