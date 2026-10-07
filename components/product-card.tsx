@@ -113,14 +113,14 @@ export function ProductCard({ p }: { p: any }) {
           <div className={"product-card-stat " + (likeFlash ? "is-updated" : "")}>
             <span className="product-card-stat-icon"><Heart size={13} strokeWidth={2.4} /></span>
             <span className="product-card-stat-copy">
-              <b className="interaction-stat-value">{likeCount.toLocaleString()}</b>
+              <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
               <small>Likes</small>
             </span>
           </div>
           <div className={"product-card-stat " + (wishlistFlash ? "is-updated" : "")}>
             <span className="product-card-stat-icon"><Bookmark size={13} strokeWidth={2.4} /></span>
             <span className="product-card-stat-copy">
-              <b className="interaction-stat-value">{wishlistCount.toLocaleString()}</b>
+              <b className={"interaction-stat-value " + (wishlistFlash ? "is-count-updated" : "")}>{wishlistCount.toLocaleString()}</b>
               <small>Saved</small>
             </span>
           </div>
