@@ -96,8 +96,8 @@ export default async function Products({
               View full wishlist <ArrowRight size={14} />
             </Link>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {wishlistProducts.slice(0, 4).map((x) => {
+          <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-6">
+            {wishlistProducts.slice(0, 6).map((x) => {
               const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
               const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
               const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
