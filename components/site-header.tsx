@@ -27,7 +27,7 @@ export function SiteHeader({ user }: { user: any }) {
   function submitSearch(e: React.FormEvent) {
     e.preventDefault();
     const q = query.trim();
-    window.location.href = q ? "/products?q=" + encodeURIComponent(q) : "/products";
+    window.location.href = q ? "/shop?q=" + encodeURIComponent(q) : "/shop";
   }
 
   return (
@@ -52,7 +52,7 @@ export function SiteHeader({ user }: { user: any }) {
 
         <nav className="hidden items-center gap-1 lg:flex">
           {[
-            ["/products", "Shop"],
+            ["/shop", "Shop"],
             ["/stores", "Stores"],
             ["/categories", "Categories"],
             ["/how-it-works", "How it works"],
@@ -74,7 +74,7 @@ export function SiteHeader({ user }: { user: any }) {
               <Store size={19} />
             </Link>
           )}
-          <Link href="/products" className="bag-btn" aria-label="Shop">
+          <Link href="/shop" className="bag-btn" aria-label="Shop">
             <ShoppingBag size={18} />
           </Link>
           <button
@@ -102,9 +102,9 @@ export function SiteHeader({ user }: { user: any }) {
             <button type="submit" aria-label="Submit search"><ArrowRight size={19} /></button>
           </div>
           <div className="search-hints">
-            <span>Try</span><Link href="/products?tag=fashion">Fashion</Link>
-            <Link href="/products?tag=beauty">Beauty</Link>
-            <Link href="/products?tag=home">Home</Link>
+            <span>Try</span><Link href="/shop?tag=fashion">Fashion</Link>
+            <Link href="/shop?tag=beauty">Beauty</Link>
+            <Link href="/shop?tag=home">Home</Link>
             <Link href="/stores">Stores</Link>
           </div>
         </form>
@@ -114,7 +114,7 @@ export function SiteHeader({ user }: { user: any }) {
         <div className="shell py-5">
           <div className="menu-label">Explore</div>
           <div className="grid grid-cols-2 gap-2">
-            <Link href="/products" className="menu-card" onClick={() => setMenuOpen(false)}>Shop all</Link>
+            <Link href="/shop" className="menu-card" onClick={() => setMenuOpen(false)}>Shop all</Link>
             <Link href="/stores" className="menu-card" onClick={() => setMenuOpen(false)}>Stores</Link>
             <Link href="/categories" className="menu-card" onClick={() => setMenuOpen(false)}>Categories</Link>
             <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>
@@ -125,10 +125,10 @@ export function SiteHeader({ user }: { user: any }) {
 
       <div className="mobile-strip lg:hidden">
         <div className="shell flex gap-2 overflow-x-auto whitespace-nowrap py-2.5">
-          <Link href="/products" className="strip-pill active">Shop all</Link>
+          <Link href="/shop" className="strip-pill active">Shop all</Link>
           <Link href="/stores" className="strip-pill">Stores</Link>
           <Link href="/categories" className="strip-pill">Categories</Link>
-          <Link href="/products?tag=new" className="strip-pill">New arrivals</Link>
+          <Link href="/shop?tag=new" className="strip-pill">New arrivals</Link>
           <Link href="/how-it-works" className="strip-pill">How it works</Link>
         </div>
       </div>
