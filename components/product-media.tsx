@@ -75,7 +75,7 @@ export function ProductMedia({
         type="button"
         onClick={(event) => { event.stopPropagation(); toggleMute(); }}
         aria-label={muted ? "Unmute video" : "Mute video"}
-        className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-black/70"
+        className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-black/70"
       >
         {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
       </button>
