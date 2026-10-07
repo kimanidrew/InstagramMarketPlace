@@ -5,6 +5,7 @@ import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 import { ProductMasonry } from "@/components/product-masonry";
+import { ShopTabs } from "@/components/shop-tabs";
 
 export const dynamic = "force-dynamic";
 
@@ -168,117 +169,71 @@ export default async function Products({
       </section>
 
       {showDiscovery && (
-        <section className="mt-12 space-y-12">
-          {featuredStores.length > 0 && (
-            <div>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p>
-                  <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">
-                    Featured placement is earned through approved marketplace growth — not simply by listing a store.
-                  </p>
+        <ShopTabs
+          discover={
+            <div className="space-y-12">
+              <section>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <p className="eyebrow plain"><Store size={13} /> Discover stores</p>
+                    <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Meet the shops behind the posts.</h2>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Explore Instagram businesses, creators and local brands with products and services on the marketplace.</p>
+                  </div>
+                  <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /></Link>
                 </div>
-                <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">
-                  View all stores <ArrowRight size={14} />
-                </Link>
-              </div>
-
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {featuredStores.map(({ store, posts }) => (
-                  <Link
-                    key={store.id}
-                    href={"/store/" + store.username}
-                    className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">
-                        {store.profileImageUrl ? (
-                          <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <b className="truncate text-sm">@{store.username}</b>
-                          <BadgeCheck size={14} className="shrink-0" />
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {featuredStores.length > 0 ? featuredStores.slice(0, 4).map(({ store, posts }) => (
+                    <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]">
+                      <div className="flex items-center gap-3">
+                        <div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">
+                          {store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}
                         </div>
-                        <p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">
-                          {posts.length} featured listings
-                        </p>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5"><b className="truncate text-sm">@{store.username}</b>{(store.verifiedAt || (store.proUntil && new Date(store.proUntil) > now)) && <BadgeCheck size={14} className="shrink-0" />}</div>
+                          <p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} listings</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]">
-                      <span>Instagram shop</span>
-                      <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                      <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><span>Instagram shop</span><ArrowRight size={13} className="transition-transform group-hover:translate-x-1" /></div>
+                    </Link>
+                  )) : <Link href="/stores" className="col-span-full rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-8 text-center"><Store className="mx-auto" size={20} /><b className="mt-3 block text-sm">Explore marketplace stores</b><span className="mt-1 block text-xs text-[#888]">Browse the businesses currently selling through Instagram Market.</span></Link>}
+                </div>
+              </section>
+              <section id="shop-all">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                  <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
+                  <span className="text-xs font-bold text-[#999]">Products & services</span>
+                </div>
+                <div className="mt-6"><ProductMasonry q="" tag="" /></div>
+              </section>
             </div>
-          )}
-
-          {featuredProductsRaw.length > 0 && (
-            <div>
+          }
+          trending={
+            <section>
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="eyebrow plain"><Sparkles size={13} /> Featured products</p>
-                  <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Put the spotlight on.</h2>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">
-                    These listings are featured because their sellers have an approved Boost running now.
-                  </p>
+                <div><p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.</p></div>
+                <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
+              </div>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{trendingProducts.map((product: any) => <ProductCard key={product.id} p={{ ...product, likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false, wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false }} />)}</div>
+              {trendingProducts.length === 0 && <div className="rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Trending picks will appear as shoppers interact with listings.</div>}
+            </section>
+          }
+          featured={
+            <div className="space-y-12">
+              <section>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div><p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Featured store placement is reserved for approved marketplace growth through Verified or Pro.</p></div>
+                  <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /></Link>
                 </div>
-                <span className="inline-flex items-center gap-2 self-start rounded-full bg-black px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-white sm:self-auto">
-                  <Sparkles size={12} /> Boosted now
-                </span>
-              </div>
-
-              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {featuredProductsRaw.slice(0, 8).map((product: any) => (
-                  <ProductCard
-                    key={product.id}
-                    p={{
-                      ...product,
-                      likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false,
-                      wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false,
-                    }}
-                  />
-                ))}
-              </div>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{featuredStores.map(({ store, posts }) => <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]"><div className="flex items-center gap-3"><div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}</div><div className="min-w-0"><div className="flex items-center gap-1.5"><b className="truncate text-sm">@{store.username}</b><BadgeCheck size={14} className="shrink-0" /></div><p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} featured listings</p></div></div><div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><span>Growth member</span><ArrowRight size={13} className="transition-transform group-hover:translate-x-1" /></div></Link>)}</div>
+              </section>
+              <section>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow plain"><Sparkles size={13} /> Featured products</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Put the spotlight on.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Only listings with an approved Boost running now appear here.</p></div><span className="inline-flex items-center gap-2 self-start rounded-full bg-black px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-white sm:self-auto"><Sparkles size={12} /> Boosted now</span></div>
+                <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{featuredProductsRaw.map((product: any) => <ProductCard key={product.id} p={{ ...product, likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false, wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false }} />)}</div>
+                {featuredProductsRaw.length === 0 && <div className="rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Featured products appear here when a seller has an approved Boost running.</div>}
+              </section>
             </div>
-          )}
-
-          {trendingProducts.length > 0 && (
-            <div>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p>
-                  <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2>
-                  <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">
-                    Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]">
-                  <Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {trendingProducts.map((product: any) => (
-                  <ProductCard
-                    key={product.id}
-                    p={{
-                      ...product,
-                      likedByCurrentUser: currentUser ? product.likes.some((like: any) => like.userId === currentUser.id) : false,
-                      wishlistedByCurrentUser: currentUser ? product.wishlistItems.some((item: any) => item.userId === currentUser.id) : false,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
+          }
+        />
       )}
 
       {!text && wishlistProducts.length > 0 && (
