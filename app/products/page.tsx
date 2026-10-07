@@ -165,7 +165,7 @@ export default async function Products({
 
         <div className="hidden items-center gap-2 text-xs text-[#999] sm:flex">
           <Grid2X2 size={15} />
-          Curated grid
+          Shop the latest
           <LayoutList size={15} />
         </div>
       </div>
