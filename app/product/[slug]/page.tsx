@@ -13,19 +13,17 @@ export const dynamic = "force-dynamic";
 
 export default async function Product({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [product, currentUser] = await Promise.all([
-    db().instagramPost.findUnique({
-      where: { productSlug: slug },
-      include: {
-        connection: true,
-        tags: true,
-        likes: true,
-        wishlistItems: currentUser ? { where: { userId: currentUser.id } } : true,
-        reviews: { include: { user: { select: { id: true, name: true } } }, orderBy: { createdAt: "desc" } },
-      },
-    }),
-    user(),
-  ]);
+  const currentUser = await user();
+  const product = await db().instagramPost.findUnique({
+    where: { productSlug: slug },
+    include: {
+      connection: true,
+      tags: true,
+      likes: true,
+      wishlistItems: currentUser ? { where: { userId: currentUser.id } } : { where: { userId: "__anonymous__" } },
+      reviews: { include: { user: { select: { id: true, name: true } } }, orderBy: { createdAt: "desc" } },
+    },
+  });
 
   if (!product || !product.isProduct) notFound();
 
