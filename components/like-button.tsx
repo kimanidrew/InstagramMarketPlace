@@ -6,17 +6,33 @@ import { useState } from "react";
 export function LikeButton({ id, count, compact = false, initialLiked = false }: { id: string; count: number; compact?: boolean; initialLiked?: boolean }) {
   const [liked, setLiked] = useState(initialLiked);
   const [n, setN] = useState(count);
+  const [busy, setBusy] = useState(false);
 
   async function go() {
-    const r = await fetch("/api/products/" + id + "/like", { method: "POST" });
-    if (r.status === 401) {
-      location.href = "/login?next=" + encodeURIComponent(location.pathname);
-      return;
-    }
-    if (r.ok) {
+    if (busy) return;
+    const nextLiked = !liked;
+    const nextCount = Math.max(0, n + (nextLiked ? 1 : -1));
+    setLiked(nextLiked);
+    setN(nextCount);
+    window.dispatchEvent(new CustomEvent("listing-like-updated", { detail: { id, liked: nextLiked, count: nextCount } }));
+    setBusy(true);
+    try {
+      const r = await fetch("/api/products/" + id + "/like", { method: "POST" });
+      if (r.status === 401) {
+        location.href = "/login?next=" + encodeURIComponent(location.pathname);
+        return;
+      }
+      if (!r.ok) throw new Error("Like request failed");
       const d = await r.json();
       setLiked(d.liked);
       setN(d.localLikes);
+      window.dispatchEvent(new CustomEvent("listing-like-updated", { detail: { id, liked: d.liked, count: d.localLikes } }));
+    } catch {
+      setLiked(!nextLiked);
+      setN(n);
+      window.dispatchEvent(new CustomEvent("listing-like-updated", { detail: { id, liked: !nextLiked, count: n } }));
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -26,6 +42,7 @@ export function LikeButton({ id, count, compact = false, initialLiked = false }:
       onClick={(e) => { e.stopPropagation(); go(); }}
       aria-label={liked ? "Unlike listing" : "Like listing"}
       title={liked ? "Unlike listing" : "Like listing"}
+      aria-busy={busy}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
         (compact ? "h-10 w-10 shadow-sm " : "px-5 py-3 text-sm font-semibold ") +
