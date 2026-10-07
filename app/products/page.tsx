@@ -84,7 +84,7 @@ export default async function Products({
         </div>
       </section>
 
-      {wishlistProducts.length > 0 && (
+      {!text && wishlistProducts.length > 0 && (
         <section className="mt-10 rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
