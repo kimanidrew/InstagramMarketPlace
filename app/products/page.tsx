@@ -98,6 +98,7 @@ export default async function Products({
           </div>
           <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
             {wishlistProducts.slice(0, 4).map((x) => {
+              const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
               const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
               const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
               const image = x.mediaUrl || x.thumbnailUrl;
@@ -106,38 +107,34 @@ export default async function Products({
                 <Link
                   key={x.id}
                   href={href}
-                  className="group overflow-hidden rounded-[22px] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(0,0,0,.08)]"
+                  aria-label={x.productTitle || "Saved listing"}
+                  className="group block aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]"
                 >
-                  <div className="aspect-[4/5] overflow-hidden bg-[#eeeeeb]">
-                    {image ? (
-                      <img
-                        src={image}
-                        alt={x.productTitle || "Saved listing"}
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-xs font-bold text-[#999]">
-                        No image
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4">
-                    <p className="line-clamp-2 text-sm font-black leading-5 text-black">
-                      {x.productTitle}
-                    </p>
-                    <p className="mt-1 truncate text-xs text-[#777]">
-                      @{x.connection.username}
-                    </p>
-                    <div className="mt-3 flex items-center justify-between text-[10px] font-bold text-[#999]">
-                      <span>{isService ? "Service" : "Product"}</span>
-                      <span>{Number(x.instagramLikeCount || 0).toLocaleString()} likes</span>
+                  {isVideo && x.mediaUrl ? (
+                    <video
+                      src={x.mediaUrl}
+                      poster={x.thumbnailUrl || undefined}
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                    />
+                  ) : image ? (
+                    <img
+                      src={image}
+                      alt={x.productTitle || "Saved listing"}
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">
+                      No media
                     </div>
-                  </div>
+                  )}
                 </Link>
               );
             })}
-          </div>
-        </section>
+          </div>       </section>
       )}
 
       <div id="shop-all" className="mt-10 flex gap-2 overflow-x-auto pb-2">
