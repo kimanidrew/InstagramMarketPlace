@@ -114,7 +114,7 @@ export function ShopTabs({
         <div className="shop-filter-heading">
           <div>
             <span className="shop-filter-label"><SlidersHorizontal size={14} /> Filter by category</span>
-            <span className="shop-filter-help">Choose a category to focus the marketplace.</span>
+            
           </div>
           <span className="shop-filter-count">{selectedTag ? "#" + selectedTag : "All listings"}</span>
         </div>
