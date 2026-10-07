@@ -97,9 +97,45 @@ export default async function Products({
             </Link>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {wishlistProducts.slice(0, 4).map((x) => (
-              <ProductCard key={x.id} p={x} />
-            ))}
+            {wishlistProducts.slice(0, 4).map((x) => {
+              const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
+              const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
+              const image = x.mediaUrl || x.thumbnailUrl;
+
+              return (
+                <Link
+                  key={x.id}
+                  href={href}
+                  className="group overflow-hidden rounded-[22px] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(0,0,0,.08)]"
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-[#eeeeeb]">
+                    {image ? (
+                      <img
+                        src={image}
+                        alt={x.productTitle || "Saved listing"}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-xs font-bold text-[#999]">
+                        No image
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <p className="line-clamp-2 text-sm font-black leading-5 text-black">
+                      {x.productTitle}
+                    </p>
+                    <p className="mt-1 truncate text-xs text-[#777]">
+                      @{x.connection.username}
+                    </p>
+                    <div className="mt-3 flex items-center justify-between text-[10px] font-bold text-[#999]">
+                      <span>{isService ? "Service" : "Product"}</span>
+                      <span>{Number(x.instagramLikeCount || 0).toLocaleString()} likes</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
