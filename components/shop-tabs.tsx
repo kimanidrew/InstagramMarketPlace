@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { Compass, Sparkles, TrendingUp } from "lucide-react";
+import { Compass, Sparkles, TrendingUp, SlidersHorizontal } from "lucide-react";
 
 type ShopTab = "discover" | "trending" | "featured";
 
@@ -9,12 +9,17 @@ export function ShopTabs({
   discover,
   trending,
   featured,
+  tags = [],
+  initialTag = "",
 }: {
-  discover: ReactNode;
-  trending: ReactNode;
-  featured: ReactNode;
+  discover: (tag: string) => ReactNode;
+  trending: (tag: string) => ReactNode;
+  featured: (tag: string) => ReactNode;
+  tags?: string[];
+  initialTag?: string;
 }) {
   const [active, setActive] = useState<ShopTab>("discover");
+  const [selectedTag, setSelectedTag] = useState(initialTag);
 
   const tabs = [
     { id: "discover" as const, label: "Discover", icon: Compass, copy: "Fresh finds & stores" },
@@ -47,8 +52,31 @@ export function ShopTabs({
         })}
       </div>
 
+      <div className="shop-filter-panel">
+        <div className="shop-filter-heading">
+          <div>
+            <span className="shop-filter-label"><SlidersHorizontal size={14} /> Filter by category</span>
+            <span className="shop-filter-help">Refine what you see without leaving this tab.</span>
+          </div>
+          <span className="shop-filter-count">{selectedTag ? "#" + selectedTag : "All listings"}</span>
+        </div>
+        <div className="shop-filter-chips" role="group" aria-label="Product categories">
+          <button type="button" className={"chip " + (!selectedTag ? "chip-active" : "")} onClick={() => setSelectedTag("")}>All</button>
+          {tags.map((name) => (
+            <button
+              key={name}
+              type="button"
+              className={"chip " + (selectedTag === name.toLowerCase() ? "chip-active" : "")}
+              onClick={() => setSelectedTag(name.toLowerCase())}
+            >
+              #{name}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="shop-tab-panel" role="tabpanel" id={"shop-tab-panel-" + active}>
-        {active === "discover" ? discover : active === "trending" ? trending : featured}
+        {active === "discover" ? discover(selectedTag) : active === "trending" ? trending(selectedTag) : featured(selectedTag)}
       </div>
     </div>
   );
