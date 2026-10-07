@@ -259,7 +259,13 @@ export function ShopTabs({
                   <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
                 </div>
                 {filteredTrendingProducts.length > 0 ? (
-                  <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{filteredTrendingProducts.map((product: any) => <ProductCard key={product.id} p={product} />)}</div>
+                  <div className="mt-6 columns-2 [column-gap:1rem] md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
+                    {filteredTrendingProducts.map((product: any) => (
+                      <div key={product.id} className="mb-10 break-inside-avoid">
+                        <ProductCard p={product} />
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                   <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{selectedTag ? emptyFilteredMessage : "Trending picks will appear as shoppers interact with listings."}</div>
                 )}
@@ -292,7 +298,13 @@ export function ShopTabs({
                 <section>
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="eyebrow plain"><Sparkles size={13} /> Featured products</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Put the spotlight on.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Only listings with an approved Boost running now appear here.</p></div><span className="inline-flex items-center gap-2 self-start rounded-full bg-black px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-white sm:self-auto"><Sparkles size={12} /> Boosted now</span></div>
                   {filteredFeaturedProducts.length > 0 ? (
-                    <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{filteredFeaturedProducts.map((product: any) => <ProductCard key={product.id} p={product} />)}</div>
+                    <div className="mt-6 columns-2 [column-gap:1rem] md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
+                      {filteredFeaturedProducts.map((product: any) => (
+                        <div key={product.id} className="mb-10 break-inside-avoid">
+                          <ProductCard p={product} />
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{selectedTag ? emptyFilteredMessage : "Featured products appear here when a seller has an approved Boost running."}</div>
                   )}
