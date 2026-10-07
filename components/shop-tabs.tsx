@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, Compass, Grid2X2, Heart, SlidersHorizontal, Sparkles, Store, TrendingUp } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, BadgeCheck, Bookmark, Compass, Grid2X2, Heart, SlidersHorizontal, Sparkles, Store, TrendingUp } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductMasonry } from "@/components/product-masonry";
 
@@ -28,6 +28,36 @@ export function ShopTabs({
   const [active, setActive] = useState<ShopTab>("discover");
   const [selectedTag, setSelectedTag] = useState(initialTag);
   const currentNow = new Date(now);
+  const filterScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateFilterScrollState = () => {
+    const el = filterScrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    setCanScrollLeft(el.scrollLeft > 1);
+    setCanScrollRight(el.scrollLeft < maxScroll - 1);
+  };
+
+  useEffect(() => {
+    const el = filterScrollRef.current;
+    if (!el) return;
+    updateFilterScrollState();
+    el.addEventListener("scroll", updateFilterScrollState, { passive: true });
+    window.addEventListener("resize", updateFilterScrollState);
+    return () => {
+      el.removeEventListener("scroll", updateFilterScrollState);
+      window.removeEventListener("resize", updateFilterScrollState);
+    };
+  }, [tags.length]);
+
+  const scrollFilters = (direction: "left" | "right") => {
+    const el = filterScrollRef.current;
+    if (!el) return;
+    const distance = Math.max(el.clientWidth * 0.72, 220);
+    el.scrollBy({ left: direction === "left" ? -distance : distance, behavior: "smooth" });
+  };
 
   const tabs = [
     { id: "discover" as const, label: "Discover", icon: Compass, copy: "Fresh finds & stores" },
@@ -76,7 +106,28 @@ export function ShopTabs({
           </div>
           <span className="shop-filter-count">{selectedTag ? "#" + selectedTag : "All listings"}</span>
         </div>
-        <div className="shop-filter-chips" role="group" aria-label="Product categories">
+        <div className="relative">
+          {canScrollLeft && (
+            <button
+              type="button"
+              onClick={() => scrollFilters("left")}
+              aria-label="Scroll categories left"
+              className="absolute left-0 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-md backdrop-blur-sm transition hover:scale-105"
+            >
+              <ArrowLeft size={14} />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              type="button"
+              onClick={() => scrollFilters("right")}
+              aria-label="Scroll categories right"
+              className="absolute right-0 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-md backdrop-blur-sm transition hover:scale-105"
+            >
+              <ArrowRight size={14} />
+            </button>
+          )}
+          <div ref={filterScrollRef} className="shop-filter-chips snap-x snap-mandatory scroll-smooth px-1" role="group" aria-label="Product categories">
           <button type="button" className={"chip " + (!selectedTag ? "chip-active" : "")} onClick={() => setSelectedTag("")}>All</button>
           {tags.map((name) => (
             <button
@@ -88,6 +139,7 @@ export function ShopTabs({
               #{name}
             </button>
           ))}
+          </div>
         </div>
       </div>
 
