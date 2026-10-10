@@ -769,3 +769,19 @@ html:has(.store-reviews-overlay){overflow:hidden}
 .mobile-bottom-nav-label{font-size:9px;font-weight:750;letter-spacing:.01em;line-height:1.1}
 @media(min-width:1024px){.mobile-bottom-nav{display:none}}
 @media(prefers-reduced-motion:reduce){.mobile-bottom-nav-item{transition:none}}
+
+
+/* Refined black header with lighter typography */
+.site-header{background:#050505!important;color:#fff!important;border-bottom:1px solid rgba(255,255,255,.12)!important}
+.brand{font-weight:650;letter-spacing:-.065em}
+.brand sup{font-weight:600}
+.nav-link{font-weight:500;letter-spacing:0}
+.mobile-menu-panel,.mobile-search-panel{background:#080808;color:#fff}
+.mobile-menu-panel .menu-label{color:#aaa}
+.mobile-menu-panel .menu-card{color:#f5f5f5;background:#171717;border-color:#292929}
+.mobile-search-box{background:#171717;border-color:#333;color:#fff}
+.mobile-search-box input{color:#fff}
+.mobile-search-box input::placeholder{color:#999}
+.search-hints{color:#aaa}
+.search-hints a{color:#eee}
+@media(max-width:1023px){.mobile-strip{display:none!important}}
