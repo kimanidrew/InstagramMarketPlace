@@ -59,7 +59,7 @@ function LazyProductCard({ product }: { product: any }) {
   }, [visible]);
 
   return (
-    <div ref={ref} className="min-w-0">
+    <div ref={ref} className="mb-7 min-w-0 break-inside-avoid sm:mb-9">
       {visible ? <ProductCard p={product} /> : <ProductShimmer compact />}
     </div>
   );
