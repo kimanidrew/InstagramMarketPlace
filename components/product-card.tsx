@@ -54,10 +54,10 @@ export function ProductCard({ p }: { p: any }) {
   const href = "/" + (isService ? "service" : "product") + "/" + p.productSlug;
 
   return (
-    <article className="mb-10 break-inside-avoid">
-      <div className="relative overflow-hidden rounded-[24px] bg-[#f4f4f2]">
+    <article className="group min-w-0">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] bg-[#f4f4f2] sm:rounded-[22px]">
         {isVideo && p.mediaUrl ? (
-          <div className="aspect-[4/5]">
+          <div className="h-full w-full">
             <ProductMedia
               src={p.mediaUrl}
               poster={p.thumbnailUrl}
@@ -75,7 +75,7 @@ export function ProductCard({ p }: { p: any }) {
               <img
                 src={img}
                 alt={p.productTitle || "Product"}
-                className="block h-auto w-full object-cover transition duration-500 hover:scale-[1.03]"
+                className="block h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
               />
             </Link>
           )
@@ -92,16 +92,16 @@ export function ProductCard({ p }: { p: any }) {
         </span>
       </div>
 
-      <div className="pt-4">
-        <p className="line-clamp-3 text-sm font-bold leading-6 text-black">
+      <div className="pt-3 sm:pt-4">
+        <p className="line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
           {p.productTitle}
         </p>
 
         <Link
           href={"/store/" + p.connection.username}
-          className="mt-2 flex min-w-0 max-w-[50%] items-center gap-2.5"
+          className="mt-2 flex min-w-0 max-w-full items-center gap-2"
         >
-          <span className="h-8 w-8 shrink-0 overflow-hidden rounded-full bg-[#ecece8] ring-1 ring-black/5">
+          <span className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-[#ecece8] ring-1 ring-black/5 sm:h-8 sm:w-8">
             {p.connection.profileImageUrl ? (
               <img
                 src={p.connection.profileImageUrl}
@@ -119,7 +119,7 @@ export function ProductCard({ p }: { p: any }) {
           </span>
         </Link>
 
-        <div className="mt-3 flex flex-wrap gap-1">
+        <div className="mt-2 flex flex-wrap gap-1 sm:mt-3">
           {p.tags
             ?.filter((t: any) => t.name !== "instagrammarket")
             .slice(0, 3)
@@ -134,7 +134,7 @@ export function ProductCard({ p }: { p: any }) {
             ))}
         </div>
 
-        <div className="product-card-stats mt-4">
+        <div className="product-card-stats mt-3">
           <div className={"product-card-stat " + (likeFlash ? "is-updated" : "")}>
             <span className="product-card-stat-icon"><Heart size={13} strokeWidth={2.4} /></span>
             <span className="product-card-stat-copy">
