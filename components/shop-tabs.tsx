@@ -294,9 +294,9 @@ export function ShopTabs({
                   <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
                 </div>
                 {filteredTrendingProducts.length > 0 ? (
-                  <div className="mt-6 columns-2 [column-gap:1rem] md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
+                  <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-9 xl:grid-cols-4">
                     {filteredTrendingProducts.map((product: any) => (
-                      <div key={product.id} className="mb-10 break-inside-avoid">
+                      <div key={product.id} className="min-w-0">
                         <ProductCard p={product} />
                       </div>
                     ))}
@@ -314,7 +314,7 @@ export function ShopTabs({
                     <div><p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Featured store placement is reserved for approved marketplace growth through Verified or Pro.</p></div>
                     <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /> </Link>
                   </div>
-                  <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
                     {filteredFeaturedStores.map(({ store, posts }: any) => (
                       <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]">
                         <div className="flex items-center gap-3">
