@@ -1,69 +1,69 @@
 "use client";
 
-import { Play, Volume2, VolumeX } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export function ProductMedia({
   src,
   poster,
   alt,
-  href,
 }: {
   src?: string | null;
   poster?: string | null;
   alt?: string;
   href?: string;
 }) {
-  const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
-    if (!playing) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-    const handleOtherVideoPlay = (event: Event) => {
-      const otherVideo = event.target;
-      if (otherVideo instanceof HTMLVideoElement && otherVideo !== videoRef.current) {
-        videoRef.current?.pause();
+    const pauseWhenAnotherVideoStarts = (event: Event) => {
+      const activeVideo = (event as CustomEvent<HTMLVideoElement>).detail;
+      if (activeVideo && activeVideo !== video) {
+        video.pause();
       }
     };
 
-    window.addEventListener("product-video-play", handleOtherVideoPlay);
-    window.dispatchEvent(new Event("product-video-play"));
+    window.addEventListener("product-video-play", pauseWhenAnotherVideoStarts);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.15) {
+          video.pause();
+        }
+      },
+      { threshold: [0, 0.15, 0.5] }
+    );
+    observer.observe(video);
 
     return () => {
-      window.removeEventListener("product-video-play", handleOtherVideoPlay);
+      window.removeEventListener("product-video-play", pauseWhenAnotherVideoStarts);
+      observer.disconnect();
+      video.pause();
     };
-  }, [playing]);
-
-  function openProduct() {
-    if (href) router.push(href);
-  }
+  }, []);
 
   function togglePlay() {
     const video = videoRef.current;
     if (!video) return;
 
-    if (video.paused) {
-      video.play()
-        .then(() => {
-          setPlaying(true);
-          window.dispatchEvent(new Event("product-video-play"));
-        })
-        .catch(() => undefined);
-    } else {
+    if (!video.paused) {
       video.pause();
-      setPlaying(false);
+      return;
     }
-  }
 
-  function toggleMute() {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
+    // Playback is initiated by the user's click and starts with sound enabled.
+    video.muted = false;
+    video.volume = 1;
+    video.play()
+      .then(() => {
+        setPlaying(true);
+        window.dispatchEvent(new CustomEvent("product-video-play", { detail: video }));
+      })
+      .catch(() => setPlaying(false));
   }
 
   return (
@@ -73,13 +73,17 @@ export function ProductMedia({
         src={src || undefined}
         poster={poster || undefined}
         playsInline
-        muted={muted}
+        muted={false}
         loop
         preload="metadata"
         aria-label={alt || "Product video"}
-        onPlay={() => setPlaying(true)}
+        onPlay={() => {
+          setPlaying(true);
+          const video = videoRef.current;
+          if (video) window.dispatchEvent(new CustomEvent("product-video-play", { detail: video }));
+        }}
         onPause={() => setPlaying(false)}
-        onClick={openProduct}
+        onClick={togglePlay}
         className="h-full w-full cursor-pointer object-cover"
       />
 
@@ -87,20 +91,17 @@ export function ProductMedia({
 
       <button
         type="button"
-        onClick={(event) => { event.stopPropagation(); togglePlay(); }}
+        onClick={(event) => {
+          event.stopPropagation();
+          togglePlay();
+        }}
         aria-label={playing ? "Pause video" : "Play video"}
-        className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-black shadow-xl transition duration-200 hover:scale-105"
+        className={
+          "absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-black shadow-xl transition-all duration-500 hover:scale-105 " +
+          (playing ? "pointer-events-none opacity-0 group-hover:opacity-100" : "opacity-100")
+        }
       >
-        <Play size={21} fill="currentColor" className="ml-0.5" />
-      </button>
-
-      <button
-        type="button"
-        onClick={(event) => { event.stopPropagation(); toggleMute(); }}
-        aria-label={muted ? "Unmute video" : "Mute video"}
-        className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-black/70"
-      >
-        {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
+        {playing ? <Pause size={21} fill="currentColor" /> : <Play size={21} fill="currentColor" className="ml-0.5" />}
       </button>
     </div>
   );
