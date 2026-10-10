@@ -26,9 +26,11 @@ function ProductShimmer({ compact = false }: { compact?: boolean }) {
 
 function ProductShimmers({ count = 8 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-9 xl:grid-cols-4">
+    <div className="columns-2 gap-3 sm:columns-2 sm:gap-5 md:columns-3 lg:columns-4">
       {Array.from({ length: count }).map((_, i) => (
-        <ProductShimmer key={i} compact={i % 3 === 1} />
+        <div key={i} className="mb-7 break-inside-avoid sm:mb-9">
+          <ProductShimmer compact={i % 3 === 1} />
+        </div>
       ))}
     </div>
   );
@@ -191,7 +193,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-9 xl:grid-cols-4">
+      <div className="columns-2 gap-3 sm:columns-2 sm:gap-5 md:columns-3 lg:columns-4">
         {products.map((product) => (
           <LazyProductCard key={product.id} product={product} />
         ))}
