@@ -122,16 +122,7 @@ export function SiteHeader({ user }: { user: any }) {
           </div>
         </div>
       </div>
-
-      <div className="mobile-strip lg:hidden">
-        <div className="shell flex gap-2 overflow-x-auto whitespace-nowrap py-2.5">
-          <Link href="/shop" className="strip-pill active">Shop all</Link>
-          <Link href="/stores" className="strip-pill">Stores</Link>
-          <Link href="/categories" className="strip-pill">Categories</Link>
-          <Link href="/shop?tag=new" className="strip-pill">New arrivals</Link>
-          <Link href="/how-it-works" className="strip-pill">How it works</Link>
-        </div>
-      </div>
+ 
     </header>
   );
 }
