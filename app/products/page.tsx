@@ -58,20 +58,26 @@ export default async function Products({
       }).then((items) => filterAvailableInstagramMedia(items)),
       db().instagramConnection.findMany({
         where: {
-          OR: [
-            { verifiedAt: { not: null } },
-            { proUntil: { gt: now } },
-          ],
           posts: { some: { isProduct: true, mediaUrl: { not: null } } },
         },
         include: {
           posts: {
             where: { isProduct: true, mediaUrl: { not: null } },
-            select: { id: true, mediaUrl: true, thumbnailUrl: true },
+            select: {
+              id: true,
+              mediaUrl: true,
+              thumbnailUrl: true,
+              productSlug: true,
+              productTitle: true,
+              mediaType: true,
+              listingType: true,
+              tags: { select: { name: true } },
+            },
+            orderBy: { timestamp: "desc" },
             take: 6,
           },
         },
-        orderBy: [{ proUntil: "desc" }, { verifiedAt: "desc" }, { username: "asc" }],
+        orderBy: [{ verifiedAt: "desc" }, { proUntil: "desc" }, { username: "asc" }],
         take: 8,
       }),
       db().instagramPost.findMany({
