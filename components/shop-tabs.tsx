@@ -97,6 +97,7 @@ export function ShopTabs({
               aria-selected={selected}
               aria-controls={"shop-tab-panel-" + id}
               className={"shop-tab shrink-0 " + (selected ? "shop-tab-active" : "")}
+              onFocus={(event) => event.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })}
               onClick={() => setActive(id)}
             >
               <span className="shop-tab-icon"><Icon size={16} /></span>
