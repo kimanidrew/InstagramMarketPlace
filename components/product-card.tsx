@@ -82,7 +82,7 @@ export function ProductCard({ p }: { p: any }) {
         )}
 
         <div className="absolute left-2 top-2 z-10 flex max-w-[calc(100%-1rem)] flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
-          <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-1.5 text-[10px] font-semibold text-black shadow-sm backdrop-blur-sm sm:px-3 sm:text-[11px]">
+          <span className="inline-flex items-center gap-1 rounded-full bg-white/55 px-2 py-1.5 text-[10px] font-semibold text-black/75 shadow-sm backdrop-blur-md sm:px-3 sm:text-[11px]">
             <Instagram size={13} strokeWidth={2.2} />
             {Number(p.instagramLikeCount || 0).toLocaleString()} likes
           </span>
