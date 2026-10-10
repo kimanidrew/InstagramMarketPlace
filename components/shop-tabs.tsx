@@ -86,7 +86,7 @@ export function ShopTabs({
 
   return (
     <div className="shop-tabs-wrap mt-10">
-      <div className="shop-tabs" role="tablist" aria-label="Shop discovery">
+      <div className="shop-tabs flex w-full max-w-full flex-nowrap overflow-x-auto overscroll-x-contain" role="tablist" aria-label="Shop discovery">
         {tabs.map(({ id, label, icon: Icon, copy }) => {
           const selected = active === id;
           return (
@@ -96,7 +96,7 @@ export function ShopTabs({
               role="tab"
               aria-selected={selected}
               aria-controls={"shop-tab-panel-" + id}
-              className={"shop-tab " + (selected ? "shop-tab-active" : "")}
+              className={"shop-tab shrink-0 " + (selected ? "shop-tab-active" : "")}
               onClick={() => setActive(id)}
             >
               <span className="shop-tab-icon"><Icon size={16} /></span>
