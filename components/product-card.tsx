@@ -95,9 +95,6 @@ export function ProductCard({ p }: { p: any }) {
         <div className="absolute bottom-2 right-2 z-10 sm:bottom-3 sm:right-3">
           <WishlistButton id={p.id} count={wishlistCount} compact wishlisted={Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length)} />
         </div>
-          <Instagram size={13} strokeWidth={2.2} />
-          {Number(p.instagramLikeCount || 0).toLocaleString()} likes
-        </span>
       </div>
 
       <div className="pt-3 sm:pt-4">
