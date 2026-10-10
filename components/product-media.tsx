@@ -98,7 +98,7 @@ export function ProductMedia({
         aria-label={playing ? "Pause video" : "Play video"}
         className={
           "absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-black shadow-xl transition-all duration-500 hover:scale-105 " +
-          (playing ? "pointer-events-none opacity-0 group-hover:opacity-100" : "opacity-100")
+          (playing ? "opacity-0 group-hover:opacity-100" : "opacity-100")
         }
       >
         {playing ? <Pause size={21} fill="currentColor" /> : <Play size={21} fill="currentColor" className="ml-0.5" />}
