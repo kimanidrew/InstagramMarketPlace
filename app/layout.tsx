@@ -5,6 +5,7 @@ import Link from "next/link";
 import { user } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 
 export const metadata: Metadata = {
   title: "Instagram Market",
@@ -16,7 +17,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <html lang="en">
-      <body>
+      <body className="pb-24 lg:pb-0">
         <ScrollToTop />
         <SiteHeader user={u} />
         {children}
@@ -53,6 +54,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             Instagram Market © 2026 · Instagram-powered marketplace
           </div>
         </footer>
+        <MobileBottomNav user={u} />
       </body>
     </html>
   );
