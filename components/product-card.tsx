@@ -82,11 +82,11 @@ export function ProductCard({ p }: { p: any }) {
         )}
 
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">{p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2.5 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}{p.connection?.verifiedAt && new Date(p.connection.verifiedAt) <= new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}</div>
-        <div className="absolute bottom-3 right-3 flex items-center gap-1.5">
+        <div className="absolute bottom-2 right-2 flex items-center gap-1 sm:bottom-3 sm:right-3 sm:gap-1.5">
           <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
           <WishlistButton id={p.id} count={wishlistCount} compact wishlisted={Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length)} />
         </div>
-        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-semibold text-black shadow-sm backdrop-blur-sm">
+        <span className="absolute bottom-[3.65rem] left-2 inline-flex max-w-[calc(100%-1rem)] items-center gap-1 rounded-full bg-white/90 px-2 py-1.5 text-[10px] font-semibold text-black shadow-sm backdrop-blur-sm sm:bottom-3 sm:left-3 sm:gap-1.5 sm:px-3 sm:text-[11px]">
           <Instagram size={13} strokeWidth={2.2} />
           {Number(p.instagramLikeCount || 0).toLocaleString()} likes
         </span>
