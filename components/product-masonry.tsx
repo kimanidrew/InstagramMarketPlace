@@ -11,7 +11,7 @@ type ProductMasonryProps = {
 
 function ProductShimmer({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="mb-10 break-inside-avoid animate-pulse">
+    <div className="min-w-0 animate-pulse">
       <div className={"overflow-hidden rounded-[24px] bg-[#eeeeeb] " + (compact ? "aspect-[4/5]" : "aspect-[4/5]")}>
         <div className="h-full w-full bg-gradient-to-br from-[#eeeeeb] via-white/60 to-[#e8e8e4]" />
       </div>
@@ -26,7 +26,7 @@ function ProductShimmer({ compact = false }: { compact?: boolean }) {
 
 function ProductShimmers({ count = 8 }: { count?: number }) {
   return (
-    <div className="columns-1 [column-gap:1rem] sm:columns-2 md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
+    <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-9 xl:grid-cols-4">
       {Array.from({ length: count }).map((_, i) => (
         <ProductShimmer key={i} compact={i % 3 === 1} />
       ))}
@@ -57,7 +57,7 @@ function LazyProductCard({ product }: { product: any }) {
   }, [visible]);
 
   return (
-    <div ref={ref} className="break-inside-avoid">
+    <div ref={ref} className="min-w-0">
       {visible ? <ProductCard p={product} /> : <ProductShimmer compact />}
     </div>
   );
@@ -191,7 +191,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
 
   return (
     <>
-      <div className="columns-1 [column-gap:1rem] sm:columns-2 md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-9 xl:grid-cols-4">
         {products.map((product) => (
           <LazyProductCard key={product.id} product={product} />
         ))}
