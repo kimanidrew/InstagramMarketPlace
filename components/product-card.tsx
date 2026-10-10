@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Heart, Instagram } from "lucide-react";
+import { Bookmark, Heart } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -82,14 +82,10 @@ export function ProductCard({ p }: { p: any }) {
         )}
 
         <div className="absolute left-2 top-2 z-10 flex max-w-[calc(100%-1rem)] flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
-          <span className="inline-flex items-center gap-1 rounded-full bg-white/55 px-2 py-1.5 text-[10px] font-semibold text-black/75 shadow-sm backdrop-blur-md sm:px-3 sm:text-[11px]">
-            <Instagram size={13} strokeWidth={2.2} />
-            {Number(p.instagramLikeCount || 0).toLocaleString()} likes
-          </span>
           {p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}
           {p.connection?.verifiedAt && new Date(p.connection.verifiedAt) <= new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}
         </div>
-        <div className="absolute bottom-2 left-2 z-10 sm:bottom-3 sm:left-3">
+        <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
           <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
         </div>
         <div className="absolute bottom-2 right-2 z-10 sm:bottom-3 sm:right-3">
