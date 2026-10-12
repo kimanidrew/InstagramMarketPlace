@@ -100,7 +100,7 @@ export function ProductCard({ p }: { p: any }) {
 
         <div className="absolute left-2 top-2 z-10 flex max-w-[calc(100%-1rem)] flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
           {p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}
-          {p.connection?.verifiedAt && new Date(p.connection.verifiedAt) <= new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}
+          {p.connection?.verifiedAt && (!p.connection?.verifiedUntil || new Date(p.connection.verifiedUntil) > new Date()) && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}
         </div>
         <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
           <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
@@ -132,8 +132,14 @@ export function ProductCard({ p }: { p: any }) {
               </span>
             )}
           </span>
-          <span className="min-w-0 truncate text-xs font-semibold leading-5 text-[#555]">
-            @{p.connection.username}
+          <span className="min-w-0 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs font-semibold leading-5 text-[#555]">
+            <span className="truncate">@{p.connection.username}</span>
+            {p.connection.verifiedAt && (!p.connection.verifiedUntil || new Date(p.connection.verifiedUntil) > new Date()) && (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#eef5ff] px-2 py-0.5 text-[9px] font-extrabold leading-4 text-[#2458a6]" title="Verified shop">✓ Verified</span>
+            )}
+            {p.connection.proUntil && new Date(p.connection.proUntil) > new Date() && (
+              <span className="inline-flex shrink-0 items-center rounded-full bg-[#fff3d6] px-2 py-0.5 text-[9px] font-extrabold leading-4 text-[#875500]" title="Pro Seller">Pro Seller</span>
+            )}
           </span>
         </Link>
 
