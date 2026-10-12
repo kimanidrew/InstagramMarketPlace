@@ -88,7 +88,7 @@ export function SellerAnalytics({ connections }: { connections: Connection[] }) 
     <div className="seller-analytics-kpis">
       <article><span className="analytics-kpi-icon purple"><Eye size={18}/></span><small>Product impressions</small><b>{loading ? "…" : summary.impressions.toLocaleString()}</b><em>Times listings appeared</em></article>
       <article><span className="analytics-kpi-icon blue"><Activity size={18}/></span><small>Product views</small><b>{loading ? "…" : summary.views.toLocaleString()}</b><em>Detail page visits</em></article>
-      <article><span className="analytics-kpi-icon amber"><MousePointer2 size={18}/></span><small>Outbound clicks</small><b>{loading ? "…" : summary.clicks.toLocaleString()}</b><em>Product link clicks</em></article>
+      <article><span className="analytics-kpi-icon amber"><MousePointer2 size={18}/></span><small>Product clicks</small><b>{loading ? "…" : summary.clicks.toLocaleString()}</b><em>Opens from listing cards</em></article>
       <article><span className="analytics-kpi-icon rose"><Heart size={18}/></span><small>Marketplace likes</small><b>{loading ? "…" : summary.likes.toLocaleString()}</b><em>Across your products</em></article>
     </div>
 
@@ -108,7 +108,8 @@ export function SellerAnalytics({ connections }: { connections: Connection[] }) 
           <div className="promotion-reach-note"><Users size={16}/><span>Reach counts distinct browser visitors who see your promoted listing on the marketplace. Campaigns stop counting once the target is reached.</span></div>
           {message && <div className="analytics-feedback error" role="alert">{message}</div>}
           {paymentMessage && <div className="analytics-feedback" role="status"><CheckCircle2 size={17}/><span>{paymentMessage}</span></div>}
-          <button className="promotion-pay-button" onClick={startPayment} disabled={paying || !!pendingCampaign || (targetType === "PRODUCT" && !products.length) || !phone.trim()}>{paying ? "Starting M-Pesa…" : pendingCampaign ? "Waiting for payment confirmation…" : <>Pay KSh {packagePrice.toLocaleString()} with M-Pesa <ArrowUpRight size={16}/></>}</button>
+          {!products.length && <div className="analytics-feedback error">Add at least one active product listing with media to this shop before buying promotion.</div>}
+          <button className="promotion-pay-button" onClick={startPayment} disabled={paying || !!pendingCampaign || !products.length || !phone.trim()}>{paying ? "Starting M-Pesa…" : pendingCampaign ? "Waiting for payment confirmation…" : <>Pay KSh {packagePrice.toLocaleString()} with M-Pesa <ArrowUpRight size={16}/></>}</button>
           <small className="promotion-secure-note"><ShieldCheck size={13}/> Campaign activates only after the payment callback confirms the amount and receipt.</small>
         </div>
         <aside className="promotion-order-summary"><div className="promotion-summary-art"><TrendingUp size={28}/><span>Promotion plan</span></div><small>YOUR SELECTED PACKAGE</small><h3>{targetReach.toLocaleString()} reach</h3><p>{targetType === "PRODUCT" ? selectedProduct?.title || "Your selected product" : "All eligible products from @" + (selectedShop?.username || "your shop")}</p><div className="promotion-summary-line"><span>Promotion target</span><b>{targetReach.toLocaleString()}</b></div><div className="promotion-summary-line"><span>One-time payment</span><b>KSh {packagePrice.toLocaleString()}</b></div><div className="promotion-summary-line"><span>Payment method</span><b>M-Pesa STK Push</b></div><div className="promotion-summary-foot"><Radio size={14}/> Live delivery tracking after payment</div></aside>
