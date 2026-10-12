@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     where: { connectedByUserId: current.id },
     include: {
       posts: {
-        where: { isProduct: true },
+        where: { isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] },
         select: { id: true, productTitle: true, productSlug: true, mediaUrl: true, thumbnailUrl: true, mediaType: true, instagramLikeCount: true, likes: { select: { id: true } }, boostUntil: true },
       },
     },
