@@ -21,8 +21,7 @@ export function SiteHeader({ user }: { user: any }) {
           ].map(([href, label]) => (
             <Link key={href} href={href} className="nav-link">{label}</Link>
           ))}
-          {user && <Link href="/account/analytics" className="nav-link">Analytics</Link>}
-          {user && <Link href="/account/grow" className="nav-link">Grow your shop</Link>}
+          {user && <Link href="/account/analytics" className="nav-link">Analytics &amp; Growth</Link>}
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
