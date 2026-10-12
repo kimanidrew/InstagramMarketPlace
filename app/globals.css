@@ -983,3 +983,42 @@ hr{border-color:#ece5fa}
     font-size:1.0625rem!important;
   }
 }
+
+
+/* Keep the global navbar clean: no search field in desktop or mobile header. */
+.site-header .desktop-search-wrap,
+.site-header .mobile-search-panel{
+  display:none!important;
+}
+
+/* On mobile, reduce the Shop banner to just its search field. */
+@media(max-width:767px){
+  .shop-page .products-hero-content{
+    min-height:0!important;
+    padding:12px!important;
+    gap:0!important;
+  }
+  .shop-page .products-hero-content>:not(form){
+    display:none!important;
+  }
+  .shop-page .products-hero-search{
+    width:100%!important;
+    max-width:none!important;
+    min-height:52px!important;
+    margin-top:0!important;
+    padding:5px 6px 5px 14px!important;
+    gap:8px!important;
+    box-shadow:0 8px 22px rgba(0,0,0,.16)!important;
+  }
+  .shop-page .products-hero-search input{
+    font-size:12px!important;
+  }
+  .shop-page .products-hero-search button{
+    min-height:40px!important;
+    padding:0 12px!important;
+    font-size:11px!important;
+  }
+  .shop-page .products-hero{
+    border-radius:20px!important;
+  }
+}
