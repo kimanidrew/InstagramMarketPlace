@@ -785,3 +785,160 @@ html:has(.store-reviews-overlay){overflow:hidden}
 .search-hints{color:#aaa}
 .search-hints a{color:#eee}
 @media(max-width:1023px){.mobile-strip{display:none!important}}
+
+
+/* Instagram Market — vibrant, friendly commerce-wide visual refresh */
+:root{
+  --market-coral:#ff5576;
+  --market-coral-dark:#e63e63;
+  --market-violet:#7055e8;
+  --market-blue:#3c82f6;
+  --market-teal:#12b8a6;
+  --market-amber:#ffbd45;
+  --market-ink:#20203a;
+  --market-muted:#77778e;
+  --market-paper:#f8f7ff;
+  --market-line:#e9e6f5;
+  --market-gradient:linear-gradient(115deg,#ff5576 0%,#a855f7 48%,#4388ff 100%);
+}
+html{background:var(--market-paper)}
+body{background:linear-gradient(180deg,#fcfbff 0%,#f8f7ff 48%,#fffaf7 100%);color:var(--market-ink)}
+::selection{background:#ffd7e1;color:#51203a}
+.shell{--shell-ink:var(--market-ink)}
+h1,h2,h3,h4,h5,h6{color:var(--market-ink)}
+a,button,input,textarea,select{accent-color:var(--market-violet)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(112,85,232,.38);outline-offset:3px}
+.card{border-color:#ece8f8;background:linear-gradient(145deg,#fff 0%,#fdfcff 100%);box-shadow:0 8px 30px rgba(70,48,135,.045)}
+.card:hover{border-color:#d9d0ff;box-shadow:0 20px 55px rgba(92,65,180,.13)}
+.eyebrow{border-color:#e6defe;background:#f5f1ff;color:#6547cb}
+.eyebrow.plain{color:#8b6adf}
+.chip{border-color:#e5def8;background:#fff;color:#625a7f;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
+.chip:hover{border-color:#c7b7ff;background:#f5f0ff;transform:translateY(-1px)}
+.chip-active{background:var(--market-violet)!important;color:#fff!important;border-color:var(--market-violet)!important;box-shadow:0 7px 18px rgba(112,85,232,.22)}
+.editorial-grid{background-color:#f9f7ff;background-image:linear-gradient(rgba(112,85,232,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(112,85,232,.075) 1px,transparent 1px);background-size:34px 34px}
+.soft-shadow{box-shadow:0 24px 70px rgba(91,67,170,.12)}
+/* Black brand bar retained, with colorful active states */
+.site-header{background:rgba(24,20,43,.97)!important;border-bottom-color:rgba(255,255,255,.12)!important;box-shadow:0 8px 30px rgba(36,22,73,.18)}
+.brand span{color:#ff87a0}
+.nav-link:hover,.nav-link:focus-visible{background:linear-gradient(120deg,rgba(255,85,118,.23),rgba(112,85,232,.25));color:#fff}
+.icon-btn:hover,.icon-btn.active{background:var(--market-gradient);color:#fff;box-shadow:0 8px 22px rgba(168,85,247,.24)}
+.bag-btn{background:var(--market-gradient);color:#fff;box-shadow:0 9px 24px rgba(255,85,118,.25)}
+.bag-btn:hover{background:linear-gradient(120deg,#e63e63,#7055e8);color:#fff}
+.desktop-search{border-color:#49415f;background:linear-gradient(135deg,#2c2544,#1d1930)}
+.desktop-search:focus-within{border-color:#a58aff;box-shadow:0 0 0 4px rgba(168,133,255,.17),0 16px 38px rgba(0,0,0,.3)}
+.search-icon-wrap{background:var(--market-gradient);color:#fff}
+.mobile-menu-panel,.mobile-search-panel{background:#201a36!important;color:#fff}
+.mobile-menu-panel .menu-card{border-color:#43365f!important;background:#2b2346!important;color:#fff!important}
+.mobile-menu-panel .menu-card:hover{background:var(--market-gradient)!important}
+.mobile-search-box{border-color:#4a3b66!important;background:#2b2346!important}
+.mobile-search-box button{background:var(--market-gradient)!important}
+.search-hints a{border-color:#493a66!important;background:#2b2346!important;color:#fff!important}
+/* Home page: joyful brand colors without sacrificing whitespace */
+.home-page{background:transparent!important}
+.home-page .editorial-grid{background-color:#fbf9ff;border-bottom-color:#e9e0ff}
+.home-page h1 span.text-\[\#777\]{background:var(--market-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
+.home-page .hero-pill{border-color:#eee5ff;background:linear-gradient(110deg,#fff,#fff4f8);color:#6a45c8}
+.home-page .instamart-hero-tip{border-color:#f0d9ed;background:linear-gradient(115deg,#fff1f5,#f4efff 55%,#eef7ff);box-shadow:0 14px 35px rgba(112,85,232,.09)}
+.home-page .instamart-hero-hashtag{background:var(--market-gradient);box-shadow:0 8px 20px rgba(168,85,247,.2)}
+.home-page .instamart-hero-tip strong{color:var(--market-violet)}
+.home-page a.bg-black,.home-page a[class*="bg-black"]{background:var(--market-gradient)!important;box-shadow:0 10px 24px rgba(112,85,232,.2);transition:transform .2s ease,box-shadow .2s ease}
+.home-page a.bg-black:hover,.home-page a[class*="bg-black"]:hover{box-shadow:0 15px 30px rgba(112,85,232,.3)}
+.home-page a.border-black\/10{border-color:#e3dafa;background:#fff;color:#6a4bc4}
+.home-page section.shell.py-24 .eyebrow.plain{color:#9b55ad}
+.home-page section.shell.py-24 h2{color:#29203e}
+.home-page section.shell.pb-24 .rounded-\[36px\]{background:linear-gradient(135deg,#fff1f5,#f0edff 55%,#eef9ff)!important}
+.home-page section.shell.pb-24 .rounded-2xl{border:1px solid rgba(112,85,232,.1);box-shadow:0 10px 30px rgba(112,85,232,.06)}
+.home-page section.shell.pb-24 .rounded-2xl svg{color:var(--market-violet)}
+/* Store and seller showcases */
+.seller-showcase{background:radial-gradient(circle at 85% 18%,rgba(255,85,118,.28),transparent 26%),radial-gradient(circle at 8% 90%,rgba(112,85,232,.32),transparent 30%),linear-gradient(135deg,#241a42,#17172f 60%,#17384a)!important}
+.seller-title span{color:#ff91a8;text-shadow:none}
+.seller-point span{background:var(--market-gradient);color:#fff}
+.seller-floating-card{background:linear-gradient(135deg,#fff,#fff2f6);border:1px solid #ffe0e9}
+.shopper-showcase{background:radial-gradient(circle at 12% 8%,#ffe6ef,transparent 27%),radial-gradient(circle at 95% 85%,#e7e1ff,transparent 32%),linear-gradient(135deg,#fff,#f5f2ff)!important}
+.shopper-kicker{border-color:#e7dfff;background:#fff;color:#7950ce}
+.shopper-title span{background:var(--market-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
+.shopper-point{border-color:#e9e1ff;background:rgba(255,255,255,.9);box-shadow:0 10px 30px rgba(112,85,232,.08)}
+.community-showcase{background:radial-gradient(circle at 12% 100%,rgba(18,184,166,.32),transparent 32%),radial-gradient(circle at 90% 5%,rgba(255,85,118,.28),transparent 30%),linear-gradient(135deg,#342052,#222044 55%,#163e52)!important}
+.community-kicker{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.1)}
+.community-badge{background:var(--market-gradient)}
+.community-badge svg{color:#fff}
+.community-mini-stat{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.11)}
+.connect-instagram-section{background:linear-gradient(110deg,#fff5f7,#f5f1ff 55%,#eef8ff)}
+.connect-instagram-card{border-color:#e9ddff;background:linear-gradient(135deg,#fff,#fff8fb 52%,#f6f3ff);box-shadow:0 18px 60px rgba(112,85,232,.1)}
+.connect-instagram-icon{background:var(--market-gradient);box-shadow:0 10px 24px rgba(112,85,232,.2)}
+.connect-instagram-kicker{color:#a04eaa}
+.connect-instagram-button{background:var(--market-gradient);box-shadow:0 9px 22px rgba(112,85,232,.18)}
+/* Shop landing, tabs, filters and product discovery */
+.shop-page{background:linear-gradient(180deg,#fbfaff,#fff 42%,#fff8fb)!important}
+.products-hero{background:radial-gradient(circle at 86% 12%,rgba(255,85,118,.35),transparent 27%),radial-gradient(circle at 10% 100%,rgba(112,85,232,.4),transparent 34%),linear-gradient(125deg,#2a1d4a,#493078 48%,#174e66)!important;color:#fff}
+.products-hero-title,.products-hero h1{color:#fff!important}
+.products-hero-kicker{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#ffe1ed}
+.products-hero-copy{color:rgba(255,255,255,.78)!important}
+.products-hero-search{border-color:rgba(255,255,255,.28)!important;background:rgba(255,255,255,.14)!important;backdrop-filter:blur(14px)}
+.products-hero-search input{color:#fff!important}
+.products-hero-search input::placeholder{color:rgba(255,255,255,.7)!important}
+.products-hero-ghost-button{border-color:rgba(255,255,255,.35)!important;background:rgba(255,255,255,.08)!important;color:#fff!important}
+.products-hero-light-button{background:#fff!important;color:#6544c6!important;box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.shop-tabs-wrap{border-color:#e9e0ff!important;background:rgba(255,255,255,.88)!important;box-shadow:0 10px 32px rgba(112,85,232,.07);backdrop-filter:blur(16px)}
+.shop-tab{color:#77718d!important}
+.shop-tab:hover{background:#f7f2ff!important;color:#6b4bc5!important}
+.shop-tab-active{color:#6948d2!important}
+.shop-tab-active .shop-tab-icon{background:linear-gradient(135deg,#fce4ec,#eee6ff)!important;color:#7b4fe0!important}
+.shop-tab-indicator{background:var(--market-gradient)!important}
+.shop-filter-panel{border-color:#e9e0ff!important;background:linear-gradient(135deg,#fff,#faf7ff)!important;box-shadow:0 10px 35px rgba(112,85,232,.06)}
+.shop-filter-heading{color:#4b376e!important}
+.shop-filter-label{color:#8c6cc8!important}
+.shop-filter-help{color:#9690a8!important}
+/* Product tiles, stats and media surfaces */
+.product-card-stats{border-color:#eee7ff;background:linear-gradient(120deg,#fff4f7,#f4f0ff)}
+.product-card-stat:hover,.product-card-stat.is-updated{background:#fff}
+.product-card-stat-icon{border-color:#eee4ff;color:#7055e8}
+.product-card-stat-copy b{color:#29203e}
+.product-card-stat-copy small{color:#8f83a9}
+.product-gallery-frame{border-color:#e8e0ff;background:linear-gradient(145deg,#fff1f6,#f1edff);box-shadow:0 20px 70px rgba(112,85,232,.1)}
+.product-carousel-stage{background:linear-gradient(145deg,#fff,#f7f3ff)}
+.product-carousel-arrow{background:var(--market-gradient)!important;color:#fff!important;box-shadow:0 8px 20px rgba(112,85,232,.22)}
+.product-carousel-dot.active{background:var(--market-violet)!important}
+/* Account, admin and seller tools: colorful status and friendly panels */
+.account-page,.admin-page,.seller-onboarding{background:linear-gradient(180deg,#faf8ff,#f6f7ff 60%,#fff8fb)!important}
+.account-hero,.seller-onboarding-hero{background:radial-gradient(circle at 90% 0%,rgba(255,85,118,.12),transparent 27%),linear-gradient(120deg,#fff,#f5f1ff)!important;border-bottom-color:#e9e0ff}
+.account-kicker,.seller-hero-copy .account-kicker{color:#8b65d9}
+.account-hero h1 span{color:#9a62e7}
+.account-user-pill span{background:#f0eaff;color:#7055c9}
+.account-step,.account-shops-card,.account-register-card,.seller-step-card,.seller-help-card,.seller-history-row,.seller-shop-switcher{border-color:#e8e0fb!important;box-shadow:0 14px 40px rgba(112,85,232,.065)}
+.account-step.is-active,.seller-step-active{border-color:#a58aff!important;box-shadow:0 20px 55px rgba(112,85,232,.14)!important}
+.account-step-number,.account-shop-avatar,.seller-step-number,.seller-history-icon{background:var(--market-gradient)!important;color:#fff!important}
+.account-step-note,.account-action-box{background:#f4efff!important;color:#6851a8!important}
+.account-primary-button,.seller-primary-button,.seller-next-button,.seller-new-shop,.seller-progress-open{background:var(--market-gradient)!important;color:#fff!important;box-shadow:0 8px 20px rgba(112,85,232,.17)}
+.account-register-card,.seller-growth{background:radial-gradient(circle at 90% 5%,rgba(255,85,118,.25),transparent 28%),linear-gradient(125deg,#2c204b,#22213f 60%,#17485b)!important}
+.account-register-icon,.seller-growth-icon{background:var(--market-gradient)!important;color:#fff!important}
+.account-status.connected,.account-status.approved,.account-alert.success{background:#e3fbf3!important;color:#087f68!important}
+.account-status.pending{background:#fff2d9!important;color:#9a6200!important}
+.account-status.rejected,.account-alert.error{background:#fff0f3!important;color:#c12f55!important}
+.admin-stat,.admin-meta-card,.admin-request-card,.admin-growth-card{border-color:#e8e0fb!important;box-shadow:0 12px 35px rgba(112,85,232,.06)}
+.admin-primary-button,.admin-top-button{background:var(--market-gradient)!important;color:#fff!important;box-shadow:0 8px 20px rgba(112,85,232,.17)}
+.admin-meta-icon{background:linear-gradient(135deg,#fce4ec,#eee7ff)!important;color:#7951d3!important}
+.admin-growth-type{background:var(--market-gradient)!important}
+.seller-growth-card{border-color:rgba(255,255,255,.15)!important;background:rgba(255,255,255,.075)!important;backdrop-filter:blur(12px)}
+.seller-growth-card.featured{border-color:rgba(255,136,166,.5)!important;background:linear-gradient(145deg,rgba(255,85,118,.2),rgba(112,85,232,.17))!important}
+.seller-growth-card button{background:var(--market-gradient)!important;color:#fff!important;border:0!important}
+.seller-growth-message{background:linear-gradient(100deg,#fff1f5,#f1eaff)!important;color:#5d3eb3!important}
+.seller-setup-window{border-color:#e8dcff;background:#fbf9ff}
+.seller-setup-topbar{border-bottom-color:#e9e0ff;background:linear-gradient(100deg,#fff,#f8f3ff)}
+.seller-setup-close{background:var(--market-gradient)!important}
+.seller-setup-progress{border-bottom-color:#e9e0ff;background:rgba(250,248,255,.94)}
+.seller-setup-progress-line{background:#e7ddfb}
+.seller-setup-progress-line i{background:var(--market-gradient)}
+.seller-setup-progress-steps span.active,.seller-step-indicator-mobile span.active{background:var(--market-violet)!important}
+.seller-setup-progress-steps span.done,.seller-step-indicator-mobile span.done{background:var(--market-teal)!important}
+.seller-numbered-tip b{background:var(--market-gradient)}
+.seller-done-note,.seller-status-box.success{background:#e4fbf3!important;color:#087f68!important}
+/* General buttons and inputs get coordinated accent colors */
+button.bg-black,a.bg-black,button[class*="bg-[#111]"],a[class*="bg-[#111]"]{background:var(--market-gradient)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 7px 20px rgba(112,85,232,.13)}
+button.bg-black:hover,a.bg-black:hover,button[class*="bg-[#111]"]:hover,a[class*="bg-[#111]"]:hover{filter:saturate(1.12);box-shadow:0 12px 26px rgba(112,85,232,.24)}
+button[class*="border-black"],a[class*="border-black"]{transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease}
+input:not([type="checkbox"]):not([type="radio"]),textarea,select{border-color:#e4dcf5}
+input:not([type="checkbox"]):not([type="radio"]):focus,textarea:focus,select:focus{border-color:#a58aff;box-shadow:0 0 0 4px rgba(112,85,232,.1)}
+/* Soft, colorful separators and reduced-motion support */
+hr{border-color:#ece5fa}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
