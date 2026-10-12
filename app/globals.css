@@ -1126,3 +1126,21 @@ hr{border-color:#ece5fa}
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
 }
+
+
+/* Slightly enlarge category filter labels for readability. */
+.shop-page .shop-category-filter,
+.shop-page .category-filter,
+.shop-page [class*="category-filter"] button,
+.shop-page [class*="category-filter"] a{
+  font-size:14px!important;
+  font-weight:650!important;
+}
+@media(max-width:767px){
+  .shop-page .shop-category-filter,
+  .shop-page .category-filter,
+  .shop-page [class*="category-filter"] button,
+  .shop-page [class*="category-filter"] a{
+    font-size:13px!important;
+  }
+}
