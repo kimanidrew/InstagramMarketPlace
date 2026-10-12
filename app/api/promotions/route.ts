@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const availableProducts = await prisma.instagramPost.count({ where: { connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] } });
     if (!availableProducts) return NextResponse.json({ error: "This shop needs at least one active marketplace listing with media before it can be promoted." }, { status: 400 });
     if (targetType === "PRODUCT") {
-      const post = await prisma.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true }, select: { id: true } });
+      const post = await prisma.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true } });
       if (!post) return NextResponse.json({ error: "That product was not found in this shop." }, { status: 404 });
     }
     const campaign = await prisma.promotionCampaign.create({ data: { userId: current.id, connectionId, postId: targetType === "PRODUCT" ? postId : null, targetType: targetType as "STORE" | "PRODUCT", targetReach, amount, status: "PENDING_PAYMENT" } });
