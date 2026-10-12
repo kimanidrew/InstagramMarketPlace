@@ -62,7 +62,7 @@ export async function GET(request: Request) {
   ];
   for (const boostFilter of batches) {
     if (visiblePosts.length >= pageStart + limit) break;
-    let boostSkip = boostFilter.boostUntil?.gt ? 0 : Math.max(0, pageStart - visiblePosts.length);
+    let boostSkip = 0;
     while (visiblePosts.length < pageStart + limit && hasMore) {
       const batch = await db().instagramPost.findMany({
         where: { ...where, ...boostFilter },
