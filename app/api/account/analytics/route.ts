@@ -32,7 +32,10 @@ export async function GET(request: Request) {
     prisma.analyticsEvent.findMany({ where: { connectionId: { in: selectedIds }, createdAt: { gte: since } }, select: { connectionId: true, postId: true, campaignId: true, visitorId: true, type: true, createdAt: true } }),
     prisma.promotionCampaign.findMany({ where: { userId: current.id, ...(requestedShopId && ids.includes(requestedShopId) ? { connectionId: requestedShopId } : {}) }, include: { connection: { select: { username: true, profileImageUrl: true } }, post: { select: { productTitle: true, thumbnailUrl: true, mediaUrl: true } }, payment: { select: { status: true, receiptNumber: true, amount: true, phoneNumber: true } } }, orderBy: { createdAt: "desc" }, take: 12 }),
   ]);
-  const [likes, recentLikes] = await Promise.all([\n    postIds.length ? prisma.productLike.count({ where: { postId: { in: postIds } } }) : Promise.resolve(0),\n    postIds.length ? prisma.productLike.findMany({ where: { postId: { in: postIds }, createdAt: { gte: since } }, select: { createdAt: true } }) : Promise.resolve([]),\n  ]);
+  const [likes, recentLikes] = await Promise.all([
+    postIds.length ? prisma.productLike.count({ where: { postId: { in: postIds } } }) : Promise.resolve(0),
+    postIds.length ? prisma.productLike.findMany({ where: { postId: { in: postIds }, createdAt: { gte: since } }, select: { createdAt: true } }) : Promise.resolve([]),
+  ]);
   const unique = (items: typeof events) => new Set(items.map(e => e.visitorId)).size;
   const impressions = events.filter(e => e.type === "IMPRESSION").length;
   const views = events.filter(e => e.type === "VIEW").length;
