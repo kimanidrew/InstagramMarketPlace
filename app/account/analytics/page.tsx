@@ -20,7 +20,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
   const selectedConnection = connections.find(c => c.id === initialShopId);
   const initialPostId = selectedConnection?.posts.some(p => p.id === query.postId) ? query.postId! : "";
   const analyticsConnections = connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, posts: c.posts.map(p => ({ id: p.id, title: p.productTitle || "Untitled product", slug: p.productSlug, image: p.thumbnailUrl || p.mediaUrl, mediaType: p.mediaType })) }));
-  const growthConnections = connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts.map(p => ({ id: p.id, productTitle: p.productTitle, mediaUrl: p.mediaUrl, thumbnailUrl: p.thumbnailUrl, mediaType: p.mediaType, permalink: p.permalink })) }));
+  const growthConnections = connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, verifiedAt: c.verifiedAt?.toISOString() || null, verifiedUntil: c.verifiedUntil?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts.map(p => ({ id: p.id, productTitle: p.productTitle, mediaUrl: p.mediaUrl, thumbnailUrl: p.thumbnailUrl, mediaType: p.mediaType, permalink: p.permalink })) }));
   return <main className="seller-analytics-page">
     <div className="seller-analytics-shell">
       <Link href="/account" className="seller-analytics-back"><ArrowLeft size={15}/> Back to account</Link>
