@@ -37,7 +37,7 @@ export async function GET(request: Request) {
   // saved listings. Anonymous visitors still get a boost-first discovery feed.
   const preferredTags = new Map<string, number>();
   if (currentUser) {
-    const [liked, saved] = await Promise.all([
+    const [liked, saved, recentlyViewed] = await Promise.all([
       db().instagramPost.findMany({
         where: { isProduct: true, likes: { some: { userId: currentUser.id } } },
         select: { tags: { select: { name: true } } },
@@ -48,9 +48,16 @@ export async function GET(request: Request) {
         select: { tags: { select: { name: true } } },
         take: 100,
       }),
+      db().recentlyViewedProduct.findMany({
+        where: { userId: currentUser.id, post: { isProduct: true } },
+        select: { post: { select: { tags: { select: { name: true } } } } },
+        orderBy: { lastViewedAt: "desc" },
+        take: 50,
+      }),
     ]);
     for (const post of liked) for (const item of post.tags) preferredTags.set(item.name.toLowerCase(), (preferredTags.get(item.name.toLowerCase()) || 0) + 1);
     for (const post of saved) for (const item of post.tags) preferredTags.set(item.name.toLowerCase(), (preferredTags.get(item.name.toLowerCase()) || 0) + 3);
+    for (const item of recentlyViewed) for (const tag of item.post.tags) preferredTags.set(tag.name.toLowerCase(), (preferredTags.get(tag.name.toLowerCase()) || 0) + 2);
   }
 
   // Read boosted products first, then regular listings. This guarantees active
