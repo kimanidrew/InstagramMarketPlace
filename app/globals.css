@@ -1115,3 +1115,14 @@ hr{border-color:#ece5fa}
 .shop-page .products-hero a[href="/shop#shop-all"]:hover{
   background:#303030!important;
 }
+
+
+/* Ensure the Shop tabs wrapper itself stays transparent. */
+.shop-page .shop-tabs-wrap{
+  background:transparent!important;
+  background-color:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
