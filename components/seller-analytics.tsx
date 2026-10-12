@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Activity, ArrowDownRight, ArrowUpRight, BadgeCheck, BarChart3, CheckCircle2, ChevronDown, CreditCard, Eye, Heart, MousePointer2, Radio, ShieldCheck, Sparkles, Store, TrendingUp, Users, Wallet, Zap } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { Activity, ArrowUpRight, CheckCircle2, ChevronDown, Eye, Heart, MousePointer2, Radio, ShieldCheck, Sparkles, Store, TrendingUp, Users, Wallet, Zap } from "lucide-react";
 
 type Product = { id: string; title: string; slug: string | null; image: string | null; mediaType: string };
 type Connection = { id: string; username: string; name: string | null; profileImageUrl: string | null; posts: Product[] };
@@ -31,15 +31,14 @@ export function SellerAnalytics({ connections }: { connections: Connection[] }) 
   const [message, setMessage] = useState("");
   const [pendingCampaign, setPendingCampaign] = useState("");
   const [paymentMessage, setPaymentMessage] = useState("");
-  const [activeMetric, setActiveMetric] = useState<"impressions" | "views" | "clicks">("impressions");
 
   const refresh = useCallback(async () => {
     try {
-      const response = await fetch("/api/account/analytics", { cache: "no-store" });
+      const response = await fetch("/api/account/analytics?shopId=" + encodeURIComponent(selectedShopId), { cache: "no-store" });
       if (response.ok) setData(await response.json());
     } catch { /* analytics refresh can be retried */ }
     finally { setLoading(false); }
-  }, []);
+  }, [selectedShopId]);
   useEffect(() => { void refresh(); }, [refresh]);
   useEffect(() => {
     if (!pendingCampaign) return;
@@ -93,7 +92,7 @@ export function SellerAnalytics({ connections }: { connections: Connection[] }) 
       <article><span className="analytics-kpi-icon rose"><Heart size={18}/></span><small>Marketplace likes</small><b>{loading ? "…" : summary.likes.toLocaleString()}</b><em>Across your products</em></article>
     </div>
 
-    <section className="seller-analytics-panel"><div className="seller-analytics-panel-heading"><div><span>PERFORMANCE OVER TIME</span><h2>Your activity, day by day</h2><p>Only events recorded on Instagram Market are shown.</p></div><div className="analytics-metric-tabs">{(["impressions","views","clicks"] as const).map(m => <button key={m} className={activeMetric === m ? "active" : ""} onClick={() => setActiveMetric(m)}>{m}</button>)}</div></div><div className="seller-analytics-charts"><LineChart data={chartData} metric="impressions" color="#8054cb" title="Impressions"/><LineChart data={chartData} metric="views" color="#3c87d8" title="Product views"/><LineChart data={chartData} metric="clicks" color="#dc9b3f" title="Clicks"/></div><div className="analytics-legend"><span><i className="purple-dot"/> Impressions <b>{summary.impressions.toLocaleString()}</b></span><span><i className="blue-dot"/> Views <b>{summary.views.toLocaleString()}</b></span><span><i className="amber-dot"/> Clicks <b>{summary.clicks.toLocaleString()}</b></span></div></section>
+    <section className="seller-analytics-panel"><div className="seller-analytics-panel-heading"><div><span>PERFORMANCE OVER TIME</span><h2>Your activity, day by day</h2><p>Only events recorded on Instagram Market are shown.</p></div></div><div className="seller-analytics-charts"><LineChart data={chartData} metric="impressions" color="#8054cb" title="Impressions"/><LineChart data={chartData} metric="views" color="#3c87d8" title="Product views"/><LineChart data={chartData} metric="clicks" color="#dc9b3f" title="Clicks"/></div><div className="analytics-legend"><span><i className="purple-dot"/> Impressions <b>{summary.impressions.toLocaleString()}</b></span><span><i className="blue-dot"/> Views <b>{summary.views.toLocaleString()}</b></span><span><i className="amber-dot"/> Clicks <b>{summary.clicks.toLocaleString()}</b></span></div></section>
 
     <section className="seller-analytics-panel"><div className="seller-analytics-panel-heading"><div><span>PRODUCT PERFORMANCE</span><h2>What people are discovering</h2><p>Compare activity for products in @{selectedShop?.username}.</p></div><span className="analytics-count-pill">{products.length} products</span></div>
       {products.length ? <div className="analytics-product-table"><div className="analytics-table-head"><span>Product</span><span>Impressions</span><span>Views</span><span>Clicks</span><span>Likes</span></div>{products.slice().sort((a,b) => b.views-a.views).map(p => <div className="analytics-table-row" key={p.id}><div className="analytics-product-name"><span>{p.image ? <img src={p.image} alt=""/> : <Store size={18}/>}</span><div><b>{p.title}</b><small>{p.boosted ? "Boost active" : "Organic listing"}</small></div></div><b>{p.impressions.toLocaleString()}</b><b>{p.views.toLocaleString()}</b><b>{p.clicks.toLocaleString()}</b><b>{p.likes.toLocaleString()}</b></div>)}</div> : <div className="analytics-empty-inline">Products from this shop will appear here after they are listed.</div>}
