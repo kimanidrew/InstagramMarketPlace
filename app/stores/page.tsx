@@ -51,7 +51,7 @@ export default async function Stores() {
       </h1>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {availableStores.map(({ store, posts }) => (
+        {availableStores.map(({ store, posts, promoted, activeVerified, activePro }) => (
           <Link
             key={store.id}
             href={"/store/" + store.username}
@@ -69,7 +69,7 @@ export default async function Stores() {
               </div>
 
               <div>
-                <div className="flex flex-wrap items-center gap-2"><b>@{store.username}</b>{store.promoted && <span className="rounded-full bg-black px-2 py-1 text-[9px] font-black uppercase tracking-wider text-white">Promoted</span>}{store.activeVerified && <span className="rounded-full border border-black/10 px-2 py-1 text-[9px] font-bold">Verified</span>}{store.activePro && <span className="rounded-full bg-[#f1e9ff] px-2 py-1 text-[9px] font-bold">Pro Seller</span>}</div>
+                <div className="flex flex-wrap items-center gap-2"><b>@{store.username}</b>{promoted && <span className="rounded-full bg-black px-2 py-1 text-[9px] font-black uppercase tracking-wider text-white">Promoted</span>}{activeVerified && <span className="rounded-full border border-black/10 px-2 py-1 text-[9px] font-bold">Verified</span>}{activePro && <span className="rounded-full bg-[#f1e9ff] px-2 py-1 text-[9px] font-bold">Pro Seller</span>}</div>
                 <p className="text-sm text-[#777]">
                   {posts.length} products
                 </p>
