@@ -19,10 +19,10 @@ function LineChart({ data, metric, color, title }: { data: Daily[]; metric: "imp
   return <div className="seller-chart-card"><div className="seller-chart-heading"><div><span>{title}</span><small>Last 30 days</small></div><span className="seller-chart-dot" style={{ background: color }}/></div><svg viewBox="0 0 500 116" role="img" aria-label={title + " over the last 30 days"} className="seller-line-chart"><defs><linearGradient id={"chart-fill-" + metric} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={color} stopOpacity=".18"/><stop offset="100%" stopColor={color} stopOpacity="0"/></linearGradient></defs>{[20,44,68,92].map(y => <line key={y} x1="8" x2="492" y1={y} y2={y} stroke="#eeeaf3" strokeDasharray="3 5"/>)}<polygon points={"8,92 " + path + " 492,92"} fill={"url(#chart-fill-" + metric + ")"} /><polyline points={path} fill="none" stroke={color} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>{last && <circle cx={last.x} cy={last.y} r="4" fill={color} stroke="#fff" strokeWidth="2"/>}</svg><div className="seller-chart-axis"><span>{data[0]?.label || "—"}</span><span>Daily activity</span><span>{data[data.length - 1]?.label || "—"}</span></div></div>;
 }
 
-export function SellerAnalytics({ connections }: { connections: Connection[] }) {
+export function SellerAnalytics({ connections, initialShopId, initialPostId }: { connections: Connection[]; initialShopId?: string; initialPostId?: string }) {
   const [data, setData] = useState<Analytics | null>(null);
-  const [selectedShopId, setSelectedShopId] = useState(connections[0]?.id || "");
-  const [selectedPostId, setSelectedPostId] = useState("");
+  const [selectedShopId, setSelectedShopId] = useState(initialShopId || connections[0]?.id || "");
+  const [selectedPostId, setSelectedPostId] = useState(initialPostId || "");
   const [targetType, setTargetType] = useState<"STORE" | "PRODUCT">("PRODUCT");
   const [targetReach, setTargetReach] = useState(1000);
   const [phone, setPhone] = useState("");
