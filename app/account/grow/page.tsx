@@ -30,7 +30,7 @@ export default async function GrowYourShop() {
     <section className="grow-shop-content">
       {connections.length ? <SellerGrowth connections={connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts }))}/> :
         <div className="grow-shop-empty"><span><Store size={25}/></span><h2>Connect a shop to get started</h2><p>Your growth options will appear here once you connect an Instagram Business account.</p><Link href="/account/setup">Connect your Instagram <ArrowRight size={15}/></Link></div>}
-      <div className="grow-shop-footnote"><Sparkles size={16}/><p>Growth requests are reviewed by the marketplace team. Submitting a request does not activate a paid feature automatically.</p></div>
+      <div className="grow-shop-footnote"><Sparkles size={16}/><p>Product and shop reach promotions are paid directly from Analytics. Verified and Pro Seller upgrades still go through marketplace review.</p></div>
     </section>
   </main>;
 }
