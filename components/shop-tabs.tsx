@@ -30,6 +30,17 @@ export function ShopTabs({
   now: string;
 }) {
   const [active, setActive] = useState<ShopTab>("discover");
+  const [recentItems, setRecentItems] = useState(recentlyViewedProducts);
+  const [clearingHistory, setClearingHistory] = useState(false);
+  const clearRecentHistory = async () => {
+    setClearingHistory(true);
+    try {
+      const response = await fetch("/api/shopper/history", { method: "DELETE" });
+      if (response.ok) setRecentItems([]);
+    } finally {
+      setClearingHistory(false);
+    }
+  };
   const [selectedTag, setSelectedTag] = useState(initialTag);
   const currentNow = new Date(now);
   const filterScrollRef = useRef<HTMLDivElement>(null);
@@ -252,7 +263,7 @@ export function ShopTabs({
                   </div>
                 </section>
 
-                {recentlyViewedProducts.length > 0 && (
+                {recentItems.length > 0 && (
                   <section className="rounded-[30px] border border-black/5 bg-white p-5 md:p-7">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                       <div>
@@ -260,9 +271,10 @@ export function ShopTabs({
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Continue browsing</h2>
                         <p className="mt-2 text-sm text-[#777]">Recently viewed listings, saved to your account across devices.</p>
                       </div>
+                      <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="self-start rounded-full border border-black/10 px-4 py-2 text-xs font-bold text-[#666] transition hover:border-black hover:text-black disabled:opacity-50">{clearingHistory ? "Clearing…" : "Clear history"}</button>
                     </div>
                     <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
-                      {recentlyViewedProducts.slice(0, 7).map((x: any) => {
+                      {recentItems.slice(0, 7).map((x: any) => {
                         const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                         const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
                         const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
