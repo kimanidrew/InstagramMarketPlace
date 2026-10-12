@@ -14,6 +14,7 @@ export function ShopTabs({
   tags = [],
   initialTag = "",
   wishlistProducts = [],
+  recentlyViewedProducts = [],
   featuredStores = [],
   trendingProducts = [],
   featuredProducts = [],
@@ -22,6 +23,7 @@ export function ShopTabs({
   tags?: string[];
   initialTag?: string;
   wishlistProducts?: any[];
+  recentlyViewedProducts?: any[];
   featuredStores?: any[];
   trendingProducts?: any[];
   featuredProducts?: any[];
@@ -249,6 +251,37 @@ export function ShopTabs({
                     )}
                   </div>
                 </section>
+
+                {recentlyViewedProducts.length > 0 && (
+                  <section className="rounded-[30px] border border-black/5 bg-white p-5 md:p-7">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                      <div>
+                        <p className="eyebrow plain"><Sparkles size={13} /> Made for your return</p>
+                        <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Continue browsing</h2>
+                        <p className="mt-2 text-sm text-[#777]">Recently viewed listings, saved to your account across devices.</p>
+                      </div>
+                    </div>
+                    <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
+                      {recentlyViewedProducts.slice(0, 7).map((x: any) => {
+                        const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
+                        const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
+                        const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
+                        const image = x.thumbnailUrl || x.mediaUrl;
+                        return (
+                          <Link key={x.id} href={href} aria-label={x.productTitle || "Recently viewed listing"} className="group block aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
+                            {isVideo && x.mediaUrl ? (
+                              <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                            ) : image ? (
+                              <img src={image} alt={x.productTitle || "Recently viewed listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </section>
+                )}
 
                 {wishlistProducts.length > 0 && (
                   <section className="rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
