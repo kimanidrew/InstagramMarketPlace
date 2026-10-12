@@ -4,6 +4,8 @@ import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 
 const REACH_PRICES: Record<number, number> = { 500: 100, 1000: 180, 2500: 400, 5000: 750, 10000: 1300 };
+// Demo mode is enabled by default until live Daraja checkout is configured.
+const isDemoMode = () => process.env.PROMOTION_DEMO_MODE !== "false";
 const env = () => ({
   key: process.env.MPESA_CONSUMER_KEY || "",
   secret: process.env.MPESA_CONSUMER_SECRET || "",
@@ -28,8 +30,9 @@ async function accessToken(base: string, key: string, secret: string) {
 export async function POST(request: Request) {
   const current = await user();
   if (!current) return NextResponse.json({ error: "Please sign in before paying for promotion." }, { status: 401 });
+  const demoMode = isDemoMode();
   const cfg = env();
-  if (!cfg.key || !cfg.secret || !cfg.shortcode || !cfg.passkey || !cfg.callback || !cfg.callback.startsWith("https://")) {
+  if (!demoMode && (!cfg.key || !cfg.secret || !cfg.shortcode || !cfg.passkey || !cfg.callback || !cfg.callback.startsWith("https://"))) {
     return NextResponse.json({ error: "M-Pesa is not configured yet. The marketplace owner must add the Daraja API credentials and public HTTPS callback URL." }, { status: 503 });
   }
   try {
@@ -40,7 +43,7 @@ export async function POST(request: Request) {
     const targetReach = Number(body.targetReach);
     const phoneNumber = normalizePhone(String(body.phoneNumber || ""));
     const amount = REACH_PRICES[targetReach];
-    if (!connectionId || !["STORE", "PRODUCT"].includes(targetType) || !amount || !phoneNumber) return NextResponse.json({ error: "Choose a shop or product, a supported reach package, and a valid Kenyan M-Pesa number." }, { status: 400 });
+    if (!connectionId || !["STORE", "PRODUCT"].includes(targetType) || !amount || (!demoMode && !phoneNumber)) return NextResponse.json({ error: "Choose a shop or product, a supported reach package, and a valid Kenyan M-Pesa number." }, { status: 400 });
     if (targetType === "PRODUCT" && !postId) return NextResponse.json({ error: "Choose a product to promote." }, { status: 400 });
     const prisma = db();
     const connection = await prisma.instagramConnection.findFirst({ where: { id: connectionId, connectedByUserId: current.id }, select: { id: true, username: true } });
@@ -52,7 +55,11 @@ export async function POST(request: Request) {
       if (!post) return NextResponse.json({ error: "That product was not found in this shop." }, { status: 404 });
     }
     const campaign = await prisma.promotionCampaign.create({ data: { userId: current.id, connectionId, postId: targetType === "PRODUCT" ? postId : null, targetType: targetType as "STORE" | "PRODUCT", targetReach, amount, status: "PENDING_PAYMENT" } });
-    const payment = await prisma.promotionPayment.create({ data: { campaignId: campaign.id, phoneNumber, amount, status: "INITIATED" } });
+    const payment = await prisma.promotionPayment.create({ data: { campaignId: campaign.id, phoneNumber: phoneNumber || "DEMO", amount, status: "INITIATED", provider: demoMode ? "DEMO" : "MPESA", ...(demoMode ? { resultDescription: "Demo activation only. No real payment was requested or charged." } : {}) } });
+    if (demoMode) {
+      await prisma.promotionCampaign.update({ where: { id: campaign.id }, data: { status: "ACTIVE", startsAt: new Date() } });
+      return NextResponse.json({ ok: true, demoMode: true, campaignId: campaign.id, message: "Promotion activated instantly in demo mode. No M-Pesa prompt was sent and no money was charged." });
+    }
     try {
       const token = await accessToken(cfg.base, cfg.key, cfg.secret);
       const timestamp = new Date().toISOString().replace(/[^0-9]/g, "").slice(0, 14);
