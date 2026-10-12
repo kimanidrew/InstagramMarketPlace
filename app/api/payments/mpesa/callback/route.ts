@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       cache: "no-store",
     });
     const queryData = await queryResponse.json();
-    if (!queryResponse.ok || String(queryData.ResultCode) !== "0") return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
+    if (!queryResponse.ok || String(queryData.ResponseCode) !== "0" || String(queryData.ResultCode) !== "0") return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
     const items = Array.isArray(callback.CallbackMetadata?.Item) ? callback.CallbackMetadata.Item as Array<{ Name?: string; Value?: string | number }> : [];
     const get = (name: string) => items.find(item => item.Name === name)?.Value;
     const paidAmount = Number(get("Amount"));
