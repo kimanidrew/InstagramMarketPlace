@@ -1504,3 +1504,12 @@ hr{border-color:#ece5fa}
 .promotion-product-check{display:grid;place-items:center;width:23px;height:23px;flex:none;border-radius:50%;color:#7c51be}
 .promotion-optional-label{margin-left:5px;color:#9a8da8;font-size:9px;font-weight:600}
 @media(max-width:650px){.promotion-product-picker{grid-template-columns:1fr}.promotion-product-image{width:62px;height:62px}}
+
+
+/* Unified seller analytics + growth dashboard */
+.combined-growth-section{margin-top:34px;padding-top:30px;border-top:1px solid #e9e3f0}
+.combined-growth-heading{margin:0 0 20px}
+.combined-growth-heading h2{margin:9px 0 7px;color:#261d33;font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.04em}
+.combined-growth-heading p{max-width:720px;margin:0;color:#7c7189;font-size:13px;line-height:1.7}
+.combined-growth-section .seller-growth{margin-top:0}
+@media(max-width:640px){.combined-growth-section{margin-top:24px;padding-top:22px}.combined-growth-heading p{font-size:12px}}
