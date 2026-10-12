@@ -7,7 +7,7 @@ import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphon
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
 type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; proUntil?: string | null; posts: Product[] };
 
-export function SellerGrowth({ connections }: { connections: Connection[] }) {
+export function SellerGrowth({ connections, embedded = false }: { connections: Connection[]; embedded?: boolean }) {
   const [selectedId, setSelectedId] = useState(connections[0]?.id || "");
   const [selectedProductId, setSelectedProductId] = useState("");
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
@@ -36,10 +36,10 @@ export function SellerGrowth({ connections }: { connections: Connection[] }) {
   const profile = selectedShop?.profileImageUrl;
 
   return <section className="seller-growth">
-    <div className="growth-welcome">
+    {!embedded && <div className="growth-welcome">
       <div><span className="growth-kicker"><Sparkles size={13}/> YOUR GROWTH STUDIO</span><h2>One place to grow<br/><span>your business.</span></h2><p>Choose a shop first, then decide whether to promote a product or grow your whole shop. You stay in control at every step.</p></div>
       <div className="growth-welcome-art"><BarChart3 size={34}/><span>Small steps.<br/><b>More visibility.</b></span></div>
-    </div>
+    </div>}
 
     <div className="growth-shop-picker">
       <div className="growth-shop-picker-label"><span className="growth-step">01</span><div><b>Choose the shop</b><small>All growth options below apply to this shop.</small></div></div>
