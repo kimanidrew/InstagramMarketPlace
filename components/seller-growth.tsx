@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap } from "lucide-react";
 
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
@@ -74,7 +75,7 @@ export function SellerGrowth({ connections }: { connections: Connection[] }) {
             <span className="growth-product-info"><strong>{p.productTitle || "Untitled product"}</strong><small>{selected ? "Selected for boost" : "Tap to select"}</small></span>
           </button>;
         })}</div>
-        <div className="growth-action-row"><div><b>{chosenProduct?.productTitle || "Choose a product"}</b><small>Selected product · 7-day visibility boost</small></div><button type="button" className="growth-primary-action" disabled={!chosenProduct || !!busy} onClick={() => chosenProduct && request("BOOST", selectedShop.id, chosenProduct.id)}>{busy === "BOOST" + selectedShop.id + chosenProduct?.id ? "Sending request…" : <>Request product boost <Zap size={15}/></>}</button></div>
+        <div className="growth-action-row"><div><b>{chosenProduct?.productTitle || "Choose a product"}</b><small>Selected product · 7-day visibility boost</small></div><Link href={chosenProduct ? "/account/analytics?shopId=" + encodeURIComponent(selectedShop.id) + "&postId=" + encodeURIComponent(chosenProduct.id) : "/account/analytics"} className="growth-primary-action">{<>Choose reach &amp; pay <Zap size={15}/></>}</Link></div>
       </> : <div className="growth-no-products"><ImageIcon size={22}/><div><b>No products found for this shop yet</b><p>Once your Instagram posts are listed as products, you can choose one here to boost.</p></div></div>}
     </section>
 
