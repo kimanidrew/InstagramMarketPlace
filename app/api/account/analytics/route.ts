@@ -46,13 +46,13 @@ export async function GET(request: Request) {
   });
   const shops = connections.map(c => {
     const shopEvents = events.filter(e => e.connectionId === c.id);
-    return { id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, productCount: c.posts.length, impressions: shopEvents.filter(e => e.type === "IMPRESSION").length, views: shopEvents.filter(e => e.type === "VIEW").length, clicks: shopEvents.filter(e => e.type === "CLICK").length, reach: unique(shopEvents), likes: c.posts.reduce((n, p) => n + p.likes.length, 0), products: c.posts.map(p => ({ id: p.id, title: p.productTitle || "Untitled product", slug: p.productSlug, image: p.thumbnailUrl || p.mediaUrl, mediaType: p.mediaType, likes: p.likes.length, instagramLikes: p.instagramLikeCount, impressions: shopEvents.filter(e => e.postId === p.id && e.type === "IMPRESSION").length, views: shopEvents.filter(e => e.postId === p.id && e.type === "VIEW").length, clicks: shopEvents.filter(e => e.postId === p.id && e.type === "CLICK").length, boosted: !!p.boostUntil && p.boostUntil > new Date() })) };
+    return { id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, productCount: c.posts.length, impressions: shopEvents.filter(e => e.type === "IMPRESSION").length, views: shopEvents.filter(e => e.type === "VIEW").length, clicks: shopEvents.filter(e => e.type === "CLICK").length, reach: unique(shopEvents.filter(e => e.type === "IMPRESSION")), likes: c.posts.reduce((n, p) => n + p.likes.length, 0), products: c.posts.map(p => ({ id: p.id, title: p.productTitle || "Untitled product", slug: p.productSlug, image: p.thumbnailUrl || p.mediaUrl, mediaType: p.mediaType, likes: p.likes.length, instagramLikes: p.instagramLikeCount, impressions: shopEvents.filter(e => e.postId === p.id && e.type === "IMPRESSION").length, views: shopEvents.filter(e => e.postId === p.id && e.type === "VIEW").length, clicks: shopEvents.filter(e => e.postId === p.id && e.type === "CLICK").length, boosted: !!p.boostUntil && p.boostUntil > new Date() })) };
   });
   const paidEvents = events.filter(e => e.campaignId);
-  const paidUnique = unique(paidEvents);
+  const paidUnique = unique(paidEvents.filter(e => e.type === "IMPRESSION"));
   return NextResponse.json({
     shops,
-    summary: { impressions, views, clicks, likes, reach: unique(events), paidImpressions: paidEvents.filter(e => e.type === "IMPRESSION").length, paidReach: paidUnique },
+    summary: { impressions, views, clicks, likes, reach: unique(events.filter(e => e.type === "IMPRESSION")), paidImpressions: paidEvents.filter(e => e.type === "IMPRESSION").length, paidReach: paidUnique },
     daily,
     campaigns: campaigns.map(c => ({ id: c.id, targetType: c.targetType, targetReach: c.targetReach, deliveredReach: c.deliveredReach, amount: c.amount, status: c.status, createdAt: c.createdAt.toISOString(), startsAt: c.startsAt?.toISOString() || null, endsAt: c.endsAt?.toISOString() || null, username: c.connection.username, profileImageUrl: c.connection.profileImageUrl, productTitle: c.post?.productTitle || null, image: c.post?.thumbnailUrl || c.post?.mediaUrl || null, paymentStatus: c.payment?.status || null, receiptNumber: c.payment?.receiptNumber || null, phoneNumber: c.payment?.phoneNumber || null })),
   });
