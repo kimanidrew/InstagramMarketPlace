@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product-card";
 import { StoreReviewsDrawer } from "@/components/store-reviews-drawer";
 import { notFound } from "next/navigation";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,7 @@ export default async function Store({
 
   return (
     <main className="store-page">
+      <AnalyticsTracker connectionId={store.id} type="VIEW" />
       <section className="store-hero">
         <div className="store-hero-orb store-hero-orb-a" />
         <div className="store-hero-orb store-hero-orb-b" />
