@@ -4,7 +4,7 @@ import { db } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   const current = await user();
   if (!current) return NextResponse.json({ error: "Login required" }, { status: 401 });
   const prisma = db();
@@ -19,17 +19,20 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
   });
   const ids = connections.map(c => c.id);
-  const postIds = connections.flatMap(c => c.posts.map(p => p.id));
+  const requestedShopId = new URL(request.url).searchParams.get("shopId");
+  const selectedIds = requestedShopId && ids.includes(requestedShopId) ? [requestedShopId] : ids;
+  const selectedConnections = connections.filter(c => selectedIds.includes(c.id));
+  const postIds = selectedConnections.flatMap(c => c.posts.map(p => p.id));
   if (!ids.length) return NextResponse.json({ shops: [], summary: { impressions: 0, views: 0, clicks: 0, likes: 0, reach: 0 }, daily: [], campaigns: [] });
 
   const since = new Date();
   since.setDate(since.getDate() - 29);
   since.setHours(0, 0, 0, 0);
   const [events, campaigns] = await Promise.all([
-    prisma.analyticsEvent.findMany({ where: { connectionId: { in: ids }, createdAt: { gte: since } }, select: { connectionId: true, postId: true, campaignId: true, visitorId: true, type: true, createdAt: true } }),
-    prisma.promotionCampaign.findMany({ where: { userId: current.id }, include: { connection: { select: { username: true, profileImageUrl: true } }, post: { select: { productTitle: true, thumbnailUrl: true, mediaUrl: true } }, payment: { select: { status: true, receiptNumber: true, amount: true, phoneNumber: true } } }, orderBy: { createdAt: "desc" }, take: 12 }),
+    prisma.analyticsEvent.findMany({ where: { connectionId: { in: selectedIds }, createdAt: { gte: since } }, select: { connectionId: true, postId: true, campaignId: true, visitorId: true, type: true, createdAt: true } }),
+    prisma.promotionCampaign.findMany({ where: { userId: current.id, ...(requestedShopId && ids.includes(requestedShopId) ? { connectionId: requestedShopId } : {}) }, include: { connection: { select: { username: true, profileImageUrl: true } }, post: { select: { productTitle: true, thumbnailUrl: true, mediaUrl: true } }, payment: { select: { status: true, receiptNumber: true, amount: true, phoneNumber: true } } }, orderBy: { createdAt: "desc" }, take: 12 }),
   ]);
-  const likes = await prisma.productLike.count({ where: { postId: { in: postIds } } });
+  const likes = postIds.length ? await prisma.productLike.count({ where: { postId: { in: postIds } } }) : 0;
   const unique = (items: typeof events) => new Set(items.map(e => e.visitorId)).size;
   const impressions = events.filter(e => e.type === "IMPRESSION").length;
   const views = events.filter(e => e.type === "VIEW").length;
