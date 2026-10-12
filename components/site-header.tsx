@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Bookmark, Store, User } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export function SiteHeader({ user }: { user: any }) {
 
@@ -46,7 +45,7 @@ export function SiteHeader({ user }: { user: any }) {
           <div className="menu-label">Explore</div>
           <div className="grid grid-cols-2 gap-2">
             <Link href="/shop" className="menu-card" >Shop all</Link>
-            <Link href="/stores" className="menu-card" onClick={() => setMenuOpen(false)}>Stores</Link>
+            <Link href="/stores" className="menu-card">Stores</Link>
             <Link href="/categories" className="menu-card" onClick={() => setMenuOpen(false)}>Categories</Link>
             <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>
             {user && <Link href="/account" className="menu-card" onClick={() => setMenuOpen(false)}>Grow your shop</Link>}
