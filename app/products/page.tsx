@@ -20,7 +20,7 @@ export default async function Products({
   const currentUser = await user();
   const now = new Date();
 
-  const [tags, wishlistProducts, featuredProductsRaw, featuredStoresRaw, topLiked, topSaved] =
+  const [tags, wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topLiked, topSaved] =
     await Promise.all([
       db().productTag.groupBy({
         by: ["name"],
@@ -44,6 +44,23 @@ export default async function Products({
             orderBy: { timestamp: "desc" },
             take: 8,
           }).then((items) => filterAvailableInstagramMedia(items))
+        : Promise.resolve([]),
+      currentUser
+        ? db().recentlyViewedProduct.findMany({
+            where: { userId: currentUser.id, post: { isProduct: true } },
+            include: {
+              post: {
+                include: {
+                  connection: true,
+                  tags: true,
+                  likes: true,
+                  wishlistItems: { where: { userId: currentUser.id } },
+                },
+              },
+            },
+            orderBy: { lastViewedAt: "desc" },
+            take: 7,
+          }).then((items) => filterAvailableInstagramMedia(items.map((item) => item.post)))
         : Promise.resolve([]),
       db().instagramPost.findMany({
         where: { isProduct: true, boostUntil: { gt: now } },
@@ -195,6 +212,7 @@ export default async function Products({
         const shopData = JSON.parse(
           JSON.stringify({
             wishlistProducts,
+            recentlyViewedProducts,
             featuredStores: promotedStores,
             trendingProducts: prepareProducts(trendingProducts),
             featuredProducts: prepareProducts(featuredProductsRaw),
@@ -206,6 +224,7 @@ export default async function Products({
             tags={tags.map((x) => x.name)}
             initialTag={tag || ""}
             wishlistProducts={shopData.wishlistProducts}
+            recentlyViewedProducts={shopData.recentlyViewedProducts}
             featuredStores={shopData.featuredStores}
             trendingProducts={shopData.trendingProducts}
             featuredProducts={shopData.featuredProducts}
