@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Buffer } from "node:buffer";
 import { db } from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -14,6 +15,25 @@ export async function POST(request: Request) {
       await prisma.promotionCampaign.update({ where: { id: payment.campaignId }, data: { status: "FAILED" } });
       return NextResponse.json({ ResultCode: 0, ResultDesc: "Recorded" });
     }
+    const key = process.env.MPESA_CONSUMER_KEY || "";
+    const secret = process.env.MPESA_CONSUMER_SECRET || "";
+    const shortcode = process.env.MPESA_SHORTCODE || "";
+    const passkey = process.env.MPESA_PASSKEY || "";
+    const base = process.env.MPESA_ENVIRONMENT === "production" ? "https://api.safaricom.co.ke" : "https://sandbox.safaricom.co.ke";
+    if (!key || !secret || !shortcode || !passkey) return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
+    const authResponse = await fetch(base + "/oauth/v1/generate?grant_type=client_credentials", { headers: { Authorization: "Basic " + Buffer.from(key + ":" + secret).toString("base64") }, cache: "no-store" });
+    const authData = await authResponse.json();
+    if (!authResponse.ok || !authData.access_token) return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
+    const timestamp = new Date().toISOString().replace(/[^0-9]/g, "").slice(0, 14);
+    const password = Buffer.from(shortcode + passkey + timestamp).toString("base64");
+    const queryResponse = await fetch(base + "/mpesa/stkpushquery/v1/query", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + authData.access_token, "Content-Type": "application/json" },
+      body: JSON.stringify({ BusinessShortCode: shortcode, Password: password, Timestamp: timestamp, CheckoutRequestID: String(callback.CheckoutRequestID) }),
+      cache: "no-store",
+    });
+    const queryData = await queryResponse.json();
+    if (!queryResponse.ok || String(queryData.ResultCode) !== "0") return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
     const items = Array.isArray(callback.CallbackMetadata?.Item) ? callback.CallbackMetadata.Item as Array<{ Name?: string; Value?: string | number }> : [];
     const get = (name: string) => items.find(item => item.Name === name)?.Value;
     const paidAmount = Number(get("Amount"));
