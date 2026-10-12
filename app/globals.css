@@ -1022,3 +1022,29 @@ hr{border-color:#ece5fa}
     border-radius:20px!important;
   }
 }
+
+
+/* Discover stores: swipe horizontally on mobile, snapping one store card at a time. */
+@media(max-width:767px){
+  .shop-page .discover-stores-list{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-inline:4px;
+    overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;
+    padding:2px 4px 12px!important;
+    margin-right:-4px;
+    scrollbar-width:none;
+  }
+  .shop-page .discover-stores-list::-webkit-scrollbar{display:none}
+  .shop-page .discover-stores-list>article{
+    flex:0 0 88%!important;
+    min-width:0!important;
+    scroll-snap-align:start!important;
+    scroll-snap-stop:always!important;
+  }
+}
