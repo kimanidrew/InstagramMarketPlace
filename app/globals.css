@@ -1026,3 +1026,17 @@ hr{border-color:#ece5fa}
 
 /* Keep the Shop page container transparent; preserve the original tab styling. */
 .shop-page{background:transparent!important}
+
+
+/* Center desktop navigation links independently of the brand and action icons. */
+@media(min-width:1024px){
+  .site-header .shell{position:relative}
+  .site-header .shell>nav{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    justify-content:center;
+    white-space:nowrap;
+  }
+  .site-header .nav-link{font-weight:900}
+}
