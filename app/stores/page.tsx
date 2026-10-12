@@ -1,11 +1,14 @@
 import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
+import { user } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function Stores() {
-  const stores = await db().instagramConnection.findMany({
+  const currentUser = await user();
+  const now = new Date();
+  const [stores, activeStoreCampaigns, tastePosts] = await Promise.all([db().instagramConnection.findMany({
     include: {
       posts: {
         where: {
@@ -18,19 +21,24 @@ export default async function Stores() {
         },
       },
     },
-    orderBy: {
-      username: "asc",
-    },
-  });
+    orderBy: [{ verifiedAt: "desc" }, { proUntil: "desc" }, { username: "asc" }],
+  }), db().promotionCampaign.findMany({ where: { status: "ACTIVE", targetType: "STORE" }, select: { connectionId: true } }), currentUser ? db().instagramPost.findMany({ where: { isProduct: true, OR: [{ likes: { some: { userId: currentUser.id } } }, { wishlistItems: { some: { userId: currentUser.id } } }] }, select: { connectionId: true }, take: 200 }) : Promise.resolve([])]);
 
+  const paidStoreIds = new Set(activeStoreCampaigns.map((campaign) => campaign.connectionId));
+  const affinity = new Map<string, number>();
+  for (const post of tastePosts) affinity.set(post.connectionId, (affinity.get(post.connectionId) || 0) + 1);
   const availableStores = (
     await Promise.all(
       stores.map(async (store) => ({
         store,
         posts: await filterAvailableInstagramMedia(store.posts),
+        promoted: paidStoreIds.has(store.id),
+        activePro: !!store.proUntil && store.proUntil > now,
+        activeVerified: !!store.verifiedAt && (!store.verifiedUntil || store.verifiedUntil > now),
+        personalAffinity: affinity.get(store.id) || 0,
       })),
     )
-  ).filter(({ posts }) => posts.length > 0);
+  ).filter(({ posts }) => posts.length > 0).sort((a, b) => Number(b.promoted) - Number(a.promoted) || Number(b.activeVerified) - Number(a.activeVerified) || Number(b.activePro) - Number(a.activePro) || b.personalAffinity - a.personalAffinity || a.store.username.localeCompare(b.store.username));
 
   return (
     <main className="shell py-16">
@@ -61,7 +69,7 @@ export default async function Stores() {
               </div>
 
               <div>
-                <b>@{store.username}</b>
+                <div className="flex flex-wrap items-center gap-2"><b>@{store.username}</b>{store.promoted && <span className="rounded-full bg-black px-2 py-1 text-[9px] font-black uppercase tracking-wider text-white">Promoted</span>}{store.activeVerified && <span className="rounded-full border border-black/10 px-2 py-1 text-[9px] font-bold">Verified</span>}{store.activePro && <span className="rounded-full bg-[#f1e9ff] px-2 py-1 text-[9px] font-bold">Pro Seller</span>}</div>
                 <p className="text-sm text-[#777]">
                   {posts.length} products
                 </p>
