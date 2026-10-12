@@ -1324,3 +1324,44 @@ hr{border-color:#ece5fa}
  .admin-page .admin-request-danger{gap:10px;align-items:flex-start}
  .admin-page .admin-growth-card{padding:14px;align-items:flex-start;flex-direction:column}
 }
+
+
+/* Dedicated seller growth studio. */
+.grow-shop-page{min-height:75vh;background:linear-gradient(180deg,#faf8ff 0,#fff 520px);padding:24px 0 60px;color:#211936}
+.grow-shop-hero{position:relative;isolation:isolate;overflow:hidden;max-width:1180px;width:calc(100% - 32px);min-height:300px;margin:0 auto 28px;padding:26px 34px 32px;border-radius:30px;background:linear-gradient(118deg,#211438 0%,#4c2e83 58%,#7754b9 100%);color:#fff;box-shadow:0 24px 65px rgba(65,41,109,.18)}
+.grow-shop-back{position:relative;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:rgba(255,255,255,.08);color:#f6f0ff;font-size:11px;font-weight:750}
+.grow-shop-hero-inner{position:relative;z-index:2;max-width:600px;padding-top:24px}
+.grow-shop-eyebrow{display:inline-flex;align-items:center;gap:7px;color:#e0d1ff;font-size:10px;font-weight:850;letter-spacing:.14em}
+.grow-shop-hero h1{margin:13px 0;font-size:clamp(38px,5vw,58px);line-height:.99;letter-spacing:-.07em;color:#fff}
+.grow-shop-hero h1 span{color:#d9c7ff}
+.grow-shop-hero-inner>p{max-width:520px;margin:0;color:#e2d9f2;font-size:13px;line-height:1.8}
+.grow-shop-summary{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+.grow-shop-summary span{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(255,255,255,.09);color:#f6f1ff;font-size:10px;font-weight:750}
+.grow-shop-orbit{position:absolute;z-index:1;right:9%;top:50%;width:240px;height:240px;transform:translateY(-42%);display:grid;place-items:center;color:#eadfff}
+.grow-shop-orbit>div{position:absolute;border:1px solid rgba(255,255,255,.18);border-radius:50%;inset:0}
+.grow-shop-orbit>div:nth-child(2){inset:28px}.grow-shop-orbit>div:nth-child(3){inset:58px;background:radial-gradient(circle,rgba(255,255,255,.18),rgba(255,255,255,.015))}
+.grow-shop-orbit>svg{position:relative;z-index:1}
+.grow-shop-content{max-width:1180px;width:calc(100% - 32px);margin:0 auto}
+.grow-shop-content .seller-growth{margin:0;padding:0;border:0;background:transparent}
+.grow-shop-content .seller-growth-head{margin-bottom:20px}
+.grow-shop-content .seller-growth-plans{gap:16px}
+.grow-shop-empty{display:flex;align-items:center;flex-direction:column;text-align:center;padding:45px 20px;border:1px dashed #ded4f0;border-radius:24px;background:#fff}
+.grow-shop-empty>span{display:grid;place-items:center;width:54px;height:54px;border-radius:17px;background:#f1ebff;color:#6b4dc0}
+.grow-shop-empty h2{margin:15px 0 6px;font-size:23px}.grow-shop-empty p{max-width:450px;margin:0 0 16px;color:#777184;font-size:12px;line-height:1.7}
+.grow-shop-empty>a{display:inline-flex;align-items:center;gap:7px;padding:11px 15px;border-radius:999px;background:#25183f;color:#fff;font-size:11px;font-weight:800}
+.grow-shop-footnote{display:flex;align-items:flex-start;gap:9px;margin-top:24px;padding:14px 16px;border:1px solid #e8e0f6;border-radius:15px;background:#faf8ff;color:#6b4dc0}
+.grow-shop-footnote svg{flex:0 0 auto;margin-top:1px}.grow-shop-footnote p{margin:0;color:#716980;font-size:11px;line-height:1.7}
+@media(max-width:767px){
+ .grow-shop-page{padding-top:12px;padding-bottom:38px}
+ .grow-shop-hero,.grow-shop-content{width:calc(100% - 20px)}
+ .grow-shop-hero{min-height:0;padding:18px 18px 22px;border-radius:23px;margin-bottom:23px}
+ .grow-shop-hero-inner{padding-top:24px}
+ .grow-shop-hero h1{font-size:38px}
+ .grow-shop-hero-inner>p{font-size:12px;line-height:1.7}
+ .grow-shop-orbit{right:-82px;top:45px;width:190px;height:190px;opacity:.55;transform:none}
+ .grow-shop-summary{gap:7px;margin-top:17px}
+ .grow-shop-summary span{font-size:9px;padding:8px 9px}
+ .grow-shop-content .seller-growth-head{align-items:flex-start;gap:12px}
+ .grow-shop-content .seller-growth-plans{grid-template-columns:1fr}
+ .grow-shop-empty{padding:32px 17px}
+}
