@@ -28,6 +28,15 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
   if (!product || !product.isProduct) notFound();
 
+  // Keep a private, account-linked history so shoppers can continue on another device.
+  if (currentUser) {
+    await db().recentlyViewedProduct.upsert({
+      where: { userId_postId: { userId: currentUser.id, postId: product.id } },
+      create: { userId: currentUser.id, postId: product.id, lastViewedAt: new Date() },
+      update: { lastViewedAt: new Date(), viewCount: { increment: 1 } },
+    });
+  }
+
   const isVideo = String(product.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = product.mediaUrl || product.thumbnailUrl;
   const carouselItems = Array.isArray(product.mediaItems) ? (product.mediaItems as Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>) : null;
