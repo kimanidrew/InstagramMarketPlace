@@ -1,26 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Menu, ShoppingBag, Store, UserCircle, X } from "lucide-react";
+import { Bookmark, Store, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function SiteHeader({ user }: { user: any }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [bagCount, setBagCount] = useState(0);
-
-  useEffect(() => {
-    const readBag = () => {
-      try {
-        const raw = localStorage.getItem("instagram-market-bag");
-        const bag = raw ? JSON.parse(raw) : [];
-        setBagCount(Array.isArray(bag) ? bag.reduce((sum, item) => sum + Number(item?.quantity || 1), 0) : 0);
-      } catch { setBagCount(0); }
-    };
-    readBag();
-    window.addEventListener("storage", readBag);
-    window.addEventListener("bag-updated", readBag);
-    return () => { window.removeEventListener("storage", readBag); window.removeEventListener("bag-updated", readBag); };
-  }, []);
 
   return (
     <header className="site-header sticky top-0 z-50">
@@ -46,32 +30,22 @@ export function SiteHeader({ user }: { user: any }) {
             <Bookmark size={19} />
           </Link>
           <Link href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
-            <UserCircle size={19} />
+            <User size={19} />
           </Link>
           {user?.role === "ADMIN" && (
             <Link href="/admin" className="icon-btn hidden md:flex" aria-label="Admin">
               <Store size={19} />
             </Link>
           )}
-          <Link href="/shop" className="bag-btn" aria-label="Shop">
-            <ShoppingBag size={18} />
-          </Link>
-          <button
-            type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            className={"icon-btn lg:hidden " + (menuOpen ? "active" : "")}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-          >
-            {menuOpen ? <X size={21} /> : <Menu size={21} />}
-          </button>
+
         </div>
       </div>
 
-      <div className={"mobile-menu-panel " + (menuOpen ? "is-open" : "")}>
+      <div className="mobile-menu-panel">
         <div className="shell py-5">
           <div className="menu-label">Explore</div>
           <div className="grid grid-cols-2 gap-2">
-            <Link href="/shop" className="menu-card" onClick={() => setMenuOpen(false)}>Shop all</Link>
+            <Link href="/shop" className="menu-card" >Shop all</Link>
             <Link href="/stores" className="menu-card" onClick={() => setMenuOpen(false)}>Stores</Link>
             <Link href="/categories" className="menu-card" onClick={() => setMenuOpen(false)}>Categories</Link>
             <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>
