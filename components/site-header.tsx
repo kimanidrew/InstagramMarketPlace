@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Menu, Search, ShoppingBag, Store, UserCircle, X, ArrowRight } from "lucide-react";
+import { Bookmark, Menu, ShoppingBag, Store, UserCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function SiteHeader({ user }: { user: any }) {
-  const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [query, setQuery] = useState("");
   const [bagCount, setBagCount] = useState(0);
 
   useEffect(() => {
@@ -24,31 +22,12 @@ export function SiteHeader({ user }: { user: any }) {
     return () => { window.removeEventListener("storage", readBag); window.removeEventListener("bag-updated", readBag); };
   }, []);
 
-  function submitSearch(e: React.FormEvent) {
-    e.preventDefault();
-    const q = query.trim();
-    window.location.href = q ? "/shop?q=" + encodeURIComponent(q) : "/shop";
-  }
-
   return (
     <header className="site-header sticky top-0 z-50">
       <div className="shell flex h-[74px] items-center gap-4">
         <Link href="/" className="brand shrink-0">
           instagram<span>market</span><sup>®</sup>
         </Link>
-
-        <div className={"desktop-search-wrap " + (searchOpen ? "is-open" : "")}>
-          <form onSubmit={submitSearch} className="desktop-search">
-            <span className="search-icon-wrap"><Search size={16} strokeWidth={2.5} /></span>
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search products, stores & categories..."
-              aria-label="Search products, stores and categories"
-            />
-            <span className="search-shortcut">⌘ K</span>
-          </form>
-        </div>
 
         <nav className="hidden items-center gap-1 lg:flex">
           {[
@@ -79,35 +58,13 @@ export function SiteHeader({ user }: { user: any }) {
           </Link>
           <button
             type="button"
-            onClick={() => { setMenuOpen((v) => !v); setSearchOpen(false); }}
+            onClick={() => setMenuOpen((v) => !v)}
             className={"icon-btn lg:hidden " + (menuOpen ? "active" : "")}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
           >
             {menuOpen ? <X size={21} /> : <Menu size={21} />}
           </button>
         </div>
-      </div>
-
-      <div className={"mobile-search-panel " + (searchOpen ? "is-open" : "")}>
-        <form onSubmit={submitSearch} className="shell">
-          <div className="mobile-search-box">
-            <Search size={20} />
-            <input
-              autoFocus={searchOpen}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="What are you looking for?"
-              aria-label="Search"
-            />
-            <button type="submit" aria-label="Submit search"><ArrowRight size={19} /></button>
-          </div>
-          <div className="search-hints">
-            <span>Try</span><Link href="/shop?tag=fashion">Fashion</Link>
-            <Link href="/shop?tag=beauty">Beauty</Link>
-            <Link href="/shop?tag=home">Home</Link>
-            <Link href="/stores">Stores</Link>
-          </div>
-        </form>
       </div>
 
       <div className={"mobile-menu-panel " + (menuOpen ? "is-open" : "")}>
