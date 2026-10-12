@@ -41,6 +41,10 @@ export function SellerAnalytics({ connections }: { connections: Connection[] }) 
   }, [selectedShopId]);
   useEffect(() => { void refresh(); }, [refresh]);
   useEffect(() => {
+    const timer = window.setInterval(() => { void refresh(); }, 15000);
+    return () => window.clearInterval(timer);
+  }, [refresh]);
+  useEffect(() => {
     if (!pendingCampaign) return;
     let attempts = 0;
     const timer = window.setInterval(async () => {
