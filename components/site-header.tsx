@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Store, User } from "lucide-react";
+import { Bookmark, Store, PersonStanding } from "lucide-react";
 
 export function SiteHeader({ user }: { user: any }) {
 
@@ -29,7 +29,7 @@ export function SiteHeader({ user }: { user: any }) {
             <Bookmark size={19} />
           </Link>
           <Link href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
-            <User size={19} />
+            <PersonStanding size={19} />
           </Link>
           {user?.role === "ADMIN" && (
             <Link href="/admin" className="icon-btn hidden md:flex" aria-label="Admin">
