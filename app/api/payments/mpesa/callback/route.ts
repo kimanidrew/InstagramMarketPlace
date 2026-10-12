@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     if (!callback?.CheckoutRequestID) return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
     const prisma = db();
     const payment = await prisma.promotionPayment.findUnique({ where: { checkoutRequestId: String(callback.CheckoutRequestID) }, include: { campaign: { include: { post: true } } } });
-    if (!payment) return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
+    if (!payment || payment.status === "PAID") return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
     if (Number(callback.ResultCode) !== 0) {
       await prisma.promotionPayment.update({ where: { id: payment.id }, data: { status: "FAILED", resultCode: String(callback.ResultCode), resultDescription: String(callback.ResultDesc || "Payment was not completed.") } });
       await prisma.promotionCampaign.update({ where: { id: payment.campaignId }, data: { status: "FAILED" } });
