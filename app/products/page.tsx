@@ -78,7 +78,7 @@ export default async function Products({
           },
         },
         orderBy: [{ verifiedAt: "desc" }, { proUntil: "desc" }, { username: "asc" }],
-        take: 8,
+        take: 50,
       }),
       db().instagramPost.findMany({
         where: { isProduct: true },
