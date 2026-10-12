@@ -55,11 +55,11 @@ export default async function Account({ searchParams }: { searchParams: Promise<
     </section>
 
     <section className="account-section">
-      <div className="account-section-heading"><div><span className="account-hub-eyebrow">YOUR BUSINESS</span><h2>Connected shops</h2><p>Choose a shop to view its public storefront, or visit Analytics & Growth to track performance, promote products, and unlock seller tools.</p></div><div className="account-section-actions"><Link href="/account/analytics" className="account-outline-button"><ChartNoAxesCombined size={16}/> Analytics &amp; Growth</Link><Link href="/account/setup" className="account-outline-button"><Plus size={16}/> Add a shop</Link></div></div>
+      <div className="account-section-heading"><div><span className="account-hub-eyebrow">YOUR BUSINESS</span><h2>Connected shops</h2><p>Choose a shop to view its public storefront, or visit Grow your own shop to track performance, promote products, and unlock seller tools.</p></div><div className="account-section-actions"><Link href="/account/analytics" className="account-outline-button"><ChartNoAxesCombined size={16}/> Grow your own shop</Link><Link href="/account/setup" className="account-outline-button"><Plus size={16}/> Add a shop</Link></div></div>
       {connections.length ? <div className="account-connected-grid">{connections.map(c => <article className="account-connected-card" key={c.id}>
         <div className="account-store-avatar"><Instagram size={23}/><span><i/></span></div>
         <div className="account-store-info"><h3>@{c.username}</h3><p>{c.posts.length} marketplace {c.posts.length === 1 ? "product" : "products"}</p><span className="account-connected-status"><CheckCircle2 size={13}/> Instagram connected</span></div>
-        <div className="account-store-actions"><Link href={"/store/"+encodeURIComponent(c.username)} className="account-manage-button">View store <ArrowRight size={14}/></Link><Link href="/account/analytics" className="account-grow-link"><Zap size={14}/> Analytics &amp; Growth</Link></div>
+        <div className="account-store-actions"><Link href={"/store/"+encodeURIComponent(c.username)} className="account-manage-button">View store <ArrowRight size={14}/></Link><Link href="/account/analytics" className="account-grow-link"><Zap size={14}/> Grow your own shop</Link></div>
       </article>)}</div> : <div className="account-empty-state"><div className="account-empty-icon"><Instagram size={25}/></div><h3>Your connected shops will appear here</h3><p>Start by connecting an Instagram Business account. We’ll guide you through each step and save your progress.</p><Link href="/account/setup" className="account-primary-button">Connect your first shop <ArrowRight size={15}/></Link></div>}
     </section>
 
@@ -68,6 +68,6 @@ export default async function Account({ searchParams }: { searchParams: Promise<
       <div className="account-request-list">{pendingRequests.map(r => <article key={r.id}><span className="account-request-icon"><Instagram size={19}/></span><div><b>@{r.username}</b><span>{r.status === "PENDING" ? "Waiting for our team to review your request" : r.status === "APPROVED" ? "Approved — ready for the next setup step" : "Needs attention — you can start a new request"}</span></div><Link href={"/account/setup?setup="+encodeURIComponent(r.id)+"&step="+(r.status === "APPROVED" ? 3 : r.status === "PENDING" ? 2 : 1)}>Continue setup <ArrowRight size={14}/></Link></article>)}</div>
     </section>}
 
-    <footer className="account-help-note"><BadgeCheck size={16}/><p><b>Quick tip:</b> Your Instagram posts stay on Instagram. Boosts and seller upgrades are optional, and you can request them for individual connected shops from the Analytics & Growth dashboard.</p></footer>
+    <footer className="account-help-note"><BadgeCheck size={16}/><p><b>Quick tip:</b> Your Instagram posts stay on Instagram. Boosts and seller upgrades are optional, and you can request them for individual connected shops from the Grow your own shop dashboard.</p></footer>
   </main>;
 }
