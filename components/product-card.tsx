@@ -5,6 +5,7 @@ import { Bookmark, Heart } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
+import { recordAnalytics } from "@/lib/analytics-client";
 import { useEffect, useRef, useState } from "react";
 
 export function ProductCard({ p }: { p: any }) {
@@ -14,6 +15,7 @@ export function ProductCard({ p }: { p: any }) {
   const [wishlistFlash, setWishlistFlash] = useState(false);
   const likeCountRef = useRef(likeCount);
   const wishlistCountRef = useRef(wishlistCount);
+  const cardRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const onLike = (event: Event) => {
@@ -48,13 +50,28 @@ export function ProductCard({ p }: { p: any }) {
     };
   }, [p.id]);
 
+  useEffect(() => {
+    const element = cardRef.current;
+    if (!element || !p.connection?.id || !p.id || typeof IntersectionObserver === "undefined") return;
+    let sent = false;
+    const observer = new IntersectionObserver(entries => {
+      if (!sent && entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.3)) {
+        sent = true;
+        recordAnalytics({ connectionId: p.connection.id, postId: p.id, type: "IMPRESSION" });
+        observer.disconnect();
+      }
+    }, { threshold: [0.3] });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [p.id, p.connection?.id]);
+
   const isVideo = String(p.mediaType || "").toUpperCase() === "VIDEO";
   const img = p.mediaUrl || p.thumbnailUrl;
   const isService = String(p.listingType || "").toUpperCase() === "SERVICE";
   const href = "/" + (isService ? "service" : "product") + "/" + p.productSlug;
 
   return (
-    <article className="group min-w-0">
+    <article ref={cardRef} className="group min-w-0" onClickCapture={event => { const target = event.target as HTMLElement; const link = target.closest("a"); if (link && link.getAttribute("href") === href && p.connection?.id) recordAnalytics({ connectionId: p.connection.id, postId: p.id, type: "CLICK" }); }}>
       <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] bg-[#f4f4f2] sm:rounded-[22px]">
         {isVideo && p.mediaUrl ? (
           <div className="h-full w-full">
