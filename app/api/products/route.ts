@@ -27,40 +27,74 @@ export async function GET(request: Request) {
     where.tags = { some: { name: tag } };
   }
 
-  // Media availability is checked after the database query. Fetch raw pages until
-  // we have a full visible batch; otherwise unavailable Instagram media can create
-  // large gaps in the masonry list and make valid products appear to be missing.
+  const now = new Date();
   const pageStart = page * limit;
   let rawSkip = pageStart;
   let hasMore = true;
   const visiblePosts: any[] = [];
 
-  while (visiblePosts.length < limit && hasMore) {
-    const batch = await db().instagramPost.findMany({
-      where,
-      include: {
-        connection: true,
-        tags: true,
-        likes: true,
-        wishlistItems: currentUser ? { where: { userId: currentUser.id } } : true,
-      },
-      orderBy: [{ boostUntil: "desc" }, { timestamp: "desc" }, { id: "desc" }],
-      skip: rawSkip,
-      take: limit,
-    });
-
-    if (batch.length === 0) {
-      hasMore = false;
-      break;
-    }
-
-    const availableBatch = await filterAvailableInstagramMedia(batch);
-    visiblePosts.push(...availableBatch);
-    rawSkip += batch.length;
-    hasMore = batch.length === limit;
+  // Build a lightweight personal taste profile from this shopper's own likes and
+  // saved listings. Anonymous visitors still get a boost-first discovery feed.
+  const preferredTags = new Map<string, number>();
+  if (currentUser) {
+    const [liked, saved] = await Promise.all([
+      db().instagramPost.findMany({
+        where: { isProduct: true, likes: { some: { userId: currentUser.id } } },
+        select: { tags: { select: { name: true } } },
+        take: 100,
+      }),
+      db().instagramPost.findMany({
+        where: { isProduct: true, wishlistItems: { some: { userId: currentUser.id } } },
+        select: { tags: { select: { name: true } } },
+        take: 100,
+      }),
+    ]);
+    for (const post of liked) for (const item of post.tags) preferredTags.set(item.name.toLowerCase(), (preferredTags.get(item.name.toLowerCase()) || 0) + 1);
+    for (const post of saved) for (const item of post.tags) preferredTags.set(item.name.toLowerCase(), (preferredTags.get(item.name.toLowerCase()) || 0) + 3);
   }
 
-  const availableProducts = visiblePosts.slice(0, limit);
+  // Read boosted products first, then regular listings. This guarantees active
+  // product boosts appear above ordinary listings rather than merely sorting
+  // by a nullable expiry timestamp.
+  const batches = [
+    { boostUntil: { gt: now } },
+    { OR: [{ boostUntil: null }, { boostUntil: { lte: now } }] },
+  ];
+  for (const boostFilter of batches) {
+    if (visiblePosts.length >= pageStart + limit) break;
+    let boostSkip = boostFilter.boostUntil?.gt ? 0 : Math.max(0, pageStart - visiblePosts.length);
+    while (visiblePosts.length < pageStart + limit && hasMore) {
+      const batch = await db().instagramPost.findMany({
+        where: { ...where, ...boostFilter },
+        include: {
+          connection: true,
+          tags: true,
+          likes: true,
+          wishlistItems: currentUser ? { where: { userId: currentUser.id } } : true,
+        },
+        orderBy: [{ boostUntil: "desc" }, { timestamp: "desc" }, { id: "desc" }],
+        skip: boostSkip,
+        take: limit,
+      });
+      if (!batch.length) break;
+      const availableBatch = await filterAvailableInstagramMedia(batch);
+      visiblePosts.push(...availableBatch);
+      boostSkip += batch.length;
+      hasMore = batch.length === limit;
+    }
+    hasMore = true;
+  }
+
+  const rankedPosts = visiblePosts.slice(pageStart, pageStart + limit).sort((a: any, b: any) => {
+    const aBoosted = !!a.boostUntil && new Date(a.boostUntil) > now;
+    const bBoosted = !!b.boostUntil && new Date(b.boostUntil) > now;
+    if (aBoosted !== bBoosted) return aBoosted ? -1 : 1;
+    const score = (post: any) => post.tags?.reduce((sum: number, item: any) => sum + (preferredTags.get(String(item.name).toLowerCase()) || 0), 0) || 0;
+    const personal = score(b) - score(a);
+    if (personal) return personal;
+    return new Date(b.timestamp || b.createdAt).getTime() - new Date(a.timestamp || a.createdAt).getTime();
+  });
+  const availableProducts = rankedPosts;
   const products = availableProducts.map((post: any) => ({
     ...post,
     likedByCurrentUser: currentUser ? post.likes.some((like: any) => like.userId === currentUser.id) : false,
