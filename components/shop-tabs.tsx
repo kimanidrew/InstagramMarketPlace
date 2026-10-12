@@ -184,8 +184,8 @@ export function ShopTabs({
                     </div>
                     <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /></Link>
                   </div>
-                  <div className="mt-7 grid gap-5 lg:grid-cols-2">
-                    {featuredStores.filter(({ posts }: any) => posts?.length > 0).slice(0, 4).map(({ store, posts }: any) => {
+                  <div className="discover-stores-list mt-7 grid gap-5 lg:grid-cols-2">
+                    {featuredStores.filter(({ posts }: any) => posts?.length > 0).slice(0, 5).map(({ store, posts }: any) => {
                       const previewPosts = posts.slice(0, 3);
                       return (
                         <article key={store.id} className="group overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,.09)]">
