@@ -46,7 +46,7 @@ export default async function Store({
       ? store.reviews.reduce((sum, review) => sum + review.rating, 0) / store.reviews.length
       : 0;
   const isPro = !!store.proUntil && new Date(store.proUntil) > new Date();
-  const isVerified = !!store.verifiedAt;
+  const isVerified = !!store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date());
   const hasGrowth = isVerified || isPro;
 
   return (
