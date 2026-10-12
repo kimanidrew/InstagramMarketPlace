@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, BadgeCheck, Bookmark, Compass, Grid2X2, Heart, SlidersHorizontal, Sparkles, Store, TrendingUp } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductMasonry } from "@/components/product-masonry";
+import { AnalyticsImpression } from "@/components/analytics-impression";
+import { recordAnalytics } from "@/lib/analytics-client";
 
 type ShopTab = "discover" | "trending" | "featured";
 
@@ -188,8 +190,9 @@ export function ShopTabs({
                     {featuredStores.filter(({ posts }: any) => posts?.length > 0).slice(0, 5).map(({ store, posts }: any) => {
                       const previewPosts = posts.slice(0, 3);
                       return (
-                        <article key={store.id} className="group overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,.09)]">
-                          <Link href={"/store/" + store.username} className="flex items-center justify-between gap-4 px-2 py-2">
+                        <article key={store.id} className="group relative overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,.09)]">
+                          <AnalyticsImpression connectionId={store.id} />
+                          <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="flex items-center justify-between gap-4 px-2 py-2">
                             <div className="flex min-w-0 items-center gap-3">
                               <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white shadow-sm">
                                 {store.profileImageUrl ? (
@@ -204,6 +207,7 @@ export function ShopTabs({
                                   {(store.verifiedAt || (store.proUntil && new Date(store.proUntil) > currentNow)) && <BadgeCheck size={14} className="shrink-0" />}
                                 </div>
                                 <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} listings · Instagram shop</p>
+                                {store.paidPromotionActive && <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-black px-2 py-1 text-[8px] font-black uppercase tracking-wider text-white"><Sparkles size={9}/> Promoted</span>}
                               </div>
                             </div>
                             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-black shadow-sm transition group-hover:translate-x-0.5">
@@ -218,7 +222,7 @@ export function ShopTabs({
                               const isService = String(post.listingType || "").toUpperCase() === "SERVICE";
                               const href = "/" + (isService ? "service" : "product") + "/" + post.productSlug;
                               return (
-                                <Link key={post.id} href={href} className="group/media relative aspect-[4/5] overflow-hidden rounded-[20px] bg-[#e9e9e5]">
+                                <Link key={post.id} href={href} onClick={() => recordAnalytics({ connectionId: store.id, postId: post.id, type: "CLICK" })} className="group/media relative aspect-[4/5] overflow-hidden rounded-[20px] bg-[#e9e9e5]">
                                   {image ? (
                                     <img src={image} alt={post.productTitle || "Store listing"} className="h-full w-full object-cover transition duration-500 group-hover/media:scale-[1.05]" />
                                   ) : isVideo && post.mediaUrl ? (
