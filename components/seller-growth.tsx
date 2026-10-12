@@ -65,7 +65,7 @@ export function SellerGrowth({ connections }: { connections: Connection[] }) {
     {message && <div role="status" className="seller-growth-message"><Sparkles size={16}/><span>{message}</span><button aria-label="Dismiss message" onClick={() => setMessage("")}>×</button></div>}
 
     <section className="growth-track growth-products">
-      <div className="growth-section-heading"><span className="growth-step">02</span><div><span className="growth-section-kicker"><Megaphone size={13}/> PRODUCT GROWTH</span><h3>Put a product in the spotlight</h3><p>Pick the exact product you want more people to discover.</p></div><span className="growth-price-pill">KSh 150 <small>/ 7 days</small></span></div>
+      <div className="growth-section-heading"><span className="growth-step">02</span><div><span className="growth-section-kicker"><Megaphone size={13}/> PRODUCT GROWTH</span><h3>Put a product in the spotlight</h3><p>Pick the exact product you want more people to discover.</p></div><span className="growth-price-pill">Pay by reach <small>from KSh 100</small></span></div>
       {products.length ? <>
         <div className="growth-product-grid">{products.map((p) => {
           const selected = (chosenProduct?.id || "") === p.id;
@@ -86,6 +86,6 @@ export function SellerGrowth({ connections }: { connections: Connection[] }) {
         <article className="growth-plan-card growth-plan-pro"><span className="growth-plan-icon"><Sparkles size={21}/></span><span className="growth-plan-price">KSh 499 <small>/ month</small></span><h4>Pro Seller</h4><p>Give your shop a stronger presence with seller-focused tools and priority growth features.</p><ul><li><Check size={13}/> Pro Seller badge</li><li><Check size={13}/> Seller analytics foundation</li><li><Check size={13}/> Priority growth features</li></ul><button type="button" disabled={!!busy || activePro} onClick={() => request("PRO", selectedShop!.id)}>{activePro ? "Pro is active" : busy === "PRO" + selectedShop?.id ? "Sending request…" : <>Explore Pro Seller <Sparkles size={15}/></>}</button>{activePro && <small className="growth-active-note">Your Pro plan is active until {new Date(selectedShop!.proUntil!).toLocaleDateString()}.</small>}</article>
       </div>
     </section>
-    <p className="growth-review-note"><ShieldCheck size={15}/> Requests are reviewed by the marketplace team. Paid features activate only after approval and payment confirmation.</p>
+    <p className="growth-review-note"><ShieldCheck size={15}/> Product and shop promotions are paid by reach target in Analytics and activate after M-Pesa confirmation. Verified and Pro Seller upgrades are reviewed separately.</p>
   </section>;
 }
