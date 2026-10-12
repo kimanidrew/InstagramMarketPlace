@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       if (!post) return NextResponse.json({ ok: true });
     }
     let campaign = null;
-    if (type === "IMPRESSION") {
+    {
       campaign = await prisma.promotionCampaign.findFirst({
         where: { connectionId, status: "ACTIVE", ...(postId ? { OR: [{ targetType: "STORE" }, { targetType: "PRODUCT", postId }] } : { targetType: "STORE" }) },
         orderBy: [{ targetType: "PRODUCT" }, { createdAt: "asc" }],
@@ -35,6 +35,10 @@ export async function POST(request: Request) {
       const deliveredReach = uniqueVisitors.length;
       const status = deliveredReach >= campaign.targetReach ? "COMPLETED" : "ACTIVE";
       await prisma.promotionCampaign.update({ where: { id: campaign.id }, data: { deliveredReach, status, ...(status === "COMPLETED" ? { endsAt: new Date() } : {}) } });
+      if (status === "COMPLETED") {
+        const completed = await prisma.promotionCampaign.findUnique({ where: { id: campaign.id }, select: { targetType: true, postId: true } });
+        if (completed?.targetType === "PRODUCT" && completed.postId) await prisma.instagramPost.update({ where: { id: completed.postId }, data: { boostUntil: new Date() } });
+      }
     }
     return NextResponse.json({ ok: true });
   } catch {
