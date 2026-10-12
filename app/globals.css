@@ -1048,3 +1048,31 @@ hr{border-color:#ece5fa}
   border-color:transparent!important;
   box-shadow:none!important;
 }
+
+
+/* Mobile Shop hero: keep the banner only slightly taller than the floating search bar. */
+@media(max-width:767px){
+  .shop-page .products-hero{
+    min-height:0!important;
+    height:auto!important;
+    padding:7px!important;
+    margin-bottom:1rem!important;
+    overflow:hidden;
+  }
+  .shop-page .products-hero-content{
+    min-height:0!important;
+    height:auto!important;
+    padding:0!important;
+    margin:0!important;
+    gap:0!important;
+    align-items:stretch!important;
+  }
+  .shop-page .products-hero-search{
+    box-sizing:border-box!important;
+    min-height:52px!important;
+    height:52px!important;
+    margin:0!important;
+    border-radius:15px!important;
+    box-shadow:0 5px 16px rgba(0,0,0,.16)!important;
+  }
+}
