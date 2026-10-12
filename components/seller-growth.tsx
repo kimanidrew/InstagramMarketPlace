@@ -9,6 +9,7 @@ type Connection = { id: string; username: string; name?: string | null; profileI
 export function SellerGrowth({ connections }: { connections: Connection[] }) {
   const [selectedId, setSelectedId] = useState(connections[0]?.id || "");
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [busy, setBusy] = useState("");
   const [message, setMessage] = useState("");
   const selectedShop = useMemo(() => connections.find(c => c.id === selectedId) || connections[0], [connections, selectedId]);
@@ -41,14 +42,22 @@ export function SellerGrowth({ connections }: { connections: Connection[] }) {
 
     <div className="growth-shop-picker">
       <div className="growth-shop-picker-label"><span className="growth-step">01</span><div><b>Choose the shop</b><small>All growth options below apply to this shop.</small></div></div>
-      <label className="growth-shop-select">
-        <span className="growth-avatar">{profile ? <img src={profile} alt={selectedShop?.username + " profile"} /> : <Store size={22}/>}</span>
-        <span className="growth-shop-select-copy"><small>SELECTED INSTAGRAM SHOP</small><strong>@{selectedShop?.username}</strong><em>{selectedShop?.name || "Your Instagram Business profile"}</em></span>
-        <ChevronDown size={18}/>
-        <select aria-label="Choose a shop to grow" value={selectedShop?.id || ""} onChange={e => { setSelectedId(e.target.value); setSelectedProductId(""); setMessage(""); }}>
-          {connections.map(c => <option key={c.id} value={c.id}>@{c.username}</option>)}
-        </select>
-      </label>
+      <div className={"growth-shop-select-wrap" + (shopDropdownOpen ? " is-open" : "")}>
+        <button type="button" className="growth-shop-select" aria-label="Choose a shop to grow" aria-haspopup="listbox" aria-expanded={shopDropdownOpen} onClick={() => setShopDropdownOpen(open => !open)}>
+          <span className="growth-avatar">{profile ? <img src={profile} alt="" /> : <Store size={22}/>}</span>
+          <span className="growth-shop-select-copy"><small>SELECTED INSTAGRAM SHOP</small><strong>@{selectedShop?.username}</strong><em>{selectedShop?.name || "Your Instagram Business profile"}</em></span>
+          <span className="growth-select-indicator"><ChevronDown size={18}/></span>
+        </button>
+        {shopDropdownOpen && <div className="growth-shop-dropdown" role="listbox" aria-label="Instagram shops">
+          <div className="growth-dropdown-heading"><span>YOUR SHOPS</span><small>{connections.length} {connections.length === 1 ? "shop" : "shops"}</small></div>
+          {connections.map(c => <button type="button" role="option" aria-selected={c.id === selectedShop?.id} key={c.id} className={"growth-shop-option" + (c.id === selectedShop?.id ? " active" : "")} onClick={() => { setSelectedId(c.id); setSelectedProductId(""); setMessage(""); setShopDropdownOpen(false); }}>
+            <span className="growth-option-avatar">{c.profileImageUrl ? <img src={c.profileImageUrl} alt="" /> : <Store size={18}/>}</span>
+            <span className="growth-option-copy"><strong>@{c.username}</strong><small>{c.name || "Instagram Business profile"}</small></span>
+            {c.id === selectedShop?.id ? <span className="growth-option-check"><Check size={15}/></span> : <span className="growth-option-arrow">Select</span>}
+          </button>)}
+          <div className="growth-dropdown-foot"><ShieldCheck size={13}/> Choose which shop you want to grow</div>
+        </div>}
+      </div>
       {connections.length > 1 && <div className="growth-shop-chips">{connections.map(c => <button key={c.id} type="button" onClick={() => { setSelectedId(c.id); setSelectedProductId(""); setMessage(""); }} className={c.id === selectedShop?.id ? "active" : ""}>{c.profileImageUrl ? <img src={c.profileImageUrl} alt="" /> : <Store size={14}/>}@{c.username}{c.id === selectedShop?.id && <Check size={13}/>}</button>)}</div>}
     </div>
 
