@@ -2,7 +2,7 @@ import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ChartNoAxesCombined, Sparkles } from "lucide-react";
+import { ArrowLeft, ChartNoAxesCombined } from "lucide-react";
 import { SellerDashboardTabs } from "@/components/seller-dashboard-tabs";
 
 export const dynamic = "force-dynamic";
