@@ -1040,3 +1040,11 @@ hr{border-color:#ece5fa}
   }
   .site-header .nav-link{font-weight:900}
 }
+
+
+/* Shop tab content area should blend into the page instead of using a white panel. */
+.shop-page .shop-tab-panel{
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
