@@ -46,9 +46,9 @@ export function SiteHeader({ user }: { user: any }) {
           <div className="grid grid-cols-2 gap-2">
             <Link href="/shop" className="menu-card" >Shop all</Link>
             <Link href="/stores" className="menu-card">Stores</Link>
-            <Link href="/categories" className="menu-card" onClick={() => setMenuOpen(false)}>Categories</Link>
-            <Link href="/how-it-works" className="menu-card" onClick={() => setMenuOpen(false)}>How it works</Link>
-            {user && <Link href="/account" className="menu-card" onClick={() => setMenuOpen(false)}>Grow your shop</Link>}
+            <Link href="/categories" className="menu-card">Categories</Link>
+            <Link href="/how-it-works" className="menu-card">How it works</Link>
+            {user && <Link href="/account" className="menu-card">Grow your shop</Link>}
           </div>
         </div>
       </div>
