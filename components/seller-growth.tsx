@@ -5,7 +5,7 @@ import Link from "next/link";
 import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap } from "lucide-react";
 
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
-type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; proUntil?: string | null; posts: Product[] };
+type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: Product[] };
 
 export function SellerGrowth({ connections, embedded = false }: { connections: Connection[]; embedded?: boolean }) {
   const [selectedId, setSelectedId] = useState(connections[0]?.id || "");
@@ -33,6 +33,7 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
 
   if (!connections.length) return null;
   const activePro = !!selectedShop?.proUntil && new Date(selectedShop.proUntil) > new Date();
+  const activeVerified = !!selectedShop?.verifiedAt && (!selectedShop?.verifiedUntil || new Date(selectedShop.verifiedUntil) > new Date());
   const profile = selectedShop?.profileImageUrl;
 
   return <section className="seller-growth">
@@ -82,10 +83,10 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
     <section className="growth-track growth-shop-plans">
       <div className="growth-section-heading"><span className="growth-step">03</span><div><span className="growth-section-kicker"><Store size={13}/> SHOP GROWTH</span><h3>Build trust in your whole shop</h3><p>These options apply to <b>@{selectedShop?.username}</b>, not an individual product.</p></div></div>
       <div className="growth-shop-plan-grid">
-        <article className="growth-plan-card"><span className="growth-plan-icon"><ShieldCheck size={21}/></span><span className="growth-plan-price">KSh 999 <small>/ year</small></span><h4>Verified shop</h4><p>Show customers that your business has completed the marketplace verification review.</p><ul><li><Check size={13}/> Verified badge on your shop</li><li><Check size={13}/> Trust-focused profile</li><li><Check size={13}/> Verification review</li></ul><button type="button" disabled={!!busy || !!selectedShop?.verifiedAt} onClick={() => request("VERIFIED", selectedShop!.id)}>{selectedShop?.verifiedAt ? "Shop already verified" : busy === "VERIFIED" + selectedShop?.id ? "Sending request…" : <>Request verification <BadgeCheck size={15}/></>}</button></article>
-        <article className="growth-plan-card growth-plan-pro"><span className="growth-plan-icon"><Sparkles size={21}/></span><span className="growth-plan-price">KSh 499 <small>/ month</small></span><h4>Pro Seller</h4><p>Give your shop a stronger presence with seller-focused tools and priority growth features.</p><ul><li><Check size={13}/> Pro Seller badge</li><li><Check size={13}/> Seller analytics foundation</li><li><Check size={13}/> Priority growth features</li></ul><button type="button" disabled={!!busy || activePro} onClick={() => request("PRO", selectedShop!.id)}>{activePro ? "Pro is active" : busy === "PRO" + selectedShop?.id ? "Sending request…" : <>Explore Pro Seller <Sparkles size={15}/></>}</button>{activePro && <small className="growth-active-note">Your Pro plan is active until {new Date(selectedShop!.proUntil!).toLocaleDateString()}.</small>}</article>
+        <article className="growth-plan-card"><span className="growth-plan-icon"><ShieldCheck size={21}/></span><span className="growth-plan-price">KSh 999 <small>/ year</small></span><h4>Verified shop</h4><p>After approval, your shop displays a Verified badge for 12 months, helping customers identify businesses that passed the marketplace review.</p><ul><li><Check size={13}/> Verified badge on your shop</li><li><Check size={13}/> Trust-focused profile</li><li><Check size={13}/> Verification review</li></ul><button type="button" disabled={!!busy || activeVerified} onClick={() => request("VERIFIED", selectedShop!.id)}>{activeVerified ? "Shop already verified" : busy === "VERIFIED" + selectedShop?.id ? "Sending request…" : <>Request verification <BadgeCheck size={15}/></>}</button></article>
+        <article className="growth-plan-card growth-plan-pro"><span className="growth-plan-icon"><Sparkles size={21}/></span><span className="growth-plan-price">KSh 499 <small>/ month</small></span><h4>Pro Seller</h4><p>After approval, your shop displays the Pro Seller badge and receives a 30-day Pro period with seller analytics and priority growth features.</p><ul><li><Check size={13}/> Pro Seller badge</li><li><Check size={13}/> Seller analytics foundation</li><li><Check size={13}/> Priority growth features</li></ul><button type="button" disabled={!!busy || activePro} onClick={() => request("PRO", selectedShop!.id)}>{activePro ? "Pro is active" : busy === "PRO" + selectedShop?.id ? "Sending request…" : <>Explore Pro Seller <Sparkles size={15}/></>}</button>{activePro && <small className="growth-active-note">Your Pro plan is active until {new Date(selectedShop!.proUntil!).toLocaleDateString()}.</small>}</article>
       </div>
     </section>
-    <p className="growth-review-note"><ShieldCheck size={15}/> Product and shop promotions are paid by reach target in Analytics and activate after M-Pesa confirmation. Verified and Pro Seller upgrades are reviewed separately.</p>
+    <p className="growth-review-note"><ShieldCheck size={15}/> Verification and Pro Seller requests require admin approval. Approved verification lasts 12 months; Pro Seller lasts 30 days. Product and shop promotions use the separate reach-based payment flow.</p>
   </section>;
 }
