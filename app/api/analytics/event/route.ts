@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     {
       campaign = await prisma.promotionCampaign.findFirst({
         where: { connectionId, status: "ACTIVE", ...(postId ? { OR: [{ targetType: "STORE" }, { targetType: "PRODUCT", postId }] } : { targetType: "STORE" }) },
-        orderBy: [{ targetType: "PRODUCT" }, { createdAt: "asc" }],
+        orderBy: [{ targetType: "asc" }, { createdAt: "asc" }],
         select: { id: true, targetReach: true, deliveredReach: true },
       });
     }
