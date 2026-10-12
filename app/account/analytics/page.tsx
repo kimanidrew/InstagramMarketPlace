@@ -12,7 +12,7 @@ export default async function AnalyticsPage() {
   if (!current) redirect("/login");
   const connections = await db().instagramConnection.findMany({
     where: { connectedByUserId: current.id },
-    include: { posts: { where: { isProduct: true }, select: { id: true, productTitle: true, productSlug: true, mediaUrl: true, thumbnailUrl: true, mediaType: true } } },
+    include: { posts: { where: { isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true, productTitle: true, productSlug: true, mediaUrl: true, thumbnailUrl: true, mediaType: true } } },
     orderBy: { createdAt: "desc" },
   });
   const safeConnections = connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, posts: c.posts.map(p => ({ id: p.id, title: p.productTitle || "Untitled product", slug: p.productSlug, image: p.thumbnailUrl || p.mediaUrl, mediaType: p.mediaType })) }));
