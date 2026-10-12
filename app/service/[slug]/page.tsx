@@ -8,6 +8,7 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { ReviewSection } from "@/components/review-section";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
 
   return (
     <main className="product-detail-page min-h-screen bg-white">
+      <AnalyticsTracker connectionId={service.connectionId} postId={service.id} type="VIEW" />
       <div className="shell py-6 md:py-10">
         <Link href="/products" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#666] hover:text-black">
           <ArrowLeft size={15} /> Back to marketplace
