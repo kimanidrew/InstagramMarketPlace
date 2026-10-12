@@ -23,7 +23,9 @@ export async function POST(request: Request) {
   await prisma.$transaction(async (tx) => {
     await tx.growthRequest.update({ where: { id }, data: { status: "APPROVED", reviewedAt: now } });
     if (growth.type === "VERIFIED") {
-      await tx.instagramConnection.update({ where: { id: growth.connectionId }, data: { verifiedAt: now } });
+      const until = new Date(now);
+      until.setDate(until.getDate() + 365);
+      await tx.instagramConnection.update({ where: { id: growth.connectionId }, data: { verifiedAt: now, verifiedUntil: until } });
     } else if (growth.type === "PRO") {
       const until = new Date(now);
       until.setDate(until.getDate() + 30);
