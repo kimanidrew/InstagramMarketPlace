@@ -129,6 +129,12 @@ export default async function Products({
     )
     .slice(0, 8);
 
+  const activeStoreCampaigns = await db().promotionCampaign.findMany({ where: { status: "ACTIVE", targetType: "STORE" }, select: { connectionId: true } });
+  const paidStoreIds = new Set(activeStoreCampaigns.map(campaign => campaign.connectionId));
+  const promotedStores = featuredStores
+    .map(({ store, posts }) => ({ store: { ...store, paidPromotionActive: paidStoreIds.has(store.id) }, posts }))
+    .sort((a, b) => Number(Boolean(b.store.paidPromotionActive)) - Number(Boolean(a.store.paidPromotionActive)));
+
   const showDiscovery = !text;
 
   return (
@@ -189,7 +195,7 @@ export default async function Products({
         const shopData = JSON.parse(
           JSON.stringify({
             wishlistProducts,
-            featuredStores,
+            featuredStores: promotedStores,
             trendingProducts: prepareProducts(trendingProducts),
             featuredProducts: prepareProducts(featuredProductsRaw),
           }),
