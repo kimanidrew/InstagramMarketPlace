@@ -56,7 +56,7 @@ export async function GET(request: Request) {
   // Read boosted products first, then regular listings. This guarantees active
   // product boosts appear above ordinary listings rather than merely sorting
   // by a nullable expiry timestamp.
-  const batches = [
+  const batches: any[] = [
     { boostUntil: { gt: now } },
     { OR: [{ boostUntil: null }, { boostUntil: { lte: now } }] },
   ];
