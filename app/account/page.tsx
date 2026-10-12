@@ -2,7 +2,7 @@ import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store, Zap } from "lucide-react";
 import { AccountLiveRefresh } from "@/components/account-live-refresh";
 
 export const dynamic = "force-dynamic";
