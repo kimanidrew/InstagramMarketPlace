@@ -12,7 +12,7 @@ export default async function GrowYourShop() {
   if (!u) redirect("/login");
   const connections = await db().instagramConnection.findMany({
     where: { connectedByUserId: u.id },
-    include: { posts: { where: { isProduct: true }, select: { id: true, productTitle: true } } },
+    include: { posts: { where: { isProduct: true }, select: { id: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, mediaType: true, permalink: true } } },
     orderBy: { createdAt: "desc" },
   });
 
@@ -28,7 +28,7 @@ export default async function GrowYourShop() {
       <div className="grow-shop-orbit" aria-hidden="true"><div/><div/><div/><Sparkles size={28}/></div>
     </section>
     <section className="grow-shop-content">
-      {connections.length ? <SellerGrowth connections={connections.map(c => ({ id: c.id, username: c.username, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts }))}/> :
+      {connections.length ? <SellerGrowth connections={connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, verifiedAt: c.verifiedAt?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts }))}/> :
         <div className="grow-shop-empty"><span><Store size={25}/></span><h2>Connect a shop to get started</h2><p>Your growth options will appear here once you connect an Instagram Business account.</p><Link href="/account/setup">Connect your Instagram <ArrowRight size={15}/></Link></div>}
       <div className="grow-shop-footnote"><Sparkles size={16}/><p>Growth requests are reviewed by the marketplace team. Submitting a request does not activate a paid feature automatically.</p></div>
     </section>
