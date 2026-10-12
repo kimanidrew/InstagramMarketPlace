@@ -28,6 +28,15 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
 
   if (!service || !service.isProduct || service.listingType !== "SERVICE") notFound();
 
+  // Keep a private, account-linked history so shoppers can continue on another device.
+  if (currentUser) {
+    await db().recentlyViewedProduct.upsert({
+      where: { userId_postId: { userId: currentUser.id, postId: service.id } },
+      create: { userId: currentUser.id, postId: service.id, lastViewedAt: new Date() },
+      update: { lastViewedAt: new Date(), viewCount: { increment: 1 } },
+    });
+  }
+
   const isVideo = String(service.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = service.mediaUrl || service.thumbnailUrl;
   const mediaItems = Array.isArray(service.mediaItems)
