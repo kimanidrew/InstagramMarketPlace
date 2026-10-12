@@ -968,3 +968,18 @@ hr{border-color:#ece5fa}
 @media(max-width:1023px){
   .shop-tabs{width:100%;border-radius:14px!important}
 }
+
+
+/* Make the Shop hero's quick-action buttons easier to read */
+.shop-page a[href="/wishlist"],
+.shop-page a[href="/shop#shop-all"]{
+  font-size:1.125rem!important;
+  font-weight:600!important;
+  line-height:1.5!important;
+}
+@media(max-width:640px){
+  .shop-page a[href="/wishlist"],
+  .shop-page a[href="/shop#shop-all"]{
+    font-size:1.0625rem!important;
+  }
+}
