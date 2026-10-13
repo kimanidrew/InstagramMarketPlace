@@ -1707,3 +1707,12 @@ select:focus-visible,
 
 /* Make the Instagram Manage Access action span the full width in Step 3. */
 .seller-setup-step3 article a[href*="instagram.com/accounts/manage_access"]{display:flex;width:100%;box-sizing:border-box;justify-content:center}
+
+
+/* Store profile trust badges: blue verified ring and the same crown treatment as product cards. */
+.store-avatar.store-avatar-verified{border-color:#2563eb}
+.store-avatar-check{right:1px;bottom:6px;height:30px;width:30px;border:3px solid #111;background:#fff;color:#fff}
+.store-avatar-check svg{fill:#2563eb;color:#fff}
+.store-hero-copy h1 .store-profile-pro{display:inline-flex;vertical-align:middle;align-items:center;gap:5px;margin-left:12px;padding:6px 9px;border-radius:999px;background:#fff3d6;color:#875500;font-size:11px;font-weight:850;letter-spacing:0;line-height:1.2;white-space:nowrap}
+.store-profile-pro svg{flex-shrink:0}
+@media(max-width:640px){.store-hero-copy h1 .store-profile-pro{gap:4px;margin-left:7px;padding:5px 7px;font-size:9px}.store-hero-copy h1 .store-profile-pro svg{width:15px;height:15px}}
