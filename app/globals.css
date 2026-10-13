@@ -1917,3 +1917,10 @@ select:focus-visible,
 .shop-filter-panel{border:0!important;box-shadow:none!important}
 .shop-tab-panel{padding-top:28px}
 @media(max-width:640px){.shop-tab-panel{padding-top:24px}}
+
+/* Account: clearly separate destructive connected-shop termination from normal actions. */
+.account-terminate-store{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:0 11px;border:1px solid #f2d8d8;border-radius:999px;background:#fff;color:#a52a2a;font-size:10px;font-weight:800;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.account-terminate-store:hover{border-color:#e7b5b5;background:#fff4f4;color:#8f1d1d}
+.account-terminate-store:focus-visible{outline:2px solid #d88;outline-offset:2px}
+.account-store-actions form{margin:0}
+@media(max-width:640px){.account-terminate-store{min-height:36px;font-size:10px}}
