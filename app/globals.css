@@ -1526,3 +1526,6 @@ hr{border-color:#ece5fa}
 
 /* Remove the left edge line from the setup step card. */
 .seller-setup-page .seller-step-card{border-left:0!important}
+
+/* Remove the full border from the active Instagram-logo setup article. */
+.seller-setup-page .seller-step-card.seller-step-active.seller-step-instagram-logo{border:0!important;}
