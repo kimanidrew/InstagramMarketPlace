@@ -1638,3 +1638,10 @@ select:focus-visible,
  .seller-tester-actions .seller-numbered-tip{padding:12px;font-size:11px}
  .seller-tester-actions .seller-instagram-open-button,.seller-tester-actions .seller-tester-next-button{width:100%}
 }
+
+
+.seller-setup-page-nav{display:grid;justify-items:center;gap:12px}
+.seller-setup-page-nav-step-controls{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.seller-setup-page-nav-step-controls .seller-back-button,.seller-setup-page-nav-step-controls .seller-next-button{min-width:155px}
+.seller-setup-page-nav>.seller-secondary-button{margin:0}
+@media(max-width:640px){.seller-setup-page-nav-step-controls{width:100%;gap:8px}.seller-setup-page-nav-step-controls .seller-back-button,.seller-setup-page-nav-step-controls .seller-next-button{min-width:0;flex:1}}
