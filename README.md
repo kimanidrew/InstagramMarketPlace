@@ -1,6 +1,6 @@
-# Instagram Market
+# SokoLink
 
-A white, mobile-friendly marketplace where approved Instagram accounts become stores and their Instagram posts are automatically linked as marketplace products.
+SokoLink is a social shopping marketplace where approved Instagram accounts become stores and their Instagram posts are automatically linked as marketplace products.
 
 ## Flow
 1. User signs up.
@@ -13,6 +13,19 @@ A white, mobile-friendly marketplace where approved Instagram accounts become st
 8. The latest Instagram posts are synced automatically.
 9. Every imported Instagram post is automatically represented as a marketplace product.
 10. Hashtags on posts become searchable marketplace categories.
+
+## Brand identity environment
+
+The visible brand name, gradient colours and wordmark font are configured with these environment variables (set them in `.env.local` and Vercel):
+
+```env
+NEXT_PUBLIC_BRAND_NAME="SokoLink"
+NEXT_PUBLIC_BRAND_COLOR_START="#00C2A8"
+NEXT_PUBLIC_BRAND_COLOR_END="#7C3AED"
+NEXT_PUBLIC_BRAND_FONT_FAMILY="Space Grotesk"
+```
+
+The gradient runs from `NEXT_PUBLIC_BRAND_COLOR_START` to `NEXT_PUBLIC_BRAND_COLOR_END`. The font is loaded from Google Fonts using the family name configured in `NEXT_PUBLIC_BRAND_FONT_FAMILY`. Restart the dev server after changing local environment variables and redeploy after changing Vercel variables.
 
 ## Instagram OAuth environment
 Set these in Vercel/server environment variables:
