@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Bookmark, Store, UserRound } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
+import { BrandWordmark } from "@/components/brand-wordmark";
 
 export function SiteHeader({ user }: { user: any }) {
 
@@ -10,7 +11,7 @@ export function SiteHeader({ user }: { user: any }) {
     <header className="site-header sticky top-0 z-50">
       <div className="shell flex h-[74px] items-center gap-4">
         <Link href="/" className="brand shrink-0">
-          instagram<span>market</span><sup>®</sup>
+          <BrandWordmark />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
