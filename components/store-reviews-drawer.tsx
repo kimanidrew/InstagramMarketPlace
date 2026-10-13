@@ -10,11 +10,15 @@ export function StoreReviewsDrawer({
   storeId,
   reviews,
   currentUserId,
+  storeOwnerUserId,
+  storeProfileImageUrl,
 }: {
   username: string;
   storeId: string;
   reviews: any[];
   currentUserId?: string | null;
+  storeOwnerUserId?: string | null;
+  storeProfileImageUrl?: string | null;
 }) {
   useEffect(() => {
     const previousBodyOverflow = document.body.style.overflow;
@@ -62,6 +66,9 @@ export function StoreReviewsDrawer({
               reviews={reviews}
               currentUserId={currentUserId}
               title={"Reviews for @" + username}
+              storeUsername={username}
+              storeOwnerUserId={storeOwnerUserId}
+              storeProfileImageUrl={storeProfileImageUrl}
             />
           </div>
         </motion.aside>
