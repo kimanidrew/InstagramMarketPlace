@@ -1613,3 +1613,28 @@ select:focus-visible,
 .notification-page .notification-empty{min-height:220px;border:1px dashed #e8e0f3;border-radius:22px;background:#fff}
 .notification-loading{padding:28px;color:#978aa7;font-size:11px;text-align:center}
 @media(max-width:640px){.notification-popover{right:-92px;width:min(370px,calc(100vw - 20px));max-height:calc(100vh - 92px)}.notification-popover-head{padding:17px 15px 13px}.notification-item{gap:9px;padding:11px 9px}.notification-item-icon{width:34px;height:34px}.notification-page{padding-top:25px}.notification-page-header{align-items:flex-start;flex-direction:column}.notification-page-actions{width:100%}.notification-page-actions>*{flex:1}.notification-page-list .notification-item{padding:13px 10px}}
+
+
+/* Account setup navigation: centered, consistent previous/next controls. */
+.seller-setup-page-nav{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px auto 0}
+.seller-setup-page-nav .seller-back-button,.seller-setup-page-nav .seller-next-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:150px;margin:0;padding:12px 18px;border-radius:14px}
+.seller-setup-page-nav .seller-back-button{border:1px solid #e4d9f7;background:#fff;color:#67439e}
+.seller-setup-page-nav .seller-next-button{background:linear-gradient(110deg,#7044b5,#9665d3)!important;color:#fff!important;box-shadow:0 8px 20px rgba(112,68,181,.2)}
+.seller-setup-page-nav .seller-secondary-button{margin-left:0;min-height:44px;border-radius:14px}
+.seller-setup-page-nav .seller-back-button:hover,.seller-setup-page-nav .seller-next-button:hover,.seller-setup-page-nav .seller-secondary-button:hover{transform:translateY(-2px)}
+.seller-tester-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:22px}
+.seller-tester-actions .seller-numbered-tip{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:0;padding:13px 14px;border:1px solid #eee7f8;border-radius:15px;background:linear-gradient(120deg,#faf7ff,#fff);color:#544866;font-size:12px;line-height:1.65}
+.seller-tester-actions .seller-numbered-tip b{width:30px;height:30px;flex:none;background:#17131f;color:#fff;font-size:11px}
+.seller-tester-actions .seller-numbered-tip strong{color:#5f359d;font-weight:900}
+.seller-tester-actions .seller-instagram-open-button,.seller-tester-actions .seller-tester-next-button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:49px;padding:13px 15px;border-radius:14px;text-align:center;font-size:11px}
+.seller-tester-actions .seller-instagram-open-button{border:1px solid #e7def5;background:#f7f2ff!important;color:#67409f!important;box-shadow:none!important}
+.seller-tester-actions .seller-instagram-open-button:hover{background:#efe6ff!important;transform:translateY(-2px)}
+.seller-tester-actions .seller-tester-next-button{background:linear-gradient(110deg,#7044b5,#9665d3)!important;color:#fff!important;box-shadow:0 9px 22px rgba(112,68,181,.2)}
+@media(max-width:640px){
+ .seller-setup-page-nav{display:flex;justify-content:center;gap:8px}
+ .seller-setup-page-nav .seller-back-button,.seller-setup-page-nav .seller-next-button{width:auto;min-width:0;flex:1;padding:12px 10px;font-size:10px}
+ .seller-setup-page-nav .seller-secondary-button{width:100%;flex:none}
+ .seller-tester-actions{grid-template-columns:1fr;gap:9px}
+ .seller-tester-actions .seller-numbered-tip{padding:12px;font-size:11px}
+ .seller-tester-actions .seller-instagram-open-button,.seller-tester-actions .seller-tester-next-button{width:100%}
+}
