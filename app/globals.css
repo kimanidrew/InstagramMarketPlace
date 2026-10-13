@@ -1912,3 +1912,8 @@ select:focus-visible,
 .product-card-like-line.is-updated .product-card-like-line-icon,.product-card-like-line-icon.is-animated{animation:productLikeIconPop .45s cubic-bezier(.22,1,.36,1) both}
 @keyframes productLikeIconPop{0%{transform:scale(1)}35%{transform:scale(1.38) rotate(-9deg)}68%{transform:scale(.92) rotate(4deg)}100%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.product-card-like-line-icon{transition:none}.product-card-like-line.is-updated .product-card-like-line-icon,.product-card-like-line-icon.is-animated{animation:none}}
+
+/* Shop category filters: remove the enclosing outline and give Discover stores more breathing room. */
+.shop-filter-panel{border:0!important;box-shadow:none!important}
+.shop-tab-panel{padding-top:28px}
+@media(max-width:640px){.shop-tab-panel{padding-top:24px}}
