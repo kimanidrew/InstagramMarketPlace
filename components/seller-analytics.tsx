@@ -22,9 +22,10 @@ function LineChart({ data, metric, color, title }: { data: Daily[]; metric: "imp
   return <div className="seller-chart-card"><div className="seller-chart-heading"><div><span>{title}</span><small>Last 30 days</small></div><span className="seller-chart-dot" style={{ background: color }}/></div><svg viewBox="0 0 500 116" role="img" aria-label={title + " over the last 30 days"} className="seller-line-chart"><defs><linearGradient id={"chart-fill-" + metric} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={color} stopOpacity=".18"/><stop offset="100%" stopColor={color} stopOpacity="0"/></linearGradient></defs>{[20,44,68,92].map(y => <line key={y} x1="8" x2="492" y1={y} y2={y} stroke="#eeeaf3" strokeDasharray="3 5"/>)}<polygon points={"8,92 " + path + " 492,92"} fill={"url(#chart-fill-" + metric + ")"} /><polyline points={path} fill="none" stroke={color} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"/>{last && <circle cx={last.x} cy={last.y} r="4" fill={color} stroke="#fff" strokeWidth="2"/>}</svg><div className="seller-chart-axis"><span>{data[0]?.label || "—"}</span><span>Daily activity</span><span>{data[data.length - 1]?.label || "—"}</span></div></div>;
 }
 
-export function SellerAnalytics({ connections, initialShopId, initialPostId, promotionOnly = false }: { connections: Connection[]; initialShopId?: string; initialPostId?: string; promotionOnly?: boolean }) {
+export function SellerAnalytics({ connections, initialShopId, initialPostId, promotionOnly = false, activeShopId, onShopChange }: { connections: Connection[]; initialShopId?: string; initialPostId?: string; promotionOnly?: boolean; activeShopId?: string; onShopChange?: (id: string) => void }) {
   const [data, setData] = useState<Analytics | null>(null);
   const [selectedShopId, setSelectedShopId] = useState(initialShopId || connections[0]?.id || "");
+  const effectiveShopId = activeShopId ?? selectedShopId;
   const [selectedPostId, setSelectedPostId] = useState(initialPostId || "");
   const [targetType, setTargetType] = useState<"STORE" | "PRODUCT">("PRODUCT");
   const [targetReach, setTargetReach] = useState(1000);
@@ -39,11 +40,11 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
 
   const refresh = useCallback(async () => {
     try {
-      const response = await fetch("/api/account/analytics?shopId=" + encodeURIComponent(selectedShopId), { cache: "no-store" });
+      const response = await fetch("/api/account/analytics?shopId=" + encodeURIComponent(effectiveShopId), { cache: "no-store" });
       if (response.ok) setData(await response.json());
     } catch { /* analytics refresh can be retried */ }
     finally { setLoading(false); }
-  }, [selectedShopId]);
+  }, [effectiveShopId]);
   useEffect(() => { void refresh(); }, [refresh]);
   useEffect(() => {
     const timer = window.setInterval(() => { void refresh(); }, 15000);
@@ -72,8 +73,8 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
     return () => window.clearInterval(timer);
   }, [pendingCampaign, refresh]);
 
-  const selectedShop = data?.shops.find(s => s.id === selectedShopId) || data?.shops[0];
-  const connection = connections.find(c => c.id === selectedShopId) || connections[0];
+  const selectedShop = data?.shops.find(s => s.id === effectiveShopId) || data?.shops[0];
+  const connection = connections.find(c => c.id === effectiveShopId) || connections[0];
   const products = selectedShop?.products || [];
   const selectedProduct = products.find(p => p.id === selectedPostId) || products[0];
   const packagePrice = packages.find(p => p.reach === targetReach)?.price || 180;
@@ -84,7 +85,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
   async function startPayment() {
     setPaying(true); setMessage(""); setPaymentMessage("");
     try {
-      const response = await fetch("/api/promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ connectionId: selectedShopId, targetType, postId: targetType === "PRODUCT" ? (selectedPostId || selectedProduct?.id) : null, targetReach, durationDays, phoneNumber: phone }) });
+      const response = await fetch("/api/promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ connectionId: effectiveShopId, targetType, postId: targetType === "PRODUCT" ? (selectedPostId || selectedProduct?.id) : null, targetReach, durationDays, phoneNumber: phone }) });
       const result = await response.json();
       if (!response.ok) { const error = result.error || "Unable to start payment."; setMessage(error); setFeedback({ type: "error", title: "Promotion could not start", message: error }); return; }
       if (result.demoMode) {
@@ -102,7 +103,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
 
   return <div className="seller-analytics-content">
     <GlobalFeedbackModal open={!!feedback} type={feedback?.type || "success"} title={feedback?.title || ""} message={feedback?.message || ""} onClose={() => setFeedback(null)} />
-    <div className="seller-analytics-shopbar"><div className="seller-analytics-shop-title"><span className="analytics-shop-avatar">{selectedShop?.profileImageUrl ? <img src={selectedShop.profileImageUrl} alt=""/> : <Store size={19}/>}</span><div><small>ANALYTICS FOR</small><b>@{connection?.username || selectedShop?.username || "—"}</b></div></div><label className="analytics-shop-select"><span>Switch shop</span><select value={selectedShopId} onChange={e => { setSelectedShopId(e.target.value); setSelectedPostId(""); }} aria-label="Select shop">{connections.map(c => <option key={c.id} value={c.id}>@{c.username}</option>)}</select><ChevronDown size={15}/></label></div>
+    {!promotionOnly && <div className="seller-analytics-shopbar"><div className="seller-analytics-shop-title"><span className="analytics-shop-avatar">{selectedShop?.profileImageUrl ? <img src={selectedShop.profileImageUrl} alt=""/> : <Store size={19}/>}</span><div><small>ANALYTICS FOR</small><b>@{connection?.username || selectedShop?.username || "—"}</b></div></div><label className="analytics-shop-select"><span>Switch shop</span><select value={effectiveShopId} onChange={e => { setSelectedShopId(e.target.value); onShopChange?.(e.target.value); setSelectedPostId(""); }} aria-label="Select shop">{connections.map(c => <option key={c.id} value={c.id}>@{c.username}</option>)}</select><ChevronDown size={15}/></label></div>}
 
 {!promotionOnly && (<>
         <div className="seller-analytics-kpis">
