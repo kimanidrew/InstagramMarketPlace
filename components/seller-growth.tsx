@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
-import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap } from "lucide-react";
+import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap, Clock3, Users } from "lucide-react";
+import { GlobalFeedbackModal } from "@/components/global-feedback-modal";
 
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
 type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: Product[] };
@@ -13,9 +13,45 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [busy, setBusy] = useState("");
   const [message, setMessage] = useState("");
+  const [durationDays, setDurationDays] = useState<7 | 30>(7);
+  const [targetReach, setTargetReach] = useState(500);
+  const [promoting, setPromoting] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; title: string; message: string } | null>(null);
   const selectedShop = useMemo(() => connections.find(c => c.id === selectedId) || connections[0], [connections, selectedId]);
   const products = selectedShop?.posts || [];
   const chosenProduct = products.find(p => p.id === selectedProductId) || products[0];
+
+  async function promoteProduct() {
+    if (!selectedShop || !chosenProduct || promoting) return;
+    setPromoting(true);
+    try {
+      const response = await fetch("/api/promotions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          connectionId: selectedShop.id,
+          targetType: "PRODUCT",
+          postId: chosenProduct.id,
+          targetReach,
+          durationDays,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setFeedback({ type: "error", title: "Promotion couldn't be started", message: data.error || "Please try again." });
+        return;
+      }
+      setFeedback({
+        type: "success",
+        title: "Your product is promoted!",
+        message: data.message || "Your product promotion is now active in demo mode. No M-Pesa prompt was sent and no money was charged.",
+      });
+    } catch {
+      setFeedback({ type: "error", title: "Connection problem", message: "We couldn't start this promotion. Check your connection and try again." });
+    } finally {
+      setPromoting(false);
+    }
+  }
 
   async function request(type: "BOOST" | "VERIFIED" | "PRO", connectionId: string, postId?: string) {
     setBusy(type + connectionId + (postId || ""));
@@ -66,7 +102,7 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
     {message && <div role="status" className="seller-growth-message"><Sparkles size={16}/><span>{message}</span><button aria-label="Dismiss message" onClick={() => setMessage("")}>×</button></div>}
 
     <section className="growth-track growth-products">
-      <div className="growth-section-heading"><span className="growth-step">02</span><div><span className="growth-section-kicker"><Megaphone size={13}/> PRODUCT GROWTH</span><h3>Put a product in the spotlight</h3><p>Pick the exact product you want more people to discover. Promotions can run for 7 days or 1 month (30 days); choose your duration in the promotion checkout.</p></div><span className="growth-price-pill">Pay by reach <small>from KSh 100</small></span></div>
+      <div className="growth-section-heading"><span className="growth-step">02</span><div><span className="growth-section-kicker"><Megaphone size={13}/> PRODUCT GROWTH</span><h3>Put a product in the spotlight</h3><p>Pick a product, set the promotion duration and reach, then activate it right here. Demo mode is on: no M-Pesa prompt and no charge.</p></div><span className="growth-price-pill">Demo mode <small>No charge</small></span></div>
       {products.length ? <>
         <div className="growth-product-grid">{products.map((p) => {
           const selected = (chosenProduct?.id || "") === p.id;
@@ -76,7 +112,13 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
             <span className="growth-product-info"><strong>{p.productTitle || "Untitled product"}</strong><small>{selected ? "Selected for promotion" : "Tap to select"}</small></span>
           </button>;
         })}</div>
-        <div className="growth-action-row"><div><b>{chosenProduct?.productTitle || "Choose a product"}</b><small>Promotion duration: 7 days or 1 month</small></div><Link href={chosenProduct ? "/account/analytics?shopId=" + encodeURIComponent(selectedShop.id) + "&postId=" + encodeURIComponent(chosenProduct.id) : "/account/analytics"} className="growth-primary-action">{<>Promote product &amp; choose reach <Zap size={15}/></>}</Link></div>
+        <div className="growth-promotion-controls">
+          <div className="growth-promotion-summary"><div><span className="growth-control-label"><Clock3 size={14}/> PROMOTION DURATION</span><div className="growth-duration-options">
+            <button type="button" className={durationDays === 7 ? "active" : ""} aria-pressed={durationDays === 7} onClick={() => setDurationDays(7)}><strong>7 days</strong><small>One week</small></button>
+            <button type="button" className={durationDays === 30 ? "active" : ""} aria-pressed={durationDays === 30} onClick={() => setDurationDays(30)}><strong>1 month</strong><small>30 days</small></button>
+          </div></div><div><label className="growth-control-label" htmlFor="growth-promotion-reach"><Users size={14}/> TARGET REACH</label><select id="growth-promotion-reach" value={targetReach} onChange={event => setTargetReach(Number(event.target.value))}>{[{ value: 500, label: "500 people · KSh 100" }, { value: 1000, label: "1,000 people · KSh 180" }, { value: 2500, label: "2,500 people · KSh 400" }, { value: 5000, label: "5,000 people · KSh 750" }, { value: 10000, label: "10,000 people · KSh 1,300" }].map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select><small className="growth-demo-note">Demo only — prices are estimates; no payment is collected.</small></div></div>
+          <div className="growth-action-row"><div><b>{chosenProduct?.productTitle || "Choose a product"}</b><small>{durationDays === 7 ? "Promotion runs for 7 days" : "Promotion runs for 30 days"} · {targetReach.toLocaleString()} target reach</small></div><button type="button" disabled={!chosenProduct || promoting} onClick={promoteProduct} className="growth-primary-action">{promoting ? "Activating promotion…" : <>Promote product <Zap size={15}/></>}</button></div>
+        </div>
       </> : <div className="growth-no-products"><ImageIcon size={22}/><div><b>No products found for this shop yet</b><p>Once your Instagram posts are listed as products, you can choose one here to promote.</p></div></div>}
     </section>
 
@@ -87,6 +129,7 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
         <article className="growth-plan-card growth-plan-pro"><span className="growth-plan-icon"><Sparkles size={21}/></span><span className="growth-plan-price">KSh 499 <small>/ month</small></span><h4>Pro Seller</h4><p>After approval, your shop displays the Pro Seller badge and receives a 30-day Pro period with seller analytics and priority growth features.</p><ul><li><Check size={13}/> Pro Seller badge</li><li><Check size={13}/> Seller analytics foundation</li><li><Check size={13}/> Priority growth features</li></ul><button type="button" disabled={!!busy || activePro} onClick={() => request("PRO", selectedShop!.id)}>{activePro ? "Pro is active" : busy === "PRO" + selectedShop?.id ? "Sending request…" : <>Explore Pro Seller <Sparkles size={15}/></>}</button>{activePro && <small className="growth-active-note">Your Pro plan is active until {new Date(selectedShop!.proUntil!).toLocaleDateString()}.</small>}</article>
       </div>
     </section>
+    <GlobalFeedbackModal open={!!feedback} type={feedback?.type || "success"} title={feedback?.title || ""} message={feedback?.message || ""} onClose={() => setFeedback(null)} />
     <p className="growth-review-note"><ShieldCheck size={15}/> Verification and Pro Seller requests require admin approval. Approved verification lasts 12 months; Pro Seller lasts 30 days. Product and shop promotions use the separate reach-based payment flow.</p>
   </section>;
 }
