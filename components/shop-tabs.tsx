@@ -13,6 +13,7 @@ type ShopTab = "discover" | "trending" | "featured";
 export function ShopTabs({
   tags = [],
   initialTag = "",
+  initialTab = "discover",
   wishlistProducts = [],
   recentlyViewedProducts = [],
   featuredStores = [],
@@ -22,6 +23,7 @@ export function ShopTabs({
 }: {
   tags?: string[];
   initialTag?: string;
+  initialTab?: ShopTab;
   wishlistProducts?: any[];
   recentlyViewedProducts?: any[];
   featuredStores?: any[];
@@ -29,7 +31,7 @@ export function ShopTabs({
   featuredProducts?: any[];
   now: string;
 }) {
-  const [active, setActive] = useState<ShopTab>("discover");
+  const [active, setActive] = useState<ShopTab>(initialTab);
   const [recentItems, setRecentItems] = useState(recentlyViewedProducts);
   const [clearingHistory, setClearingHistory] = useState(false);
   const clearRecentHistory = async () => {
@@ -105,15 +107,14 @@ export function ShopTabs({
         {tabs.map(({ id, label, icon: Icon, copy }) => {
           const selected = active === id;
           return (
-            <button
+            <Link
               key={id}
-              type="button"
+              href={"/shop?tab=" + id + (selectedTag ? "&tag=" + encodeURIComponent(selectedTag) : "")}
               role="tab"
               aria-selected={selected}
               aria-controls={"shop-tab-panel-" + id}
               className={"shop-tab shrink-0 " + (selected ? "shop-tab-active" : "")}
               onFocus={(event) => event.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })}
-              onClick={() => setActive(id)}
             >
               <span className="shop-tab-icon"><Icon size={16} /></span>
               <span className="shop-tab-copy">
@@ -121,7 +122,7 @@ export function ShopTabs({
                 <small>{copy}</small>
               </span>
               <span className="shop-tab-indicator" aria-hidden="true" />
-            </button>
+            </Link>
           );
         })}
       </div>
