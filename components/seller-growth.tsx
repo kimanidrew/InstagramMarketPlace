@@ -66,7 +66,7 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
     {message && <div role="status" className="seller-growth-message"><Sparkles size={16}/><span>{message}</span><button aria-label="Dismiss message" onClick={() => setMessage("")}>×</button></div>}
 
     <section className="growth-track growth-products">
-      <div className="growth-section-heading"><span className="growth-step">02</span><div><span className="growth-section-kicker"><Megaphone size={13}/> PRODUCT GROWTH</span><h3>Put a product in the spotlight</h3><p>Pick the exact product you want more people to discover.</p></div><span className="growth-price-pill">Pay by reach <small>from KSh 100</small></span></div>
+      <div className="growth-section-heading"><span className="growth-step">02</span><div><span className="growth-section-kicker"><Megaphone size={13}/> PRODUCT GROWTH</span><h3>Put a product in the spotlight</h3><p>Pick the exact product you want more people to discover. Promotions can run for 7 days or 1 month (30 days); choose your duration in the promotion checkout.</p></div><span className="growth-price-pill">Pay by reach <small>from KSh 100</small></span></div>
       {products.length ? <>
         <div className="growth-product-grid">{products.map((p) => {
           const selected = (chosenProduct?.id || "") === p.id;
