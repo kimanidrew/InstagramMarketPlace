@@ -1645,3 +1645,11 @@ select:focus-visible,
 .seller-setup-page-nav-step-controls .seller-back-button,.seller-setup-page-nav-step-controls .seller-next-button{min-width:155px}
 .seller-setup-page-nav>.seller-secondary-button{margin:0}
 @media(max-width:640px){.seller-setup-page-nav-step-controls{width:100%;gap:8px}.seller-setup-page-nav-step-controls .seller-back-button,.seller-setup-page-nav-step-controls .seller-next-button{min-width:0;flex:1}}
+
+
+/* Step 3 request cancellation action */
+.seller-cancel-request-form{display:inline-flex;align-items:center;margin:0}
+.seller-cancel-request-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 18px;border:1px solid #fecaca;border-radius:14px;background:#fff7f7;color:#b42318;font-size:10px;font-weight:900;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.seller-cancel-request-button:hover{background:#fee2e2;border-color:#fca5a5;transform:translateY(-1px)}
+.seller-setup-page-nav-step-controls .seller-cancel-request-button{min-width:155px}
+@media(max-width:640px){.seller-cancel-request-form{width:100%}.seller-cancel-request-button{width:100%}.seller-setup-page-nav-step-controls .seller-cancel-request-button{min-width:0}}
