@@ -71,9 +71,9 @@ export default async function Store({
             <div className="store-hero-copy">
               <div className="store-kicker-row">
                 <span className="store-kicker"><Instagram size={13} /> Instagram shop</span>
-
+                {isPro && <span className="store-profile-pro" title="Pro Seller" aria-label="Pro Seller"><Crown size={16} strokeWidth={2.5} /><span>Pro Seller</span></span>}
               </div>
-              <h1>@{store.username}{isPro && <span className="store-profile-pro" title="Pro Seller" aria-label="Pro Seller"><Crown size={19} strokeWidth={2.5} /><span>Pro Seller</span></span>}</h1>
+              <h1>@{store.username}</h1>
               <p className="store-hero-bio">
                 {store.biography || "Discover products and services from this Instagram business on Instagram Market."}
               </p>
