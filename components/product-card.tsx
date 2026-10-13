@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Heart } from "lucide-react";
+import { BadgeCheck, Bookmark, Crown, Heart } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -100,7 +100,6 @@ export function ProductCard({ p }: { p: any }) {
 
         <div className="absolute left-2 top-2 z-10 flex max-w-[calc(100%-1rem)] flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
           {p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}
-          {p.connection?.verifiedAt && (!p.connection?.verifiedUntil || new Date(p.connection.verifiedUntil) > new Date()) && <span className="inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-1.5 text-[10px] font-black text-black shadow-sm">✓ Verified</span>}
         </div>
         <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
           <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
@@ -119,7 +118,8 @@ export function ProductCard({ p }: { p: any }) {
           href={"/store/" + p.connection.username}
           className="mt-2 flex min-w-0 max-w-full items-center gap-2"
         >
-          <span className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-[#ecece8] ring-1 ring-black/5 sm:h-8 sm:w-8">
+          <span className="relative h-7 w-7 shrink-0 overflow-visible rounded-full sm:h-8 sm:w-8">
+            <span className="block h-full w-full overflow-hidden rounded-full bg-[#ecece8] ring-1 ring-black/5">
             {p.connection.profileImageUrl ? (
               <img
                 src={p.connection.profileImageUrl}
@@ -131,14 +131,17 @@ export function ProductCard({ p }: { p: any }) {
                 {(p.connection.username || "?").slice(0, 1).toUpperCase()}
               </span>
             )}
+            </span>
+            {p.connection.verifiedAt && (!p.connection.verifiedUntil || new Date(p.connection.verifiedUntil) > new Date()) && (
+              <span className="absolute -bottom-0.5 -right-0.5 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm sm:h-[18px] sm:w-[18px]" title="Verified shop" aria-label="Verified shop">
+                <BadgeCheck size={16} strokeWidth={2.8} className="fill-[#2563eb] text-white sm:h-[18px] sm:w-[18px]" />
+              </span>
+            )}
           </span>
           <span className="min-w-0 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs font-semibold leading-5 text-[#555]">
             <span className="truncate">@{p.connection.username}</span>
-            {p.connection.verifiedAt && (!p.connection.verifiedUntil || new Date(p.connection.verifiedUntil) > new Date()) && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#eef5ff] px-2 py-0.5 text-[9px] font-extrabold leading-4 text-[#2458a6]" title="Verified shop">✓ Verified</span>
-            )}
             {p.connection.proUntil && new Date(p.connection.proUntil) > new Date() && (
-              <span className="inline-flex shrink-0 items-center rounded-full bg-[#fff3d6] px-2 py-0.5 text-[9px] font-extrabold leading-4 text-[#875500]" title="Pro Seller">Pro Seller</span>
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#fff3d6] px-2 py-0.5 text-[9px] font-extrabold leading-4 text-[#875500]" title="Pro Seller"><Crown size={11} strokeWidth={2.5} /> Pro Seller</span>
             )}
           </span>
         </Link>
