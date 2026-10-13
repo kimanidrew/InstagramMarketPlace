@@ -6,10 +6,15 @@ import { user } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { BrandWordmark } from "@/components/brand-wordmark";
+
+const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
+const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Space Grotesk").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
+const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:wght@400;500;600;700;800&display=swap`;
 
 export const metadata: Metadata = {
-  title: "Instagram Market",
-  description: "Shop products discovered from Instagram stores.",
+  title: `${brandName} | Social Shopping`,
+  description: "Discover products, connect with stores, and shop socially with " + brandName + ".",
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
@@ -17,6 +22,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <html lang="en">
+      <head><link rel="stylesheet" href={brandFontUrl} /></head>
       <body className="pb-24 lg:pb-0">
         <ScrollToTop />
         <SiteHeader user={u} />
@@ -25,9 +31,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <footer className="mt-24 border-t border-black/5 bg-[#fafaf8]">
           <div className="shell grid gap-10 py-14 md:grid-cols-4">
             <div className="md:col-span-2">
-              <Link href="/" className="text-2xl font-black tracking-[-.06em]">
-                instagram<span className="text-[#777]">market</span><sup className="text-[8px]">®</sup>
-              </Link>
+              <Link href="/" className="footer-brand-link"><BrandWordmark /></Link>
               <p className="mt-4 max-w-md text-sm leading-7 text-[#777]">
                 A curated shopping experience built from real Instagram stores. Discover products, explore shops and jump straight to the original post.
               </p>
@@ -51,7 +55,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             </div>
           </div>
           <div className="shell border-t border-black/5 py-5 text-xs text-[#999]">
-            Instagram Market © 2026 · Instagram-powered marketplace
+            {brandName} © 2026 · Social shopping, connected
           </div>
         </footer>
         <MobileBottomNav user={u} />
