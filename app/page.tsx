@@ -27,6 +27,7 @@ const editorialImages = {
 };
 
 export default async function Home() {
+  const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
   const prisma = db();
 
   const [products, stores] = await Promise.all([
@@ -52,7 +53,7 @@ export default async function Home() {
         <div className="shell grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.02fr_.98fr]">
           <Reveal y={34}>
             <div className="eyebrow">
-              <Instagram size={13} /> Instagram marketplace
+              <Instagram size={13} /> Social shopping marketplace
             </div>
             <h1 className="mt-7 max-w-4xl text-6xl font-black leading-[.88] tracking-[-.075em] sm:text-7xl lg:text-[88px]">
               Discover it.
@@ -62,7 +63,7 @@ export default async function Home() {
               <span>Support it.</span>
             </h1>
             <p className="mt-8 max-w-xl text-base leading-8 text-[#666] sm:text-lg">
-              Instagram Market connects the inspiration you find on Instagram
+              {brandName} connects the inspiration you find on Instagram
               with a simple way to discover and shop from the people and
               businesses behind it.
             </p>
@@ -141,7 +142,7 @@ export default async function Home() {
           <div>
             <p className="text-lg leading-8 text-[#555]">
               Social media has already changed how people discover things.
-              Instagram Market takes that discovery one step further — making
+              {brandName} takes that discovery one step further — making
               it easier to find the product, understand who made or sells it,
               and go directly to the original Instagram story.
             </p>
@@ -172,7 +173,7 @@ export default async function Home() {
             <p className="mt-6 text-base leading-8 text-[#666]">
               A post can make you stop scrolling. A product can make you want
               to learn more. A great seller can make you want to come back.
-              Instagram Market brings those moments together in one experience.
+              {brandName} brings those moments together in one experience.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl bg-white p-5">
@@ -209,7 +210,7 @@ export default async function Home() {
                 <h2>Turn your Instagram into a shop.</h2>
                 <p>
                   Connect your approved Instagram Business account and your posts can
-                  become products on Instagram Market. No second catalogue to build.
+                  become products on {brandName}. No second catalogue to build.
                 </p>
               </div>
               <Link href="/account" className="connect-instagram-button">
@@ -250,7 +251,7 @@ export default async function Home() {
               <div className="community-kicker"><Store size={14} /> Meet the stores</div>
               <h2 className="community-title mt-6">Discover the people<br /><span>behind the posts.</span></h2>
               <p className="mt-7 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
-                Every store on Instagram Market starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.
+                Every store on {brandName} starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.
               </p>
               <Link href="/stores" className="community-stores-button mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 text-xs font-black transition hover:-translate-y-1">
                 Explore all stores <ArrowRight size={14} />
