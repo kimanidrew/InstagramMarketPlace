@@ -1533,3 +1533,22 @@ hr{border-color:#ece5fa}
 /* Keep the #instamart note on a single line in the setup sidebar. */
 .seller-setup-page-aside li:last-child{white-space:nowrap;align-items:center;font-size:10px;gap:6px}
 .seller-setup-page-aside li:last-child svg{margin-top:0}
+
+/* Keep input focus styling on the containing field instead of the control itself. */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible,
+[contenteditable="true"]:focus,
+[contenteditable="true"]:focus-visible{
+  outline:none!important;
+  box-shadow:none!important;
+}
+
+/* Show the focus ring around the complete input wrapper across the app. */
+:where(label,fieldset,[class*="field"],[class*="input"],[class*="search"],[class*="control"],.desktop-search,.mobile-search-box,.products-hero-search):has(input:focus,textarea:focus,select:focus,[contenteditable="true"]:focus){
+  border-color:#a58aff!important;
+  box-shadow:0 0 0 3px rgba(112,85,232,.14)!important;
+}
