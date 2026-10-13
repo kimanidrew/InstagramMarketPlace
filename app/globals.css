@@ -1552,3 +1552,11 @@ select:focus-visible,
   border-color:#a58aff!important;
   box-shadow:0 0 0 3px rgba(112,85,232,.14)!important;
 }
+
+
+/* Remove borders from every article used for the Instagram setup steps, on page and modal. */
+.seller-step-card,
+.seller-step-card.seller-step-active,
+.seller-step-card.seller-step-done,
+.seller-step-card.seller-step-locked,
+.seller-setup-page .seller-step-card.seller-step-active.seller-step-instagram-logo{border:0!important;border-color:transparent!important;}
