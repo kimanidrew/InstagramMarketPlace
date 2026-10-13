@@ -1885,3 +1885,22 @@ select:focus-visible,
  .review-thread-author{gap:5px}
 }
 @media(prefers-reduced-motion:reduce){.review-write-button,.review-rating-picker button{transition:none}}
+
+
+/* Keep the product card's primary stat focused on likes; saved count lives below it. */
+.product-card-likes-only{justify-content:flex-start}
+.product-card-likes-only .product-card-stat{flex:0 1 auto;min-width:116px}
+.product-card-saved-stat{display:inline-flex;align-items:center;gap:5px;max-width:100%;margin-top:7px;padding:4px 8px;border:1px solid #eee;border-radius:999px;background:#fff;color:#929292;font-size:9px;font-weight:750;line-height:1.2;transition:background .25s ease,border-color .25s ease,transform .35s cubic-bezier(.22,1,.36,1),box-shadow .25s ease}
+.product-card-saved-icon{display:inline-flex;align-items:center;justify-content:center;color:#8b83a0;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.product-card-saved-stat .interaction-stat-value{display:inline-block;color:#45404f;font-size:10px;font-weight:900;transform-origin:center;will-change:transform,opacity}
+.product-card-saved-stat.is-updated{border-color:#e7dfff;background:#faf7ff;box-shadow:0 4px 12px rgba(100,70,160,.07);animation:productStatRowPop .45s cubic-bezier(.22,1,.36,1) both}
+.product-card-saved-stat.is-updated .product-card-saved-icon{transform:scale(1.14) rotate(-5deg)}
+.product-card-saved-stat .interaction-stat-value.is-count-updated{animation:productStatNumberPop .45s cubic-bezier(.22,1,.36,1) both}
+@media(max-width:640px){
+ .product-card-likes-only .product-card-stat{min-width:0}
+ .product-card-saved-stat{margin-top:6px;padding:4px 7px}
+}
+@media(prefers-reduced-motion:reduce){
+ .product-card-saved-stat,.product-card-saved-icon{transition:none}
+ .product-card-saved-stat.is-updated,.product-card-saved-stat .interaction-stat-value.is-count-updated{animation:none}
+}
