@@ -12,11 +12,12 @@ export const dynamic = "force-dynamic";
 export default async function Products({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; tag?: string }>;
+  searchParams: Promise<{ q?: string; tag?: string; tab?: string }>;
 }) {
   const params = await searchParams;
   const text = params.q?.trim();
   const tag = params.tag?.toLowerCase();
+  const initialTab = params.tab === "trending" || params.tab === "featured" ? params.tab : "discover";
   const currentUser = await user();
   const now = new Date();
 
@@ -224,6 +225,7 @@ export default async function Products({
           <ShopTabs
             tags={tags.map((x) => x.name)}
             initialTag={tag || ""}
+            initialTab={initialTab}
             wishlistProducts={shopData.wishlistProducts}
             recentlyViewedProducts={shopData.recentlyViewedProducts}
             featuredStores={shopData.featuredStores}
