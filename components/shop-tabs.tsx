@@ -201,13 +201,14 @@ export function ShopTabs({
                   </div>
                   <div className="discover-stores-list mt-7 grid gap-5 lg:grid-cols-2">
                     {featuredStores.filter(({ posts }: any) => posts?.length > 0).slice(0, 5).map(({ store, posts }: any) => {
-                      const previewPosts = posts.slice(0, 3);
+                      const ratings = store.reviews || [];
+                      const averageRating = ratings.length ? ratings.reduce((sum: number, review: any) => sum + review.rating, 0) / ratings.length : null;
                       return (
                         <article key={store.id} className="group relative overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,.09)]">
                           <AnalyticsImpression connectionId={store.id} />
                           <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="flex items-center justify-between gap-4 px-2 py-2">
                             <div className="flex min-w-0 items-center gap-3">
-                              <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white ring-2 ring-white shadow-sm">
+                              <div className="h-[76px] w-[76px] shrink-0 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-md sm:h-20 sm:w-20">
                                 {store.profileImageUrl ? (
                                   <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" />
                                 ) : (
@@ -219,7 +220,7 @@ export function ShopTabs({
                                   <b className="truncate text-sm font-black">@{store.username}</b>
                                   {(store.verifiedAt || (store.proUntil && new Date(store.proUntil) > currentNow)) && <BadgeCheck size={14} className="shrink-0" />}
                                 </div>
-                                <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} listings · Instagram shop</p>
+                                <p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">Instagram shop</p>
                                 {store.paidPromotionActive && <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-black px-2 py-1 text-[8px] font-black uppercase tracking-wider text-white"><Sparkles size={9}/> Promoted</span>}
                               </div>
                             </div>
@@ -228,27 +229,19 @@ export function ShopTabs({
                             </span>
                           </Link>
 
-                          <div className="grid grid-cols-3 gap-2.5">
-                            {previewPosts.map((post: any) => {
-                              const isVideo = String(post.mediaType || "").toUpperCase() === "VIDEO";
-                              const image = post.thumbnailUrl || post.mediaUrl;
-                              const isService = String(post.listingType || "").toUpperCase() === "SERVICE";
-                              const href = "/" + (isService ? "service" : "product") + "/" + post.productSlug;
-                              return (
-                                <Link key={post.id} href={href} onClick={() => recordAnalytics({ connectionId: store.id, postId: post.id, type: "CLICK" })} className="group/media relative aspect-[4/5] overflow-hidden rounded-[20px] bg-[#e9e9e5]">
-                                  {image ? (
-                                    <img src={image} alt={post.productTitle || "Store listing"} className="h-full w-full object-cover transition duration-500 group-hover/media:scale-[1.05]" />
-                                  ) : isVideo && post.mediaUrl ? (
-                                    <video src={post.mediaUrl} muted playsInline className="h-full w-full object-cover" />
-                                  ) : (
-                                    <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-[#999]">No media</div>
-                                  )}
-                                  <span className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent px-2 pb-2 pt-7 text-[10px] font-bold text-white">
-                                    {post.productTitle || "View listing"}
-                                  </span>
-                                </Link>
-                              );
-                            })}
+                          <div className="mt-3 grid grid-cols-3 gap-2 border-t border-black/5 px-2 pt-4">
+                            <div className="flex flex-col gap-1">
+                              <span className="flex items-center gap-1 text-sm font-black text-[#252525]"><Store size={14} className="text-[#777]" /> {posts.length}</span>
+                              <span className="text-[9px] font-bold uppercase tracking-[.1em] text-[#888]">Listings</span>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <span className="flex items-center gap-1 text-sm font-black text-[#252525]"><span className="text-amber-500">★</span> {averageRating === null ? "—" : averageRating.toFixed(1)}</span>
+                              <span className="text-[9px] font-bold uppercase tracking-[.1em] text-[#888]">Rating</span>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <span className="text-sm font-black text-[#252525]">{ratings.length}</span>
+                              <span className="text-[9px] font-bold uppercase tracking-[.1em] text-[#888]">Reviews</span>
+                            </div>
                           </div>
                         </article>
                       );
@@ -303,7 +296,7 @@ export function ShopTabs({
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Still loving these?</h2>
                         <p className="mt-2 text-sm text-[#777]">Your saved products and services are ready whenever you are.</p>
                       </div>
-                      <Link href="/wishlist" className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#deded8] bg-white px-4 py-2.5 text-xs font-semibold text-[#33332f] shadow-sm transition hover:border-[#222] hover:bg-[#222] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#555] focus-visible:ring-offset-2 sm:w-auto sm:shrink-0">View full wishlist <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" /></Link>
+                      <Link href="/wishlist" className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#deded8] bg-white px-4 py-2.5 text-[10px] font-semibold text-[#33332f] sm:text-[11px] shadow-sm transition hover:border-[#222] hover:bg-[#222] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#555] focus-visible:ring-offset-2 sm:w-auto sm:shrink-0">View full wishlist <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" /></Link>
                     </div>
                     <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
                       {wishlistProducts.slice(0, 7).map((x: any) => {
