@@ -43,6 +43,7 @@ export function NotificationBell({userId}:{userId:string}) {
   </div>;
 }
 export function NotificationsPageClient() {
+  const router=useRouter();
   const [payload,setPayload]=useState<Payload>({notifications:[],unreadCount:0});
   const [loading,setLoading]=useState(true);
   const load=useCallback(async()=>{try{const r=await fetch("/api/notifications?all=1",{cache:"no-store"});if(r.ok)setPayload(await r.json())}finally{setLoading(false)}},[]);
