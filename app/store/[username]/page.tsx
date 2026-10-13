@@ -25,7 +25,16 @@ export default async function Store({
       where: { username },
       include: {
         reviews: {
-          include: { user: { select: { id: true, name: true } } },
+          include: {
+            user: { select: { id: true, name: true } },
+            replies: {
+              include: {
+                user: { select: { id: true, name: true } },
+                connection: { select: { id: true, username: true, profileImageUrl: true } },
+              },
+              orderBy: { createdAt: "asc" },
+            },
+          },
           orderBy: { createdAt: "desc" },
         },
         posts: {
@@ -146,8 +155,15 @@ export default async function Store({
             ...review,
             createdAt: review.createdAt.toISOString(),
             updatedAt: review.updatedAt.toISOString(),
+            replies: review.replies.map((reply) => ({
+              ...reply,
+              createdAt: reply.createdAt.toISOString(),
+              updatedAt: reply.updatedAt.toISOString(),
+            })),
           }))}
           currentUserId={currentUser?.id}
+          storeOwnerUserId={store.connectedByUserId}
+          storeProfileImageUrl={store.profileImageUrl}
         />
       )}
     </main>
