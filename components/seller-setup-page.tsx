@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, XCircle } from "lucide-react";
 
 const images = {
@@ -16,10 +17,11 @@ function StepCard({number,title,text,image,state,children,imageIsLogo=false}:{nu
   return <article className={"seller-step-card seller-step-"+state+(imageIsLogo?" seller-step-instagram-logo":"")}><div className="seller-step-media"><img src={image} alt={imageIsLogo?"Instagram logo":""}/></div><div className="seller-step-number">{state==="done"?<Check size={17}/>:number}</div><div className="seller-step-body"><div className="seller-step-top"><span>{state==="done"?"DONE":state==="active"?"YOUR NEXT STEP":"COMING NEXT"}</span>{state==="active"&&<b>Step {number} of 4</b>}</div><h2>{title}</h2><p className="seller-step-text">{text}</p>{children}</div></article>;
 }
 export default function SellerSetupPage({request,connection,initialStep=1}:{request:Request;connection?:Connection;initialStep?:number}) {
+  const router=useRouter();
   const connected=Boolean(connection);
   const currentStep=connected?4:request.status==="APPROVED"?3:request.status==="PENDING"?2:1;
   const [activeStep,setActiveStep]=useState(Math.min(4,Math.max(1,initialStep)));
-  useEffect(()=>{if(connected){setActiveStep(4);return;}if(request.status==="REJECTED")setActiveStep(1);},[connected,request.status]);
+  useEffect(()=>{if(connected){setActiveStep(4);return;}if(request.status==="REJECTED"){setActiveStep(1);return;}if(request.status==="APPROVED"&&activeStep===2){setActiveStep(3);return;}if(request.status!=="PENDING"||activeStep!==2)return;const timer=window.setInterval(()=>router.refresh(),5000);return()=>window.clearInterval(timer);},[connected,request.status,activeStep,router]);
   const visibleStep=activeStep===4&&request.status==="APPROVED"&&!connected?4:Math.min(activeStep,currentStep);
   const href=(n:number)=>"/account/setup?setup="+encodeURIComponent(request.id)+"&step="+n;
   return <main className="seller-onboarding seller-setup-page">
