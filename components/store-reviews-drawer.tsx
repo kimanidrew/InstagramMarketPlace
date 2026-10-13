@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
-import { ArrowLeft, Star, X } from "lucide-react";
+import { Star, X } from "lucide-react";
 import { ReviewSection } from "@/components/review-section";
 
 export function StoreReviewsDrawer({
