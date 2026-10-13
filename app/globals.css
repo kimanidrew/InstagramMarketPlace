@@ -1441,7 +1441,7 @@ hr{border-color:#ece5fa}
 /* Seller analytics and paid reach studio */
 .seller-analytics-page{min-height:70vh;padding:28px 0 70px;background:radial-gradient(ellipse at 10% 0%,#f2eaff 0,transparent 34%),linear-gradient(180deg,#fcfaff 0,#fff 420px)}
 .seller-analytics-shell{width:min(1180px,calc(100% - 32px));margin:auto}
-.seller-analytics-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;color:#786d88;font-size:12px;font-weight:800;transition:color .2s}.seller-analytics-back:hover{color:#111}
+.seller-analytics-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:20px;color:#302044;font-size:12px;font-weight:800;transition:color .2s}.seller-analytics-back:hover{color:#8156c3}
 .seller-analytics-hero{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;overflow:hidden;margin-bottom:23px;padding:clamp(25px,5vw,48px);border:1px solid #e8ddf7;border-radius:30px;background:linear-gradient(125deg,#fff 0%,#f7f0ff 65%,#efe5ff 100%);box-shadow:0 18px 55px #3e245c0a}
 .seller-analytics-kicker{display:inline-flex;align-items:center;gap:7px;color:#8156c3;font-size:9px;font-weight:950;letter-spacing:.15em}
 .seller-analytics-hero h1{margin:15px 0 12px;color:#211936;font-size:clamp(32px,5vw,52px);line-height:.99;letter-spacing:-.065em}
