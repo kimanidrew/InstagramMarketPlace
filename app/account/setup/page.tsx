@@ -11,5 +11,5 @@ export default async function AccountSetup({searchParams}:{searchParams:Promise<
  const requestedStep=Number(q.step|| (request?.status==="APPROVED"?3:request?.status==="PENDING"?2:1));
  const step=Math.min(4,Math.max(1,Number.isFinite(requestedStep)?requestedStep:1));
  const active=request||{id:"new",username:"new shop",status:"REJECTED" as const};
- return <><SellerSetupPage request={active} connection={connection?{username:connection.username,postsCount:connection.posts.length}:undefined} initialStep={step}/>{q.error==="invalid"&&<div className="seller-alert error">Please enter a valid Instagram username.</div>}</>;
+ return <><SellerSetupPage request={active} connection={connection?{username:connection.username,postsCount:connection.posts.length,profileImageUrl:connection.profileImageUrl}:undefined} initialStep={step}/>{q.error==="invalid"&&<div className="seller-alert error">Please enter a valid Instagram username.</div>}</>;
 }
