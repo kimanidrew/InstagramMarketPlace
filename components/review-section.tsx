@@ -1,7 +1,19 @@
 "use client";
 
-import { Pencil, Star, Trash2, X } from "lucide-react";
+import { BadgeCheck, CornerDownRight, MessageCircle, Pencil, Send, Star, Store as StoreIcon, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
+
+type ReviewReply = {
+  id: string;
+  reviewId: string;
+  userId: string;
+  connectionId: string | null;
+  body: string;
+  createdAt: string | Date;
+  updatedAt?: string | Date;
+  user?: { id: string; name: string | null };
+  connection?: { id: string; username: string; profileImageUrl: string | null } | null;
+};
 
 type Review = {
   id: string;
@@ -11,6 +23,7 @@ type Review = {
   createdAt: string | Date;
   updatedAt: string | Date;
   user?: { id: string; name: string | null };
+  replies?: ReviewReply[];
 };
 
 export function ReviewSection({
@@ -19,12 +32,18 @@ export function ReviewSection({
   reviews: initialReviews,
   currentUserId,
   title = "Reviews",
+  storeUsername,
+  storeOwnerUserId,
+  storeProfileImageUrl,
 }: {
   type: "store" | "product";
   targetId: string;
   reviews: Review[];
   currentUserId?: string | null;
   title?: string;
+  storeUsername?: string;
+  storeOwnerUserId?: string | null;
+  storeProfileImageUrl?: string | null;
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [rating, setRating] = useState(5);
@@ -35,15 +54,20 @@ export function ReviewSection({
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
+  const [replyOpen, setReplyOpen] = useState<string | null>(null);
+  const [replyBusy, setReplyBusy] = useState<string | null>(null);
+  const [replyError, setReplyError] = useState<Record<string, string>>({});
 
   const average = useMemo(
     () => (reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0),
     [reviews],
   );
+  const isStoreOwner = !!currentUserId && !!storeOwnerUserId && currentUserId === storeOwnerUserId;
 
   function startReview(review?: Review) {
     if (!currentUserId) {
-      window.location.href = "/login?next=" + encodeURIComponent(window.location.pathname);
+      window.location.href = "/login?next=" + encodeURIComponent(window.location.pathname + window.location.search);
       return;
     }
     setError("");
@@ -60,139 +84,201 @@ export function ReviewSection({
   }
 
   async function save() {
+    if (body.trim().length < 3) {
+      setError("Please write at least 3 characters.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
       const response = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, targetId, rating, body }),
+        body: JSON.stringify({ type, targetId, rating, body: body.trim() }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.error || "Could not save your review.");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.review?.id) {
+        setError(data.error || "Your review could not be saved. Please try again.");
         return;
       }
 
+      const savedReview = data.review as Review;
       setReviews((current) => {
-        const exists = current.some((review) => review.id === data.review.id);
-        return exists ? current.map((review) => review.id === data.review.id ? data.review : review) : [data.review, ...current];
+        const exists = current.some((review) => review.id === savedReview.id);
+        return exists
+          ? current.map((review) => review.id === savedReview.id ? { ...review, ...savedReview } : review)
+          : [{ ...savedReview, replies: [] }, ...current];
       });
-      setEditing(data.review);
+      setEditing(savedReview);
       setOpen(false);
+      setBody("");
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError("Connection problem. Your review was not confirmed as saved. Please try again.");
     } finally {
       setBusy(false);
     }
   }
 
   async function remove(review: Review) {
-    if (!window.confirm("Delete your review?")) return;
+    if (!window.confirm("Delete your review and its replies?")) return;
     setBusy(true);
+    setError("");
     try {
       const response = await fetch("/api/reviews/delete", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type, id: review.id }),
       });
-      if (response.ok) {
-        setReviews((current) => current.filter((item) => item.id !== review.id));
-        if (editing?.id === review.id) setEditing(null);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setError(data.error || "Could not delete this review.");
+        return;
       }
+      setReviews((current) => current.filter((item) => item.id !== review.id));
+      if (editing?.id === review.id) setEditing(null);
+    } catch {
+      setError("Connection problem. The review was not deleted.");
     } finally {
       setBusy(false);
     }
   }
 
+  async function sendReply(review: Review) {
+    if (!currentUserId) {
+      window.location.href = "/login?next=" + encodeURIComponent(window.location.pathname + window.location.search);
+      return;
+    }
+    const replyBody = (replyDrafts[review.id] || "").trim();
+    if (!replyBody) {
+      setReplyError((current) => ({ ...current, [review.id]: "Write a reply first." }));
+      return;
+    }
+    setReplyBusy(review.id);
+    setReplyError((current) => ({ ...current, [review.id]: "" }));
+    try {
+      const response = await fetch("/api/reviews/replies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviewId: review.id, body: replyBody }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.reply?.id) {
+        setReplyError((current) => ({ ...current, [review.id]: data.error || "Reply could not be saved." }));
+        return;
+      }
+      setReviews((current) => current.map((item) => item.id === review.id
+        ? { ...item, replies: [...(item.replies || []), data.reply as ReviewReply] }
+        : item));
+      setReplyDrafts((current) => ({ ...current, [review.id]: "" }));
+      setReplyOpen(null);
+    } catch {
+      setReplyError((current) => ({ ...current, [review.id]: "Connection problem. Your reply was not confirmed as saved." }));
+    } finally {
+      setReplyBusy(null);
+    }
+  }
+
   return (
-    <section className="mt-8 rounded-[30px] border border-black/[0.07] bg-white p-5 shadow-[0_18px_55px_rgba(0,0,0,0.06)] sm:p-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-black tracking-tight">{title}</h2>
-            {reviews.length > 0 && (
-              <span className="rounded-full bg-[#f4f4f1] px-3 py-1 text-xs font-bold text-[#555]">
-                {reviews.length}
-              </span>
-            )}
-          </div>
-          <div className="mt-2 flex items-center gap-2">
-            <div className="flex gap-0.5 text-[#d4a72c]">
-              {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={15} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
-            </div>
-            <span className="text-sm font-semibold text-[#666]">
-              {reviews.length ? average.toFixed(1) : "No ratings yet"}
-            </span>
+    <section className="review-community">
+      <header className="review-community-head">
+        <div className="review-community-heading">
+          <span className="review-community-eyebrow"><MessageCircle size={13} /> COMMUNITY CONVERSATION</span>
+          <h2>{title}</h2>
+          <p>Real experiences, helpful replies, and a direct conversation with the shop.</p>
+          <div className="review-community-rating">
+            <span className="review-community-stars">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={15} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}</span>
+            <strong>{reviews.length ? average.toFixed(1) : "New shop"}</strong>
+            <span>{reviews.length} {reviews.length === 1 ? "review" : "reviews"}</span>
           </div>
         </div>
-
-        <button
-          onClick={() => startReview(editing || undefined)}
-          className="rounded-full bg-black px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#222]"
-        >
-          {editing ? "Edit your review" : "Write a review"}
-        </button>
-      </div>
+        {!isStoreOwner && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
+          <Pencil size={15} /> {editing ? "Edit your review" : "Write a review"}
+        </button>}
+      </header>
 
       {open && (
-        <div className="mt-6 rounded-[24px] bg-[#f7f7f4] p-5">
-          <div className="flex items-center justify-between">
-            <h3 className="font-black">{editing ? "Edit your review" : "Share your experience"}</h3>
-            <button onClick={() => setOpen(false)} className="rounded-full p-2 hover:bg-white"><X size={17} /></button>
+        <div className="review-compose">
+          <div className="review-compose-top">
+            <div><span>{editing ? "UPDATE YOUR FEEDBACK" : "YOUR EXPERIENCE MATTERS"}</span><h3>{editing ? "Edit your review" : "Write a review"}</h3></div>
+            <button type="button" onClick={() => setOpen(false)} aria-label="Close review form"><X size={18} /></button>
           </div>
-          <div className="mt-5 flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button key={star} type="button" onClick={() => setRating(star)} aria-label={star + " stars"} className="rounded-full p-1 transition hover:scale-110">
-                <Star size={25} fill={star <= rating ? "currentColor" : "none"} />
-              </button>
-            ))}
+          <div className="review-rating-picker" aria-label="Choose a rating">
+            {[1, 2, 3, 4, 5].map((star) => <button key={star} type="button" onClick={() => setRating(star)} aria-label={star + " stars"}><Star size={27} fill={star <= rating ? "currentColor" : "none"} /></button>)}
+            <span>{rating}/5</span>
           </div>
-          <textarea
-            value={body}
-            onChange={(event) => setBody(event.target.value)}
-            maxLength={1000}
-            rows={4}
-            placeholder={type === "store" ? "How was your experience with this store?" : "What did you think about this product?"}
-            className="mt-4 w-full resize-none rounded-[18px] border border-black/[0.08] bg-white px-4 py-3 text-sm outline-none transition focus:border-black"
-          />
-          <div className="mt-2 flex items-center justify-between">
-            <span className="text-[11px] text-[#888]">{body.length}/1000</span>
-            {error && <span className="text-xs font-semibold text-red-600">{error}</span>}
-          </div>
-          <div className="mt-4 flex gap-2">
-            <button onClick={save} disabled={busy} className="rounded-full bg-black px-5 py-3 text-sm font-bold text-white disabled:opacity-50">
-              {busy ? "Saving..." : editing ? "Save changes" : "Post review"}
-            </button>
-            <button onClick={() => setOpen(false)} className="rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-bold">Cancel</button>
-          </div>
+          <textarea value={body} onChange={(event) => setBody(event.target.value)} maxLength={1000} rows={4} placeholder={type === "store" ? "Share what shopping with this store was like…" : "Share what you thought about this product…"} />
+          <div className="review-compose-footer"><span>{body.length}/1000</span><button type="button" onClick={() => void save()} disabled={busy}><Send size={14} /> {busy ? "Saving review…" : editing ? "Save changes" : "Post review"}</button></div>
+          {error && <p className="review-error" role="alert">{error}</p>}
         </div>
       )}
 
-      <div className="mt-7 space-y-3">
+      {error && !open && <p className="review-error review-global-error" role="alert">{error}</p>}
+
+      <div className="review-thread-list">
         {reviews.length === 0 ? (
-          <div className="rounded-[22px] border border-dashed border-black/10 bg-[#fafaf8] px-5 py-8 text-center">
-            <p className="font-bold">Be the first to review</p>
-            <p className="mt-1 text-sm text-[#888]">Your experience can help other shoppers decide.</p>
-          </div>
+          <div className="review-empty-state"><span><MessageCircle size={22} /></span><h3>Start the conversation</h3><p>Be the first to share a thoughtful review. Your feedback helps shoppers and the shop owner.</p></div>
         ) : reviews.map((review) => (
-          <article key={review.id} className="rounded-[22px] border border-black/[0.06] bg-[#fafaf8] p-5">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="font-bold">{review.user?.name || "Marketplace shopper"}</p>
-                <div className="mt-1 flex items-center gap-2">
-                  <span className="flex gap-0.5 text-[#d4a72c]">{[1,2,3,4,5].map((star) => <Star key={star} size={12} fill={star <= review.rating ? "currentColor" : "none"} />)}</span>
-                  <span className="text-[11px] text-[#999]">{new Date(review.createdAt).toLocaleDateString()}</span>
+          <article key={review.id} className="review-thread">
+            <div className="review-thread-main">
+              <div className="review-avatar">{(review.user?.name || "S").trim().charAt(0).toUpperCase()}</div>
+              <div className="review-thread-content">
+                <div className="review-thread-author">
+                  <strong>{review.user?.name || "Marketplace shopper"}</strong>
+                  <time>{new Date(review.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</time>
+                </div>
+                <div className="review-thread-stars">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={12} fill={star <= review.rating ? "currentColor" : "none"} />)}</div>
+                <p className="review-thread-body">{review.body}</p>
+                {review.userId === currentUserId && (
+                  <div className="review-own-actions">
+                    <button type="button" onClick={() => startReview(review)}><Pencil size={12} /> Edit</button>
+                    <button type="button" onClick={() => void remove(review)} disabled={busy}><Trash2 size={12} /> Delete</button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {(review.replies || []).length > 0 && (
+              <div className="review-replies">
+                {(review.replies || []).map((reply) => {
+                  const isShopReply = !!reply.connection;
+                  const displayName = isShopReply ? "@" + reply.connection!.username : reply.user?.name || "Marketplace shopper";
+                  return <div key={reply.id} className={"review-reply" + (isShopReply ? " review-reply-shop" : "")}>
+                    <span className="review-reply-rail"><CornerDownRight size={15} /></span>
+                    <div className={"review-reply-avatar" + (isShopReply ? " is-shop" : "")}>
+                      {isShopReply && reply.connection?.profileImageUrl
+                        ? <img src={reply.connection.profileImageUrl} alt="" />
+                        : isShopReply ? <StoreIcon size={15} /> : (reply.user?.name || "S").trim().charAt(0).toUpperCase()}
+                    </div>
+                    <div className="review-reply-content">
+                      <div className="review-thread-author"><strong>{displayName}{isShopReply && <BadgeCheck size={13} />}</strong><time>{new Date(reply.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</time></div>
+                      {isShopReply && <span className="review-shop-reply-label">OFFICIAL SHOP REPLY</span>}
+                      <p>{reply.body}</p>
+                    </div>
+                  </div>;
+                })}
+              </div>
+            )}
+
+            {currentUserId && (
+              <div className="review-reply-actions">
+                <button type="button" onClick={() => { setReplyOpen(replyOpen === review.id ? null : review.id); setReplyError((current) => ({ ...current, [review.id]: "" })); }}>
+                  <MessageCircle size={13} /> Reply{(review.replies || []).length ? " (" + review.replies!.length + ")" : ""}
+                </button>
+                {isStoreOwner && <span className="review-reply-as-shop"><StoreIcon size={12} /> Replying as @{storeUsername}</span>}
+              </div>
+            )}
+            {replyOpen === review.id && (
+              <div className="review-reply-compose">
+                <div className={"review-reply-avatar" + (isStoreOwner ? " is-shop" : "")}>
+                  {isStoreOwner && storeProfileImageUrl ? <img src={storeProfileImageUrl} alt="" /> : isStoreOwner ? <StoreIcon size={15} /> : "Y"}
+                </div>
+                <div className="review-reply-compose-field">
+                  <textarea value={replyDrafts[review.id] || ""} onChange={(event) => setReplyDrafts((current) => ({ ...current, [review.id]: event.target.value }))} maxLength={1000} rows={2} placeholder={isStoreOwner ? "Reply as @" + storeUsername + "…" : "Add a reply…"} />
+                  <div className="review-reply-compose-bottom"><span>{(replyDrafts[review.id] || "").length}/1000</span><button type="button" onClick={() => void sendReply(review)} disabled={replyBusy === review.id}><Send size={13} /> {replyBusy === review.id ? "Sending…" : "Reply"}</button></div>
+                  {replyError[review.id] && <p className="review-error" role="alert">{replyError[review.id]}</p>}
                 </div>
               </div>
-              {review.userId === currentUserId && (
-                <div className="flex gap-1">
-                  <button onClick={() => startReview(review)} aria-label="Edit review" className="rounded-full p-2 hover:bg-white"><Pencil size={14} /></button>
-                  <button onClick={() => remove(review)} aria-label="Delete review" className="rounded-full p-2 text-red-600 hover:bg-white"><Trash2 size={14} /></button>
-                </div>
-              )}
-            </div>
-            <p className="mt-4 whitespace-pre-line text-sm leading-6 text-[#555]">{review.body}</p>
+            )}
           </article>
         ))}
       </div>
