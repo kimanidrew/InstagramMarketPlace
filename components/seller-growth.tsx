@@ -120,6 +120,8 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
         promotionOnly
         connections={connections.map(c => ({ id: c.id, username: c.username, name: c.name || null, profileImageUrl: c.profileImageUrl || null, posts: c.posts.map(p => ({ id: p.id, title: p.productTitle || "Untitled product", slug: null, image: p.thumbnailUrl || p.mediaUrl || null, mediaType: p.mediaType || "IMAGE" })) }))}
         initialShopId={selectedId}
+        activeShopId={selectedId}
+        onShopChange={setSelectedId}
       />
     </div>}
     <GlobalFeedbackModal open={!!feedback} type={feedback?.type || "success"} title={feedback?.title || ""} message={feedback?.message || ""} onClose={() => setFeedback(null)} />
