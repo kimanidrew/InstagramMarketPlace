@@ -18,21 +18,32 @@ async function review(formData: FormData) {
     redirect("/admin?error=" + encodeURIComponent("Invalid store request action."));
   }
 
-  if (status === "REJECTED") {
-    await db().storeRequest.update({
-      where: { id },
-      data: { status: "REJECTED", reviewedAt: new Date() },
-    });
-    redirect("/admin?rejected=1");
+  const prisma = db();
+  const request = await prisma.storeRequest.findUnique({ where: { id } });
+  if (!request) redirect("/admin?error=" + encodeURIComponent("Store request not found."));
+  if (request.status !== "PENDING") {
+    redirect("/admin?error=" + encodeURIComponent("This store request has already been reviewed."));
   }
 
-  const request = await db().storeRequest.findUnique({ where: { id } });
-  if (!request) redirect("/admin?error=" + encodeURIComponent("Store request not found."));
-  await db().storeRequest.update({
-    where: { id },
-    data: { status: "APPROVED", reviewedAt: new Date() },
-  });
-  redirect("/admin?approved=1");
+  const approved = status === "APPROVED";
+  await prisma.$transaction([
+    prisma.storeRequest.update({
+      where: { id },
+      data: { status: approved ? "APPROVED" : "REJECTED", reviewedAt: new Date() },
+    }),
+    prisma.notification.create({
+      data: {
+        userId: request.userId,
+        type: approved ? "STORE_REQUEST_APPROVED" : "STORE_REQUEST_REJECTED",
+        title: approved ? "Your shop request was approved" : "Your shop request was declined",
+        message: approved
+          ? `Your request for @${request.username} was approved. You can now accept the Instagram tester invitation and connect your shop.`
+          : `Your request for @${request.username} was not approved. You can review your setup and submit another request if needed.`,
+        href: approved ? `/account/setup?setup=${encodeURIComponent(request.id)}&step=3` : "/account/setup",
+      },
+    }),
+  ]);
+  redirect(approved ? "/admin?approved=1" : "/admin?rejected=1");
 }
 
 export default async function Admin({
