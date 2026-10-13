@@ -99,7 +99,7 @@ export function ProductCard({ p }: { p: any }) {
         )}
 
         <div className="absolute left-2 top-2 z-10 flex max-w-[calc(100%-1rem)] flex-wrap gap-1 sm:left-3 sm:top-3 sm:gap-1.5">
-          {p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1.5 text-[10px] font-black text-white shadow-sm">Boosted</span>}
+          {p.boostUntil && new Date(p.boostUntil) > new Date() && <span className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1.5 text-[10px] font-black text-white shadow-sm">Promoted</span>}
         </div>
         <div className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3">
           <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
