@@ -1529,3 +1529,7 @@ hr{border-color:#ece5fa}
 
 /* Remove the full border from the active Instagram-logo setup article. */
 .seller-setup-page .seller-step-card.seller-step-active.seller-step-instagram-logo{border:0!important;}
+
+/* Keep the #instamart note on a single line in the setup sidebar. */
+.seller-setup-page-aside li:last-child{white-space:nowrap;align-items:center;font-size:10px;gap:6px}
+.seller-setup-page-aside li:last-child svg{margin-top:0}
