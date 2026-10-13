@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, Check, CheckCheck, ChevronRight, Inbox, ShieldCheck } from "lucide-react";
+import { Bell, Check, CheckCheck, ChevronRight, Inbox, MessageCircle, ShieldCheck, Star } from "lucide-react";
 
 type NotificationItem = { id:string; type:string; title:string; message:string; href:string|null; readAt:string|null; createdAt:string };
 type Payload = { notifications:NotificationItem[]; unreadCount:number };
@@ -16,7 +16,8 @@ function relativeTime(value:string) {
   return new Date(value).toLocaleDateString(undefined,{month:"short",day:"numeric"});
 }
 function NoticeIcon({type}:{type:string}) {
-  return <span className="notification-item-icon">{type.includes("APPROVED")?<Check size={17}/>:type.includes("REJECTED")?<ShieldCheck size={17}/>:<Bell size={17}/>}</span>;
+  const isReview = type.startsWith("STORE_REVIEW");
+  return <span className="notification-item-icon">{isReview ? <MessageCircle size={17}/> : type.includes("APPROVED") ? <Check size={17}/> : type.includes("REJECTED") ? <ShieldCheck size={17}/> : <Bell size={17}/>}</span>;
 }
 function EmptyNotifications() {
   return <div className="notification-empty"><span className="notification-empty-icon"><Inbox size={22}/></span><strong>You’re all caught up</strong><span>Important shop updates and account activity will appear here.</span></div>;
