@@ -1974,3 +1974,22 @@ select:focus-visible,
 .growth-promotion-tab-panel{min-width:0}
 .growth-promotion-tab-panel .seller-analytics-shopbar{margin-top:0}
 @media(max-width:520px){.growth-studio-tabs{gap:4px;padding:4px}.growth-studio-tabs button{gap:6px;padding:9px 6px;font-size:12px}}
+
+
+/* Seller Growth panel: clean surface with no inherited brand gradient. */
+#shop-growth-panel{min-width:0;padding:clamp(16px,2.4vw,28px);border:1px solid #eee9f4;border-radius:26px;background:#fff;box-shadow:0 12px 36px rgba(37,24,56,.045)}
+#shop-growth-panel>.seller-growth{display:block!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;color:#211936!important}
+#shop-growth-panel .growth-welcome{border-color:#eee8f5;background:#fff;box-shadow:0 6px 22px rgba(42,26,68,.035)}
+#shop-growth-panel .growth-shop-picker,#shop-growth-panel .growth-track{box-shadow:0 6px 22px rgba(42,26,68,.035)}
+#shop-growth-panel .growth-studio-tabs{position:relative;display:flex;gap:7px;margin:0 0 22px;padding:6px;border:1px solid #e9e4f0;border-radius:16px;background:#f7f5fa}
+#shop-growth-panel .growth-studio-tabs button{min-height:48px;border:1px solid transparent;border-radius:11px;background:transparent;color:#766b87;font-size:12px;font-weight:800;transition:background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
+#shop-growth-panel .growth-studio-tabs button:hover{background:#fff;color:#56358a}
+#shop-growth-panel .growth-studio-tabs button.active{border-color:#e7ddf4;background:#fff;color:#5c3693;box-shadow:0 3px 10px rgba(49,30,72,.07)}
+#shop-growth-panel .growth-studio-tabs button:focus-visible{outline:2px solid #9c7bd0;outline-offset:2px}
+#shop-growth-panel .growth-promotion-tab-panel{padding-top:2px}
+@media(max-width:600px){
+  #shop-growth-panel{padding:13px;border-radius:21px}
+  #shop-growth-panel .growth-studio-tabs{gap:5px;margin-bottom:17px;padding:4px;border-radius:13px}
+  #shop-growth-panel .growth-studio-tabs button{min-height:44px;padding:8px 5px;font-size:11px}
+  #shop-growth-panel .growth-studio-tabs button svg{width:15px;height:15px;flex:none}
+}
