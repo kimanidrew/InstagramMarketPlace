@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap, Clock3, Users } from "lucide-react";
 import { GlobalFeedbackModal } from "@/components/global-feedback-modal";
 import { SellerAnalytics } from "@/components/seller-analytics";
@@ -8,9 +9,9 @@ import { SellerAnalytics } from "@/components/seller-analytics";
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
 type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: Product[] };
 
-export function SellerGrowth({ connections, embedded = false }: { connections: Connection[]; embedded?: boolean }) {
+export function SellerGrowth({ connections, embedded = false, initialTab = "store" }: { connections: Connection[]; embedded?: boolean; initialTab?: "store" | "promotion" }) {
   const [selectedId, setSelectedId] = useState(connections[0]?.id || "");
-  const [studioTab, setStudioTab] = useState<"store" | "promotion">("store");
+  const studioTab = initialTab;
   const [selectedProductId, setSelectedProductId] = useState("");
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [busy, setBusy] = useState("");
@@ -104,8 +105,8 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
     {message && <div role="status" className="seller-growth-message"><Sparkles size={16}/><span>{message}</span><button aria-label="Dismiss message" onClick={() => setMessage("")}>×</button></div>}
 
     <div className="growth-studio-tabs" role="tablist" aria-label="Seller Growth Studio">
-      <button type="button" role="tab" aria-selected={studioTab === "store"} className={studioTab === "store" ? "active" : ""} onClick={() => setStudioTab("store")}><Store size={16}/> Store Growth</button>
-      <button type="button" role="tab" aria-selected={studioTab === "promotion"} className={studioTab === "promotion" ? "active" : ""} onClick={() => setStudioTab("promotion")}><Megaphone size={16}/> Product Promotion</button>
+      <Link href="/account/analytics?tab=store-growth" role="tab" aria-selected={studioTab === "store"} className={studioTab === "store" ? "active" : ""}><Store size={16}/> Store Growth</Link>
+      <Link href="/account/analytics?tab=product-promotion" role="tab" aria-selected={studioTab === "promotion"} className={studioTab === "promotion" ? "active" : ""}><Megaphone size={16}/> Product Promotion</Link>
     </div>
     {studioTab === "store" ? <>
     <section className="growth-track growth-shop-plans">
