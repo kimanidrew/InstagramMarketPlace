@@ -141,7 +141,7 @@ export function ProductCard({ p }: { p: any }) {
           <span className="min-w-0 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs font-semibold leading-5 text-[#555]">
             <span className="truncate">@{p.connection.username}</span>
             {p.connection.proUntil && new Date(p.connection.proUntil) > new Date() && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#fff3d6] px-2 py-0.5 text-[9px] font-extrabold leading-4 text-[#875500]" title="Pro Seller"><Crown size={11} strokeWidth={2.5} /> Pro Seller</span>
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#fff3d6] px-1.5 py-1 text-[9px] font-extrabold leading-4 text-[#875500] sm:px-2" title="Pro Seller" aria-label="Pro Seller"><Crown size={13} strokeWidth={2.5} className="shrink-0" /><span className="hidden sm:inline">Pro Seller</span></span>
             )}
           </span>
         </Link>
