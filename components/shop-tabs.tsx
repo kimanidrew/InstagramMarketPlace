@@ -303,7 +303,7 @@ export function ShopTabs({
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Still loving these?</h2>
                         <p className="mt-2 text-sm text-[#777]">Your saved products and services are ready whenever you are.</p>
                       </div>
-                      <Link href="/wishlist" className="inline-flex items-center gap-2 text-xs font-black">View full wishlist <ArrowRight size={14} /></Link>
+                      <Link href="/wishlist" className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-extrabold text-black shadow-sm transition hover:border-black hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:w-auto sm:shrink-0">View full wishlist <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" /></Link>
                     </div>
                     <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
                       {wishlistProducts.slice(0, 7).map((x: any) => {
