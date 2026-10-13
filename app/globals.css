@@ -1703,3 +1703,7 @@ select:focus-visible,
 
 /* Step 4 is the completion screen; hide previous/return navigation there. */
 .seller-setup-page-nav-step4{display:none!important}
+
+
+/* Make the Instagram Manage Access action span the full width in Step 3. */
+.seller-setup-step3 article a[href*="instagram.com/accounts/manage_access"]{display:flex;width:100%;box-sizing:border-box;justify-content:center}
