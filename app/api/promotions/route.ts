@@ -5,7 +5,8 @@ import { db } from "@/lib/prisma";
 
 const REACH_PRICES: Record<number, number> = { 500: 100, 1000: 180, 2500: 400, 5000: 750, 10000: 1300 };
 // Demo mode is enabled by default until live Daraja checkout is configured.
-const isDemoMode = () => process.env.PROMOTION_DEMO_MODE !== "false";
+// Force demo mode until the product owner explicitly requests live payments. No STK push is sent.
+const isDemoMode = () => true;
 const env = () => ({
   key: process.env.MPESA_CONSUMER_KEY || "",
   secret: process.env.MPESA_CONSUMER_SECRET || "",
