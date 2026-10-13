@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, Check, CheckCheck, ChevronRight, Inbox, MessageCircle, ShieldCheck, Star } from "lucide-react";
+import { Bell, Check, CheckCheck, ChevronRight, Inbox, MessageCircle, ShieldCheck } from "lucide-react";
 
 type NotificationItem = { id:string; type:string; title:string; message:string; href:string|null; readAt:string|null; createdAt:string };
 type Payload = { notifications:NotificationItem[]; unreadCount:number };
