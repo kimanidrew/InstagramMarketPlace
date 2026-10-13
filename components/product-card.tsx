@@ -161,7 +161,7 @@ export function ProductCard({ p }: { p: any }) {
             ))}
         </div>
 
-        <div className="product-card-stats mt-3">
+        <div className="product-card-stats product-card-likes-only mt-3">
           <div className={"product-card-stat " + (likeFlash ? "is-updated" : "")}>
             <span className="product-card-stat-icon"><Heart size={13} strokeWidth={2.4} /></span>
             <span className="product-card-stat-copy">
@@ -169,13 +169,11 @@ export function ProductCard({ p }: { p: any }) {
               <small>Likes</small>
             </span>
           </div>
-          <div className={"product-card-stat " + (wishlistFlash ? "is-updated" : "")}>
-            <span className="product-card-stat-icon"><Bookmark size={13} strokeWidth={2.4} /></span>
-            <span className="product-card-stat-copy">
-              <b className={"interaction-stat-value " + (wishlistFlash ? "is-count-updated" : "")}>{wishlistCount.toLocaleString()}</b>
-              <small>Saved</small>
-            </span>
-          </div>
+        </div>
+        <div className={"product-card-saved-stat " + (wishlistFlash ? "is-updated" : "")} aria-label={wishlistCount.toLocaleString() + " saves"}>
+          <span className="product-card-saved-icon"><Bookmark size={12} strokeWidth={2.3} /></span>
+          <span className={"interaction-stat-value " + (wishlistFlash ? "is-count-updated" : "")}>{wishlistCount.toLocaleString()}</span>
+          <span>saved</span>
         </div>
       </div>
     </article>
