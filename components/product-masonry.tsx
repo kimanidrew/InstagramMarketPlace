@@ -90,7 +90,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
       try {
         const params = new URLSearchParams({
           page: "0",
-          limit: "8",
+          limit: "12",
         });
         if (q) params.set("q", q);
         if (tag) params.set("tag", tag);
