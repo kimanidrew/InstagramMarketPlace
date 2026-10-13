@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, Instagram, Search, ShoppingBag } from "lucide-re
 import { useRef, useState } from "react";
 
 const steps = [
-  { number: "01", label: "Connect", title: "Sellers connect once.", text: "Approved Instagram Business accounts connect securely to Instagram Market. There is no second product catalogue to maintain.", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1600&q=85", icon: Instagram, tag: "Instagram → Market" },
+  { number: "01", label: "Connect", title: "Sellers connect once.", text: "Approved Instagram Business accounts connect securely to SokoLink. There is no second product catalogue to maintain.", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1600&q=85", icon: Instagram, tag: "Instagram → Market" },
   { number: "02", label: "Sync", title: "Posts become products.", text: "When a seller publishes an Instagram post, it can flow into the marketplace with its image, caption, hashtags and original Instagram link.", image: "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=85", icon: ShoppingBag, tag: "Post → Product" },
   { number: "03", label: "Discover", title: "Shoppers find what feels right.", text: "Browse stores, search products, explore categories and save favourites — then jump straight back to the original Instagram post.", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=85", icon: Search, tag: "Discover → Shop" },
 ];
@@ -47,7 +47,7 @@ export function HowMarketWorks() {
       <div className="shell relative z-10 py-20 sm:py-24">
         <div className="flex items-end justify-between gap-5">
           <div>
-            <p className="how-works-kicker">How Instagram Market works</p>
+            <p className="how-works-kicker">How SokoLink works</p>
             <h2 className="how-works-heading mt-4">One post.<br /><span>Three simple steps.</span></h2>
             <p className="mt-5 max-w-xl text-sm leading-7 text-white/45 sm:text-base">From Instagram inspiration to marketplace discovery, everything follows the content sellers already create.</p>
           </div>
