@@ -1692,3 +1692,10 @@ select:focus-visible,
 .seller-connect-panel>.seller-back-button{justify-self:center;margin-top:0}
 @media(prefers-reduced-motion:reduce){.seller-confetti span{animation:none;display:none}.seller-celebration-icon{animation:none}.seller-celebration-cta,.seller-connect-cta{transition:none!important}}
 @media(max-width:640px){.seller-celebration{margin-top:18px;padding:24px 14px 17px;border-radius:20px}.seller-celebration-icon{width:64px;height:64px;border-radius:21px}.seller-celebration-copy{font-size:11px}.seller-celebration-stats strong{font-size:18px}.seller-connect-panel{padding:18px 14px}.seller-connect-points span{font-size:11px}}
+
+
+/* Instagram profile photo in the Step 4 completion celebration */
+.seller-celebration-profile{position:relative;width:104px;height:104px;margin:0 auto 16px;padding:5px;border:2px solid #c4a5fd;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f0abfc,#f59e0b);box-shadow:0 12px 30px rgba(124,58,237,.2);animation:sellerSuccessPop .7s cubic-bezier(.2,1.5,.5,1) both}
+.seller-celebration-profile>img,.seller-celebration-profile-fallback{display:grid;width:100%;height:100%;place-items:center;border:3px solid #fff;border-radius:50%;background:#f3e8ff;color:#7c3aed;object-fit:cover}
+.seller-celebration-profile>span{position:absolute;right:-1px;bottom:2px;display:grid;width:31px;height:31px;place-items:center;border:3px solid #fff;border-radius:50%;background:#16a34a;color:#fff;box-shadow:0 4px 12px rgba(22,163,74,.25)}
+@media(max-width:640px){.seller-celebration-profile{width:90px;height:90px}}
