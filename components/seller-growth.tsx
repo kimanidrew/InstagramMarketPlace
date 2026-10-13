@@ -23,7 +23,7 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
     try {
       const res = await fetch("/api/growth/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type, connectionId, postId }) });
       const data = await res.json();
-      setMessage(res.ok ? (data.message || (type === "BOOST" ? "Your product boost request has been sent for review." : "Your shop growth request has been sent for review.")) : (data.error || "Something went wrong. Please try again."));
+      setMessage(res.ok ? (data.message || (type === "BOOST" ? "Your product promotion request has been sent for review." : "Your shop growth request has been sent for review.")) : (data.error || "Something went wrong. Please try again."));
     } catch {
       setMessage("We couldn't send that request. Check your connection and try again.");
     } finally {
@@ -73,11 +73,11 @@ export function SellerGrowth({ connections, embedded = false }: { connections: C
           const image = p.thumbnailUrl || p.mediaUrl;
           return <button type="button" key={p.id} className={"growth-product-choice" + (selected ? " selected" : "")} onClick={() => { setSelectedProductId(p.id); setMessage(""); }} aria-pressed={selected}>
             <span className="growth-product-image">{image ? <img src={image} alt={p.productTitle || "Product"} loading="lazy"/> : <span className="growth-image-fallback"><ImageIcon size={25}/></span>}{selected && <span className="growth-selected-check"><Check size={15}/></span>}</span>
-            <span className="growth-product-info"><strong>{p.productTitle || "Untitled product"}</strong><small>{selected ? "Selected for boost" : "Tap to select"}</small></span>
+            <span className="growth-product-info"><strong>{p.productTitle || "Untitled product"}</strong><small>{selected ? "Selected for promotion" : "Tap to select"}</small></span>
           </button>;
         })}</div>
-        <div className="growth-action-row"><div><b>{chosenProduct?.productTitle || "Choose a product"}</b><small>Selected product · 7-day visibility boost</small></div><Link href={chosenProduct ? "/account/analytics?shopId=" + encodeURIComponent(selectedShop.id) + "&postId=" + encodeURIComponent(chosenProduct.id) : "/account/analytics"} className="growth-primary-action">{<>Choose reach &amp; pay <Zap size={15}/></>}</Link></div>
-      </> : <div className="growth-no-products"><ImageIcon size={22}/><div><b>No products found for this shop yet</b><p>Once your Instagram posts are listed as products, you can choose one here to boost.</p></div></div>}
+        <div className="growth-action-row"><div><b>{chosenProduct?.productTitle || "Choose a product"}</b><small>Promotion duration: 7 days or 1 month</small></div><Link href={chosenProduct ? "/account/analytics?shopId=" + encodeURIComponent(selectedShop.id) + "&postId=" + encodeURIComponent(chosenProduct.id) : "/account/analytics"} className="growth-primary-action">{<>Promote product &amp; choose reach <Zap size={15}/></>}</Link></div>
+      </> : <div className="growth-no-products"><ImageIcon size={22}/><div><b>No products found for this shop yet</b><p>Once your Instagram posts are listed as products, you can choose one here to promote.</p></div></div>}
     </section>
 
     <section className="growth-track growth-shop-plans">
