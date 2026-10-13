@@ -63,7 +63,7 @@ export default function SellerSetupModal({request,connection,initialStep=1}:{req
             <form action="/api/store-requests" method="post" className="seller-form">
               <input type="hidden" name="modal" value="1"/><label htmlFor="setup-username">Your Instagram username</label>
               <div className="seller-input-wrap"><span>@</span><input id="setup-username" name="username" required placeholder="yourshopname" autoComplete="off"/><button type="submit">Next <ArrowRight size={16}/></button></div>
-              <small>Use the exact username. Example: <b>yourbrand</b> — do not type @.</small>
+              <small>Use the exact username. Example: <b>yourbrand</b> — do not type @.</small><small className="seller-username-account-note">Only Instagram Business accounts are supported here. Personal and Creator accounts cannot be connected.</small>
             </form>
           </StepCard>}
 
