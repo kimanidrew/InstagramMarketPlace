@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Activity, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { SellerAnalytics } from "@/components/seller-analytics";
@@ -37,10 +36,10 @@ export function SellerDashboardTabs({ analyticsConnections, growthConnections, i
     <div className="seller-dashboard-tab-list" role="tablist" aria-label="Shop dashboard sections">
       <Link href="/account/analytics?tab=analytics" role="tab" id="shop-analytics-tab" aria-selected={activeTab === "analytics"} aria-controls="shop-analytics-panel" className={activeTab === "analytics" ? "active" : ""}>
         <Activity size={16}/> Analytics
-      </button>
+      </Link>
       <Link href="/account/analytics?tab=store-growth" role="tab" id="shop-growth-tab" aria-selected={activeTab === "growth"} aria-controls="shop-growth-panel" className={activeTab === "growth" ? "active" : ""}>
         <Sparkles size={16}/> Seller Growth Studio
-      </button>
+      </Link>
     </div>
     {activeTab === "analytics" ? <div id="shop-analytics-panel" role="tabpanel" aria-labelledby="shop-analytics-tab">
       {analyticsConnections.length ? <SellerAnalytics connections={analyticsConnections} initialShopId={initialShopId} initialPostId={initialPostId}/> : <section className="seller-analytics-empty"><Sparkles size={28}/><h2>Connect a shop to see analytics</h2><p>Once your Instagram Business account is connected, this dashboard will record marketplace impressions, product views and clicks.</p><Link href="/account/setup">Connect Instagram <span aria-hidden="true">→</span></Link></section>}
