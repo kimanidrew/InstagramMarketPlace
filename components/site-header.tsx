@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Bookmark, Store, UserRound } from "lucide-react";
+import { NotificationBell } from "@/components/notification-center";
 
 export function SiteHeader({ user }: { user: any }) {
 
@@ -28,6 +29,7 @@ export function SiteHeader({ user }: { user: any }) {
           <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
           </Link>
+          {user && <NotificationBell userId={user.id} />}
           <Link href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
             <UserRound size={19} />
           </Link>
