@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgeCheck, Instagram, MessageCircle, Star, ArrowUpRight } from "lucide-react";
+import { BadgeCheck, Crown, Instagram, MessageCircle, Star, ArrowUpRight } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { ProductCard } from "@/components/product-card";
@@ -58,23 +58,22 @@ export default async function Store({
         <div className="shell store-hero-inner">
           <div className="store-profile">
             <div className="store-avatar-wrap">
-              <div className="store-avatar">
+              <div className={"store-avatar" + (isVerified ? " store-avatar-verified" : "")}>
                 {store.profileImageUrl ? (
                   <img src={store.profileImageUrl} alt={"@" + store.username} />
                 ) : (
                   <span>@</span>
                 )}
               </div>
-              {hasGrowth && <span className="store-avatar-check"><BadgeCheck size={15} /></span>}
+              {isVerified && <span className="store-avatar-check" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={18} strokeWidth={2.8} /></span>}
             </div>
 
             <div className="store-hero-copy">
               <div className="store-kicker-row">
                 <span className="store-kicker"><Instagram size={13} /> Instagram shop</span>
-                {isVerified && <span className="store-badge store-badge-dark"><BadgeCheck size={12} /> Verified</span>}
-                {isPro && <span className="store-badge store-badge-pro">Pro Seller</span>}
+
               </div>
-              <h1>@{store.username}</h1>
+              <h1>@{store.username}{isPro && <span className="store-profile-pro" title="Pro Seller" aria-label="Pro Seller"><Crown size={19} strokeWidth={2.5} /><span>Pro Seller</span></span>}</h1>
               <p className="store-hero-bio">
                 {store.biography || "Discover products and services from this Instagram business on Instagram Market."}
               </p>
