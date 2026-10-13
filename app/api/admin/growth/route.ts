@@ -15,13 +15,34 @@ export async function POST(request: Request) {
   if (growth.status !== "PENDING") return NextResponse.json({ error: "Request already reviewed." }, { status: 409 });
 
   if (status === "REJECTED") {
-    await prisma.growthRequest.update({ where: { id }, data: { status: "REJECTED", reviewedAt: new Date() } });
+    await prisma.$transaction([
+      prisma.growthRequest.update({ where: { id }, data: { status: "REJECTED", reviewedAt: new Date() } }),
+      prisma.notification.create({
+        data: {
+          userId: growth.userId,
+          type: "GROWTH_REQUEST_REJECTED",
+          title: `${growth.type === "BOOST" ? "Boost" : growth.type === "VERIFIED" ? "Verified badge" : "Pro Seller"} request update`,
+          message: `Your ${growth.type.toLowerCase()} request for @${(await prisma.instagramConnection.findUnique({where:{id:growth.connectionId},select:{username:true}}))?.username ?? "your shop"} was not approved.`,
+          href: "/account/analytics",
+        },
+      }),
+    ]);
     return NextResponse.json({ ok: true });
   }
 
   const now = new Date();
   await prisma.$transaction(async (tx) => {
     await tx.growthRequest.update({ where: { id }, data: { status: "APPROVED", reviewedAt: now } });
+    const connection = await tx.instagramConnection.findUnique({ where: { id: growth.connectionId }, select: { username: true } });
+    await tx.notification.create({
+      data: {
+        userId: growth.userId,
+        type: "GROWTH_REQUEST_APPROVED",
+        title: `${growth.type === "BOOST" ? "Boost" : growth.type === "VERIFIED" ? "Verified badge" : "Pro Seller"} request approved`,
+        message: `Your ${growth.type.toLowerCase()} request for @${connection?.username ?? "your shop"} has been approved.`,
+        href: "/account/analytics",
+      },
+    });
     if (growth.type === "VERIFIED") {
       const until = new Date(now);
       until.setDate(until.getDate() + 365);
