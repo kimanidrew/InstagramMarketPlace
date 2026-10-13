@@ -1653,3 +1653,42 @@ select:focus-visible,
 .seller-cancel-request-button:hover{background:#fee2e2;border-color:#fca5a5;transform:translateY(-1px)}
 .seller-setup-page-nav-step-controls .seller-cancel-request-button{min-width:155px}
 @media(max-width:640px){.seller-cancel-request-form{width:100%}.seller-cancel-request-button{width:100%}.seller-setup-page-nav-step-controls .seller-cancel-request-button{min-width:0}}
+
+
+/* Step 4: polished connection panel and celebratory confetti */
+.seller-setup-page .seller-step-card.seller-step-done{position:relative;overflow:hidden;background:radial-gradient(ellipse at 85% 5%,rgba(168,125,255,.16),transparent 42%),linear-gradient(145deg,#fff 0%,#fbf8ff 100%);border-radius:26px;box-shadow:0 24px 70px rgba(62,35,102,.09)}
+.seller-setup-page .seller-step-card.seller-step-done .seller-step-media{filter:saturate(1.08)}
+.seller-setup-page .seller-step-card.seller-step-done .seller-step-number{background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;box-shadow:0 8px 24px rgba(124,58,237,.25)}
+.seller-celebration{position:relative;isolation:isolate;overflow:hidden;margin-top:24px;padding:28px 22px 22px;border:1px solid #e9ddff;border-radius:23px;background:linear-gradient(150deg,rgba(255,255,255,.97),rgba(248,243,255,.94));text-align:center}
+.seller-confetti{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.seller-confetti span{position:absolute;top:-18px;left:calc((var(--i,0) * 3.7%) + 2%);width:7px;height:13px;border-radius:2px;background:#a78bfa;opacity:0;animation:sellerConfettiFall 3.8s cubic-bezier(.2,.7,.3,1) infinite;transform:rotate(20deg)}
+.seller-confetti span:nth-child(7n+1){left:4%;background:#f59e0b;animation-delay:-.2s}
+.seller-confetti span:nth-child(7n+2){left:13%;background:#ec4899;animation-delay:-1.4s}
+.seller-confetti span:nth-child(7n+3){left:24%;background:#8b5cf6;animation-delay:-2.5s}
+.seller-confetti span:nth-child(7n+4){left:38%;background:#14b8a6;animation-delay:-.9s}
+.seller-confetti span:nth-child(7n+5){left:53%;background:#f97316;animation-delay:-2s}
+.seller-confetti span:nth-child(7n+6){left:69%;background:#6366f1;animation-delay:-3.1s}
+.seller-confetti span:nth-child(7n){left:87%;background:#eab308;animation-delay:-1.8s}
+.seller-confetti span:nth-child(3n){width:5px;height:8px;border-radius:50%}
+@keyframes sellerConfettiFall{0%{top:-5%;opacity:0;transform:translate3d(0,-10px,0) rotate(0deg)}12%{opacity:.9}85%{opacity:.85}100%{top:110%;opacity:0;transform:translate3d(22px,0,0) rotate(640deg)}}
+.seller-celebration-icon{display:grid;place-items:center;width:74px;height:74px;margin:0 auto 14px;border:1px solid #e5d5ff;border-radius:24px;background:linear-gradient(145deg,#f1e8ff,#fff);color:#7c3aed;box-shadow:0 12px 32px rgba(124,58,237,.14);animation:sellerSuccessPop .7s cubic-bezier(.2,1.5,.5,1) both}
+@keyframes sellerSuccessPop{from{opacity:0;transform:scale(.45) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.seller-celebration-eyebrow{margin:0 0 7px;color:#8b5cf6;font-size:9px;font-weight:950;letter-spacing:.2em}
+.seller-celebration h3{margin:0;color:#21152f;font-size:clamp(23px,4vw,32px);font-weight:950;letter-spacing:-.06em}
+.seller-celebration-copy{max-width:390px;margin:9px auto 20px;color:#786b8b;font-size:12px;line-height:1.8}
+.seller-celebration-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto 17px}
+.seller-celebration-stats>div{display:grid;gap:5px;padding:15px 10px;border:1px solid #eee5fc;border-radius:16px;background:rgba(255,255,255,.84)}
+.seller-celebration-stats strong{color:#6d3fc0;font-size:20px;font-weight:950;letter-spacing:-.04em}
+.seller-celebration-stats span{color:#9486a5;font-size:9px;font-weight:800}
+.seller-celebration .seller-status-box{max-width:480px;margin:0 auto 15px;text-align:left}
+.seller-celebration-cta,.seller-connect-cta{display:flex;align-items:center;justify-content:center;gap:9px;min-height:52px;border-radius:15px!important;background:linear-gradient(110deg,#6d28d9,#a855f7)!important;color:#fff!important;font-size:12px!important;font-weight:900!important;box-shadow:0 12px 28px rgba(124,58,237,.22)!important;transition:transform .2s ease,box-shadow .2s ease!important}
+.seller-celebration-cta{max-width:360px;margin:0 auto}
+.seller-celebration-cta:hover,.seller-connect-cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(124,58,237,.28)!important}
+.seller-connect-panel{display:grid;gap:15px;margin-top:24px;padding:23px;border:1px solid #eee5fc;border-radius:22px;background:linear-gradient(145deg,#fff,#faf7ff)}
+.seller-connect-points{display:grid;gap:12px}
+.seller-connect-points span{display:flex;align-items:center;gap:10px;color:#554667;font-size:12px;font-weight:750;line-height:1.5}
+.seller-connect-points svg{flex:none;color:#8b5cf6}
+.seller-connect-note{margin:-5px 0 0;color:#9a8eaa;font-size:10px;line-height:1.6;text-align:center}
+.seller-connect-panel>.seller-back-button{justify-self:center;margin-top:0}
+@media(prefers-reduced-motion:reduce){.seller-confetti span{animation:none;display:none}.seller-celebration-icon{animation:none}.seller-celebration-cta,.seller-connect-cta{transition:none!important}}
+@media(max-width:640px){.seller-celebration{margin-top:18px;padding:24px 14px 17px;border-radius:20px}.seller-celebration-icon{width:64px;height:64px;border-radius:21px}.seller-celebration-copy{font-size:11px}.seller-celebration-stats strong{font-size:18px}.seller-connect-panel{padding:18px 14px}.seller-connect-points span{font-size:11px}}
