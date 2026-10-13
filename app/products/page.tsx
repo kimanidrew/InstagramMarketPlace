@@ -78,6 +78,7 @@ export default async function Products({
           posts: { some: { isProduct: true, mediaUrl: { not: null } } },
         },
         include: {
+          reviews: { select: { rating: true } },
           posts: {
             where: { isProduct: true, mediaUrl: { not: null } },
             select: {
