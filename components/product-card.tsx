@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BadgeCheck, Bookmark, Crown, Heart } from "lucide-react";
+import { BadgeCheck, Crown, Heart } from "lucide-react";
 import { ProductMedia } from "@/components/product-media";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -110,6 +110,11 @@ export function ProductCard({ p }: { p: any }) {
       </div>
 
       <div className="pt-3 sm:pt-4">
+        <div className={"product-card-like-line " + (likeFlash ? "is-updated" : "")} aria-label={likeCount.toLocaleString() + " likes"}>
+          <Heart size={14} strokeWidth={2.4} className={"product-card-like-line-icon " + (likeFlash ? "is-animated" : "")} />
+          <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
+          <span>likes</span>
+        </div>
         <p className="line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
           {p.productTitle}
         </p>
@@ -161,20 +166,6 @@ export function ProductCard({ p }: { p: any }) {
             ))}
         </div>
 
-        <div className="product-card-stats product-card-likes-only mt-3">
-          <div className={"product-card-stat " + (likeFlash ? "is-updated" : "")}>
-            <span className="product-card-stat-icon"><Heart size={13} strokeWidth={2.4} /></span>
-            <span className="product-card-stat-copy">
-              <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
-              <small>Likes</small>
-            </span>
-          </div>
-        </div>
-        <div className={"product-card-saved-stat " + (wishlistFlash ? "is-updated" : "")} aria-label={wishlistCount.toLocaleString() + " saves"}>
-          <span className="product-card-saved-icon"><Bookmark size={12} strokeWidth={2.3} /></span>
-          <span className={"interaction-stat-value " + (wishlistFlash ? "is-count-updated" : "")}>{wishlistCount.toLocaleString()}</span>
-          <span>saved</span>
-        </div>
       </div>
     </article>
   );
