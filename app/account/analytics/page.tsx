@@ -7,7 +7,7 @@ import { SellerDashboardTabs } from "@/components/seller-dashboard-tabs";
 
 export const dynamic = "force-dynamic";
 
-export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ shopId?: string; postId?: string }> }) {
+export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ shopId?: string; postId?: string; tab?: string }> }) {
   const current = await user();
   if (!current) redirect("/login");
   const connections = await db().instagramConnection.findMany({
@@ -28,7 +28,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <div><span className="seller-analytics-kicker"><ChartNoAxesCombined size={14}/> YOUR SELLER SPACE</span><h1>Grow your<br/><span>own shop.</span></h1><p>Understand your shop’s performance and take action from one place. Track marketplace activity, boost products, request verification, and explore Pro Seller tools.</p></div>
         <div className="seller-analytics-hero-art"><ChartNoAxesCombined size={35}/><span>Real activity.<br/><b>Smarter growth.</b></span></div>
       </section>
-      <SellerDashboardTabs analyticsConnections={analyticsConnections} growthConnections={growthConnections} initialShopId={initialShopId} initialPostId={initialPostId}/>
+      <SellerDashboardTabs analyticsConnections={analyticsConnections} growthConnections={growthConnections} initialShopId={initialShopId} initialPostId={initialPostId} initialTab={query.tab}/>
       <p className="seller-analytics-disclaimer">Analytics on this page measure activity recorded on Instagram Market. Instagram’s own reach and impressions are separate and are not included unless supported Instagram Insights data is connected.</p>
     </div>
   </main>;
