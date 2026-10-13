@@ -22,12 +22,33 @@ export async function POST(request: Request) {
     const store = await prisma.instagramConnection.findUnique({ where: { id: targetId } });
     if (!store) return NextResponse.json({ error: "Store not found" }, { status: 404 });
 
+    const previousReview = await prisma.storeReview.findUnique({
+      where: { userId_connectionId: { userId: current.id, connectionId: targetId } },
+      select: { id: true },
+    });
     const review = await prisma.storeReview.upsert({
       where: { userId_connectionId: { userId: current.id, connectionId: targetId } },
       create: { userId: current.id, connectionId: targetId, rating, body: reviewBody },
       update: { rating, body: reviewBody },
-      include: { user: { select: { id: true, name: true } } },
+      include: { user: { select: { id: true, name: true } }, replies: { include: { user: { select: { id: true, name: true } }, connection: { select: { id: true, username: true, profileImageUrl: true } } }, orderBy: { createdAt: "asc" } } },
     });
+
+    // A notification must never turn a successfully saved review into a failed request.
+    if (!previousReview && store.connectedByUserId && store.connectedByUserId !== current.id) {
+      try {
+        await prisma.notification.create({
+          data: {
+            userId: store.connectedByUserId,
+            type: "STORE_REVIEW",
+            title: "New store review",
+            message: (current.name || "A shopper") + " left a review for @" + store.username + ".",
+            href: "/store/" + encodeURIComponent(store.username) + "?reviews=1",
+          },
+        });
+      } catch (notificationError) {
+        console.error("Could not create store review notification", notificationError);
+      }
+    }
     return NextResponse.json({ review });
   }
 
