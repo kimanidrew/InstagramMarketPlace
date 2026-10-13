@@ -16,6 +16,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const retentionCutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const deletedNotifications = await db().notification.deleteMany({ where: { createdAt: { lt: retentionCutoff } } });
+
   const connections = await db().instagramConnection.findMany({
     select: { id: true, username: true },
     orderBy: { updatedAt: "asc" },
@@ -44,6 +47,7 @@ export async function GET(request: Request) {
   return NextResponse.json({
     ok: true,
     checked: connections.length,
+    deletedNotifications: deletedNotifications.count,
     results,
   });
 }
