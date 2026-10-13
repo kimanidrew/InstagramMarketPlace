@@ -1965,3 +1965,12 @@ select:focus-visible,
 .growth-demo-note{display:block;margin-top:8px;color:#9287a3;font-size:9px;line-height:1.5}
 .growth-action-row .growth-primary-action{cursor:pointer}
 @media(max-width:600px){.growth-promotion-controls{padding:12px}.growth-promotion-summary{grid-template-columns:1fr;gap:17px}.growth-duration-options button{padding:11px}.growth-action-row .growth-primary-action{width:100%}}
+
+
+/* Seller Growth Studio sub-tabs */
+.growth-studio-tabs{display:flex;gap:8px;padding:6px;margin:22px 0 20px;background:#f4f2f8;border:1px solid #e9e4f1;border-radius:14px}
+.growth-studio-tabs button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-height:44px;padding:10px 14px;border:0;border-radius:10px;background:transparent;color:#686174;font:inherit;font-size:13px;font-weight:750;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s}
+.growth-studio-tabs button.active{background:#fff;color:#5928a5;box-shadow:0 2px 8px #30204b12}
+.growth-promotion-tab-panel{min-width:0}
+.growth-promotion-tab-panel .seller-analytics-shopbar{margin-top:0}
+@media(max-width:520px){.growth-studio-tabs{gap:4px;padding:4px}.growth-studio-tabs button{gap:6px;padding:9px 6px;font-size:12px}}
