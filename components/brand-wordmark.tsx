@@ -1,7 +1,7 @@
 const DEFAULT_NAME = "SokoLink";
 const DEFAULT_START = "#00C2A8";
 const DEFAULT_END = "#7C3AED";
-const DEFAULT_FONT = "Space Grotesk";
+const DEFAULT_FONT = "Montserrat";
 
 function safeColor(value: string | undefined, fallback: string) {
   return value && /^#[0-9a-fA-F]{3,8}$/.test(value) ? value : fallback;
@@ -15,7 +15,7 @@ export function BrandWordmark() {
   return (
     <span
       className="brand-wordmark"
-      style={{ backgroundImage: `linear-gradient(105deg, ${start}, ${end})`, fontFamily: `"${font}", sans-serif` }}
+      style={{ backgroundImage: `linear-gradient(105deg, ${start}, ${end})`, fontFamily: `"${font}", sans-serif`, fontStyle: "italic", fontWeight: 800 }}
     >
       {name}
     </span>
