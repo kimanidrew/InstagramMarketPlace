@@ -120,6 +120,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
     </section>
     </>)}
 
+    {promotionOnly && (<>
         <section className="seller-analytics-panel promotion-panel"><div className="seller-analytics-panel-heading"><div><span><Zap size={13}/> PRODUCT PROMOTION</span><h2>Promote your product or shop</h2><p>Demo mode is on: promotions activate immediately without M-Pesa or a charge. Choose 7 days or a full month (30 days), then select your reach target.</p></div><span className="analytics-mpesa-pill"><CheckCircle2 size={14}/> Demo mode · no charge</span></div>
       <div className="promotion-builder">
         <div className="promotion-form">
@@ -141,6 +142,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
 
     <section className="seller-analytics-panel"><div className="seller-analytics-panel-heading"><div><span>CAMPAIGN HISTORY</span><h2>Paid promotion delivery</h2><p>Follow payment status, target and measured unique visitors delivered.</p></div><button className="analytics-refresh" onClick={() => void refresh()}><Activity size={14}/> Refresh</button></div>
       {campaigns.length ? <div className="analytics-campaign-list">{campaigns.map(c => <article key={c.id} className="analytics-campaign"><span className="analytics-campaign-image">{c.image ? <img src={c.image} alt=""/> : c.profileImageUrl ? <img src={c.profileImageUrl} alt=""/> : <Store size={19}/>}</span><div className="analytics-campaign-info"><b>{c.targetType === "PRODUCT" ? c.productTitle || "Product promotion" : "Shop promotion"} · @{c.username}</b><small>{c.provider === "DEMO" ? "Demo activation · no charge" : c.paymentStatus === "PAID" ? "Paid" + (c.receiptNumber ? " · Receipt " + c.receiptNumber : "") : c.paymentStatus === "FAILED" ? "Payment failed" : "Payment " + (c.paymentStatus || "pending").toLowerCase()}</small><div className="campaign-progress"><span style={{ width: Math.min(100, c.targetReach ? c.deliveredReach / c.targetReach * 100 : 0) + "%" }}/></div><small>{c.deliveredReach.toLocaleString()} of {c.targetReach.toLocaleString()} reach delivered</small></div><div className="analytics-campaign-right"><b>KSh {c.amount.toLocaleString()}</b><span className={"campaign-status " + c.status.toLowerCase()}>{c.status.replaceAll("_", " ")}</span></div></article>)}</div> : <div className="analytics-empty-inline">Your paid campaigns and payment receipts will appear here.</div>}
+    </>)}
     </section>
   </div>;
 }
