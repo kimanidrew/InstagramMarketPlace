@@ -94,7 +94,7 @@ export default async function Home() {
             <div className="hero-float hero-float-a absolute left-[8%] top-10 z-10 w-[34%] rotate-[-7deg] overflow-hidden rounded-[22px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_24px_60px_rgba(0,0,0,.18)] sm:left-[4%] sm:w-[36%]">
               <img
                 src={products[1]?.mediaUrl || editorialImages.people}
-                alt={products[1]?.productTitle || "Instagram marketplace discovery"}
+                alt={products[1]?.productTitle || `${brandName} product discovery`}
                 className="aspect-[4/5] w-full object-cover"
               />
             </div>
@@ -306,7 +306,7 @@ export default async function Home() {
             A new way to turn social discovery into meaningful shopping.
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#777]">
-            Instagram Market is designed to make the journey from “I love
+            {brandName} is designed to make the journey from “I love
             this” to “I want to know more” simple, visual and human.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
