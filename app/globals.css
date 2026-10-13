@@ -1699,3 +1699,7 @@ select:focus-visible,
 .seller-celebration-profile>img,.seller-celebration-profile-fallback{display:grid;width:100%;height:100%;place-items:center;border:3px solid #fff;border-radius:50%;background:#f3e8ff;color:#7c3aed;object-fit:cover}
 .seller-celebration-profile>span{position:absolute;right:-1px;bottom:2px;display:grid;width:31px;height:31px;place-items:center;border:3px solid #fff;border-radius:50%;background:#16a34a;color:#fff;box-shadow:0 4px 12px rgba(22,163,74,.25)}
 @media(max-width:640px){.seller-celebration-profile{width:90px;height:90px}}
+
+
+/* Step 4 is the completion screen; hide previous/return navigation there. */
+.seller-setup-page-nav-step4{display:none!important}
