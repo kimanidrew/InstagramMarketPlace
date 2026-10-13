@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Activity, ArrowUpRight, CheckCircle2, ChevronDown, Eye, Heart, MousePointer2, Radio, ShieldCheck, Sparkles, Store, TrendingUp, Users, Wallet, Zap } from "lucide-react";
+import { GlobalFeedbackModal } from "@/components/global-feedback-modal";
 
 type Product = { id: string; title: string; slug: string | null; image: string | null; mediaType: string };
 type Connection = { id: string; username: string; name: string | null; profileImageUrl: string | null; posts: Product[] };
@@ -26,6 +27,8 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId }: {
   const [selectedPostId, setSelectedPostId] = useState(initialPostId || "");
   const [targetType, setTargetType] = useState<"STORE" | "PRODUCT">("PRODUCT");
   const [targetReach, setTargetReach] = useState(1000);
+  const [durationDays, setDurationDays] = useState<7 | 30>(7);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; title: string; message: string } | null>(null);
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
@@ -54,7 +57,9 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId }: {
         const response = await fetch("/api/promotions/status?campaignId=" + encodeURIComponent(pendingCampaign), { cache: "no-store" });
         const status = await response.json();
         if (status.paymentStatus === "PAID" || status.paymentStatus === "FAILED" || status.status === "ACTIVE" || status.status === "COMPLETED") {
-          setPaymentMessage(status.paymentStatus === "PAID" ? "Payment confirmed. Your promotion is now active and its reach is being measured." : status.paymentStatus === "FAILED" ? (status.message || "Payment was not completed. You can try again.") : "Your promotion status has been updated.");
+          const completedMessage = status.paymentStatus === "PAID" ? "Payment confirmed. Your promotion is now active and its reach is being measured." : status.paymentStatus === "FAILED" ? (status.message || "Payment was not completed. You can try again.") : "Your promotion status has been updated.";
+          setPaymentMessage(completedMessage);
+          setFeedback({ type: status.paymentStatus === "FAILED" ? "error" : "success", title: status.paymentStatus === "FAILED" ? "Payment unsuccessful" : "Promotion update", message: completedMessage });
           setPendingCampaign("");
           void refresh();
         } else if (attempts >= 30) {
@@ -78,21 +83,24 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId }: {
   async function startPayment() {
     setPaying(true); setMessage(""); setPaymentMessage("");
     try {
-      const response = await fetch("/api/promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ connectionId: selectedShopId, targetType, postId: targetType === "PRODUCT" ? (selectedPostId || selectedProduct?.id) : null, targetReach, phoneNumber: phone }) });
+      const response = await fetch("/api/promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ connectionId: selectedShopId, targetType, postId: targetType === "PRODUCT" ? (selectedPostId || selectedProduct?.id) : null, targetReach, durationDays, phoneNumber: phone }) });
       const result = await response.json();
-      if (!response.ok) { setMessage(result.error || "Unable to start payment."); return; }
+      if (!response.ok) { const error = result.error || "Unable to start payment."; setMessage(error); setFeedback({ type: "error", title: "Promotion could not start", message: error }); return; }
       if (result.demoMode) {
         setPaymentMessage(result.message || "Demo promotion activated. No payment was taken.");
+        setFeedback({ type: "success", title: "Promotion successful", message: (result.message || "Your promotion is active.") + " Duration: " + (durationDays === 7 ? "7 days." : "1 month (30 days).") });
         void refresh();
       } else {
         setPendingCampaign(result.campaignId);
         setPaymentMessage(result.message || "Check your phone and enter your M-Pesa PIN to pay.");
+        setFeedback({ type: "success", title: "Payment prompt sent", message: result.message || "Check your phone and enter your M-Pesa PIN to complete payment." });
       }
-    } catch { setMessage("We could not reach the payment service. Please try again."); }
+    } catch { const error = "We could not reach the payment service. Please try again."; setMessage(error); setFeedback({ type: "error", title: "Connection error", message: error }); }
     finally { setPaying(false); }
   }
 
   return <div className="seller-analytics-content">
+    <GlobalFeedbackModal open={!!feedback} type={feedback?.type || "success"} title={feedback?.title || ""} message={feedback?.message || ""} onClose={() => setFeedback(null)} />
     <div className="seller-analytics-shopbar"><div className="seller-analytics-shop-title"><span className="analytics-shop-avatar">{selectedShop?.profileImageUrl ? <img src={selectedShop.profileImageUrl} alt=""/> : <Store size={19}/>}</span><div><small>ANALYTICS FOR</small><b>@{connection?.username || selectedShop?.username || "—"}</b></div></div><label className="analytics-shop-select"><span>Switch shop</span><select value={selectedShopId} onChange={e => { setSelectedShopId(e.target.value); setSelectedPostId(""); }} aria-label="Select shop">{connections.map(c => <option key={c.id} value={c.id}>@{c.username}</option>)}</select><ChevronDown size={15}/></label></div>
 
     <div className="seller-analytics-kpis">
@@ -109,10 +117,11 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId }: {
       {products.length ? <div className="analytics-product-table"><div className="analytics-table-head"><span>Product</span><span>Impressions</span><span>Views</span><span>Clicks</span><span>IG likes</span><span>Market likes</span></div>{products.slice().sort((a,b) => b.views-a.views).map(p => <div className="analytics-table-row" key={p.id}><div className="analytics-product-name"><span>{p.image ? <img src={p.image} alt=""/> : <Store size={18}/>}</span><div><b>{p.title}</b><small>{p.boosted ? "Boost active" : "Organic listing"}</small></div></div><b>{p.impressions.toLocaleString()}</b><b>{p.views.toLocaleString()}</b><b>{p.clicks.toLocaleString()}</b><b>{p.instagramLikes.toLocaleString()}</b><b>{p.likes.toLocaleString()}</b></div>)}</div> : <div className="analytics-empty-inline">Products from this shop will appear here after they are listed.</div>}
     </section>
 
-    <section className="seller-analytics-panel promotion-panel"><div className="seller-analytics-panel-heading"><div><span><Zap size={13}/> PAID PROMOTION</span><h2>Choose your reach target</h2><p>Pay for marketplace promotion. Your campaign reports measured delivery, not a guaranteed number of distinct people before it runs.</p></div><span className="analytics-mpesa-pill"><Wallet size={14}/> M-Pesa</span></div>
+    <section className="seller-analytics-panel promotion-panel"><div className="seller-analytics-panel-heading"><div><span><Zap size={13}/> PAID PROMOTION</span><h2>Promote your product or shop</h2><p>Choose a 7-day promotion or a full month (30 days), then select your reach target. Delivery reports measured marketplace activity.</p></div><span className="analytics-mpesa-pill"><Wallet size={14}/> M-Pesa</span></div>
       <div className="promotion-builder">
         <div className="promotion-form">
-          <div className="promotion-type-toggle"><button className={targetType === "PRODUCT" ? "active" : ""} onClick={() => setTargetType("PRODUCT")}><Sparkles size={16}/> Promote a product</button><button className={targetType === "STORE" ? "active" : ""} onClick={() => setTargetType("STORE")}><Store size={16}/> Promote whole shop</button></div>
+          <div className="promotion-type-toggle"><button type="button" className={targetType === "PRODUCT" ? "active" : ""} onClick={() => setTargetType("PRODUCT")}><Sparkles size={16}/> Promote a product</button><button type="button" className={targetType === "STORE" ? "active" : ""} onClick={() => setTargetType("STORE")}><Store size={16}/> Promote whole shop</button></div>
+          <div className="promotion-field"><span>Promotion duration</span><div className="promotion-packages promotion-duration-options"><button type="button" className={durationDays === 7 ? "active" : ""} onClick={() => setDurationDays(7)}><b>7 days</b><small>Standard</small><strong>One week</strong></button><button type="button" className={durationDays === 30 ? "active" : ""} onClick={() => setDurationDays(30)}><b>1 month</b><small>Extended</small><strong>30 days</strong></button></div></div>
           {targetType === "PRODUCT" && <div className="promotion-field"><span>Choose a product to promote</span><div className="promotion-product-picker">{products.map(p => <button type="button" key={p.id} className={"promotion-product-option " + ((selectedPostId || selectedProduct?.id) === p.id ? "active" : "")} onClick={() => setSelectedPostId(p.id)} aria-pressed={(selectedPostId || selectedProduct?.id) === p.id}><span className="promotion-product-image">{p.image ? <img src={p.image} alt="" /> : <Store size={20}/>}</span><span className="promotion-product-copy"><b>{p.title}</b><small>{p.mediaType === "VIDEO" ? "Video listing" : "Photo listing"} · {p.views.toLocaleString()} views · {p.likes.toLocaleString()} market likes</small><em>{p.boosted ? "Currently boosted" : "Ready to promote"}</em></span><span className="promotion-product-check">{(selectedPostId || selectedProduct?.id) === p.id ? <CheckCircle2 size={18}/> : null}</span></button>)}</div></div>}
           {!demoMode && <label className="promotion-field"><span>M-Pesa phone number</span><input value={phone} onChange={e => setPhone(e.target.value)} placeholder="07XX XXX XXX" inputMode="tel" autoComplete="tel" /></label>}
           <div className="promotion-field"><span>Target marketplace reach</span><div className="promotion-packages">{packages.map(p => <button key={p.reach} className={targetReach === p.reach ? "active" : ""} onClick={() => setTargetReach(p.reach)}><b>{p.reach.toLocaleString()}</b><small>target</small><strong>KSh {p.price.toLocaleString()}</strong></button>)}</div></div>
@@ -123,7 +132,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId }: {
           <button className="promotion-pay-button" onClick={startPayment} disabled={paying || !!pendingCampaign || !products.length || (targetType === "PRODUCT" && !selectedProduct) || (!demoMode && !phone.trim())}>{paying ? (demoMode ? "Activating promotion…" : "Starting M-Pesa…") : pendingCampaign ? "Waiting for payment confirmation…" : demoMode ? <>Activate promotion · KSh {packagePrice.toLocaleString()} <ArrowUpRight size={16}/></> : <>Pay KSh {packagePrice.toLocaleString()} with M-Pesa <ArrowUpRight size={16}/></>}</button>
           <small className="promotion-secure-note"><ShieldCheck size={13}/>{demoMode ? "Demo mode activates campaigns immediately without charging you. Live M-Pesa checkout can be enabled later." : "Your promotion activates after M-Pesa confirms payment."}</small>
         </div>
-        <aside className="promotion-order-summary"><div className="promotion-summary-art"><TrendingUp size={28}/><span>Promotion plan</span></div><small>YOUR SELECTED PACKAGE</small><h3>{targetReach.toLocaleString()} reach</h3><p>{targetType === "PRODUCT" ? selectedProduct?.title || "Your selected product" : "All eligible products from @" + (selectedShop?.username || "your shop")}</p><div className="promotion-summary-line"><span>Promotion target</span><b>{targetReach.toLocaleString()}</b></div><div className="promotion-summary-line"><span>One-time payment</span><b>KSh {packagePrice.toLocaleString()}</b></div><div className="promotion-summary-line"><span>Payment mode</span><b>{demoMode ? "Demo · no charge" : "M-Pesa STK Push"}</b></div><div className="promotion-summary-foot"><Radio size={14}/>{demoMode ? "Campaign activates instantly; reach tracking remains live" : "Live delivery tracking after payment"}</div></aside>
+        <aside className="promotion-order-summary"><div className="promotion-summary-art"><TrendingUp size={28}/><span>Promotion plan</span></div><small>YOUR SELECTED PACKAGE</small><h3>{targetReach.toLocaleString()} reach</h3><p>{targetType === "PRODUCT" ? selectedProduct?.title || "Your selected product" : "All eligible products from @" + (selectedShop?.username || "your shop")}</p><div className="promotion-summary-line"><span>Promotion duration</span><b>{durationDays === 7 ? "7 days" : "1 month"}</b></div><div className="promotion-summary-line"><span>Promotion target</span><b>{targetReach.toLocaleString()}</b></div><div className="promotion-summary-line"><span>One-time payment</span><b>KSh {packagePrice.toLocaleString()}</b></div><div className="promotion-summary-line"><span>Payment mode</span><b>{demoMode ? "Demo · no charge" : "M-Pesa STK Push"}</b></div><div className="promotion-summary-foot"><Radio size={14}/>{demoMode ? "Campaign activates instantly; reach tracking remains live" : "Live delivery tracking after payment"}</div></aside>
       </div>
     </section>
 
