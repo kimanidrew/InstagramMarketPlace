@@ -45,7 +45,7 @@ export async function GET(request: Request) {
     let rawSkip = 0;
     while (visiblePosts.length < targetCount) {
       const batch = await db().instagramPost.findMany({
-        where: { ...where, ...boostFilter },
+        where: { AND: [where, boostFilter] },
         include: {
           connection: true,
           tags: true,
@@ -54,25 +54,27 @@ export async function GET(request: Request) {
         },
         orderBy: [{ boostUntil: "desc" }, { timestamp: "desc" }, { id: "desc" }],
         skip: rawSkip,
-        take: Math.min(limit, targetCount - visiblePosts.length + limit),
+        take: limit,
       });
       if (!batch.length) break;
       const availableBatch = await filterAvailableInstagramMedia(batch);
       visiblePosts.push(...availableBatch);
       rawSkip += batch.length;
-      if (batch.length < Math.min(limit, targetCount - (visiblePosts.length - availableBatch.length) + limit)) break;
+      if (batch.length < limit) break;
     }
     if (visiblePosts.length >= targetCount) break;
   }
 
+  // Keep ordering deterministic across pages. Personal tag ranking is not
+  // applied here because this endpoint does not load a preferredTags map.
   const rankedPosts = visiblePosts.sort((a: any, b: any) => {
     const aBoosted = !!a.boostUntil && new Date(a.boostUntil) > now;
     const bBoosted = !!b.boostUntil && new Date(b.boostUntil) > now;
     if (aBoosted !== bBoosted) return aBoosted ? -1 : 1;
-    const score = (post: any) => post.tags?.reduce((sum: number, item: any) => sum + (preferredTags.get(String(item.name).toLowerCase()) || 0), 0) || 0;
-    const personal = score(b) - score(a);
-    if (personal) return personal;
-    return new Date(b.timestamp || b.createdAt).getTime() - new Date(a.timestamp || a.createdAt).getTime();
+    const timeDifference =
+      new Date(b.timestamp || b.createdAt).getTime() -
+      new Date(a.timestamp || a.createdAt).getTime();
+    return timeDifference || String(b.id).localeCompare(String(a.id));
   });
   const hasMore = rankedPosts.length > pageStart + limit;
   const availableProducts = rankedPosts.slice(pageStart, pageStart + limit);
