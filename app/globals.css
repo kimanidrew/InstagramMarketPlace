@@ -1949,3 +1949,19 @@ select:focus-visible,
 @keyframes globalFeedbackRise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:540px){.global-feedback-backdrop{padding:14px}.global-feedback-modal{padding:34px 22px 22px;border-radius:25px}.global-feedback-icon{width:60px;height:60px;border-radius:20px}}
 @media(prefers-reduced-motion:reduce){.global-feedback-backdrop,.global-feedback-modal{animation:none}}
+
+
+/* Seller Growth Studio: inline product promotion controls */
+.growth-promotion-controls{margin-top:18px;padding:17px;border:1px solid #e9e1f5;border-radius:20px;background:linear-gradient(135deg,#fcfaff,#fff)}
+.growth-promotion-summary{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.85fr);gap:20px;align-items:start}
+.growth-control-label{display:flex;align-items:center;gap:7px;margin-bottom:10px;color:#75628f;font-size:9px;font-weight:950;letter-spacing:.1em}
+.growth-control-label svg{color:#8359c7}
+.growth-duration-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.growth-duration-options button{display:grid;gap:4px;padding:12px;border:1px solid #e7e0f0;border-radius:14px;background:#fff;color:#302345;text-align:left;transition:border-color .2s,background .2s,box-shadow .2s}
+.growth-duration-options button.active{border-color:#8b60d3;background:#f5efff;box-shadow:0 0 0 2px #eee4ff}
+.growth-duration-options button strong{font-size:12px}.growth-duration-options button small{color:#897e9b;font-size:10px}
+.growth-promotion-summary select{width:100%;min-height:42px;padding:0 12px;border:1px solid #e7e0f0;border-radius:12px;background:#fff;color:#302345;font-size:11px;font-weight:750;outline:none}
+.growth-promotion-summary select:focus{border-color:#8b60d3;box-shadow:0 0 0 3px #f0e8ff}
+.growth-demo-note{display:block;margin-top:8px;color:#9287a3;font-size:9px;line-height:1.5}
+.growth-action-row .growth-primary-action{cursor:pointer}
+@media(max-width:600px){.growth-promotion-controls{padding:12px}.growth-promotion-summary{grid-template-columns:1fr;gap:17px}.growth-duration-options button{padding:11px}.growth-action-row .growth-primary-action{width:100%}}
