@@ -9,8 +9,8 @@ import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
 const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
-const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Space Grotesk").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
-const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:wght@400;500;600;700;800&display=swap`;
+const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Montserrat").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
+const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:ital,wght@1,400;1,500;1,600;1,700;1,800&display=swap`;
 
 export const metadata: Metadata = {
   title: `${brandName} | Social Shopping`,
