@@ -59,7 +59,7 @@ export async function GET(r: Request) {
     const connection = await connect(token, s.uid);
     await sync(connection.id);
 
-    const res = NextResponse.redirect(new URL("/account?instagram=connected", r.url));
+    const res = NextResponse.redirect(new URL("/account/setup?setup=" + encodeURIComponent(s.requestId) + "&step=4&instagram=connected", r.url));
     res.cookies.delete("instagram_oauth_state");
     return res;
   } catch (e) {
