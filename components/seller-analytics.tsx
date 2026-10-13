@@ -11,7 +11,8 @@ type ShopAnalytics = { id: string; username: string; name: string | null; profil
 type Campaign = { id: string; targetType: "PRODUCT" | "STORE"; targetReach: number; deliveredReach: number; amount: number; status: string; createdAt: string; startsAt: string | null; endsAt: string | null; username: string; profileImageUrl: string | null; productTitle: string | null; image: string | null; paymentStatus: string | null; receiptNumber: string | null; phoneNumber: string | null; provider: string | null };
 type Analytics = { shops: ShopAnalytics[]; summary: { impressions: number; views: number; clicks: number; likes: number; reach: number; paidImpressions: number; paidReach: number }; daily: Daily[]; campaigns: Campaign[] };
 const packages = [{ reach: 500, price: 100 }, { reach: 1000, price: 180 }, { reach: 2500, price: 400 }, { reach: 5000, price: 750 }, { reach: 10000, price: 1300 }];
-const demoMode = process.env.NEXT_PUBLIC_PROMOTION_DEMO_MODE !== "false";
+// Keep the UI in demo mode in sync with the promotions API; never request an STK push.
+const demoMode = true;
 
 function LineChart({ data, metric, color, title }: { data: Daily[]; metric: "impressions" | "views" | "clicks" | "likes"; color: string; title: string }) {
   const max = Math.max(1, ...data.map(d => d[metric]));
@@ -117,7 +118,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId }: {
       {products.length ? <div className="analytics-product-table"><div className="analytics-table-head"><span>Product</span><span>Impressions</span><span>Views</span><span>Clicks</span><span>IG likes</span><span>Market likes</span></div>{products.slice().sort((a,b) => b.views-a.views).map(p => <div className="analytics-table-row" key={p.id}><div className="analytics-product-name"><span>{p.image ? <img src={p.image} alt=""/> : <Store size={18}/>}</span><div><b>{p.title}</b><small>{p.boosted ? "Boost active" : "Organic listing"}</small></div></div><b>{p.impressions.toLocaleString()}</b><b>{p.views.toLocaleString()}</b><b>{p.clicks.toLocaleString()}</b><b>{p.instagramLikes.toLocaleString()}</b><b>{p.likes.toLocaleString()}</b></div>)}</div> : <div className="analytics-empty-inline">Products from this shop will appear here after they are listed.</div>}
     </section>
 
-    <section className="seller-analytics-panel promotion-panel"><div className="seller-analytics-panel-heading"><div><span><Zap size={13}/> PAID PROMOTION</span><h2>Promote your product or shop</h2><p>Choose a 7-day promotion or a full month (30 days), then select your reach target. Delivery reports measured marketplace activity.</p></div><span className="analytics-mpesa-pill"><Wallet size={14}/> M-Pesa</span></div>
+    <section className="seller-analytics-panel promotion-panel"><div className="seller-analytics-panel-heading"><div><span><Zap size={13}/> PRODUCT PROMOTION</span><h2>Promote your product or shop</h2><p>Demo mode is on: promotions activate immediately without M-Pesa or a charge. Choose 7 days or a full month (30 days), then select your reach target.</p></div><span className="analytics-mpesa-pill"><CheckCircle2 size={14}/> Demo mode · no charge</span></div>
       <div className="promotion-builder">
         <div className="promotion-form">
           <div className="promotion-type-toggle"><button type="button" className={targetType === "PRODUCT" ? "active" : ""} onClick={() => setTargetType("PRODUCT")}><Sparkles size={16}/> Promote a product</button><button type="button" className={targetType === "STORE" ? "active" : ""} onClick={() => setTargetType("STORE")}><Store size={16}/> Promote whole shop</button></div>
