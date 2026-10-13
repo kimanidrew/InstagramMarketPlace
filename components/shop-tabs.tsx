@@ -32,6 +32,9 @@ export function ShopTabs({
   now: string;
 }) {
   const [active, setActive] = useState<ShopTab>(initialTab);
+  useEffect(() => {
+    setActive(initialTab);
+  }, [initialTab]);
   const [recentItems, setRecentItems] = useState(recentlyViewedProducts);
   const [clearingHistory, setClearingHistory] = useState(false);
   const clearRecentHistory = async () => {
