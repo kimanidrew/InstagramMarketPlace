@@ -2386,3 +2386,71 @@ header nav {
   -webkit-filter: none !important;
   text-shadow: none !important;
 }
+
+
+/* SokoLink shop discovery: compact, polished sticky tabs without the hero banner. */
+.shop-page .shop-tabs{
+  position:sticky;
+  top:74px;
+  z-index:40;
+  gap:5px;
+  padding:5px;
+  margin:0 0 14px;
+  overflow-x:auto;
+  border:1px solid #e9e7f0;
+  border-radius:18px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 8px 24px rgba(20,16,35,.07);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+}
+.shop-page .shop-tab{
+  min-height:56px;
+  padding:10px 16px 12px;
+  border-radius:13px;
+}
+.shop-page .shop-tab-active{
+  background:#f5f1ff;
+  color:#6241c8!important;
+}
+.shop-page .shop-tab-active .shop-tab-icon{
+  background:linear-gradient(135deg,#e8dcff,#f8e5f0)!important;
+  border-color:transparent!important;
+  color:#6241c8!important;
+  box-shadow:none!important;
+  transform:none;
+}
+.shop-page .shop-tab-indicator{
+  bottom:2px;
+  left:24%;
+  right:24%;
+  height:3px;
+  background:#6241c8!important;
+}
+.shop-page .shop-filter-panel{
+  margin-top:0;
+  margin-bottom:28px;
+  border:1px solid #eeecef!important;
+  border-radius:18px;
+  background:#fff!important;
+  box-shadow:0 5px 18px rgba(20,16,35,.035)!important;
+}
+@media(max-width:640px){
+  .shop-page .shop-tabs{
+    top:68px;
+    gap:3px;
+    padding:4px;
+    margin-bottom:10px;
+    border-radius:15px;
+  }
+  .shop-page .shop-tab{
+    min-height:46px;
+    padding:8px 13px 10px;
+    gap:7px;
+    border-radius:11px;
+  }
+  .shop-page .shop-tab-copy b{font-size:12px}
+  .shop-page .shop-tab-icon{height:28px;width:28px}
+  .shop-page .shop-tab-indicator{left:20%;right:20%;bottom:1px}
+  .shop-page .shop-filter-panel{margin-bottom:22px}
+}
