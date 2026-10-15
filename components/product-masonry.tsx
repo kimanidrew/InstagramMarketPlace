@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/product-card";
 type ProductMasonryProps = {
   q?: string;
   tag?: string;
+  personalized?: boolean;
 };
 
 function ProductShimmer({ compact = false }: { compact?: boolean }) {
@@ -65,7 +66,7 @@ function LazyProductCard({ product }: { product: any }) {
   );
 }
 
-export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
+export function ProductMasonry({ q = "", tag = "", personalized = false }: ProductMasonryProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -94,6 +95,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
         });
         if (q) params.set("q", q);
         if (tag) params.set("tag", tag);
+        if (personalized) params.set("personalized", "1");
 
         const response = await fetch("/api/products?" + params.toString(), {
           signal: controller.signal,
@@ -116,7 +118,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
     loadFirstPage();
 
     return () => controller.abort();
-  }, [q, tag]);
+  }, [q, tag, personalized]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -131,7 +133,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, loading, loadingMore, q, tag, products.length]);
+  }, [hasMore, loading, loadingMore, q, tag, personalized, products.length]);
 
   async function loadMore() {
     if (loading || loadingMore || !hasMore) return;
@@ -146,6 +148,7 @@ export function ProductMasonry({ q = "", tag = "" }: ProductMasonryProps) {
       });
       if (q) params.set("q", q);
       if (tag) params.set("tag", tag);
+      if (personalized) params.set("personalized", "1");
 
       const response = await fetch("/api/products?" + params.toString(), {
         cache: "no-store",
