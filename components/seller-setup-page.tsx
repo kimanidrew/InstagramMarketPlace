@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, XCircle } from "lucide-react";
+import { ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, XCircle } from "lucide-react";
 
 const images = {
   register: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
@@ -38,7 +38,7 @@ export default function SellerSetupPage({request,connection,initialStep=1}:{requ
   const visibleStep=activeStep===4&&request.status==="APPROVED"&&!connected?4:Math.min(activeStep,currentStep);
   const href=(n:number)=>"/account/setup?setup="+encodeURIComponent(request.id)+"&step="+n;
   return <main className="seller-onboarding seller-setup-page">
-    <section className="seller-onboarding-hero"><div className="shell"><div className="seller-hero-row"><div><p className="seller-kicker"><Instagram size={13}/> STEP-BY-STEP CONNECTION</p><h1>Connect your<br/><span>Instagram shop.</span></h1><p className="seller-hero-copy">Follow one step at a time. We save your progress, so you can leave and come back whenever you need.</p></div><Link href="/account" className="seller-setup-return"><ArrowLeft size={15}/> Back to account</Link></div><div className="seller-trust-row"><span><CheckCircle2 size={14}/> Your progress is saved</span><span><Instagram size={14}/> Instagram Business account</span><span><CheckCircle2 size={14}/> Four simple steps</span></div></div></section>
+    <section className="seller-onboarding-hero"><div className="shell"><div className="seller-hero-row"><div><p className="seller-kicker"><Instagram size={13}/> STEP-BY-STEP CONNECTION</p><h1>Connect your<br/><span>Instagram shop.</span></h1><p className="seller-hero-copy">Follow one step at a time. We save your progress, so you can leave and come back whenever you need.</p></div></div><div className="seller-trust-row"><span><CheckCircle2 size={14}/> Your progress is saved</span><span><Instagram size={14}/> Instagram Business account</span><span><CheckCircle2 size={14}/> Four simple steps</span></div></div></section>
     <section className="shell seller-onboarding-content seller-setup-page-content">
       <div className="seller-setup-page-progress"><div><span>SHOP SETUP</span><b>{request.id==="new"?"New Instagram shop":"@"+request.username}</b></div><strong>{connected?"Complete":"Step "+visibleStep+" of 4"}</strong><div className="seller-setup-progress-line"><i style={{width:(connected?100:((visibleStep-1)/3)*100)+"%"}}/></div><div className="seller-setup-progress-steps">{[1,2,3,4].map(n=><span key={n} className={n<visibleStep||connected?"done":n===visibleStep?"active":""}>{n<visibleStep||connected?<Check size={12}/>:n}</span>)}</div></div>
       <div className="seller-setup-page-layout"><div className="seller-setup-page-main">
