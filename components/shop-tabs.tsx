@@ -57,7 +57,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
           <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
             <span className="shop-promo-label"><Sparkles size={11} /> Boosted listing</span>
             <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{activeSlide.product.productTitle || "A find worth sharing."}</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-black/60">A spotlight on a product shoppers should not miss.</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-black/60">Handpicked for a closer look. Discover the details, then shop directly from the seller.</p>
             <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white">Discover listing <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></span>
           </div>
           <div className="shop-promo-product-visual">
@@ -70,8 +70,8 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
         <div key={activeSlide.key} className="shop-promo-slide shop-promo-enter shop-promo-ad grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1fr_.85fr]">
           <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
             <span className="shop-promo-label"><Megaphone size={11} /> Marketplace spotlight · Ad</span>
-            <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Your next favourite shop is <span className="text-[#d6ff63]">closer than you think.</span></h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-white/70">Explore independent sellers, discover fresh finds and support the people behind the posts.</p>
+            <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Your next great find <span className="text-[#d6ff63]">starts here.</span></h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/70">Meet independent sellers, uncover fresh finds and shop from the people behind the posts.</p>
             <Link href="/stores" className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore all shops <ArrowRight size={14} /></Link>
           </div>
           <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
