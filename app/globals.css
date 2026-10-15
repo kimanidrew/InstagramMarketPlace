@@ -2249,7 +2249,7 @@ select:focus-visible,
 .header-search-panel.is-open.has-suggestions .header-suggestions-label{flex:none}
 .header-search-panel.is-open.has-suggestions .header-suggestion-item{flex:none}
 @media(max-width:640px){
- .header-search-panel.is-open.has-suggestions{height:calc(100dvh - 62px);max-height:none!important;padding:10px 0 8px}
+ .header-search-panel.is-open.has-suggestions{height:calc(100dvh - 74px);max-height:none!important;padding:10px 0 8px}
  .header-search-panel.is-open.has-suggestions .header-search-content{width:calc(100% - 22px)}
  .header-search-panel.is-open.has-suggestions .header-search-suggestions{margin-top:10px;flex:1;min-height:0;max-height:none;padding:8px;border-radius:16px}
 }
