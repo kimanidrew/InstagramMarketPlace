@@ -106,12 +106,6 @@ export function SiteHeader({ user }: { user: any }) {
               <span>Search</span><ArrowRight size={15} />
             </button>
           </form>
-          <div className="header-search-hints">
-            <span>Explore</span>
-            <Link href="/shop" onClick={() => setSearchOpen(false)}>All products</Link>
-            <Link href="/stores" onClick={() => setSearchOpen(false)}>Instagram shops</Link>
-            <Link href="/categories" onClick={() => setSearchOpen(false)}>Categories</Link>
-          </div>
           {trendingTags.length > 0 && (
             <div className="header-trending-tags">
               <div className="header-trending-heading"><span>Trending tags</span><span>Most products first</span></div>
