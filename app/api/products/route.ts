@@ -33,7 +33,6 @@ export async function GET(request: Request) {
         where,
         include: { connection: true, tags: true, likes: true, wishlistItems: currentUser ? { where: { userId: currentUser.id } } : true, _count: { select: { likes: true, wishlistItems: true } } },
         orderBy: [{ boostUntil: "desc" }, { timestamp: "desc" }, { id: "desc" }],
-        take: 600,
       }),
     ]);
     const tagScores = new Map<string, number>();
