@@ -75,18 +75,23 @@ export function SiteHeader({ user }: { user: any }) {
     };
   }, [searchQuery, searchOpen]);
 
-  const categorySuggestions = Array.from(new Map(
-    searchSuggestions.flatMap((item: any) => (item.tags || [])
-      .map((tag: any) => ({ name: String(tag.name || "").replace(/^#/, ""), count: 1 }))
-      .filter((tag: any) => tag.name && tag.name.toLowerCase().includes(searchQuery.trim().toLowerCase())))
-      .map((tag: any) => [tag.name.toLowerCase(), tag]),
-  ).values()).slice(0, 6);
+  const categoryMap = new Map<string, { name: string }>();
+  searchSuggestions.forEach((item: any) => {
+    (item.tags || []).forEach((tag: any) => {
+      const name = String(tag.name || "").replace(/^#/, "");
+      if (name && !categoryMap.has(name.toLowerCase())) categoryMap.set(name.toLowerCase(), { name });
+    });
+  });
+  const categorySuggestions = Array.from(categoryMap.values()).slice(0, 6);
 
-  const storeSuggestions = Array.from(new Map(
-    searchSuggestions
-      .filter((item: any) => item.connection?.username)
-      .map((item: any) => [String(item.connection.username).toLowerCase(), item.connection]),
-  ).values()).slice(0, 6);
+  const storeMap = new Map<string, any>();
+  searchSuggestions.forEach((item: any) => {
+    const store = item.connection;
+    if (store?.username && !storeMap.has(String(store.username).toLowerCase())) {
+      storeMap.set(String(store.username).toLowerCase(), store);
+    }
+  });
+  const storeSuggestions = Array.from(storeMap.values()).slice(0, 6);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
