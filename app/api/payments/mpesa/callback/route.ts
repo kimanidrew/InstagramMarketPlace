@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       await tx.promotionPayment.update({ where: { id: payment.id }, data: { status: "PAID", receiptNumber: receipt, resultCode: "0", resultDescription: "Payment confirmed", paidAt: new Date() } });
       await tx.promotionCampaign.update({ where: { id: payment.campaignId }, data: { status: payment.campaign.targetReach <= payment.campaign.deliveredReach ? "COMPLETED" : "ACTIVE", startsAt: new Date(), ...(payment.campaign.targetReach <= payment.campaign.deliveredReach ? { endsAt: new Date() } : {}) } });
       if (payment.campaign.targetType === "PRODUCT" && payment.campaign.postId) {
-        await tx.instagramPost.update({ where: { id: payment.campaign.postId }, data: { boostUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) } });
+        await tx.instagramPost.update({ where: { id: payment.campaign.postId }, data: { boostUntil: new Date(Date.now() + payment.campaign.durationDays * 24 * 60 * 60 * 1000) } });
       }
     });
     return NextResponse.json({ ResultCode: 0, ResultDesc: "Payment confirmed" });
