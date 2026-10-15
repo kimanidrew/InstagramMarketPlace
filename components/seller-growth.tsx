@@ -2,11 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap, Clock3, Users } from "lucide-react";
+import { BadgeCheck, BarChart3, Check, ChevronDown, Megaphone, ShieldCheck, Sparkles, Store } from "lucide-react";
 import { SellerAnalytics } from "@/components/seller-analytics";
 
-type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
-type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: Product[] };
+type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: { id: string }[] };
 type GrowthOffering = { id: string; code: string; name: string; category: "PROMOTION" | "GROWTH"; description: string; price: number; durationDays: number; features: string[]; active: boolean };
 
 export function SellerGrowth({ connections, embedded = false, initialTab = "store" }: { connections: Connection[]; embedded?: boolean; initialTab?: "store" | "promotion" }) {
@@ -14,13 +13,10 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
   const [growthOfferings, setGrowthOfferings] = useState<GrowthOffering[]>([]);
   useEffect(() => { fetch("/api/offerings", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(data => { if (data?.offerings) setGrowthOfferings(data.offerings.filter((item: GrowthOffering) => item.category === "GROWTH")); }).catch(() => {}); }, []);
   const studioTab = initialTab;
-  const [selectedProductId, setSelectedProductId] = useState("");
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [busy, setBusy] = useState("");
   const [message, setMessage] = useState("");
   const selectedShop = useMemo(() => connections.find(c => c.id === selectedId) || connections[0], [connections, selectedId]);
-  const products = selectedShop?.posts || [];
-  const chosenProduct = products.find(p => p.id === selectedProductId) || products[0];
 
   async function request(offering: GrowthOffering, connectionId: string) {
     setBusy(offering.id + connectionId);
@@ -57,7 +53,7 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
         </button>
         {shopDropdownOpen && <div className="growth-shop-dropdown" role="listbox" aria-label="Instagram shops">
           <div className="growth-dropdown-heading"><span>YOUR SHOPS</span><small>{connections.length} {connections.length === 1 ? "shop" : "shops"}</small></div>
-          {connections.map(c => <button type="button" role="option" aria-selected={c.id === selectedShop?.id} key={c.id} className={"growth-shop-option" + (c.id === selectedShop?.id ? " active" : "")} onClick={() => { setSelectedId(c.id); setSelectedProductId(""); setMessage(""); setShopDropdownOpen(false); }}>
+          {connections.map(c => <button type="button" role="option" aria-selected={c.id === selectedShop?.id} key={c.id} className={"growth-shop-option" + (c.id === selectedShop?.id ? " active" : "")} onClick={() => { setSelectedId(c.id); setMessage(""); setShopDropdownOpen(false); }}>
             <span className="growth-option-avatar">{c.profileImageUrl ? <img src={c.profileImageUrl} alt="" /> : <Store size={18}/>}</span>
             <span className="growth-option-copy"><strong>@{c.username}</strong><small>{c.name || "Instagram Business profile"}</small></span>
             {c.id === selectedShop?.id ? <span className="growth-option-check"><Check size={15}/></span> : <span className="growth-option-arrow">Select</span>}
@@ -65,7 +61,7 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
           <div className="growth-dropdown-foot"><ShieldCheck size={13}/> Choose which shop you want to grow</div>
         </div>}
       </div>
-      {connections.length > 1 && <div className="growth-shop-chips">{connections.map(c => <button key={c.id} type="button" onClick={() => { setSelectedId(c.id); setSelectedProductId(""); setMessage(""); }} className={c.id === selectedShop?.id ? "active" : ""}>{c.profileImageUrl ? <img src={c.profileImageUrl} alt="" /> : <Store size={14}/>}@{c.username}{c.id === selectedShop?.id && <Check size={13}/>}</button>)}</div>}
+      {connections.length > 1 && <div className="growth-shop-chips">{connections.map(c => <button key={c.id} type="button" onClick={() => { setSelectedId(c.id); setMessage(""); }} className={c.id === selectedShop?.id ? "active" : ""}>{c.profileImageUrl ? <img src={c.profileImageUrl} alt="" /> : <Store size={14}/>}@{c.username}{c.id === selectedShop?.id && <Check size={13}/>}</button>)}</div>}
     </div>
 
     {message && <div role="status" className="seller-growth-message"><Sparkles size={16}/><span>{message}</span><button aria-label="Dismiss message" onClick={() => setMessage("")}>×</button></div>}
