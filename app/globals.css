@@ -2783,3 +2783,21 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   .shop-promo-slide>div:first-child>a.mt-6{margin-top:9px;padding:9px 14px;font-size:11px}
   .shop-promo-slide .shop-promo-label{font-size:8px;padding:6px 8px}
 }
+
+
+/* Use a true end ellipsis for promo copy: one line, never wrap or clip mid-word. */
+.shop-promo-slide h2,
+.shop-promo-slide p{
+  display:block;
+  width:100%;
+  max-width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  overflow-wrap:normal;
+  word-break:normal;
+  -webkit-line-clamp:unset;
+  line-clamp:unset;
+  -webkit-box-orient:initial;
+}
+.shop-promo-slide h2 span{white-space:nowrap}
