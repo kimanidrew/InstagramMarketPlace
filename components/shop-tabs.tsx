@@ -324,9 +324,9 @@ export function ShopTabs({
                     {(recentItems.length > 0 || recentStores.length > 0) && (
                       <div className="mt-6 flex gap-3 overflow-x-auto pb-2">
                         {[
-                          ...recentItems.slice(0, 7).map((item: any) => ({ kind: "product", item })),
-                          ...recentStores.slice(0, 7).map((item: any) => ({ kind: "store", item })),
-                        ].map(({ kind, item }: any) => kind === "product" ? (() => {
+                          ...recentItems.slice(0, 7).map((item: any) => ({ kind: "product", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
+                          ...recentStores.slice(0, 7).map((item: any) => ({ kind: "store", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
+                        ].sort((a: any, b: any) => b.viewedAt - a.viewedAt).map(({ kind, item }: any) => kind === "product" ? (() => {
                           const isVideo = String(item.mediaType || "").toUpperCase() === "VIDEO";
                           const isService = String(item.listingType || "").toUpperCase() === "SERVICE";
                           const href = "/" + (isService ? "service" : "product") + "/" + item.productSlug;
