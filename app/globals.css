@@ -2466,6 +2466,16 @@ header nav {
   }
 }
 
+/* Let shop tabs rise to the very top when the navbar hides on downward scroll. */
+body:has(.site-header.is-hidden) .shop-page .shop-tabs{
+  top:0;
+}
+@media(max-width:640px){
+  body:has(.site-header.is-hidden) .shop-page .shop-tabs{
+    top:0;
+  }
+}
+
 /* Black SokoLink shop-tabs wrapper with high-contrast, readable typography. */
 .shop-page .shop-tabs{
   background:#080808!important;
