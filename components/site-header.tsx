@@ -209,7 +209,7 @@ export function SiteHeader({ user }: { user: any }) {
           </form>
           {searchOpen && searchQuery.trim().length >= 2 && (
             <div className="header-search-suggestions" role="region" aria-label="Search suggestions">
-              <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type">
+              <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type" style={{ "--active-tab-index": ["Products", "Categories", "Stores"].indexOf(activeSuggestionTab) } as React.CSSProperties}>
                 {(["Products", "Categories", "Stores"] as const).map((tab) => {
                   const count = tab === "Products" ? searchSuggestions.length : tab === "Categories" ? categorySuggestions.length : storeSuggestions.length;
                   return (
@@ -225,6 +225,7 @@ export function SiteHeader({ user }: { user: any }) {
                     </button>
                   );
                 })}
+                <span className="header-suggestion-tab-indicator" aria-hidden="true" />
               </div>
               <div className="header-suggestions-label">
                 {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : "MATCHING STORES"}
