@@ -94,9 +94,7 @@ export default function AdminOfferingsManager({ initialOfferings, audienceSize }
         <label className="text-xs font-bold">Display order<input type="number" step="1" value={draft.sortOrder} onChange={e => update("sortOrder", Number(e.target.value))} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal"/></label>
         <label className="flex items-center gap-3 self-end rounded-xl border border-black/10 bg-white p-3 text-sm font-bold"><input type="checkbox" checked={draft.active} onChange={e => update("active", e.target.checked)}/> Available to sellers</label>
         <label className="text-xs font-bold sm:col-span-2 lg:col-span-3">Description<textarea rows={2} value={draft.description} onChange={e => update("description", e.target.value)} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal" placeholder="Explain what this plan does."/></label>
-        <label className="text-xs font-bold sm:col-span-2 lg:col-span-3">Included features (one per line)<textarea rows={4} value={draft.features.join("
-")} onChange={e => update("features", e.target.value.split("
-"))} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal" placeholder={"Verified badge
+        <label className="text-xs font-bold sm:col-span-2 lg:col-span-3">Included features (one per line)<textarea rows={4} value={draft.features.join("\n")} onChange={e => update("features", e.target.value.split("\n"))} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal" placeholder={"Verified badge
 Seller analytics
 Priority support"}/></label>
       </div>
