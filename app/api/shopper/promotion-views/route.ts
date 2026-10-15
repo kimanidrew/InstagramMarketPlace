@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const events = await db().analyticsEvent.findMany({
       where: {
         visitorId,
-        type: "VIEW",
+        type: { in: ["VIEW", "IMPRESSION"] },
         createdAt: { gte: new Date(sinceValue) },
       },
       select: { connectionId: true, postId: true },
