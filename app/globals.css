@@ -4070,3 +4070,20 @@ html, body {
   .for-you-filter-scroll-button.left-2 { left: 5px !important; }
   .for-you-filter-scroll-button.right-2 { right: 5px !important; }
 }
+
+
+/* Align the category chips' scroll track with the page's horizontal gutters. */
+.for-you-filter-tags {
+  padding-left: max(16px, calc((100vw - 1180px) / 2)) !important;
+  padding-right: max(16px, calc((100vw - 1180px) / 2)) !important;
+  scroll-padding-left: max(16px, calc((100vw - 1180px) / 2));
+  scroll-padding-right: max(16px, calc((100vw - 1180px) / 2));
+}
+@media (max-width: 640px) {
+  .for-you-filter-tags {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    scroll-padding-left: 16px;
+    scroll-padding-right: 16px;
+  }
+}
