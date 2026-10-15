@@ -48,10 +48,17 @@ const storeSectionTitles = [
   { eyebrow: "Around the marketplace", title: "A few more shops to discover.", copy: "Real businesses, fresh inspiration and more reasons to keep exploring." },
 ];
 
-function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex: number }) {
+export function StoreInlineSection({ stores, batchIndex, variant = "discover" }: { stores: any[]; batchIndex: number; variant?: "discover" | "trending" }) {
   const batch = stores.slice(batchIndex * 4, batchIndex * 4 + 4);
   if (!batch.length) return null;
-  const heading = storeSectionTitles[batchIndex % storeSectionTitles.length];
+  const heading = variant === "trending"
+    ? [
+        { eyebrow: "Trending shops", title: "Stores shoppers are loving.", copy: "Explore the shops behind listings getting the most attention." },
+        { eyebrow: "More shops on the rise", title: "Keep up with the stores gaining attention.", copy: "More sellers are making waves across the marketplace." },
+        { eyebrow: "Popular with the community", title: "Discover the shops people come back to.", copy: "Find more businesses earning likes, saves and attention." },
+        { eyebrow: "Still trending", title: "More shops worth a closer look.", copy: "Keep exploring sellers making their mark." },
+      ][batchIndex % 4]
+    : storeSectionTitles[batchIndex % storeSectionTitles.length];
 
   return (
     <section className="product-store-interlude column-span-all my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] px-5 py-4 sm:my-9 sm:rounded-[30px] sm:px-8 sm:py-6" aria-label={heading.eyebrow}>
