@@ -2617,3 +2617,50 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   letter-spacing:normal!important;
 }
 .shop-page .saved-for-later-link svg{width:14px;height:14px;flex:none}
+
+
+/* Shop promotion carousel */
+.shop-promo-carousel{isolation:isolate;background:#111}
+.shop-promo-slide{position:relative;display:grid;width:100%;color:#fff;text-decoration:none}
+.shop-promo-store{background:radial-gradient(circle at 76% 40%,#344522 0,transparent 36%),linear-gradient(115deg,#10110e,#20271b 62%,#111)}
+.shop-promo-label{display:inline-flex;align-items:center;gap:7px;width:max-content;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:rgba(255,255,255,.08);padding:7px 10px;font-size:9px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.9)}
+.shop-promo-store-visual{min-height:200px}
+.shop-promo-float{position:absolute;width:31%;height:67%;object-fit:cover;border:4px solid rgba(255,255,255,.9);border-radius:17px;box-shadow:0 22px 45px #0005;transition:transform .45s}
+.shop-promo-float-0{left:15%;top:19%;transform:rotate(-12deg)}
+.shop-promo-float-1{left:37%;top:11%;transform:rotate(5deg)}
+.shop-promo-float-2{left:59%;top:23%;transform:rotate(12deg)}
+.shop-promo-store:hover .shop-promo-float-0{transform:translateY(-5px) rotate(-15deg)}
+.shop-promo-store:hover .shop-promo-float-1{transform:translateY(-8px) rotate(2deg)}
+.shop-promo-store:hover .shop-promo-float-2{transform:translateY(-4px) rotate(15deg)}
+.shop-promo-store-avatar{position:absolute;right:8%;bottom:9%;width:56px;height:56px;object-fit:cover;border:4px solid #fff;border-radius:50%;box-shadow:0 8px 25px #0004}
+.shop-promo-orbit{position:absolute;right:8%;top:12%;width:95px;height:95px;border:1px solid #d6ff6340;border-radius:50%}
+.shop-promo-product{color:#171717;background:linear-gradient(115deg,#f3f0e8,#e6e3d9)}
+.shop-promo-product .shop-promo-label{border-color:#17171720;background:#fff9;color:#222}
+.shop-promo-product-visual{position:relative;min-height:210px;overflow:hidden;background:#dedbd0}
+.shop-promo-product-visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.shop-promo-product:hover .shop-promo-product-visual img{transform:scale(1.05)}
+.shop-promo-product-sticker{position:absolute;right:16px;bottom:16px;border-radius:999px;background:#d6ff63;padding:10px 13px;font-size:9px;font-weight:1000;letter-spacing:.13em;box-shadow:0 8px 24px #0002}
+.shop-promo-ad{background:radial-gradient(circle at 80% 45%,#344522 0,transparent 30%),linear-gradient(115deg,#111,#20231c 65%,#111)}
+.shop-promo-ad-art{position:relative;min-height:210px;overflow:hidden}
+.promo-art-ring{position:absolute;top:50%;left:54%;width:220px;height:220px;border:1px solid #d6ff634d;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 24px #d6ff6308,0 0 0 50px #d6ff6306}
+.promo-art-spark{position:absolute;top:15%;right:15%;color:#d6ff63;font-size:64px;line-height:1}
+.promo-art-card{position:absolute;display:flex;align-items:center;justify-content:center;width:42%;height:52%;border:1px solid #ffffff30;border-radius:19px;background:#ffffff0e;color:#fff;font-size:clamp(10px,1.5vw,17px);font-weight:1000;letter-spacing:.12em;box-shadow:0 25px 55px #0003;backdrop-filter:blur(8px)}
+.promo-art-card-a{top:17%;left:15%;transform:rotate(-11deg)}
+.promo-art-card-b{right:12%;bottom:12%;background:#d6ff63;color:#171717;transform:rotate(8deg)}
+.shop-promo-controls{position:absolute;right:16px;bottom:15px;z-index:5;display:flex;align-items:center;gap:14px}
+.shop-promo-dots{display:flex;align-items:center;gap:5px}
+.shop-promo-dots button{width:6px;height:6px;border:0;border-radius:99px;background:#ffffff66;padding:0;transition:width .2s,background .2s}
+.shop-promo-dots button.is-active{width:22px;background:#d6ff63}
+.shop-promo-controls>div:last-child{display:flex;gap:6px}
+.shop-promo-controls>div:last-child button{display:flex;width:32px;height:32px;align-items:center;justify-content:center;border:1px solid #ffffff35;border-radius:50%;background:#ffffff12;color:#fff;transition:background .2s}
+.shop-promo-controls>div:last-child button:hover{background:#ffffff30}
+@media(max-width:767px){
+ .shop-promo-carousel{border-radius:22px}
+ .shop-promo-slide{padding-bottom:42px}
+ .shop-promo-slide>div:first-child{padding-bottom:14px}
+ .shop-promo-store-visual,.shop-promo-product-visual,.shop-promo-ad-art{min-height:150px}
+ .shop-promo-float{height:76%;width:27%}
+ .shop-promo-float-0{left:18%;top:8%}.shop-promo-float-1{left:39%;top:3%}.shop-promo-float-2{left:60%;top:10%}
+ .shop-promo-controls{right:12px;bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){.shop-promo-float,.shop-promo-product-visual img{transition:none}}
