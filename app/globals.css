@@ -2875,3 +2875,13 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   .for-you-filter-sticky,.for-you-filter-chip,.for-you-filter-scroll-button{transition:none}
   .for-you-filter-tags{scroll-behavior:auto}
 }
+
+
+/* Shop promo banner controls: transparent surface with no blur. */
+.shop-promo-controls{
+  background:transparent!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  box-shadow:none!important;
+  border-color:transparent!important;
+}
