@@ -2,13 +2,85 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, Compass, Grid2X2, Heart, Sparkles, Store, TrendingUp } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp } from "lucide-react";
 import { ProductMasonry } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { recordAnalytics } from "@/lib/analytics-client";
 
 type ShopTab = "discover" | "trending" | "featured";
+
+type PromoSlide =
+  | { type: "store"; key: string; store: any; posts: any[] }
+  | { type: "product"; key: string; product: any }
+  | { type: "ad"; key: string };
+
+function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[] }) {
+  const promotedStores = stores.filter(({ store }) => store.paidPromotionActive).slice(0, 4);
+  const promotedProducts = products.filter((product) => product.boostUntil && new Date(product.boostUntil).getTime() > Date.now()).slice(0, 4);
+  const slides: PromoSlide[] = [
+    ...promotedStores.map(({ store, posts }) => ({ type: "store" as const, key: "store-" + store.id, store, posts })),
+    ...promotedProducts.map((product) => ({ type: "product" as const, key: "product-" + product.id, product })),
+    { type: "ad", key: "sokolink-promo" },
+  ];
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 6500);
+    return () => window.clearInterval(timer);
+  }, [slides.length]);
+  useEffect(() => { setIndex((current) => Math.min(current, slides.length - 1)); }, [slides.length]);
+  if (!slides.length) return null;
+  const activeSlide = slides[index] || slides[0];
+  const previous = () => setIndex((current) => (current - 1 + slides.length) % slides.length);
+  const next = () => setIndex((current) => (current + 1) % slides.length);
+
+  return (
+    <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" aria-label="Promoted shops, products and marketplace ads">
+      {activeSlide.type === "store" && (
+        <Link href={"/store/" + activeSlide.store.username} className="shop-promo-slide shop-promo-store group grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1.05fr_.95fr]">
+          <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
+            <span className="shop-promo-label"><Sparkles size={11} /> Promoted shop</span>
+            <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Meet <span className="text-[#d6ff63]">@{activeSlide.store.username}</span></h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/70">Discover the shop behind the posts and explore their latest finds.</p>
+            <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore shop <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></span>
+          </div>
+          <div className="shop-promo-store-visual relative min-h-[150px] overflow-hidden sm:min-h-[200px]">
+            {activeSlide.posts.slice(0, 3).map((post: any, i: number) => <img key={post.id} src={post.thumbnailUrl || post.mediaUrl} alt="" className={"shop-promo-float shop-promo-float-" + i} />)}
+            {activeSlide.store.profileImageUrl && <img src={activeSlide.store.profileImageUrl} alt="" className="shop-promo-store-avatar" />}
+            <span className="shop-promo-orbit" />
+          </div>
+        </Link>
+      )}
+      {activeSlide.type === "product" && (
+        <Link href={"/" + (String(activeSlide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + activeSlide.product.productSlug} className="shop-promo-slide shop-promo-product group grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[.9fr_1.1fr]">
+          <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
+            <span className="shop-promo-label"><Sparkles size={11} /> Boosted listing</span>
+            <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{activeSlide.product.productTitle || "A find worth sharing."}</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-black/60">A spotlight on a product shoppers should not miss.</p>
+            <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white">Discover listing <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></span>
+          </div>
+          <div className="shop-promo-product-visual">
+            <img src={activeSlide.product.thumbnailUrl || activeSlide.product.mediaUrl} alt={activeSlide.product.productTitle || "Promoted listing"} />
+            <span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span>
+          </div>
+        </Link>
+      )}
+      {activeSlide.type === "ad" && (
+        <div className="shop-promo-slide shop-promo-ad grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1fr_.85fr]">
+          <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
+            <span className="shop-promo-label"><Megaphone size={11} /> Marketplace spotlight · Ad</span>
+            <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Your next favourite shop is <span className="text-[#d6ff63]">closer than you think.</span></h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/70">Explore independent sellers, discover fresh finds and support the people behind the posts.</p>
+            <Link href="/stores" className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore all shops <ArrowRight size={14} /></Link>
+          </div>
+          <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
+        </div>
+      )}
+      {slides.length > 1 && <div className="shop-promo-controls"><div className="shop-promo-dots">{slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show promotion " + (i + 1)} aria-current={i === index} onClick={() => setIndex(i)} className={i === index ? "is-active" : ""} />)}</div><div className="flex gap-2"><button type="button" onClick={previous} aria-label="Previous promotion"><ChevronLeft size={16} /></button><button type="button" onClick={next} aria-label="Next promotion"><ChevronRight size={16} /></button></div></div>}
+    </section>
+  );
+}
 
 export function ShopTabs({
   initialTab = "discover",
@@ -55,7 +127,7 @@ export function ShopTabs({
   const filteredFeaturedStores = featuredStores;
 
   return (
-    <div className="shop-tabs-wrap mt-0">
+    <div className="shop-tabs-wrap mt-0">\n      <ShopPromoCarousel stores={filteredFeaturedStores} products={filteredFeaturedProducts} />
       <div className="shop-tabs flex w-full max-w-full flex-nowrap overflow-x-auto overscroll-x-contain" role="tablist" aria-label="Shop discovery">
         {tabs.map(({ id, label, icon: Icon, copy }) => {
           const selected = active === id;
