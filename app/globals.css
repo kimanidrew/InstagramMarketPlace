@@ -4061,3 +4061,12 @@ html, body {
   .for-you-filter-scroll-button.left-2 { left: 10px !important; }
   .for-you-filter-scroll-button.right-2 { right: 10px !important; }
 }
+
+
+/* Final For You filter control inset: 5px from both ends. */
+.for-you-filter-scroll-button.left-2 { left: 5px !important; }
+.for-you-filter-scroll-button.right-2 { right: 5px !important; }
+@media (max-width: 640px) {
+  .for-you-filter-scroll-button.left-2 { left: 5px !important; }
+  .for-you-filter-scroll-button.right-2 { right: 5px !important; }
+}
