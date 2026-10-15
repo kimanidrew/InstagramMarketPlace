@@ -10,6 +10,7 @@ type ProductMasonryProps = {
   tag?: string;
   personalized?: boolean;
   stores?: any[];
+  wishlistProducts?: any[];
 };
 
 function ProductShimmer({ compact = false }: { compact?: boolean }) {
@@ -128,7 +129,7 @@ function LazyProductCard({ product }: { product: any }) {
   );
 }
 
-export function ProductMasonry({ q = "", tag = "", personalized = false, stores = [] }: ProductMasonryProps) {
+export function ProductMasonry({ q = "", tag = "", personalized = false, stores = [], wishlistProducts = [] }: ProductMasonryProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -256,22 +257,47 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     );
   }
 
-  const productFeed: Array<{ type: "product"; product: any } | { type: "stores"; batchIndex: number }> = [];
+  const productFeed: Array<{ type: "product"; product: any } | { type: "stores"; batchIndex: number } | { type: "saved" }> = [];
   products.forEach((product, index) => {
     productFeed.push({ type: "product", product });
     // Show the first store section after product 4, then after each 12 more products.
     if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 2) {
       productFeed.push({ type: "stores", batchIndex: Math.floor((index - 3) / 12) });
     }
+    if (index === 7 && wishlistProducts.length > 0) productFeed.push({ type: "saved" });
   });
 
   return (
     <>
       <div className="product-feed-layout">
-        {productFeed.map((item, index) => item.type === "product" ? (
+        {productFeed.map((item) => item.type === "product" ? (
           <div key={item.product.id} className="product-feed-item"><LazyProductCard product={item.product} /></div>
-        ) : (
+        ) : item.type === "stores" ? (
           <div key={"store-section-" + item.batchIndex} className="product-store-interlude-row"><StoreInlineSection stores={stores} batchIndex={item.batchIndex} /></div>
+        ) : (
+          <section key="saved-for-later" className="product-feed-full-row rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Store size={13} /> Saved for later</p>
+                <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
+              </div>
+              <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
+              {wishlistProducts.slice(0, 7).map((x: any) => {
+                const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
+                const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
+                const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
+                const image = x.mediaUrl || x.thumbnailUrl;
+                return (
+                  <Link key={x.id} href={href} aria-label={x.productTitle || "Saved listing"} className="group block aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
+                    {isVideo && x.mediaUrl ? <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
         ))}
       </div>
 
