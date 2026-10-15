@@ -6,7 +6,7 @@ import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, C
 import { ProductMasonry } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
-import { analyticsVisitorId, recordAnalytics } from "@/lib/analytics-client";
+import { analyticsVisitorId } from "@/lib/analytics-client";
 
 type ShopTab = "discover" | "trending" | "featured";
 
