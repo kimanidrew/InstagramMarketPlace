@@ -3407,6 +3407,7 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .discover-store-avatar{
   background:linear-gradient(145deg,#d6ff63 0%,#e8e8df 48%,#d8d8d0 100%);
   box-shadow:0 8px 22px rgba(20,24,14,.09);
+  max-width:100%;
 }
 .discover-store-card .discover-store-avatar img{display:block}
 .discover-store-card a:focus-visible{
@@ -3416,6 +3417,6 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 }
 @media(max-width:640px){
   .discover-store-card{padding:14px 10px!important;border-radius:20px!important}
-  .discover-store-avatar{width:88px;height:88px;margin-bottom:10px}
+  .discover-store-avatar{width:min(100%,160px);height:auto;aspect-ratio:1;margin-bottom:10px}
   .discover-store-card a>span:last-child{margin-top:12px!important;padding:8px 12px;font-size:10px}
 }
