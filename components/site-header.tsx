@@ -122,9 +122,6 @@ export function SiteHeader({ user }: { user: any }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
-            {searchOpen ? <X size={20} strokeWidth={2.2} /> : <Search size={19} />}
-          </button>
           <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
           </Link>
@@ -138,6 +135,9 @@ export function SiteHeader({ user }: { user: any }) {
             </Link>
           )}
 
+          <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
+            {searchOpen ? <X size={20} strokeWidth={2.2} /> : <Search size={19} />}
+          </button>
         </div>
       </div>
 
