@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store, Zap, ChartNoAxesCombined, XCircle } from "lucide-react";
 import { AccountLiveRefresh } from "@/components/account-live-refresh";
+import { AccountTerminateStoreForm } from "@/components/account-terminate-store-form";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +62,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
       {connections.length ? <div className="account-connected-grid">{connections.map(c => <article className="account-connected-card" key={c.id}>
         <div className="account-store-avatar"><Instagram size={23}/><span><i/></span></div>
         <div className="account-store-info"><h3>@{c.username}</h3><p>{c.posts.length} marketplace {c.posts.length === 1 ? "product" : "products"}</p><span className="account-connected-status"><CheckCircle2 size={13}/> Instagram connected</span></div>
-        <div className="account-store-actions"><Link href={"/store/"+encodeURIComponent(c.username)} className="account-manage-button">View store <ArrowRight size={14}/></Link><Link href="/account/analytics" className="account-grow-link"><Zap size={14}/> Grow your own shop</Link><form action="/api/account/terminate-store" method="post" onSubmit={(event)=>{if(!window.confirm("Terminate @"+c.username+"? This disconnects the Instagram shop and permanently removes its marketplace listings, reviews, and related shop data. You can reconnect it later by starting setup again."))event.preventDefault();}}><input type="hidden" name="connectionId" value={c.id}/><button type="submit" className="account-terminate-store"><XCircle size={14}/> Terminate shop</button></form></div>
+        <div className="account-store-actions"><Link href={"/store/"+encodeURIComponent(c.username)} className="account-manage-button">View store <ArrowRight size={14}/></Link><Link href="/account/analytics" className="account-grow-link"><Zap size={14}/> Grow your own shop</Link><AccountTerminateStoreForm connectionId={c.id} username={c.username} /></div>
       </article>)}</div> : <div className="account-empty-state"><div className="account-empty-icon"><Instagram size={25}/></div><h3>Your connected shops will appear here</h3><p>Start by connecting an Instagram Business account. We’ll guide you through each step and save your progress.</p><Link href="/account/setup" className="account-primary-button">Connect your first shop <ArrowRight size={15}/></Link></div>}
     </section>
 
