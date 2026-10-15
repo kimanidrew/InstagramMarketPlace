@@ -3234,3 +3234,33 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   min-height:16px;
   line-height:16px;
 }
+
+
+/* For You category filters: flat surface and edge-to-edge category rail. */
+.for-you-filter-bar{
+  padding:14px 0!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+.for-you-filter-heading{
+  padding-inline:clamp(16px,calc((100vw - 1180px)/2),max(16px,calc((100vw - 1180px)/2)));
+}
+.for-you-filter-scroller,
+.for-you-filter-tags{
+  width:100%;
+  max-width:100%;
+}
+.for-you-filter-tags{
+  padding:2px 0 4px!important;
+  gap:9px;
+}
+.for-you-filter-chip.is-active,
+.for-you-filter-scroll-button{
+  box-shadow:none!important;
+}
+@media(max-width:640px){
+  .for-you-filter-bar{padding:12px 0!important}
+  .for-you-filter-heading{padding-inline:11px}
+  .for-you-filter-tags{gap:8px}
+}
