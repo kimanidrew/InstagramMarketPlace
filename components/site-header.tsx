@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
@@ -131,9 +130,9 @@ export function SiteHeader({ user }: { user: any }) {
   return (
     <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "")}>
       <div className="shell flex h-[74px] items-center gap-4">
-        <Link href="/" className="brand shrink-0">
+        <a href="/" className="brand shrink-0">
           <BrandWordmark />
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-1 lg:flex">
           {[
@@ -143,23 +142,23 @@ export function SiteHeader({ user }: { user: any }) {
             ["/categories", "Categories"],
             ["/how-it-works", "How it works"],
           ].map(([href, label]) => (
-            <Link key={href} href={href} className="nav-link">{label}</Link>
+            <a key={href} href={href} className="nav-link">{label}</a>
           ))}
-          {user && <Link href="/account/analytics" className="nav-link">Grow your own shop</Link>}
+          {user && <a href="/account/analytics" className="nav-link">Grow your own shop</a>}
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
+          <a href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
-          </Link>
+          </a>
           {user && <NotificationBell userId={user.id} />}
-          <Link href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
+          <a href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
             <UserRound size={19} />
-          </Link>
+          </a>
           {user?.role === "ADMIN" && (
-            <Link href="/admin" className="icon-btn hidden md:flex" aria-label="Admin">
+            <a href="/admin" className="icon-btn hidden md:flex" aria-label="Admin">
               <Store size={19} />
-            </Link>
+            </a>
           )}
 
           <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
@@ -232,28 +231,28 @@ export function SiteHeader({ user }: { user: any }) {
                   const profileImage = item.connection?.profileImageUrl;
                   const title = item.productTitle || item.caption?.split("\\n")[0] || "View product";
                   return (
-                    <Link key={item.id} href={`/archive/${encodeURIComponent(item.id)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
+                    <a key={item.id} href={`/archive/${encodeURIComponent(item.id)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
                       <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
                       <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}</small></span>
                       <ArrowRight size={16} className="header-suggestion-arrow" />
-                    </Link>
+                    </a>
                   );
                 }) : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
               ) : activeSuggestionTab === "Categories" ? (
                 categorySuggestions.length ? categorySuggestions.map((category: any) => (
-                  <Link key={category.name} href={`/search?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
+                  <a key={category.name} href={`/search?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
                     <span className="header-suggestion-image header-suggestion-category-icon"><Sparkles size={19} /></span>
                     <span className="header-suggestion-copy"><strong>#{category.name}</strong><small>Browse products in this category</small></span>
                     <ArrowRight size={16} className="header-suggestion-arrow" />
-                  </Link>
+                  </a>
                 )) : <p className="header-suggestions-empty">No matching categories in these results yet.</p>
               ) : (
                 storeSuggestions.length ? storeSuggestions.map((store: any) => (
-                  <Link key={store.id || store.username} href={`/store/${encodeURIComponent(store.username)}`} className="header-suggestion-item header-suggestion-store" onClick={() => setSearchOpen(false)}>
+                  <a key={store.id || store.username} href={`/store/${encodeURIComponent(store.username)}`} className="header-suggestion-item header-suggestion-store" onClick={() => setSearchOpen(false)}>
                     <span className="header-suggestion-image header-suggestion-store-image">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" loading="lazy" /> : <Store size={19} />}</span>
                     <span className="header-suggestion-copy"><strong>@{store.username}</strong><small>View Instagram shop</small></span>
                     <ArrowRight size={16} className="header-suggestion-arrow" />
-                  </Link>
+                  </a>
                 )) : <p className="header-suggestions-empty">No matching stores in these results yet.</p>
               )}
             </div>
@@ -269,10 +268,10 @@ export function SiteHeader({ user }: { user: any }) {
                     </span>
                   ))
                 ) : trendingTags.map((tag) => (
-                  <Link key={tag.name} href={`/search?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
+                  <a key={tag.name} href={`/search?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
                     <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
                     <small>{tag.productCount}</small>
-                  </Link>
+                  </a>
                 ))}
               </div>
             </div>
