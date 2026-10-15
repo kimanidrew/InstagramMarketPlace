@@ -3441,3 +3441,19 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   .discover-store-product-overlay{font-size:9px;padding:22px 6px 7px}
   .discover-store-products{margin-top:14px;padding-top:12px}
 }
+
+
+/* For You feed: preserve four desktop columns and two mobile columns around full-width interludes. */
+.product-feed-layout{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  align-items:start;
+  gap:clamp(14px,1.6vw,24px);
+  min-width:0;
+}
+.product-feed-item{min-width:0;width:100%;}
+.product-store-interlude-row,
+.product-feed-full-row{grid-column:1 / -1;min-width:0;width:100%;}
+@media(max-width:640px){
+  .product-feed-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 9px;}
+}
