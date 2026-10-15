@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, BadgeCheck, Bookmark, Compass, Heart, Sparkles, Store, TrendingUp } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
-import { ProductMasonry } from "@/components/product-masonry";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { recordAnalytics } from "@/lib/analytics-client";
 
