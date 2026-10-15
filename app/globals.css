@@ -2727,3 +2727,59 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   .shop-promo-slide{padding-bottom:48px}
   .shop-promo-controls{bottom:10px}
 }
+
+
+/* Keep every promo slide's copy, spacing and controls inside the fixed banner. */
+.shop-promo-slide,
+.shop-promo-slide>div:first-child{
+  box-sizing:border-box;
+  min-width:0;
+  min-height:0;
+}
+.shop-promo-slide>div:first-child{overflow:hidden}
+.shop-promo-slide h2{
+  display:-webkit-box;
+  min-width:0;
+  overflow:hidden;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+  overflow-wrap:anywhere;
+}
+.shop-promo-slide p{
+  display:-webkit-box;
+  min-width:0;
+  overflow:hidden;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+  overflow-wrap:anywhere;
+}
+.shop-promo-slide .shop-promo-label{
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.shop-promo-slide>div:first-child>span.mt-6,
+.shop-promo-slide>div:first-child>a.mt-6{
+  max-width:100%;
+  min-width:0;
+  flex-shrink:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.shop-promo-slide>div:first-child>span.mt-6 svg,
+.shop-promo-slide>div:first-child>a.mt-6 svg{flex-shrink:0}
+.shop-promo-controls{max-width:calc(100% - 24px);box-sizing:border-box}
+@media(max-width:767px){
+  .shop-promo-slide{grid-template-rows:minmax(0,1fr) 145px;padding-bottom:48px}
+  .shop-promo-slide>div:first-child{padding:16px 20px 8px;justify-content:flex-start}
+  .shop-promo-slide h2{font-size:clamp(22px,6.2vw,30px);line-height:1.02;margin-top:10px}
+  .shop-promo-slide p{font-size:12px;line-height:1.35;margin-top:7px;-webkit-line-clamp:2;line-clamp:2}
+  .shop-promo-slide>div:first-child>span.mt-6,
+  .shop-promo-slide>div:first-child>a.mt-6{margin-top:9px;padding:9px 14px;font-size:11px}
+  .shop-promo-slide .shop-promo-label{font-size:8px;padding:6px 8px}
+}
