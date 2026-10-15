@@ -2606,3 +2606,14 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 .shop-page .shop-tab-indicator{
   background:#52525b!important;
 }
+
+
+/* Keep the Saved for later link independent from broad /wishlist typography rules. */
+.shop-page .saved-for-later-link{
+  font-family:"Plus Jakarta Sans",Arial,Helvetica,sans-serif!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  line-height:20px!important;
+  letter-spacing:normal!important;
+}
+.shop-page .saved-for-later-link svg{width:14px;height:14px;flex:none}
