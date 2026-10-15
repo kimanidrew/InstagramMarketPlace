@@ -94,7 +94,7 @@ export function SellerAnalytics({ connections, initialShopId, initialPostId, pro
       if (!response.ok) { const error = result.error || "Unable to start payment."; setMessage(error); setFeedback({ type: "error", title: "Promotion could not start", message: error }); return; }
       if (result.demoMode) {
         setPaymentMessage(result.message || "Demo promotion activated. No payment was taken.");
-        setFeedback({ type: "success", title: "Promotion successful", message: (result.message || "Your promotion is active.") + " Duration: " + (durationDays + " days.") });
+        setFeedback({ type: "success", title: "Promotion successful", message: (result.message || "Your promotion is active.") + " Duration: " + durationDays + " days." });
         void refresh();
       } else {
         setPendingCampaign(result.campaignId);
