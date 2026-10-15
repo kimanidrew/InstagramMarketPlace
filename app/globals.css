@@ -1513,15 +1513,17 @@ hr{border-color:#ece5fa}
 .promotion-product-option{display:flex;align-items:center;gap:10px;min-width:0;padding:10px;border:1px solid #ece5f4;border-radius:15px;background:#fff;color:#332343;text-align:left;cursor:pointer;transition:border-color .18s,background .18s,box-shadow .18s}
 .promotion-product-option:hover{border-color:#c9b4eb;background:#fdfaff}
 .promotion-product-option.active{border-color:#9770d2;background:linear-gradient(120deg,#f5efff,#fff);box-shadow:0 0 0 2px #eee4ff}
-.promotion-product-image{display:grid;place-items:center;width:68px;height:68px;flex:none;overflow:hidden;border-radius:11px;background:#f0e9f8;color:#8b72ae}
-.promotion-product-image img{width:100%;height:100%;object-fit:cover}
+.promotion-product-image{position:relative;display:grid;place-items:center;width:92px;height:92px;flex:none;overflow:hidden;border-radius:14px;background:#dedbd0;color:#8b72ae;box-shadow:0 5px 16px #17171712}
+.promotion-product-image img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.promotion-product-option:hover .promotion-product-image img{transform:scale(1.05)}
+.promotion-product-image-tag{position:absolute;right:4px;bottom:4px;max-width:calc(100% - 8px);overflow:hidden;border-radius:999px;background:#d6ff63;padding:4px 5px;color:#171717;font-size:5px;font-weight:1000;letter-spacing:.07em;line-height:1.2;white-space:nowrap;text-overflow:ellipsis;box-shadow:0 3px 9px #0002}
 .promotion-product-copy{display:grid;gap:5px;min-width:0;flex:1}
 .promotion-product-copy b{display:-webkit-box;overflow:hidden;color:#30223f;font-size:11px;font-weight:900;line-height:1.4;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .promotion-product-copy small{color:#8e829c;font-size:9px;line-height:1.5}
 .promotion-product-copy em{color:#8054cb;font-size:8px;font-style:normal;font-weight:850}
 .promotion-product-check{display:grid;place-items:center;width:23px;height:23px;flex:none;border-radius:50%;color:#7c51be}
 .promotion-optional-label{margin-left:5px;color:#9a8da8;font-size:9px;font-weight:600}
-@media(max-width:650px){.promotion-product-picker{grid-template-columns:1fr}.promotion-product-image{width:62px;height:62px}}
+@media(max-width:650px){.promotion-product-picker{grid-template-columns:1fr}.promotion-product-image{width:78px;height:78px}.promotion-product-image-tag{font-size:5px}}
 
 
 /* Unified seller analytics + growth dashboard */
