@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { connect, replaceConnectionToken, sync } from "@/lib/instagram";
 import Link from "next/link";
 import { RefreshCw, ShieldCheck } from "lucide-react";
+import AdminWorkspaceNav from "@/components/admin-workspace-nav";
 
 export const dynamic = "force-dynamic";
 
@@ -97,7 +98,9 @@ export default async function IG({
   });
 
   return (
-    <main className="shell py-12">
+    <div className="admin-workspace">
+    <AdminWorkspaceNav />
+    <main className="shell admin-ig-page py-12">
       <Link href="/admin">← Admin</Link>
 
       <div className="mt-7 max-w-3xl">
@@ -259,5 +262,6 @@ export default async function IG({
         hashtags. Hashtags become marketplace categories.
       </div>
     </main>
+    </div>
   );
 }
