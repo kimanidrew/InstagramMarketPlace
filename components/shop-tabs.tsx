@@ -153,6 +153,19 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
 
   if (!slides.length) return null;
   const activeSlide = slides[index] || slides[0];
+  const markImpression = (slide: PromoSlide) => {
+    if (slide.type === "ad" || seenPromoKeys.includes(slide.key)) return;
+    const nextSeen = [...new Set([...seenPromoKeys, slide.key])];
+    const cycleComplete = allSlides.length > 0 && allSlides.every((item) => nextSeen.includes(item.key));
+    if (cycleComplete) {
+      window.localStorage.setItem(progressKey, "[]");
+      window.localStorage.setItem(cycleStartKey, String(Date.now()));
+      setSeenPromoKeys([]);
+    } else {
+      window.localStorage.setItem(progressKey, JSON.stringify(nextSeen));
+      setSeenPromoKeys(nextSeen);
+    }
+  };
   const previous = () => setIndex((current) => (current - 1 + slides.length) % slides.length);
   const next = () => setIndex((current) => (current + 1) % slides.length);
 
@@ -160,6 +173,8 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" style={{ height: bannerHeight, minHeight: bannerHeight }} aria-label="Promoted shops, products and marketplace ads">
       <div className="shop-promo-active" style={{ height: bannerHeight }}>
         <PromoSlideContent slide={activeSlide} />
+        {activeSlide.type === "store" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.store.id} onImpression={() => markImpression(activeSlide)} />}
+        {activeSlide.type === "product" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.product.connectionId} postId={activeSlide.product.id} onImpression={() => markImpression(activeSlide)} />}
       </div>
       <div ref={measureRef} className="shop-promo-measurement" aria-hidden="true">
         {slides.map((slide) => <PromoSlideContent key={"measure-" + slide.key} slide={slide} measure />)}
