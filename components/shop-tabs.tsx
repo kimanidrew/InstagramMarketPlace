@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp, X } from "lucide-react";
 import { ProductMasonry, StoreCard, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
@@ -214,6 +214,7 @@ export function ShopTabs({
   const [recentItems, setRecentItems] = useState(recentlyViewedProducts);
   const [recentStores, setRecentStores] = useState<any[]>([]);
   const [clearingHistory, setClearingHistory] = useState(false);
+  const [removingHistoryKeys, setRemovingHistoryKeys] = useState<string[]>([]);
   useEffect(() => {
     let cancelled = false;
     const visitorId = analyticsVisitorId();
@@ -236,6 +237,26 @@ export function ShopTabs({
       setClearingHistory(false);
     }
   };
+  const removeHistoryItem = async (kind: "product" | "store", item: any) => {
+    const key = kind + "-" + item.id;
+    setRemovingHistoryKeys((current) => [...current, key]);
+    try {
+      const url = kind === "product"
+        ? "/api/shopper/history"
+        : "/api/shopper/stores-history?visitorId=" + encodeURIComponent(analyticsVisitorId()) + "&connectionId=" + encodeURIComponent(item.id);
+      const response = await fetch(url, kind === "product"
+        ? { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId: item.id }) }
+        : { method: "DELETE" });
+      if (!response.ok) throw new Error("Unable to remove this item from history.");
+      if (kind === "product") setRecentItems((current) => current.filter((entry) => entry.id !== item.id));
+      else setRecentStores((current) => current.filter((entry) => entry.id !== item.id));
+    } catch {
+      // Keep the item visible if the server could not update the history.
+    } finally {
+      setRemovingHistoryKeys((current) => current.filter((entry) => entry !== key));
+    }
+  };
+
   const currentNow = new Date(now);
 
   const tabs = [
@@ -300,14 +321,16 @@ export function ShopTabs({
                           const href = "/" + (isService ? "service" : "product") + "/" + item.productSlug;
                           const image = item.thumbnailUrl || item.mediaUrl;
                           return (
-                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group block h-[164px] w-[112px] shrink-0 sm:h-[176px] sm:w-[136px]">
+                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group relative block h-[164px] w-[112px] shrink-0 sm:h-[176px] sm:w-[136px]">
+                              <button type="button" aria-label="Remove from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("product-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("product", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
                               <div className="h-full w-full overflow-hidden rounded-[22px] bg-[#eeeeeb]">
                                 {isVideo && item.mediaUrl ? <video src={item.mediaUrl} poster={item.thumbnailUrl || undefined} muted loop playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={item.productTitle || "Recently viewed listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
                               </div>
                             </Link>
                           );
                         })() : (
-                          <Link key={"store-" + item.id} href={"/store/" + item.username} className="group flex h-[164px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[176px] sm:w-[136px]">
+                          <Link key={"store-" + item.id} href={"/store/" + item.username} className="group relative flex h-[164px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[176px] sm:w-[136px]">
+                            <button type="button" aria-label="Remove store from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("store-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("store", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
                             <span className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-[#ecece8] sm:h-[76px] sm:w-[76px]">
                               {item.profileImageUrl ? <img src={item.profileImageUrl} alt={"@" + item.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
                             </span>
