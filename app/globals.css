@@ -24,7 +24,7 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .horizontal-scroll,.overflow-x-auto,.overflow-x-scroll{scrollbar-width:none;-ms-overflow-style:none}
 .horizontal-scroll::-webkit-scrollbar,.overflow-x-auto::-webkit-scrollbar,.overflow-x-scroll::-webkit-scrollbar{display:none}
 
-.site-header{background:rgba(0,0,0,.97);border-bottom:1px solid rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);transition:box-shadow .3s ease}
+.site-header{background:rgba(0,0,0,.97);border-bottom:1px solid rgba(255,255,255,.1);color:#fff;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);transition:transform .32s cubic-bezier(.22,1,.36,1),box-shadow .3s ease;will-change:transform}.site-header.is-hidden{transform:translateY(-100%);pointer-events:none}
 .site-header:hover{box-shadow:0 12px 40px rgba(0,0,0,.32)}
 .brand{font-size:21px;font-weight:950;letter-spacing:-.075em;line-height:1;color:#fff}
 .brand span{color:#b8b8b8}.brand sup{margin-left:2px;font-size:7px;vertical-align:top;font-weight:900;color:#fff}
