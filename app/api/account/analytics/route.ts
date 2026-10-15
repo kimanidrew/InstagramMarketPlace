@@ -28,9 +28,10 @@ export async function GET(request: Request) {
   const since = new Date();
   since.setDate(since.getDate() - 29);
   since.setHours(0, 0, 0, 0);
-  const [events, campaigns] = await Promise.all([
+  const [events, campaigns, audienceSize] = await Promise.all([
     prisma.analyticsEvent.findMany({ where: { connectionId: { in: selectedIds }, createdAt: { gte: since } }, select: { connectionId: true, postId: true, campaignId: true, visitorId: true, type: true, createdAt: true } }),
-    prisma.promotionCampaign.findMany({ where: { userId: current.id, ...(requestedShopId && ids.includes(requestedShopId) ? { connectionId: requestedShopId } : {}) }, include: { connection: { select: { username: true, profileImageUrl: true } }, post: { select: { productTitle: true, thumbnailUrl: true, mediaUrl: true } }, payment: { select: { status: true, receiptNumber: true, amount: true, phoneNumber: true, provider: true } } }, orderBy: { createdAt: "desc" }, take: 12 }),
+    prisma.promotionCampaign.findMany({ where: { userId: current.id, ...(requestedShopId && ids.includes(requestedShopId) ? { connectionId: requestedShopId } : {}) }, include: { connection: { select: { username: true, profileImageUrl: true } }, post: { select: { productTitle: true, thumbnailUrl: true, mediaUrl: true } }, payment: { select: { status: true, receiptNumber: true, amount: true, phoneNumber: true, provider: true } }, offering: { select: { name: true, durationDays: true, features: true } } }, orderBy: { createdAt: "desc" }, take: 12 }),
+    prisma.user.count({ where: { role: "USER" } }),
   ]);
   const [likes, recentLikes] = await Promise.all([
     postIds.length ? prisma.productLike.count({ where: { postId: { in: postIds } } }) : Promise.resolve(0),
@@ -55,8 +56,9 @@ export async function GET(request: Request) {
   const paidUnique = unique(paidEvents.filter(e => e.type === "IMPRESSION"));
   return NextResponse.json({
     shops,
+    audienceSize,
     summary: { impressions, views, clicks, likes, reach: unique(events.filter(e => e.type === "IMPRESSION")), paidImpressions: paidEvents.filter(e => e.type === "IMPRESSION").length, paidReach: paidUnique },
     daily,
-    campaigns: campaigns.map(c => ({ id: c.id, targetType: c.targetType, targetReach: c.targetReach, deliveredReach: c.deliveredReach, amount: c.amount, status: c.status, createdAt: c.createdAt.toISOString(), startsAt: c.startsAt?.toISOString() || null, endsAt: c.endsAt?.toISOString() || null, username: c.connection.username, profileImageUrl: c.connection.profileImageUrl, productTitle: c.post?.productTitle || null, image: c.post?.thumbnailUrl || c.post?.mediaUrl || null, paymentStatus: c.payment?.status || null, receiptNumber: c.payment?.receiptNumber || null, phoneNumber: c.payment?.phoneNumber || null, provider: c.payment?.provider || null })),
+    campaigns: campaigns.map(c => ({ id: c.id, targetType: c.targetType, targetReach: c.targetReach, deliveredReach: c.deliveredReach, amount: c.amount, status: c.status, createdAt: c.createdAt.toISOString(), startsAt: c.startsAt?.toISOString() || null, endsAt: c.endsAt?.toISOString() || null, durationDays: c.durationDays, offeringName: c.offering?.name || null, features: c.offering?.features || [], username: c.connection.username, profileImageUrl: c.connection.profileImageUrl, productTitle: c.post?.productTitle || null, image: c.post?.thumbnailUrl || c.post?.mediaUrl || null, paymentStatus: c.payment?.status || null, receiptNumber: c.payment?.receiptNumber || null, phoneNumber: c.payment?.phoneNumber || null, provider: c.payment?.provider || null })),
   });
 }
