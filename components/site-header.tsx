@@ -102,7 +102,7 @@ export function SiteHeader({ user }: { user: any }) {
   }, []);
 
   return (
-    <header className="site-header sticky top-0 z-50">
+    <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : "")}>
       <div className="shell flex h-[74px] items-center gap-4">
         <Link href="/" className="brand shrink-0">
           <BrandWordmark />
