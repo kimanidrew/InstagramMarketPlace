@@ -2237,7 +2237,7 @@ select:focus-visible,
 
 
 /* Full-height search results view: fixed search controls, scrollable suggestions */
-.header-search-panel.is-open.has-suggestions{height:calc(100dvh - 74px);max-height:none!important;overflow:hidden;display:flex;flex-direction:column;padding:14px 0 12px;box-sizing:border-box}
+.header-search-panel.is-open.has-suggestions{height:calc(100vh - 74px);height:calc(100dvh - 74px);min-height:calc(100dvh - 74px);max-height:none!important;flex-shrink:0;overflow:hidden;display:flex;flex-direction:column;padding:14px 0 12px;box-sizing:border-box}
 .header-search-panel.is-open.has-suggestions .header-search-content{display:flex;flex:1;flex-direction:column;min-height:0;height:100%;overflow:hidden}
 .header-search-panel.is-open.has-suggestions .header-search-intro{flex:none}
 .header-search-panel.is-open.has-suggestions .header-search-form{flex:none}
