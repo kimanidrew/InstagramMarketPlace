@@ -4126,3 +4126,22 @@ html, body {
     width: 52px;
   }
 }
+
+
+/* Prevent the sticky full-bleed For You rail from covering unrelated navigation. */
+.for-you-filter-sticky {
+  z-index: 20 !important;
+  pointer-events: none;
+}
+.for-you-filter-bar,
+.for-you-filter-heading,
+.for-you-filter-scroller,
+.for-you-filter-scroll-button,
+.for-you-filter-tags,
+.for-you-filter-chip {
+  pointer-events: auto;
+}
+.for-you-filter-scroller::before,
+.for-you-filter-scroller::after {
+  pointer-events: none !important;
+}
