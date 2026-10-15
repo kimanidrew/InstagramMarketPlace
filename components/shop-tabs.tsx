@@ -26,7 +26,7 @@ function PromoSlideContent({ slide, measure = false }: { slide: PromoSlide; meas
     </>
   ) : slide.type === "product" ? (
     <>
-      <span className="shop-promo-label"><Sparkles size={11} /> Boosted listing</span>
+      <span className="shop-promo-label"><Sparkles size={11} /> Promoted listing</span>
       <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{slide.product.productTitle || "A find worth sharing."}</h2>
       <p className="mt-3 max-w-md text-sm leading-6 text-black/60">Handpicked for a closer look. Discover the details, then shop directly from the seller.</p>
       <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white">Discover listing <ArrowRight size={14} /></span>
