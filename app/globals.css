@@ -3084,3 +3084,21 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
  .how-help-bottom .how-primary-action,.how-help-bottom .how-secondary-action{flex:1}
 }
 @media(prefers-reduced-motion:reduce){.how-primary-action,.how-secondary-action,.how-guide-sidebar nav button{transition:none}}
+
+
+/* Show complete Shop promo titles: allow natural wrapping instead of truncating. */
+.shop-promo-slide h2{
+  display:block!important;
+  width:100%;
+  max-width:100%;
+  overflow:visible!important;
+  white-space:normal!important;
+  text-overflow:clip!important;
+  overflow-wrap:break-word;
+  word-break:normal;
+  -webkit-line-clamp:unset!important;
+  line-clamp:unset!important;
+  -webkit-box-orient:initial!important;
+}
+.shop-promo-slide h2 span{white-space:normal!important}
+.shop-promo-slide>div:first-child{overflow:visible!important}
