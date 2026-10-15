@@ -15,7 +15,7 @@ type PromoSlide =
   | { type: "product"; key: string; product: any }
   | { type: "ad"; key: string };
 
-function PromoSlideContent({ slide, measure = false }: { slide: PromoSlide; measure?: boolean }) {
+function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSlide; measure?: boolean; onVisit?: (key: string) => void }) {
   const className = "shop-promo-slide " + (measure ? "shop-promo-measure-slide " : "") + (slide.type === "store" ? "shop-promo-store" : slide.type === "product" ? "shop-promo-product" : "shop-promo-ad") + " group grid overflow-hidden " + (slide.type === "store" ? "md:grid-cols-[1.05fr_.95fr]" : slide.type === "product" ? "md:grid-cols-[.9fr_1.1fr]" : "md:grid-cols-[1fr_.85fr]");
   const copy = slide.type === "store" ? (
     <>
@@ -51,28 +51,72 @@ function PromoSlideContent({ slide, measure = false }: { slide: PromoSlide; meas
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
   const slideContent = <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
-  if (slide.type === "store") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/store/" + slide.store.username} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-store " + className.split(" ").slice(3).join(" ")}>{slideContent}</Link>;
-  if (slide.type === "product") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")}>{slideContent}</Link>;
+  if (slide.type === "store") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/store/" + slide.store.username} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-store " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
+  if (slide.type === "product") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }
 
 function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[] }) {
-  const promotedStores = stores.filter(({ store }) => store.paidPromotionActive).slice(0, 4);
-  const promotedProducts = products.filter((product) => product.boostUntil && new Date(product.boostUntil).getTime() > Date.now()).slice(0, 4);
-  const slides: PromoSlide[] = [
+  const promotedStores = stores.filter(({ store }) => store.paidPromotionActive);
+  const promotedProducts = products.filter((product) => product.boostUntil && new Date(product.boostUntil).getTime() > Date.now());
+  const allSlides: PromoSlide[] = [
     ...promotedStores.map(({ store, posts }) => ({ type: "store" as const, key: "store-" + store.id, store, posts })),
     ...promotedProducts.map((product) => ({ type: "product" as const, key: "product-" + product.id, product })),
-    { type: "ad", key: "sokolink-promo" },
   ];
+  // Keep the original marketplace spotlight as a fallback only when there are no active paid promotions.
+  const promotionSlides: PromoSlide[] = allSlides.length ? allSlides : [{ type: "ad", key: "sokolink-promo" }];
+  const [seenPromoKeys, setSeenPromoKeys] = useState<string[]>([]);
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
   const measureRef = React.useRef<HTMLDivElement>(null);
+  const progressKey = "imarket_promo_cycle_" + analyticsVisitorId();
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(progressKey) || "[]");
+      const validSeen = Array.isArray(stored)
+        ? stored.filter((key: unknown): key is string => typeof key === "string" && promotionSlides.some((slide) => slide.key === key))
+        : [];
+      if (allSlides.length > 0 && allSlides.every((slide) => validSeen.includes(slide.key))) {
+        window.localStorage.setItem(progressKey, "[]");
+        setSeenPromoKeys([]);
+      } else {
+        setSeenPromoKeys(validSeen);
+      }
+    } catch {
+      setSeenPromoKeys([]);
+    }
+  // Reload cycle progress when the promotion inventory changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [progressKey, promotionSlides.length, allSlides.map((slide) => slide.key).join("|")]);
+
+  const remainingSlides = promotionSlides.filter((slide) => !seenPromoKeys.includes(slide.key));
+  const slides = (remainingSlides.length ? remainingSlides : promotionSlides).slice(0, 3);
+
+  useEffect(() => {
+    setIndex((current) => slides.length ? current % slides.length : 0);
+  }, [slides.length, slides.map((slide) => slide.key).join("|")]);
+
   useEffect(() => {
     if (slides.length < 2) return;
     const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 6500);
     return () => window.clearInterval(timer);
-  }, [slides.length]);
-  useEffect(() => { setIndex((current) => Math.min(current, slides.length - 1)); }, [slides.length]);
+  }, [slides.length, slides.map((slide) => slide.key).join("|")]);
+
+  const markVisited = (key: string) => {
+    if (!allSlides.some((slide) => slide.key === key)) return;
+    const nextSeen = [...new Set([...seenPromoKeys, key])];
+    const cycleComplete = allSlides.every((slide) => nextSeen.includes(slide.key));
+    const persisted = cycleComplete ? [] : nextSeen;
+    try {
+      window.localStorage.setItem(progressKey, JSON.stringify(persisted));
+    } catch {
+      // The carousel still advances for this page view if browser storage is unavailable.
+    }
+    setSeenPromoKeys(persisted);
+    setIndex(0);
+  };
+
   useEffect(() => {
     const measure = () => {
       const nodes = measureRef.current?.querySelectorAll<HTMLElement>(".shop-promo-measure-slide");
@@ -91,7 +135,8 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       window.removeEventListener("resize", measure);
       images.forEach((img) => img.removeEventListener("load", measure));
     };
-  }, [slides.length, stores, products]);
+  }, [slides.map((slide) => slide.key).join("|"), stores, products]);
+
   if (!slides.length) return null;
   const activeSlide = slides[index] || slides[0];
   const previous = () => setIndex((current) => (current - 1 + slides.length) % slides.length);
@@ -100,7 +145,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   return (
     <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" style={{ height: bannerHeight, minHeight: bannerHeight }} aria-label="Promoted shops, products and marketplace ads">
       <div className="shop-promo-active" style={{ height: bannerHeight }}>
-        <PromoSlideContent slide={activeSlide} />
+        <PromoSlideContent slide={activeSlide} onVisit={markVisited} />
       </div>
       <div ref={measureRef} className="shop-promo-measurement" aria-hidden="true">
         {slides.map((slide) => <PromoSlideContent key={"measure-" + slide.key} slide={slide} measure />)}
