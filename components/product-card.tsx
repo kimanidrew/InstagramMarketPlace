@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 export function ProductCard({ p }: { p: any }) {
   const [likeCount, setLikeCount] = useState(p.likes?.length || 0);
   const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
+  const [wishlistSaved, setWishlistSaved] = useState(Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length));
   const [likeFlash, setLikeFlash] = useState(false);
   const [wishlistFlash, setWishlistFlash] = useState(false);
   const likeCountRef = useRef(likeCount);
@@ -31,8 +32,9 @@ export function ProductCard({ p }: { p: any }) {
       }
     };
     const onWishlist = (event: Event) => {
-      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
+      const detail = (event as CustomEvent<{ id: string; count: number; wishlisted?: boolean }>).detail;
       if (detail?.id === p.id) {
+        if (typeof detail.wishlisted === "boolean") setWishlistSaved(detail.wishlisted);
         const changed = detail.count !== wishlistCountRef.current;
         wishlistCountRef.current = detail.count;
         setWishlistCount(detail.count);
@@ -105,7 +107,7 @@ export function ProductCard({ p }: { p: any }) {
           <LikeButton id={p.id} count={likeCount} compact initialLiked={Boolean(p.likedByCurrentUser)} />
         </div>
         <div className="absolute bottom-2 right-2 z-10 sm:bottom-3 sm:right-3">
-          <WishlistButton id={p.id} count={wishlistCount} compact wishlisted={Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length)} />
+          <WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact wishlisted={wishlistSaved} />
         </div>
       </div>
 
