@@ -3,7 +3,6 @@ import { Buffer } from "node:buffer";
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 
-const REACH_PRICES: Record<number, number> = { 500: 100, 1000: 180, 2500: 400, 5000: 750, 10000: 1300 };
 // Demo mode is enabled by default until live Daraja checkout is configured.
 // Force demo mode until the product owner explicitly requests live payments. No STK push is sent.
 const isDemoMode = () => true;
@@ -41,11 +40,16 @@ export async function POST(request: Request) {
     const connectionId = String(body.connectionId || "");
     const targetType = String(body.targetType || "").toUpperCase();
     const postId = body.postId ? String(body.postId) : null;
-    const targetReach = Number(body.targetReach);
-    const durationDays = Number(body.durationDays || 7);
+    const offeringId = String(body.offeringId || "");
     const phoneNumber = normalizePhone(String(body.phoneNumber || ""));
-    const amount = REACH_PRICES[targetReach];
-    if (!connectionId || !["STORE", "PRODUCT"].includes(targetType) || !amount || ![7, 30].includes(durationDays) || (!demoMode && !phoneNumber)) return NextResponse.json({ error: "Choose a shop or product, a supported reach package, and a valid Kenyan M-Pesa number." }, { status: 400 });
+    if (!connectionId || !["STORE", "PRODUCT"].includes(targetType) || !offeringId || (!demoMode && !phoneNumber)) return NextResponse.json({ error: "Choose a shop or product, an active promotion package, and a valid Kenyan M-Pesa number." }, { status: 400 });
+    const offering = await db().growthOffering.findFirst({ where: { id: offeringId, category: "PROMOTION", targetType: targetType as "STORE" | "PRODUCT", active: true } });
+    if (!offering) return NextResponse.json({ error: "That promotion package is no longer available. Refresh and choose another." }, { status: 400 });
+    const audienceSize = await db().user.count({ where: { role: "USER" } });
+    const targetReach = offering.reachMode === "ALL_USERS" ? audienceSize : offering.targetReach;
+    const durationDays = offering.durationDays;
+    const amount = offering.price;
+    if (targetReach < 1) return NextResponse.json({ error: "The marketplace audience is not large enough to activate this reach package yet." }, { status: 400 });
     if (targetType === "PRODUCT" && !postId) return NextResponse.json({ error: "Choose a product to promote." }, { status: 400 });
     const prisma = db();
     const connection = await prisma.instagramConnection.findFirst({ where: { id: connectionId, connectedByUserId: current.id }, select: { id: true, username: true } });
@@ -58,11 +62,11 @@ export async function POST(request: Request) {
     }
     const startsAt = new Date();
     const endsAt = new Date(startsAt.getTime() + durationDays * 24 * 60 * 60 * 1000);
-    const campaign = await prisma.promotionCampaign.create({ data: { userId: current.id, connectionId, postId: targetType === "PRODUCT" ? postId : null, targetType: targetType as "STORE" | "PRODUCT", targetReach, amount, status: "PENDING_PAYMENT", startsAt, endsAt } });
+    const campaign = await prisma.promotionCampaign.create({ data: { userId: current.id, connectionId, postId: targetType === "PRODUCT" ? postId : null, targetType: targetType as "STORE" | "PRODUCT", targetReach, amount, offeringId: offering.id, durationDays, status: "PENDING_PAYMENT", startsAt, endsAt } });
     const payment = await prisma.promotionPayment.create({ data: { campaignId: campaign.id, phoneNumber: phoneNumber || "DEMO", amount, status: "INITIATED", provider: demoMode ? "DEMO" : "MPESA", ...(demoMode ? { resultDescription: "Demo activation only. No real payment was requested or charged." } : {}) } });
     if (demoMode) {
       await prisma.promotionCampaign.update({ where: { id: campaign.id }, data: { status: "ACTIVE", startsAt, endsAt } });
-      return NextResponse.json({ ok: true, demoMode: true, campaignId: campaign.id, message: "Promotion activated instantly in demo mode for " + (durationDays === 7 ? "7 days" : "30 days") + ". No M-Pesa prompt was sent and no money was charged." });
+      return NextResponse.json({ ok: true, demoMode: true, campaignId: campaign.id, message: "Promotion activated instantly in demo mode for " + (durationDays + " days") + ". No M-Pesa prompt was sent and no money was charged." });
     }
     try {
       const token = await accessToken(cfg.base, cfg.key, cfg.secret);
