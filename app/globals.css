@@ -2116,3 +2116,15 @@ select:focus-visible,
   }
   .header-trending-tag{flex:0 0 auto}
 }
+
+
+/* Prevent a focus-state border on the expanded navbar search panel itself. */
+.header-search-panel.is-open,
+.header-search-panel.is-open:focus,
+.header-search-panel.is-open:focus-within,
+.header-search-panel.is-open:focus-visible{
+  border:0!important;
+  border-top:0!important;
+  outline:none!important;
+  box-shadow:none!important;
+}
