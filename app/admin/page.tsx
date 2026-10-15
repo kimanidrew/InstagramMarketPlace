@@ -234,7 +234,7 @@ export default async function Admin({
                       <div>
                         <span className="admin-growth-type">{item.type}</span>
                         <h3>@{item.connection.username}{item.post?.productTitle ? " · " + item.post.productTitle : ""}</h3>
-                        <p>{item.user.email} · KSh {item.amount.toLocaleString()} · {item.offering?.name || item.type} · {item.durationDays || item.offering?.durationDays || (item.type === "PRO" ? 30 : item.type === "VERIFIED" ? 365 : 7)} days</p>
+                        <p>{item.user.email} · KSh {item.amount.toLocaleString()} · {item.offeringName || item.offering?.name || item.type} · {item.durationDays || item.offering?.durationDays || (item.type === "PRO" ? 30 : item.type === "VERIFIED" ? 365 : 7)} days</p>
                       </div>
                       <AdminGrowthActions id={item.id} />
                     </article>
