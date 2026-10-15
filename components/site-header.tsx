@@ -150,7 +150,7 @@ export function SiteHeader({ user }: { user: any }) {
               <span>Search across products, stores and categories.</span>
             </div>
           </div>
-          <form action="/shop" className="header-search-form" onSubmit={() => setSearchOpen(false)}>
+          <form action="/search" className="header-search-form" onSubmit={() => setSearchOpen(false)}>
             <Search size={19} className="shrink-0 text-[#888]" />
             <input
               ref={searchInputRef}
@@ -220,7 +220,7 @@ export function SiteHeader({ user }: { user: any }) {
                 }) : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
               ) : activeSuggestionTab === "Categories" ? (
                 categorySuggestions.length ? categorySuggestions.map((category: any) => (
-                  <Link key={category.name} href={`/shop?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
+                  <Link key={category.name} href={`/search?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
                     <span className="header-suggestion-image header-suggestion-category-icon"><Sparkles size={19} /></span>
                     <span className="header-suggestion-copy"><strong>#{category.name}</strong><small>Browse products in this category</small></span>
                     <ArrowRight size={16} className="header-suggestion-arrow" />
@@ -248,7 +248,7 @@ export function SiteHeader({ user }: { user: any }) {
                     </span>
                   ))
                 ) : trendingTags.map((tag) => (
-                  <Link key={tag.name} href={`/shop?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
+                  <Link key={tag.name} href={`/search?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
                     <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
                     <small>{tag.productCount}</small>
                   </Link>
