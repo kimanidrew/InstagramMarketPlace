@@ -12,6 +12,7 @@ export function SiteHeader({ user }: { user: any }) {
   const [trendingTags, setTrendingTags] = useState<Array<{ name: string; productCount: number }>>([]);
   const [trendingTagsLoading, setTrendingTagsLoading] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
+  const [activeSuggestionTab, setActiveSuggestionTab] = useState<"Products" | "Categories" | "Stores">("Products");
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -73,6 +74,19 @@ export function SiteHeader({ user }: { user: any }) {
       controller.abort();
     };
   }, [searchQuery, searchOpen]);
+
+  const categorySuggestions = Array.from(new Map(
+    searchSuggestions.flatMap((item: any) => (item.tags || [])
+      .map((tag: any) => ({ name: String(tag.name || "").replace(/^#/, ""), count: 1 }))
+      .filter((tag: any) => tag.name && tag.name.toLowerCase().includes(searchQuery.trim().toLowerCase())))
+      .map((tag: any) => [tag.name.toLowerCase(), tag]),
+  ).values()).slice(0, 6);
+
+  const storeSuggestions = Array.from(new Map(
+    searchSuggestions
+      .filter((item: any) => item.connection?.username)
+      .map((item: any) => [String(item.connection.username).toLowerCase(), item.connection]),
+  ).values()).slice(0, 6);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -162,24 +176,60 @@ export function SiteHeader({ user }: { user: any }) {
             </button>
           </form>
           {searchOpen && searchQuery.trim().length >= 2 && (
-            <div className="header-search-suggestions" role="listbox" aria-label="Search suggestions">
-              <div className="header-suggestions-label">{suggestionsLoading ? "Finding matches…" : searchSuggestions.length ? "SUGGESTED FOR YOU" : "No matching products yet"}</div>
+            <div className="header-search-suggestions" role="region" aria-label="Search suggestions">
+              <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type">
+                {(["Products", "Categories", "Stores"] as const).map((tab) => {
+                  const count = tab === "Products" ? searchSuggestions.length : tab === "Categories" ? categorySuggestions.length : storeSuggestions.length;
+                  return (
+                    <button
+                      key={tab}
+                      type="button"
+                      role="tab"
+                      aria-selected={activeSuggestionTab === tab}
+                      className={"header-suggestion-tab " + (activeSuggestionTab === tab ? "active" : "")}
+                      onClick={() => setActiveSuggestionTab(tab)}
+                    >
+                      {tab}<span>{count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="header-suggestions-label">
+                {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : "MATCHING STORES"}
+              </div>
               {suggestionsLoading ? (
                 <div className="header-suggestions-loading"><span /><span /><span /></div>
-              ) : searchSuggestions.map((item: any) => {
-                const image = item.thumbnailUrl || item.mediaUrl;
-                const username = item.connection?.username || item.username || "Instagram shop";
-                const profileImage = item.connection?.profileImageUrl;
-                const title = item.productTitle || item.caption?.split("\n")[0] || "View product";
-                return (
-                  <Link key={item.id} href={`/archive/${encodeURIComponent(item.id)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
-                    <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
-                    <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}</small></span>
+              ) : activeSuggestionTab === "Products" ? (
+                searchSuggestions.length ? searchSuggestions.map((item: any) => {
+                  const image = item.thumbnailUrl || item.mediaUrl;
+                  const username = item.connection?.username || item.username || "Instagram shop";
+                  const profileImage = item.connection?.profileImageUrl;
+                  const title = item.productTitle || item.caption?.split("\\n")[0] || "View product";
+                  return (
+                    <Link key={item.id} href={`/archive/${encodeURIComponent(item.id)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
+                      <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
+                      <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}</small></span>
+                      <ArrowRight size={16} className="header-suggestion-arrow" />
+                    </Link>
+                  );
+                }) : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
+              ) : activeSuggestionTab === "Categories" ? (
+                categorySuggestions.length ? categorySuggestions.map((category: any) => (
+                  <Link key={category.name} href={`/shop?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
+                    <span className="header-suggestion-image header-suggestion-category-icon"><Sparkles size={19} /></span>
+                    <span className="header-suggestion-copy"><strong>#{category.name}</strong><small>Browse products in this category</small></span>
                     <ArrowRight size={16} className="header-suggestion-arrow" />
                   </Link>
-                );
-              })}
-              {!suggestionsLoading && searchSuggestions.length === 0 && <p className="header-suggestions-empty">Try a product name, shop username or category.</p>}
+                )) : <p className="header-suggestions-empty">No matching categories in these results yet.</p>
+              ) : (
+                storeSuggestions.length ? storeSuggestions.map((store: any) => (
+                  <Link key={store.id || store.username} href={`/store/${encodeURIComponent(store.username)}`} className="header-suggestion-item header-suggestion-store" onClick={() => setSearchOpen(false)}>
+                    <span className="header-suggestion-image header-suggestion-store-image">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" loading="lazy" /> : <Store size={19} />}</span>
+                    <span className="header-suggestion-copy"><strong>@{store.username}</strong><small>View Instagram shop</small></span>
+                    <ArrowRight size={16} className="header-suggestion-arrow" />
+                  </Link>
+                )) : <p className="header-suggestions-empty">No matching stores in these results yet.</p>
+              )}
             </div>
           )}
           {(trendingTagsLoading || trendingTags.length > 0) && (
