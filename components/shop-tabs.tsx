@@ -105,7 +105,7 @@ export function ShopTabs({
   const emptyFilteredMessage = "No listings are available in #" + selectedTag + " for this section yet.";
 
   return (
-    <div className="shop-tabs-wrap mt-10">
+    <div className="shop-tabs-wrap mt-0">
       <div className="shop-tabs flex w-full max-w-full flex-nowrap overflow-x-auto overscroll-x-contain" role="tablist" aria-label="Shop discovery">
         {tabs.map(({ id, label, icon: Icon, copy }) => {
           const selected = active === id;
