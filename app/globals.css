@@ -2544,3 +2544,55 @@ header nav {
 .shop-page .shop-tab.shop-tab-active .shop-tab-indicator{
   background:#fff!important;
 }
+
+
+/* Soft grey-white shop tab states for a lighter, cleaner discovery UI. */
+.shop-page .shop-tabs{
+  background:#f4f4f5!important;
+  border-color:#e4e4e7!important;
+}
+.shop-page .shop-tab{
+  color:#52525b!important;
+}
+.shop-page .shop-tab-copy b{
+  color:inherit!important;
+}
+.shop-page .shop-tab-copy small{
+  color:#71717a!important;
+}
+.shop-page .shop-tab-icon{
+  background:#fff!important;
+  border-color:#e4e4e7!important;
+  color:#52525b!important;
+}
+.shop-page .shop-tab:hover{
+  background:#e5e7eb!important;
+  color:#27272a!important;
+}
+.shop-page .shop-tab:hover .shop-tab-copy b,
+.shop-page .shop-tab:hover .shop-tab-copy small{
+  color:#27272a!important;
+}
+.shop-page .shop-tab:hover .shop-tab-icon{
+  background:#fff!important;
+  border-color:#d4d4d8!important;
+  color:#3f3f46!important;
+}
+.shop-page .shop-tab.shop-tab-active,
+.shop-page .shop-tab.shop-tab-active:hover{
+  background:#e4e4e7!important;
+  color:#18181b!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-copy b,
+.shop-page .shop-tab.shop-tab-active .shop-tab-copy small{
+  color:#18181b!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-icon,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-icon{
+  background:#fff!important;
+  border-color:#d4d4d8!important;
+  color:#27272a!important;
+}
+.shop-page .shop-tab-indicator{
+  background:#52525b!important;
+}
