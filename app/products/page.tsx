@@ -18,7 +18,7 @@ export default async function Products({
   const currentUser = await user();
   const now = new Date();
 
-  const [wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topLiked, topSaved] =
+  const [wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topInstagramLiked, topLiked, topSaved] =
     await Promise.all([
       currentUser
         ? db().instagramPost.findMany({
@@ -98,6 +98,18 @@ export default async function Products({
           wishlistItems: true,
           _count: { select: { likes: true, wishlistItems: true } },
         },
+        orderBy: { instagramLikeCount: "desc" },
+        take: 24,
+      }),
+      db().instagramPost.findMany({
+        where: { isProduct: true },
+        include: {
+          connection: true,
+          tags: true,
+          likes: true,
+          wishlistItems: true,
+          _count: { select: { likes: true, wishlistItems: true } },
+        },
         orderBy: { likes: { _count: "desc" } },
         take: 24,
       }),
@@ -125,7 +137,7 @@ export default async function Products({
   ).filter(({ posts }) => posts.length > 0);
 
   const trendingMap = new Map<string, any>();
-  [...topLiked, ...topSaved].forEach((post: any) => {
+  [...topInstagramLiked, ...topLiked, ...topSaved].forEach((post: any) => {
     trendingMap.set(post.id, post);
   });
   const trendingProducts = (await filterAvailableInstagramMedia(
@@ -133,8 +145,8 @@ export default async function Products({
   ))
     .sort(
       (a: any, b: any) =>
-        (b._count.likes + b._count.wishlistItems) -
-        (a._count.likes + a._count.wishlistItems),
+        (Number(b.instagramLikeCount || 0) + Number(b._count?.likes || 0) + Number(b._count?.wishlistItems || 0)) -
+        (Number(a.instagramLikeCount || 0) + Number(a._count?.likes || 0) + Number(a._count?.wishlistItems || 0)),
     )
     .slice(0, 8);
 
