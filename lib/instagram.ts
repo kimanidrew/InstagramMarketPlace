@@ -84,6 +84,9 @@ export function instagramOAuthUrl(state: string) {
   u.searchParams.set("redirect_uri", redirect);
   u.searchParams.set("response_type", "code");
   u.searchParams.set("scope", "instagram_business_basic");
+  // Ask Instagram to re-authenticate instead of silently reusing the browser session.
+  // The callback still verifies the returned username against the approved shop.
+  u.searchParams.set("force_authentication", "true");
   u.searchParams.set("state", state);
   return u.toString();
 }
