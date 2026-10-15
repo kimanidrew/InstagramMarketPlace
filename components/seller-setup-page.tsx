@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, XCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, ExternalLink, Instagram, XCircle } from "lucide-react";
 
 const images = {
   register: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png",
