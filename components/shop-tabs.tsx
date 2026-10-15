@@ -303,7 +303,7 @@ export function ShopTabs({
                     <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
                     <span className="text-xs font-bold text-[#999]">Products & services</span>
                   </div>
-                  <div className="mt-6"><ProductMasonry q="" tag="" /></div>
+                  <div className="mt-6"><ProductMasonry q="" tag="" stores={filteredFeaturedStores} /></div>
                 </section>
               </div>
             )}
