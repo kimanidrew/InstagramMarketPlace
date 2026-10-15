@@ -2456,12 +2456,12 @@ header nav {
 }
 
 
-/* Keep a comfortable gap between the sticky shop tabs and the navbar. */
+/* Keep the sticky shop tabs about 10px below the navbar. */
 .shop-page .shop-tabs{
-  top:94px;
+  top:80px;
 }
 @media(max-width:640px){
   .shop-page .shop-tabs{
-    top:84px;
+    top:70px;
   }
 }
