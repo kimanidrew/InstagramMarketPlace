@@ -1,8 +1,7 @@
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, ChartNoAxesCombined } from "lucide-react";
+import { ChartNoAxesCombined } from "lucide-react";
 import { SellerDashboardTabs } from "@/components/seller-dashboard-tabs";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +22,6 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
   const growthConnections = connections.map(c => ({ id: c.id, username: c.username, name: c.name, profileImageUrl: c.profileImageUrl, verifiedAt: c.verifiedAt?.toISOString() || null, verifiedUntil: c.verifiedUntil?.toISOString() || null, proUntil: c.proUntil?.toISOString() || null, posts: c.posts.map(p => ({ id: p.id, productTitle: p.productTitle, mediaUrl: p.mediaUrl, thumbnailUrl: p.thumbnailUrl, mediaType: p.mediaType, permalink: p.permalink })) }));
   return <main className="seller-analytics-page">
     <div className="seller-analytics-shell">
-      <Link href="/account" className="seller-analytics-back"><ArrowLeft size={15}/> Back to account</Link>
       <section className="seller-analytics-hero">
         <div><span className="seller-analytics-kicker"><ChartNoAxesCombined size={14}/> YOUR SELLER SPACE</span><h1>Grow your<br/><span>own shop.</span></h1><p>Understand your shop’s performance and take action from one place. Track marketplace activity, boost products, request verification, and explore Pro Seller tools.</p></div>
         <div className="seller-analytics-hero-art"><ChartNoAxesCombined size={35}/><span>Real activity.<br/><b>Smarter growth.</b></span></div>
