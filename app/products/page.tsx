@@ -148,7 +148,18 @@ export default async function Products({
         (Number(b.instagramLikeCount || 0) + Number(b._count?.likes || 0) + Number(b._count?.wishlistItems || 0)) -
         (Number(a.instagramLikeCount || 0) + Number(a._count?.likes || 0) + Number(a._count?.wishlistItems || 0)),
     )
-    .slice(0, 8);
+    .slice(0, 24);
+
+  const trendingStoreScores = new Map<string, number>();
+  trendingProducts.forEach((post: any) => {
+    const connectionId = post.connectionId || post.connection?.id;
+    if (!connectionId) return;
+    const score = Number(post.instagramLikeCount || 0) + Number(post._count?.likes || 0) + Number(post._count?.wishlistItems || 0);
+    trendingStoreScores.set(connectionId, (trendingStoreScores.get(connectionId) || 0) + score);
+  });
+  const trendingStores = [...featuredStores].sort((a, b) =>
+    (trendingStoreScores.get(b.store.id) || 0) - (trendingStoreScores.get(a.store.id) || 0)
+  );
 
   const activeStoreCampaigns = await db().promotionCampaign.findMany({ where: { status: "ACTIVE", targetType: "STORE" }, select: { connectionId: true } });
   const paidStoreIds = new Set(activeStoreCampaigns.map(campaign => campaign.connectionId));
@@ -177,6 +188,7 @@ export default async function Products({
             wishlistProducts,
             recentlyViewedProducts,
             featuredStores: promotedStores,
+            trendingStores,
             trendingProducts: prepareProducts(trendingProducts),
             featuredProducts: prepareProducts(featuredProductsRaw),
           }),
@@ -188,6 +200,7 @@ export default async function Products({
             wishlistProducts={shopData.wishlistProducts}
             recentlyViewedProducts={shopData.recentlyViewedProducts}
             featuredStores={shopData.featuredStores}
+            trendingStores={shopData.trendingStores}
             trendingProducts={shopData.trendingProducts}
             featuredProducts={shopData.featuredProducts}
             now={now.toISOString()}
