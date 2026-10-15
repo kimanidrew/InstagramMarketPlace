@@ -3350,3 +3350,25 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   .shop-promo-slide>div:first-child>span.mt-6,
   .shop-promo-slide>div:first-child>a.mt-6{transition:none}
 }
+
+
+/* Discover shop cards: compact vertical profile-first layout. */
+.discover-store-card{
+  min-height:0;
+  background:linear-gradient(155deg,#fff 0%,#fbfbf8 100%);
+}
+.discover-store-avatar{
+  background:linear-gradient(145deg,#d6ff63 0%,#e8e8df 48%,#d8d8d0 100%);
+  box-shadow:0 8px 22px rgba(20,24,14,.09);
+}
+.discover-store-card .discover-store-avatar img{display:block}
+.discover-store-card a:focus-visible{
+  outline:2px solid #819d38;
+  outline-offset:4px;
+  border-radius:18px;
+}
+@media(max-width:640px){
+  .discover-store-card{padding:14px 10px!important;border-radius:20px!important}
+  .discover-store-avatar{width:88px;height:88px;margin-bottom:10px}
+  .discover-store-card a>span:last-child{margin-top:12px!important;padding:8px 12px;font-size:10px}
+}
