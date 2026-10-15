@@ -66,6 +66,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   // Keep the original marketplace spotlight as a fallback only when there are no active paid promotions.
   const promotionSlides: PromoSlide[] = allSlides.length ? allSlides : [{ type: "ad", key: "sokolink-promo" }];
   const [seenPromoKeys, setSeenPromoKeys] = useState<string[]>([]);
+  const seenPromoKeysRef = React.useRef<string[]>([]);
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
   const measureRef = React.useRef<HTMLDivElement>(null);
@@ -103,14 +104,17 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
             const nextStart = Date.now();
             window.localStorage.setItem(progressKey, "[]");
             window.localStorage.setItem(cycleStartKey, String(nextStart));
+            seenPromoKeysRef.current = [];
             setSeenPromoKeys([]);
           } else {
             window.localStorage.setItem(progressKey, JSON.stringify(combined));
+            seenPromoKeysRef.current = combined;
             setSeenPromoKeys(combined);
           }
         })
-        .catch(() => { if (!cancelled) setSeenPromoKeys(validStored); });
+        .catch(() => { if (!cancelled) { seenPromoKeysRef.current = validStored; setSeenPromoKeys(validStored); } });
     } catch {
+      seenPromoKeysRef.current = [];
       setSeenPromoKeys([]);
     }
     return () => { cancelled = true; };
@@ -154,14 +158,14 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   if (!slides.length) return null;
   const activeSlide = slides[index] || slides[0];
   const markImpression = (slide: PromoSlide) => {
-    if (slide.type === "ad" || seenPromoKeys.includes(slide.key)) return;
-    const nextSeen = [...new Set([...seenPromoKeys, slide.key])];
+    if (slide.type === "ad" || seenPromoKeysRef.current.includes(slide.key)) return;
+    const nextSeen = [...new Set([...seenPromoKeysRef.current, slide.key])];
+    seenPromoKeysRef.current = nextSeen;
     const cycleComplete = allSlides.length > 0 && allSlides.every((item) => nextSeen.includes(item.key));
     if (cycleComplete) {
       window.localStorage.setItem(progressKey, "[]");
       window.localStorage.setItem(cycleStartKey, String(Date.now()));
-      window.localStorage.setItem(progressKey, "[]");
-      window.localStorage.setItem(cycleStartKey, String(Date.now()));
+      seenPromoKeysRef.current = [];
     } else {
       window.localStorage.setItem(progressKey, JSON.stringify(nextSeen));
     }
