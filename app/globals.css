@@ -3930,3 +3930,11 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
     gap:8px!important;
   }
 }
+
+
+/* Shop tabs: keep the active underline indicator white. */
+.shop-page .shop-tab-indicator,
+.shop-page .shop-tab.shop-tab-active .shop-tab-indicator,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-indicator{
+  background:#fff!important;
+}
