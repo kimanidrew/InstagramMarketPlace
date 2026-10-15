@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Layers3 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Layers3 } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
