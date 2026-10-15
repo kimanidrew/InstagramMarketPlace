@@ -4087,3 +4087,42 @@ html, body {
     scroll-padding-right: 16px;
   }
 }
+
+
+/* Fade category chips beneath the side gutters; keep controls above the fades. */
+.for-you-filter-scroller {
+  position: relative;
+  isolation: isolate;
+}
+.for-you-filter-scroller::before,
+.for-you-filter-scroller::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: max(56px, calc(max(16px, (100vw - 1180px) / 2) + 34px));
+  z-index: 4;
+  pointer-events: none;
+  opacity: 1;
+}
+.for-you-filter-scroller::before {
+  left: 0;
+  background: linear-gradient(to right, #fff 0%, rgba(255,255,255,.96) 35%, rgba(255,255,255,0) 100%);
+}
+.for-you-filter-scroller::after {
+  right: 0;
+  background: linear-gradient(to left, #fff 0%, rgba(255,255,255,.96) 35%, rgba(255,255,255,0) 100%);
+}
+.for-you-filter-tags {
+  position: relative;
+  z-index: 1;
+}
+.for-you-filter-scroll-button {
+  z-index: 5 !important;
+}
+@media (max-width: 640px) {
+  .for-you-filter-scroller::before,
+  .for-you-filter-scroller::after {
+    width: 52px;
+  }
+}
