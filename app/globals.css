@@ -4149,3 +4149,15 @@ html, body {
 .for-you-filter-scroller::after {
   pointer-events: none !important;
 }
+
+
+/* Keep mobile bottom navigation above the For You category filter rail. */
+@media (max-width: 1023px) {
+  .mobile-bottom-nav {
+    z-index: 9999 !important;
+  }
+
+  .for-you-filter-sticky {
+    z-index: 10 !important;
+  }
+}
