@@ -46,7 +46,7 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false 
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
         (compact ? "h-10 w-10 shadow-sm " : "px-5 py-3.5 text-sm font-bold ") +
-        (saved ? "bg-[#7c3aed] text-white" : "bg-black text-white")
+        "bg-black text-white"
       }
     >
       <Bookmark size={compact ? 17 : 16} fill={saved ? "currentColor" : "none"} strokeWidth={saved ? 2.5 : 2} />
