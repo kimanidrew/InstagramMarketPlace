@@ -53,7 +53,7 @@ function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex:
   const heading = storeSectionTitles[batchIndex % storeSectionTitles.length];
 
   return (
-    <section className="product-store-interlude column-span-all my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:my-9 sm:rounded-[30px] sm:p-6" aria-label={heading.eyebrow}>
+    <section className="product-store-interlude column-span-all my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] px-5 py-4 sm:my-9 sm:rounded-[30px] sm:px-8 sm:py-6" aria-label={heading.eyebrow}>
       <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.14em] text-[#777] sm:text-[10px]"><Store size={12} /> {heading.eyebrow}</p>
@@ -263,7 +263,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
         ) : item.type === "stores" ? (
           <div key={"store-section-" + item.batchIndex} className="product-store-interlude-row"><StoreInlineSection stores={stores} batchIndex={item.batchIndex} /></div>
         ) : (
-          <section key="saved-for-later" className="product-feed-full-row rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
+          <section key="saved-for-later" className="product-feed-full-row rounded-[30px] border border-black/5 bg-[#f7f7f4] px-6 py-5 md:px-9 md:py-7">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Store size={13} /> Saved for later</p>
