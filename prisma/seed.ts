@@ -35,7 +35,12 @@ async function main() {
   for (const offering of offerings) {
     await prisma.growthOffering.upsert({
       where: { code: offering.code },
-      update: offering,
+      update: {
+        name: offering.name, category: offering.category, targetType: offering.targetType,
+        description: offering.description, price: offering.price, targetReach: offering.targetReach,
+        reachMode: offering.reachMode, durationDays: offering.durationDays, features: offering.features,
+        active: offering.active, sortOrder: offering.sortOrder,
+      },
       create: offering,
     });
   }
