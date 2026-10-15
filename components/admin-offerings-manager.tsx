@@ -18,7 +18,13 @@ export default function AdminOfferingsManager({ initialOfferings, audienceSize }
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const promotionCount = useMemo(() => items.filter(x => x.category === "PROMOTION").length, [items]);
-  const growthCount = items.length - promotionCount;\n  useEffect(() => {\n    if (notice) window.dispatchEvent(new CustomEvent("sokolink:feedback", { detail: { type: "success", title: "Changes saved", message: notice } }));\n  }, [notice]);\n  useEffect(() => {\n    if (error) window.dispatchEvent(new CustomEvent("sokolink:feedback", { detail: { type: "error", title: "Could not complete action", message: error } }));\n  }, [error]);
+  const growthCount = items.length - promotionCount;
+  useEffect(() => {
+    if (notice) window.dispatchEvent(new CustomEvent("sokolink:feedback", { detail: { type: "success", title: "Changes saved", message: notice } }));
+  }, [notice]);
+  useEffect(() => {
+    if (error) window.dispatchEvent(new CustomEvent("sokolink:feedback", { detail: { type: "error", title: "Could not complete action", message: error } }));
+  }, [error]);
 
   function edit(item: Offering) { setDraft({ ...item, features: [...item.features] }); setNotice(""); setError(""); }
   function update<K extends keyof Draft>(key: K, value: Draft[K]) { setDraft(current => current ? { ...current, [key]: value } : current); }
@@ -88,7 +94,11 @@ export default function AdminOfferingsManager({ initialOfferings, audienceSize }
         <label className="text-xs font-bold">Display order<input type="number" step="1" value={draft.sortOrder} onChange={e => update("sortOrder", Number(e.target.value))} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal"/></label>
         <label className="flex items-center gap-3 self-end rounded-xl border border-black/10 bg-white p-3 text-sm font-bold"><input type="checkbox" checked={draft.active} onChange={e => update("active", e.target.checked)}/> Available to sellers</label>
         <label className="text-xs font-bold sm:col-span-2 lg:col-span-3">Description<textarea rows={2} value={draft.description} onChange={e => update("description", e.target.value)} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal" placeholder="Explain what this plan does."/></label>
-        <label className="text-xs font-bold sm:col-span-2 lg:col-span-3">Included features (one per line)<textarea rows={4} value={draft.features.join("\n")} onChange={e => update("features", e.target.value.split("\n"))} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal" placeholder={"Verified badge\nSeller analytics\nPriority support"}/></label>
+        <label className="text-xs font-bold sm:col-span-2 lg:col-span-3">Included features (one per line)<textarea rows={4} value={draft.features.join("
+")} onChange={e => update("features", e.target.value.split("
+"))} className="mt-2 block w-full rounded-xl border border-black/15 bg-white px-3 py-3 text-sm font-normal" placeholder={"Verified badge
+Seller analytics
+Priority support"}/></label>
       </div>
       {draft.category === "PROMOTION" && draft.reachMode === "ALL_USERS" && <p className="mt-3 text-xs text-neutral-600">Current audience target: {audienceSize.toLocaleString()} registered users. The live count is saved as the campaign target when a seller starts a promotion.</p>}
       <div className="mt-5 flex flex-wrap justify-end gap-2"><button type="button" onClick={() => setDraft(null)} className="rounded-full border border-black/15 bg-white px-4 py-3 text-sm font-bold">Cancel</button><button disabled={busy} className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-bold text-white disabled:opacity-50"><Save size={15}/>{busy ? "Saving…" : "Save to database"}</button></div>
