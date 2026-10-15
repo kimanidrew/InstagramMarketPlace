@@ -2,7 +2,7 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Sparkles, Star } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Instagram, Sparkles, Star } from "lucide-react";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
