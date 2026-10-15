@@ -2665,3 +2665,45 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
  .shop-promo-controls{right:12px;bottom:10px}
 }
 @media(prefers-reduced-motion:reduce){.shop-promo-float,.shop-promo-product-visual img{transition:none}}
+
+
+/* Promo carousel: consistent slide height and polished entrance motion. */
+.shop-promo-carousel{
+  position:relative;
+  height:300px;
+  min-height:300px;
+}
+.shop-promo-slide{
+  height:300px;
+  min-height:300px!important;
+  grid-template-rows:minmax(0,1fr);
+}
+.shop-promo-enter{
+  animation:shopPromoEnter .72s cubic-bezier(.2,.75,.25,1) both;
+  will-change:opacity,transform;
+}
+@keyframes shopPromoEnter{
+  from{opacity:0;transform:translateY(14px) scale(.99);filter:blur(3px)}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+.shop-promo-controls{pointer-events:none}
+.shop-promo-controls button{pointer-events:auto}
+.shop-promo-dots button{height:6px;min-width:6px}
+@media(max-width:767px){
+  .shop-promo-carousel{height:410px;min-height:410px}
+  .shop-promo-slide{
+    height:410px;
+    min-height:410px!important;
+    grid-template-rows:minmax(0,1fr) 145px;
+    padding-bottom:42px;
+  }
+  .shop-promo-slide>div:first-child{min-height:0;padding-top:20px;padding-bottom:10px}
+  .shop-promo-slide h2{font-size:clamp(25px,7vw,34px);line-height:1}
+  .shop-promo-slide p{margin-top:9px;line-height:1.45}
+  .shop-promo-slide>div:first-child>span.mt-6,
+  .shop-promo-slide>div:first-child>a.mt-6{margin-top:12px}
+  .shop-promo-store-visual,.shop-promo-product-visual,.shop-promo-ad-art{height:145px;min-height:145px}
+}
+@media(prefers-reduced-motion:reduce){
+  .shop-promo-enter{animation:none;will-change:auto}
+}
