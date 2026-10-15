@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowUpRight, Bookmark, CheckCircle2, CircleHelp, Compass, ExternalLink, Instagram, LayoutGrid, Play, Search, ShieldCheck, ShoppingBag, Store, Tags, UserRound, Video } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { ArrowUpRight, Bookmark, CheckCircle2, CircleHelp, Compass, ExternalLink, Instagram, LayoutGrid, Play, Search, ShieldCheck, ShoppingBag, Store, Tags, Video } from "lucide-react";
 
 const sections = [
   { id: "overview", label: "How SokoLink works", icon: Compass },
@@ -15,7 +15,7 @@ const sections = [
   { id: "help", label: "Help & requirements", icon: CircleHelp },
 ];
 
-function Step({ number, title, children }: { number: string; title: string; children: React.ReactNode }) {
+function Step({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return <div className="how-step"><span className="how-step-number">{number}</span><div><h3>{title}</h3><p>{children}</p></div></div>;
 }
 
