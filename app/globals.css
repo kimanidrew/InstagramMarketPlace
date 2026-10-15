@@ -3444,17 +3444,22 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 
 
 
-/* Shop discovery feed only: four product columns on desktop, two on mobile. */
-.shop-tabs-wrap .product-feed-layout{
+/* Shop and For You discovery feeds: four product columns on desktop, two on mobile. */
+.shop-tabs-wrap .product-feed-layout,
+.product-feed-layout{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
   align-items:start;
   gap:clamp(14px,1.6vw,24px);
   min-width:0;
 }
-.shop-tabs-wrap .product-feed-item{min-width:0;width:100%;}
+.shop-tabs-wrap .product-feed-item,
+.product-feed-item{min-width:0;width:100%;}
 .shop-tabs-wrap .product-store-interlude-row,
-.shop-tabs-wrap .product-feed-full-row{grid-column:1 / -1;min-width:0;width:100%;}
+.shop-tabs-wrap .product-feed-full-row,
+.product-store-interlude-row,
+.product-feed-full-row{grid-column:1 / -1;min-width:0;width:100%;}
 @media(max-width:640px){
-  .shop-tabs-wrap .product-feed-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 9px;}
+  .shop-tabs-wrap .product-feed-layout,
+  .product-feed-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 9px;}
 }
