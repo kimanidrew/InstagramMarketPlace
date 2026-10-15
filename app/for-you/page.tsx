@@ -4,7 +4,6 @@ import { user } from "@/lib/auth";
 import { ForYouFilters } from "@/components/for-you-filters";
 import { ForYouProductCarousel } from "@/components/for-you-product-carousel";
 import { db } from "@/lib/prisma";
-import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
 
@@ -71,8 +70,8 @@ export default async function ForYouPage() {
     recommendations = [...recommendations, ...fallback].slice(0, 12);
   }
 
-  const availableRecommendations = await filterAvailableInstagramMedia(recommendations);
-  const carouselProducts = JSON.parse(JSON.stringify(availableRecommendations.map((product: any) => ({
+  // Do not suppress listings when Instagram blocks HEAD requests to its media URLs.
+  const carouselProducts = JSON.parse(JSON.stringify(recommendations.map((product: any) => ({
     ...product,
     likedByCurrentUser: currentUser ? product.likes?.some((like: any) => like.userId === currentUser.id) : false,
     wishlistedByCurrentUser: currentUser ? product.wishlistItems?.some((item: any) => item.userId === currentUser.id) : false,
