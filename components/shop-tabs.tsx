@@ -225,13 +225,13 @@ export function ShopTabs({
 
                 {recentItems.length > 0 && (
                   <section className="rounded-[30px] border border-black/5 bg-white p-5 md:p-7">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                       <div>
                         <p className="eyebrow plain"><Sparkles size={13} /> Back on Your Shopping List</p>
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Pick Up Where You Left Off</h2>
                         <p className="mt-2 text-sm text-[#777]">Revisit the products and services you recently checked out.</p>
                       </div>
-                      <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="self-start rounded-full border border-black/10 px-4 py-2 text-xs font-bold text-[#666] transition hover:border-black hover:text-black disabled:opacity-50">{clearingHistory ? "Clearing…" : "Clear history"}</button>
+                      <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="inline-flex shrink-0 items-center justify-center self-start rounded-full border border-black/10 px-4 py-2 text-xs font-bold text-[#666] transition hover:border-black hover:text-black disabled:opacity-50 sm:self-auto">{clearingHistory ? "Clearing…" : "Clear history"}</button>
                     </div>
                     <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
                       {recentItems.slice(0, 7).map((x: any) => {
