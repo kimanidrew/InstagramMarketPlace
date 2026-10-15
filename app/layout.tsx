@@ -6,7 +6,6 @@ import { user } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { BrandWordmark } from "@/components/brand-wordmark";
-import { ScrollRestoration } from "@/components/scroll-restoration";
 import { GlobalFeedbackProvider } from "@/components/global-feedback-provider";
 
 const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
@@ -26,7 +25,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <head><link rel="stylesheet" href={brandFontUrl} /></head>
       <body className="pb-24 lg:pb-0">
         <GlobalFeedbackProvider>
-          <ScrollRestoration />
           <SiteHeader user={u} />
           {children}
 
