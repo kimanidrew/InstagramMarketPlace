@@ -751,7 +751,7 @@ html:has(.store-reviews-overlay){overflow:hidden}
 .mobile-bottom-nav-inner{
   pointer-events: auto;
   display: grid;
-  grid-template-columns: repeat(6,minmax(0,1fr));
+  grid-template-columns: repeat(5,minmax(0,1fr));
   align-items: center;
   max-width: 560px;
   margin: 0 auto;
@@ -779,15 +779,12 @@ html:has(.store-reviews-overlay){overflow:hidden}
 }
 .mobile-bottom-nav-item:active{transform:scale(.94)}
 .mobile-bottom-nav-item.is-active{
-  color:#f5f5f5;
+  color:#111827;
   background:transparent;
 }
-.mobile-bottom-nav-item.is-active .mobile-bottom-nav-icon,
-.mobile-bottom-nav-item.is-active .mobile-bottom-nav-label{
-  color:#f5f5f5;
-}
+.mobile-bottom-nav-item.is-active .mobile-bottom-nav-icon{color:#111827}
 .mobile-bottom-nav-icon{display:flex;align-items:center;justify-content:center}
-.mobile-bottom-nav-label{font-size:8px;font-weight:750;letter-spacing:.01em;line-height:1.1}
+.mobile-bottom-nav-label{display:none}
 @media(min-width:1024px){.mobile-bottom-nav{display:none}}
 @media(prefers-reduced-motion:reduce){.mobile-bottom-nav-item{transition:none}}
 
