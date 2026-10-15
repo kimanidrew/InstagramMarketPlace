@@ -7,53 +7,52 @@ export async function POST(request: Request) {
   const body = await request.json();
   const id = String(body.id || "");
   const status = String(body.status || "");
-  if (!id || !["APPROVED","REJECTED"].includes(status)) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+  if (!id || !["APPROVED", "REJECTED"].includes(status)) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
 
   const prisma = db();
-  const growth = await prisma.growthRequest.findUnique({ where: { id } });
+  const growth = await prisma.growthRequest.findUnique({ where: { id }, include: { offering: true, connection: { select: { username: true } } } });
   if (!growth) return NextResponse.json({ error: "Growth request not found." }, { status: 404 });
   if (growth.status !== "PENDING") return NextResponse.json({ error: "Request already reviewed." }, { status: 409 });
 
+  const code = growth.type.toUpperCase();
+  const label = growth.offering?.name || (code === "VERIFIED" ? "Verified Shop" : code === "PRO" ? "Pro Seller" : code === "BOOST" ? "Product Boost" : growth.type);
+  const username = growth.connection.username;
   if (status === "REJECTED") {
     await prisma.$transaction([
       prisma.growthRequest.update({ where: { id }, data: { status: "REJECTED", reviewedAt: new Date() } }),
-      prisma.notification.create({
-        data: {
-          userId: growth.userId,
-          type: "GROWTH_REQUEST_REJECTED",
-          title: `${growth.type === "BOOST" ? "Boost" : growth.type === "VERIFIED" ? "Verified badge" : "Pro Seller"} request update`,
-          message: `Your ${growth.type.toLowerCase()} request for @${(await prisma.instagramConnection.findUnique({where:{id:growth.connectionId},select:{username:true}}))?.username ?? "your shop"} was not approved.`,
-          href: "/account/analytics",
-        },
-      }),
+      prisma.notification.create({ data: {
+        userId: growth.userId,
+        type: "GROWTH_REQUEST_REJECTED",
+        title: label + " request update",
+        message: "Your " + label + " request for @" + username + " was not approved.",
+        href: "/account/analytics",
+      } }),
     ]);
     return NextResponse.json({ ok: true });
   }
 
   const now = new Date();
+  const durationDays = growth.durationDays || growth.offering?.durationDays || (code === "VERIFIED" ? 365 : code === "PRO" ? 30 : 7);
   await prisma.$transaction(async (tx) => {
     await tx.growthRequest.update({ where: { id }, data: { status: "APPROVED", reviewedAt: now } });
-    const connection = await tx.instagramConnection.findUnique({ where: { id: growth.connectionId }, select: { username: true } });
-    await tx.notification.create({
-      data: {
-        userId: growth.userId,
-        type: "GROWTH_REQUEST_APPROVED",
-        title: `${growth.type === "BOOST" ? "Boost" : growth.type === "VERIFIED" ? "Verified badge" : "Pro Seller"} request approved`,
-        message: `Your ${growth.type.toLowerCase()} request for @${connection?.username ?? "your shop"} has been approved.`,
-        href: "/account/analytics",
-      },
-    });
-    if (growth.type === "VERIFIED") {
+    await tx.notification.create({ data: {
+      userId: growth.userId,
+      type: "GROWTH_REQUEST_APPROVED",
+      title: label + " request approved",
+      message: "Your " + label + " request for @" + username + " has been approved.",
+      href: "/account/analytics",
+    } });
+    if (code === "VERIFIED") {
       const until = new Date(now);
-      until.setDate(until.getDate() + 365);
+      until.setDate(until.getDate() + durationDays);
       await tx.instagramConnection.update({ where: { id: growth.connectionId }, data: { verifiedAt: now, verifiedUntil: until } });
-    } else if (growth.type === "PRO") {
+    } else if (code === "PRO") {
       const until = new Date(now);
-      until.setDate(until.getDate() + 30);
+      until.setDate(until.getDate() + durationDays);
       await tx.instagramConnection.update({ where: { id: growth.connectionId }, data: { proUntil: until } });
-    } else if (growth.type === "BOOST" && growth.postId) {
+    } else if (code === "BOOST" && growth.postId) {
       const until = new Date(now);
-      until.setDate(until.getDate() + 7);
+      until.setDate(until.getDate() + durationDays);
       await tx.instagramPost.update({ where: { id: growth.postId }, data: { boostUntil: until } });
     }
   });
