@@ -141,7 +141,7 @@ export function SiteHeader({ user }: { user: any }) {
         </div>
       </div>
 
-      <div id="header-search-panel" className={"header-search-panel " + (searchOpen ? "is-open" : "")} aria-hidden={!searchOpen}>
+      <div id="header-search-panel" className={"header-search-panel " + (searchOpen ? "is-open" : "") + (searchOpen && searchQuery.trim().length >= 2 ? " has-suggestions" : "")} aria-hidden={!searchOpen}>
         <div className="shell header-search-content">
           <div className="header-search-intro">
             <span className="header-search-mark"><Sparkles size={14} /></span>
@@ -237,7 +237,7 @@ export function SiteHeader({ user }: { user: any }) {
               )}
             </div>
           )}
-          {(trendingTagsLoading || trendingTags.length > 0) && (
+          {searchQuery.trim().length < 2 && (trendingTagsLoading || trendingTags.length > 0) && (
             <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
               <div className="header-trending-list">
                 {trendingTagsLoading ? (
