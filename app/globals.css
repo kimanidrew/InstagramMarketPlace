@@ -2885,3 +2885,57 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   box-shadow:none!important;
   border-color:transparent!important;
 }
+
+
+/* Dedicated admin workspace: keep admin pages separate from shopper/seller chrome. */
+body:has(.admin-workspace) .site-header,
+body:has(.admin-workspace) > footer,
+body:has(.admin-workspace) .mobile-bottom-nav,
+body:has(.admin-workspace) nav.mobile-bottom-nav{display:none!important}
+body:has(.admin-workspace){padding-bottom:0!important;background:#f5f6f4;color:#171717}
+body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
+.admin-workspace{min-height:100vh;background:#f5f6f4}
+.admin-workspace-nav{
+  position:sticky;top:0;z-index:100;display:flex;min-height:76px;align-items:center;gap:28px;
+  padding:0 clamp(18px,4vw,56px);background:#111;color:#fff;border-bottom:1px solid #ffffff12;
+}
+.admin-workspace-brand{display:flex;align-items:center;gap:11px;min-width:205px;color:#fff;text-decoration:none}
+.admin-workspace-brand-mark{display:grid;width:39px;height:39px;place-items:center;border-radius:12px;background:#d6ff63;color:#171717}
+.admin-workspace-brand b{display:block;font-size:17px;line-height:1.15;font-weight:900;letter-spacing:-.04em}
+.admin-workspace-brand small{display:block;margin-top:4px;color:#a4a4a4;font-size:9px;font-weight:800;letter-spacing:.17em}
+.admin-workspace-links{display:flex;align-items:center;gap:7px;align-self:stretch}
+.admin-workspace-links a{position:relative;display:flex;align-items:center;gap:9px;padding:0 15px;color:#bdbdbd;font-size:12px;font-weight:800;text-decoration:none;transition:color .18s,background .18s}
+.admin-workspace-links a:hover{color:#fff;background:#ffffff0b}
+.admin-workspace-links a.active{color:#d6ff63}
+.admin-workspace-links a.active:after{position:absolute;right:14px;bottom:0;left:14px;height:3px;border-radius:3px 3px 0 0;background:#d6ff63;content:""}
+.admin-workspace-exit{display:flex;align-items:center;gap:7px;margin-left:auto;border:1px solid #ffffff2b;border-radius:999px;padding:10px 14px;color:#e5e5e5;font-size:11px;font-weight:800;text-decoration:none;white-space:nowrap}
+.admin-workspace-exit:hover{border-color:#d6ff63;color:#d6ff63}
+.admin-workspace .admin-page{min-height:calc(100vh - 76px);padding-top:1px;padding-bottom:50px}
+.admin-workspace .admin-page>.shell{max-width:1440px;padding-top:36px}
+.admin-workspace .admin-ig-page{max-width:1440px;min-height:calc(100vh - 76px);padding:34px clamp(18px,4vw,56px) 56px}
+.admin-workspace .admin-head{align-items:flex-start}
+.admin-workspace .admin-head h1{letter-spacing:-.045em}
+.admin-workspace .admin-stats{gap:14px}
+.admin-workspace .admin-stat{border:1px solid #e7e8e3;border-radius:18px;background:#fff;box-shadow:0 5px 18px #11100005}
+.admin-workspace .admin-tabs-shell{margin-top:28px}
+.admin-workspace .admin-tabs{position:sticky;top:76px;z-index:30;border-radius:14px;background:#fff;border:1px solid #e7e8e3;padding:6px;box-shadow:0 5px 20px #11100008}
+.admin-workspace .admin-tab{border-radius:10px}
+.admin-workspace .admin-tab.active{background:#171717;color:#d6ff63}
+.admin-workspace .admin-tab-panel{padding-top:22px}
+.admin-workspace .admin-request-card,.admin-workspace .admin-meta-card,.admin-workspace .admin-overview-note,.admin-workspace .admin-growth-card{border-radius:18px}
+@media(max-width:760px){
+  .admin-workspace-nav{min-height:68px;gap:10px;padding:0 14px;flex-wrap:wrap}
+  .admin-workspace-brand{min-width:0;gap:8px}
+  .admin-workspace-brand-mark{width:34px;height:34px}
+  .admin-workspace-brand b{font-size:15px}
+  .admin-workspace-brand small{font-size:8px}
+  .admin-workspace-links{order:3;width:100%;height:48px;gap:2px}
+  .admin-workspace-links a{flex:1;justify-content:center;padding:0 8px;font-size:11px}
+  .admin-workspace-links a.active:after{right:8px;left:8px}
+  .admin-workspace-exit{margin-left:auto;padding:8px 10px;font-size:10px}
+  .admin-workspace-exit span{display:none}
+  .admin-workspace .admin-page>.shell{padding:24px 14px 40px}
+  .admin-workspace .admin-ig-page{padding:24px 14px 40px}
+  .admin-workspace .admin-tabs{top:116px;overflow-x:auto}
+  .admin-workspace .admin-tab{white-space:nowrap}
+}
