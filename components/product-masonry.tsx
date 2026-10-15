@@ -260,12 +260,19 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     <>
       <div className="columns-2 gap-3 sm:columns-2 sm:gap-5 md:columns-3 lg:columns-4">
         {products.map((product, index) => {
-          const batchIndex = Math.floor((index + 1) / 12) - 1;
-          const showStoreSection = stores.length > batchIndex * 2 && (index + 1) % 12 === 0;
+          // Start store discovery after product 4, then after every 12 products.
+          // Use standalone full-width rows between product batches so a store section
+          // never gets inserted inside a masonry column or overlaps a product card.
+          const showStoreSection = index === 3 || (index > 3 && (index - 3) % 12 === 0);
+          const batchIndex = index === 3 ? 0 : Math.floor((index - 3) / 12);
           return (
             <Fragment key={product.id}>
               <LazyProductCard product={product} />
-              {showStoreSection && <StoreInlineSection stores={stores} batchIndex={batchIndex} />}
+              {showStoreSection && stores.length > batchIndex * 2 && (
+                <div className="product-store-interlude-row" key={"store-section-" + batchIndex}>
+                  <StoreInlineSection stores={stores} batchIndex={batchIndex} />
+                </div>
+              )}
             </Fragment>
           );
         })}
