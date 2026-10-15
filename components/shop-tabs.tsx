@@ -127,7 +127,8 @@ export function ShopTabs({
   const filteredFeaturedStores = featuredStores;
 
   return (
-    <div className="shop-tabs-wrap mt-0">\n      <ShopPromoCarousel stores={filteredFeaturedStores} products={filteredFeaturedProducts} />
+    <div className="shop-tabs-wrap mt-0">
+      <ShopPromoCarousel stores={filteredFeaturedStores} products={filteredFeaturedProducts} />
       <div className="shop-tabs flex w-full max-w-full flex-nowrap overflow-x-auto overscroll-x-contain" role="tablist" aria-label="Shop discovery">
         {tabs.map(({ id, label, icon: Icon, copy }) => {
           const selected = active === id;
