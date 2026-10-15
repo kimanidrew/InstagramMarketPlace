@@ -3470,3 +3470,21 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .shop-tabs-wrap .product-feed-full-row{
   margin-top:0!important;
 }
+
+/* Prevent Shop promo banner title and description glyphs from clipping vertically. */
+.shop-promo-slide h2{
+  line-height:1.24!important;
+  padding-top:4px!important;
+  padding-bottom:6px!important;
+}
+.shop-promo-slide p{
+  line-height:1.62!important;
+  padding-top:3px!important;
+  padding-bottom:4px!important;
+  max-height:none;
+}
+@media(max-width:767px){
+  .shop-promo-slide h2{line-height:1.24!important;padding-top:4px!important;padding-bottom:6px!important}
+  .shop-promo-slide p{line-height:1.58!important;padding-top:3px!important;padding-bottom:4px!important}
+}
+
