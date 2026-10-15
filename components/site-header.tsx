@@ -8,6 +8,7 @@ import { BrandWordmark } from "@/components/brand-wordmark";
 
 export function SiteHeader({ user }: { user: any }) {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [trendingTags, setTrendingTags] = useState<Array<{ name: string; productCount: number }>>([]);
   const [trendingTagsLoading, setTrendingTagsLoading] = useState(false);
@@ -15,6 +16,32 @@ export function SiteHeader({ user }: { user: any }) {
   const [activeSuggestionTab, setActiveSuggestionTab] = useState<"Products" | "Categories" | "Stores">("Products");
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (searchOpen) {
+      setHeaderHidden(false);
+      return;
+    }
+
+    let previousY = window.scrollY;
+    const handleScroll = () => {
+      const currentY = Math.max(0, window.scrollY);
+      const difference = currentY - previousY;
+
+      if (currentY < 80) {
+        setHeaderHidden(false);
+      } else if (difference > 6) {
+        setHeaderHidden(true);
+      } else if (difference < -6) {
+        setHeaderHidden(false);
+      }
+
+      previousY = currentY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [searchOpen]);
 
   useEffect(() => {
     if (searchOpen) {
@@ -102,7 +129,7 @@ export function SiteHeader({ user }: { user: any }) {
   }, []);
 
   return (
-    <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : "")}>
+    <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "")}>
       <div className="shell flex h-[74px] items-center gap-4">
         <Link href="/" className="brand shrink-0">
           <BrandWordmark />
