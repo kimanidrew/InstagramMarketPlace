@@ -16,6 +16,7 @@ export async function GET(request: Request) {
       distinct: ["connectionId"],
       take: 7,
       select: {
+        createdAt: true,
         connection: {
           select: {
             id: true,
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
       },
     });
     const stores = events
-      .map((event) => event.connection)
+      .map((event) => ({ ...event.connection, historyViewedAt: event.createdAt }))
       .filter((store) => store.posts.length > 0)
       .map(({ posts, ...store }) => ({ ...store, listingCount: posts.length }));
     return NextResponse.json({ stores });
