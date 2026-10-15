@@ -160,10 +160,10 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     if (cycleComplete) {
       window.localStorage.setItem(progressKey, "[]");
       window.localStorage.setItem(cycleStartKey, String(Date.now()));
-      setSeenPromoKeys([]);
+      window.localStorage.setItem(progressKey, "[]");
+      window.localStorage.setItem(cycleStartKey, String(Date.now()));
     } else {
       window.localStorage.setItem(progressKey, JSON.stringify(nextSeen));
-      setSeenPromoKeys(nextSeen);
     }
   };
   const previous = () => setIndex((current) => (current - 1 + slides.length) % slides.length);
