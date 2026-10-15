@@ -6,6 +6,7 @@ import { ExternalLink, ShieldCheck, Users, CheckCircle2, Store, Package, UserRou
 import AdminRemoveStore from "@/components/admin-remove-store";
 import AdminGrowthActions from "@/components/admin-growth-actions";
 import AdminDashboardTabs from "@/components/admin-dashboard-tabs";
+import AdminWorkspaceNav from "@/components/admin-workspace-nav";
 
 export const dynamic = "force-dynamic";
 
@@ -130,7 +131,9 @@ export default async function Admin({
   }
 
   return (
-    <main className="admin-page">
+    <div className="admin-workspace">
+      <AdminWorkspaceNav />
+      <main className="admin-page">
       <div className="shell py-12">
         <header className="admin-head">
           <div>
@@ -233,7 +236,8 @@ export default async function Admin({
           ]}
         />
       </div>
-    </main>
+      </main>
+    </div>
   );
 }
 
