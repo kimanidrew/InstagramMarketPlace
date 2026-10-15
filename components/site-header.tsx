@@ -143,6 +143,20 @@ export function SiteHeader({ user }: { user: any }) {
               aria-label="Search products, stores or categories"
               tabIndex={searchOpen ? 0 : -1}
             />
+            {searchQuery.length > 0 && (
+              <button
+                type="button"
+                className="header-search-clear"
+                onClick={() => {
+                  setSearchQuery("");
+                  searchInputRef.current?.focus();
+                }}
+                aria-label="Clear search"
+                title="Clear search"
+              >
+                <X size={18} strokeWidth={2.2} />
+              </button>
+            )}
             <button type="submit" disabled={!searchQuery.trim()} aria-label="Submit search">
               <span>Search</span><ArrowRight size={15} />
             </button>
