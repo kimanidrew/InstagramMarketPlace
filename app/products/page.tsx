@@ -62,7 +62,6 @@ export default async function Products({
           wishlistItems: true,
         },
         orderBy: { boostUntil: "desc" },
-        take: 8,
       }).then((items) => filterAvailableInstagramMedia(items)),
       db().instagramConnection.findMany({
         where: {
@@ -87,7 +86,6 @@ export default async function Products({
           },
         },
         orderBy: [{ verifiedAt: "desc" }, { proUntil: "desc" }, { username: "asc" }],
-        take: 50,
       }),
       db().instagramPost.findMany({
         where: { isProduct: true },
