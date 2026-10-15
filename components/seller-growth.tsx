@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap, Clock3, Users } from "lucide-react";
 import { GlobalFeedbackModal } from "@/components/global-feedback-modal";
@@ -8,9 +8,12 @@ import { SellerAnalytics } from "@/components/seller-analytics";
 
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
 type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: Product[] };
+type GrowthOffering = { id: string; code: string; name: string; category: "PROMOTION" | "GROWTH"; description: string; price: number; durationDays: number; features: string[]; active: boolean };
 
 export function SellerGrowth({ connections, embedded = false, initialTab = "store" }: { connections: Connection[]; embedded?: boolean; initialTab?: "store" | "promotion" }) {
   const [selectedId, setSelectedId] = useState(connections[0]?.id || "");
+  const [growthOfferings, setGrowthOfferings] = useState<GrowthOffering[]>([]);
+  useEffect(() => { fetch("/api/offerings", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(data => { if (data?.offerings) setGrowthOfferings(data.offerings.filter((item: GrowthOffering) => item.category === "GROWTH")); }).catch(() => {}); }, []);
   const studioTab = initialTab;
   const [selectedProductId, setSelectedProductId] = useState("");
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
@@ -56,13 +59,13 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
     }
   }
 
-  async function request(type: "BOOST" | "VERIFIED" | "PRO", connectionId: string, postId?: string) {
-    setBusy(type + connectionId + (postId || ""));
+  async function request(offering: GrowthOffering, connectionId: string) {
+    setBusy(offering.id + connectionId);
     setMessage("");
     try {
-      const res = await fetch("/api/growth/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type, connectionId, postId }) });
+      const res = await fetch("/api/growth/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ offeringId: offering.id, connectionId }) });
       const data = await res.json();
-      setMessage(res.ok ? (data.message || (type === "BOOST" ? "Your product promotion request has been sent for review." : "Your shop growth request has been sent for review.")) : (data.error || "Something went wrong. Please try again."));
+      setMessage(res.ok ? (data.message || "Your growth request has been sent for review.") : (data.error || "Something went wrong. Please try again."));
     } catch {
       setMessage("We couldn't send that request. Check your connection and try again.");
     } finally {
@@ -112,8 +115,23 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
     <section className="growth-track growth-shop-plans">
       <div className="growth-section-heading"><span className="growth-step">01</span><div><span className="growth-section-kicker"><Store size={13}/> SHOP GROWTH</span><h3>Build trust in your whole shop</h3><p>These options apply to <b>@{selectedShop?.username}</b>, not an individual product.</p></div></div>
       <div className="growth-shop-plan-grid">
-        <article className="growth-plan-card"><span className="growth-plan-icon"><ShieldCheck size={21}/></span><span className="growth-plan-price">KSh 999 <small>/ year</small></span><h4>Verified shop</h4><p>After approval, your shop displays a Verified badge for 12 months, helping customers identify businesses that passed the marketplace review.</p><ul><li><Check size={13}/> Verified badge on your shop</li><li><Check size={13}/> Trust-focused profile</li><li><Check size={13}/> Verification review</li></ul><button type="button" disabled={!!busy || activeVerified} onClick={() => request("VERIFIED", selectedShop!.id)}>{activeVerified ? "Shop already verified" : busy === "VERIFIED" + selectedShop?.id ? "Sending request…" : <>Request verification <BadgeCheck size={15}/></>}</button></article>
-        <article className="growth-plan-card growth-plan-pro"><span className="growth-plan-icon"><Sparkles size={21}/></span><span className="growth-plan-price">KSh 499 <small>/ month</small></span><h4>Pro Seller</h4><p>After approval, your shop displays the Pro Seller badge and receives a 30-day Pro period with seller analytics and priority growth features.</p><ul><li><Check size={13}/> Pro Seller badge</li><li><Check size={13}/> Seller analytics foundation</li><li><Check size={13}/> Priority growth features</li></ul><button type="button" disabled={!!busy || activePro} onClick={() => request("PRO", selectedShop!.id)}>{activePro ? "Pro is active" : busy === "PRO" + selectedShop?.id ? "Sending request…" : <>Explore Pro Seller <Sparkles size={15}/></>}</button>{activePro && <small className="growth-active-note">Your Pro plan is active until {new Date(selectedShop!.proUntil!).toLocaleDateString()}.</small>}</article>
+        {growthOfferings.map((offering) => {
+          const code = offering.code.toUpperCase();
+          const isVerified = code === "VERIFIED";
+          const isPro = code === "PRO";
+          const alreadyActive = (isVerified && activeVerified) || (isPro && activePro);
+          return <article key={offering.id} className={"growth-plan-card" + (isPro ? " growth-plan-pro" : "")}>
+            <span className="growth-plan-icon">{isVerified ? <ShieldCheck size={21}/> : isPro ? <Sparkles size={21}/> : <BadgeCheck size={21}/>}</span>
+            <span className="growth-plan-price">KSh {offering.price.toLocaleString()} <small>/ {offering.durationDays} days</small></span>
+            <h4>{offering.name}</h4>
+            <p>{offering.description || "A marketplace growth option for your shop."}</p>
+            {!!offering.features.length && <ul>{offering.features.map((feature, i) => <li key={i}><Check size={13}/>{feature}</li>)}</ul>}
+            <button type="button" disabled={!!busy || alreadyActive} onClick={() => request(offering, selectedShop!.id)}>{alreadyActive ? (isVerified ? "Shop already verified" : "Plan already active") : busy === offering.id + selectedShop?.id ? "Sending request…" : <>Request plan <Sparkles size={15}/></>}</button>
+            {isVerified && activeVerified && <small className="growth-active-note">Verified until {selectedShop?.verifiedUntil ? new Date(selectedShop.verifiedUntil).toLocaleDateString() : "further notice"}.</small>}
+            {isPro && activePro && <small className="growth-active-note">Pro active until {new Date(selectedShop!.proUntil!).toLocaleDateString()}.</small>}
+          </article>;
+        })}
+        {!growthOfferings.length && <p className="col-span-full rounded-2xl border border-dashed border-black/15 p-6 text-sm text-[#777]">Growth plans are loading, or no active plans are currently available. Please check back soon.</p>}
       </div>
     </section>
     </> : <div className="growth-promotion-tab-panel">
