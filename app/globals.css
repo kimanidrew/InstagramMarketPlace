@@ -2509,3 +2509,38 @@ header nav {
   background:#a78bfa!important;
 }
 
+/* Refined hover and selected states for shop tabs. */
+.shop-page .shop-tab{
+  transition:background-color .18s ease,color .18s ease,border-color .18s ease;
+}
+.shop-page .shop-tab:hover{
+  background:#29252f!important;
+  color:#fff!important;
+}
+.shop-page .shop-tab:hover .shop-tab-copy b,
+.shop-page .shop-tab:hover .shop-tab-copy small{
+  color:#fff!important;
+}
+.shop-page .shop-tab:hover .shop-tab-icon{
+  background:#393044!important;
+  border-color:#514264!important;
+  color:#ddd0ff!important;
+}
+.shop-page .shop-tab.shop-tab-active,
+.shop-page .shop-tab.shop-tab-active:hover{
+  background:#6241c8!important;
+  color:#fff!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-copy b,
+.shop-page .shop-tab.shop-tab-active .shop-tab-copy small{
+  color:#fff!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-icon,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-icon{
+  background:#795be0!important;
+  border-color:#957df0!important;
+  color:#fff!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-indicator{
+  background:#fff!important;
+}
