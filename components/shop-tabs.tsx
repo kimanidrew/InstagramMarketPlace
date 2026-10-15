@@ -332,7 +332,7 @@ export function ShopTabs({
                           const href = "/" + (isService ? "service" : "product") + "/" + item.productSlug;
                           const image = item.thumbnailUrl || item.mediaUrl;
                           return (
-                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group relative block h-[164px] w-[112px] shrink-0 sm:h-[176px] sm:w-[136px]">
+                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group relative block h-[148px] w-[112px] shrink-0 sm:h-[160px] sm:w-[136px]">
                               <button type="button" aria-label="Remove from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("product-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("product", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
                               <div className="h-full w-full overflow-hidden rounded-[22px] bg-[#eeeeeb]">
                                 {isVideo && item.mediaUrl ? <video src={item.mediaUrl} poster={item.thumbnailUrl || undefined} muted loop playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={item.productTitle || "Recently viewed listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
@@ -340,13 +340,12 @@ export function ShopTabs({
                             </Link>
                           );
                         })() : (
-                          <Link key={"store-" + item.id} href={"/store/" + item.username} className="group relative flex h-[164px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[176px] sm:w-[136px]">
+                          <Link key={"store-" + item.id} href={"/store/" + item.username} className="group relative flex h-[148px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[160px] sm:w-[136px]">
                             <button type="button" aria-label="Remove store from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("store-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("store", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
-                            <span className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-[#ecece8] sm:h-[76px] sm:w-[76px]">
+                            <span className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[#ecece8] sm:h-14 sm:w-14">
                               {item.profileImageUrl ? <img src={item.profileImageUrl} alt={"@" + item.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
                             </span>
                             <b className="mt-3 max-w-full truncate text-xs font-extrabold text-[#171717]">@{item.username}</b>
-                            <span className="mt-1 text-[10px] font-semibold text-[#888]">{item.listingCount} listings</span>
                             <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555] transition group-hover:text-black">Visit again <ArrowRight size={11} /></span>
                           </Link>
                         ))}
