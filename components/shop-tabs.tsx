@@ -42,7 +42,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
           <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
             <span className="shop-promo-label"><Sparkles size={11} /> Promoted shop</span>
             <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Meet <span className="text-[#d6ff63]">@{activeSlide.store.username}</span></h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-white/70">Discover the shop behind the posts and explore their latest finds.</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-white/70">{activeSlide.store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
             <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore shop <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></span>
           </div>
           <div className="shop-promo-store-visual relative min-h-[150px] overflow-hidden sm:min-h-[200px]">
