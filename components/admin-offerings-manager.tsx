@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { Check, Edit3, Plus, Save, Trash2, X } from "lucide-react";
 
 type Offering = {
@@ -29,7 +29,7 @@ export default function AdminOfferingsManager({ initialOfferings, audienceSize }
     if (response.ok) setItems(data.offerings);
   }
 
-  async function save(event: React.FormEvent) {
+  async function save(event: FormEvent) {
     event.preventDefault();
     if (!draft || busy) return;
     setBusy(true); setNotice(""); setError("");
