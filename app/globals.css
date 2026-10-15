@@ -3620,3 +3620,39 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-indicator{
   background:#fff!important;
 }
+
+
+/* Shop promotion banner: no outer border; show promoted product imagery without cropping it. */
+.shop-page .shop-promo-carousel{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+.shop-page .shop-promo-product-visual{
+  position:relative;
+  min-height:260px;
+  background:radial-gradient(ellipse at center,#f7f6f1 0%,#e7e4da 78%);
+  isolation:isolate;
+}
+.shop-page .shop-promo-product-visual img{
+  object-fit:contain!important;
+  object-position:center!important;
+  padding:18px!important;
+  box-sizing:border-box;
+}
+.shop-page .shop-promo-product .shop-promo-product-visual{
+  min-width:0;
+  align-self:stretch;
+}
+.shop-page .shop-promo-product-sticker{
+  z-index:2;
+}
+@media(max-width:767px){
+  .shop-page .shop-promo-product-visual{
+    min-height:220px!important;
+    height:220px!important;
+  }
+  .shop-page .shop-promo-product-visual img{
+    padding:12px!important;
+  }
+}
