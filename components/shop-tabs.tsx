@@ -59,11 +59,18 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
 function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[] }) {
   const promotedStores = stores.filter(({ store }) => store.paidPromotionActive);
   const promotedProducts = products.filter((product) => product.boostUntil && new Date(product.boostUntil).getTime() > Date.now());
+  // Always keep a shop in the carousel, even when no paid shop campaign is active.
+  const fallbackShop = promotedStores.length ? null : stores.find(({ store, posts }) => store && (store.profileImageUrl || posts?.length)) || stores[0] || null;
+  const shopSlides: PromoSlide[] = promotedStores.length
+    ? promotedStores.map(({ store, posts }) => ({ type: "store" as const, key: "store-" + store.id, store, posts }))
+    : fallbackShop
+      ? [{ type: "store" as const, key: "shop-spotlight-" + fallbackShop.store.id, store: fallbackShop.store, posts: fallbackShop.posts || [] }]
+      : [];
   const allSlides: PromoSlide[] = [
-    ...promotedStores.map(({ store, posts }) => ({ type: "store" as const, key: "store-" + store.id, store, posts })),
+    ...shopSlides,
     ...promotedProducts.map((product) => ({ type: "product" as const, key: "product-" + product.id, product })),
   ];
-  // Keep the original marketplace spotlight as a fallback only when there are no active paid promotions.
+  // Keep the marketplace spotlight art only if no shop or product is available.
   const promotionSlides: PromoSlide[] = allSlides.length ? allSlides : [{ type: "ad", key: "sokolink-promo" }];
   const [seenPromoKeys, setSeenPromoKeys] = useState<string[]>([]);
   const seenPromoKeysRef = React.useRef<string[]>([]);
@@ -123,7 +130,11 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   }, [progressKey, cycleStartKey, visitorId, allSlides.map((slide) => slide.key).join("|")]);
 
   const remainingSlides = promotionSlides.filter((slide) => !seenPromoKeys.includes(slide.key));
-  const slides = remainingSlides.length ? remainingSlides : promotionSlides;
+  // If a fallback shop exists, keep at least one shop slide visible even after it has been seen.
+  const visibleRemaining = fallbackShop && !remainingSlides.some((slide) => slide.type === "store")
+    ? [...remainingSlides, shopSlides[0]].filter(Boolean) as PromoSlide[]
+    : remainingSlides;
+  const slides = visibleRemaining.length ? visibleRemaining : promotionSlides;
 
   useEffect(() => {
     setIndex((current) => slides.length ? current % slides.length : 0);
