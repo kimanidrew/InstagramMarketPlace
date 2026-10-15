@@ -168,48 +168,32 @@ export function ShopTabs({
                   </div>
                   <div className="discover-stores-list mt-7 grid gap-5 lg:grid-cols-2">
                     {featuredStores.filter(({ posts }: any) => posts?.length > 0).slice(0, 5).map(({ store, posts }: any) => {
-                      const ratings = store.reviews || [];
-                      const averageRating = ratings.length ? ratings.reduce((sum: number, review: any) => sum + review.rating, 0) / ratings.length : null;
+                      const isVerified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > currentNow));
+                      const isPro = Boolean(store.proUntil && new Date(store.proUntil) > currentNow);
                       return (
-                        <article key={store.id} className="group relative overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(0,0,0,.09)]">
+                        <article key={store.id} className="discover-store-card group relative min-w-0 overflow-hidden rounded-[24px] border border-black/[.06] bg-white p-4 transition duration-300 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_16px_38px_rgba(0,0,0,.07)] sm:p-5">
                           <AnalyticsImpression connectionId={store.id} />
-                          <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="flex items-center justify-between gap-4 px-2 py-2">
-                            <div className="flex min-w-0 items-center gap-3">
-                              <div className="h-[76px] w-[76px] shrink-0 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-md sm:h-20 sm:w-20">
+                          <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="flex h-full flex-col items-center text-center">
+                            <div className="discover-store-avatar relative mb-3 h-24 w-24 shrink-0 overflow-hidden rounded-full bg-[#f1f1ed] p-[3px] sm:h-28 sm:w-28">
+                              <div className="h-full w-full overflow-hidden rounded-full bg-white">
                                 {store.profileImageUrl ? (
-                                  <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" />
+                                  <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                                 ) : (
-                                  <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>
+                                  <div className="flex h-full w-full items-center justify-center text-2xl font-black text-[#777]">@</div>
                                 )}
                               </div>
-                              <div className="min-w-0">
-                                <div className="flex items-center gap-1.5">
-                                  <b className="truncate text-sm font-black">@{store.username}</b>
-                                  {(store.verifiedAt || (store.proUntil && new Date(store.proUntil) > currentNow)) && <BadgeCheck size={14} className="shrink-0" />}
-                                </div>
-                                <p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">Instagram shop</p>
-                                {store.paidPromotionActive && <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-black px-2 py-1 text-[8px] font-black uppercase tracking-wider text-white"><Sparkles size={9}/> Promoted</span>}
-                              </div>
+                              {isVerified && <span className="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-white text-blue-600" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={19} fill="currentColor" className="text-white" /></span>}
                             </div>
-                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-black shadow-sm transition group-hover:translate-x-0.5">
-                              <ArrowRight size={14} />
+                            <div className="flex max-w-full items-center justify-center gap-1.5">
+                              <b className="max-w-full truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
+                              {isPro && <Crown size={14} className="shrink-0 text-amber-500" aria-label="Pro Seller" />}
+                            </div>
+                            <span className="mt-1 text-[10px] font-semibold tracking-wide text-[#888]">Instagram shop</span>
+                            {store.paidPromotionActive && <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#f1f5e8] px-2.5 py-1 text-[9px] font-extrabold text-[#536b27]"><Sparkles size={10} /> Promoted</span>}
+                            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f2] px-4 py-2 text-[11px] font-extrabold text-[#222] transition group-hover:bg-black group-hover:text-white">
+                              Visit shop <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                             </span>
                           </Link>
-
-                          <div className="mt-3 grid grid-cols-3 gap-2 border-t border-black/5 px-2 pt-4">
-                            <div className="flex flex-col gap-1">
-                              <span className="flex items-center gap-1 text-sm font-black text-[#252525]"><Store size={14} className="text-[#777]" /> {posts.length}</span>
-                              <span className="text-[9px] font-bold uppercase tracking-[.1em] text-[#888]">Listings</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <span className="flex items-center gap-1 text-sm font-black text-[#252525]"><span className="text-amber-500">★</span> {averageRating === null ? "—" : averageRating.toFixed(1)}</span>
-                              <span className="text-[9px] font-bold uppercase tracking-[.1em] text-[#888]">Rating</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <span className="text-sm font-black text-[#252525]">{ratings.length}</span>
-                              <span className="text-[9px] font-bold uppercase tracking-[.1em] text-[#888]">Reviews</span>
-                            </div>
-                          </div>
                         </article>
                       );
                     })}
