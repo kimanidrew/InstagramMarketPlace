@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { House, Search, Sparkles, Store, UserRound } from "lucide-react";
 
@@ -28,7 +27,7 @@ export function MobileBottomNav({ user }: { user: any }) {
             : pathname === href || pathname.startsWith(href + "/");
 
           return (
-            <Link
+            <a
               key={label}
               href={destination}
               aria-label={label}
@@ -39,7 +38,7 @@ export function MobileBottomNav({ user }: { user: any }) {
                 <Icon size={20} strokeWidth={active ? 2.4 : 1.9} />
               </span>
               <span className="mobile-bottom-nav-label">{label}</span>
-            </Link>
+            </a>
           );
         })}
       </div>
