@@ -66,7 +66,7 @@ function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex:
           const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
           const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
           return (
-            <Link key={store.id} href={"/store/" + store.username} className="group w-[86%] min-w-0 shrink-0 snap-start rounded-[21px] sm:w-auto sm:shrink" border border-black/[.05] bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
+            <Link key={store.id} href={"/store/" + store.username} className="group w-[86%] min-w-0 shrink-0 snap-start rounded-[21px] border border-black/[.05] bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:w-auto sm:shrink sm:rounded-[24px] sm:p-4">
               <div className="flex min-w-0 items-center gap-3">
                 <span className="relative h-[58px] w-[58px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[66px] sm:w-[66px]">
                   <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
