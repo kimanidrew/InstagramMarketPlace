@@ -20,7 +20,7 @@ export default async function CategoriesPage() {
   });
 
   const categories = await Promise.all(grouped
-    .filter((item) => item.category?.trim())
+    .filter((item): item is typeof item & { category: string } => Boolean(item.category?.trim()))
     .map(async (item) => {
       const products = await prisma.instagramPost.findMany({
         where: { isProduct: true, category: { equals: item.category, mode: "insensitive" } },
