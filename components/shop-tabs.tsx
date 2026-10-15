@@ -123,7 +123,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   }, [progressKey, cycleStartKey, visitorId, allSlides.map((slide) => slide.key).join("|")]);
 
   const remainingSlides = promotionSlides.filter((slide) => !seenPromoKeys.includes(slide.key));
-  const slides = (remainingSlides.length ? remainingSlides : promotionSlides).slice(0, 3);
+  const slides = remainingSlides.length ? remainingSlides : promotionSlides;
 
   useEffect(() => {
     setIndex((current) => slides.length ? current % slides.length : 0);
@@ -183,7 +183,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       <div ref={measureRef} className="shop-promo-measurement" aria-hidden="true">
         {slides.map((slide) => <PromoSlideContent key={"measure-" + slide.key} slide={slide} measure />)}
       </div>
-      {slides.length > 1 && <div className="shop-promo-controls"><div className="shop-promo-dots">{slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show promotion " + (i + 1)} aria-current={i === index} onClick={() => setIndex(i)} className={i === index ? "is-active" : ""} />)}</div><div className="flex gap-2"><button type="button" onClick={previous} aria-label="Previous promotion"><ChevronLeft size={16} /></button><button type="button" onClick={next} aria-label="Next promotion"><ChevronRight size={16} /></button></div></div>}
+      {slides.length > 1 && <div className="shop-promo-controls" aria-label="Promotion carousel controls"><div className="shop-promo-dots" role="group" aria-label="Choose a promotion">{slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show promotion " + (i + 1)} aria-current={i === index ? "true" : undefined} onClick={() => setIndex(i)} className={i === index ? "is-active" : ""} />)}</div><div className="flex gap-2"><button type="button" onClick={previous} aria-label="Previous promotion"><ChevronLeft size={16} /></button><button type="button" onClick={next} aria-label="Next promotion"><ChevronRight size={16} /></button></div></div>}
     </section>
   );
 }
