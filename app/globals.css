@@ -3287,6 +3287,7 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .for-you-filter-chip.is-active{box-shadow:0 3px 10px rgba(0,0,0,.1)}
 .for-you-filter-scroll-button{
   z-index:3;
+  top:calc(50% - 1.5px);
   width:32px;
   height:32px;
   border:1px solid rgba(20,20,20,.1);
@@ -3308,8 +3309,8 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   .for-you-filter-tags{padding-inline:38px!important;gap:8px;scroll-padding-inline:38px}
   .for-you-filter-scroller::before,.for-you-filter-scroller::after{width:30px}
   .for-you-filter-scroll-button{width:29px;height:29px}
-  .for-you-filter-scroll-button.left-2{left:4px}
-  .for-you-filter-scroll-button.right-2{right:4px}
+  .for-you-filter-scroll-button.left-2{left:5px}
+  .for-you-filter-scroll-button.right-2{right:5px}
 }
 
 
