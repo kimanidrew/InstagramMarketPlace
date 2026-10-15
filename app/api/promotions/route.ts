@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     }
     const startsAt = new Date();
     const endsAt = new Date(startsAt.getTime() + durationDays * 24 * 60 * 60 * 1000);
-    const campaign = await prisma.promotionCampaign.create({ data: { userId: current.id, connectionId, postId: targetType === "PRODUCT" ? postId : null, targetType: targetType as "STORE" | "PRODUCT", targetReach, amount, offeringId: offering.id, durationDays, status: "PENDING_PAYMENT", startsAt, endsAt } });
+    const campaign = await prisma.promotionCampaign.create({ data: { userId: current.id, connectionId, postId: targetType === "PRODUCT" ? postId : null, targetType: targetType as "STORE" | "PRODUCT", targetReach, amount, offeringId: offering.id, durationDays, offeringName: offering.name, offeringFeatures: offering.features, status: "PENDING_PAYMENT", startsAt, endsAt } });
     const payment = await prisma.promotionPayment.create({ data: { campaignId: campaign.id, phoneNumber: phoneNumber || "DEMO", amount, status: "INITIATED", provider: demoMode ? "DEMO" : "MPESA", ...(demoMode ? { resultDescription: "Demo activation only. No real payment was requested or charged." } : {}) } });
     if (demoMode) {
       await prisma.promotionCampaign.update({ where: { id: campaign.id }, data: { status: "ACTIVE", startsAt, endsAt } });
