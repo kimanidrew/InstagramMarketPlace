@@ -80,9 +80,12 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       const validStored = Array.isArray(stored)
         ? stored.filter((key: unknown): key is string => typeof key === "string" && allSlides.some((slide) => slide.key === key))
         : [];
-      let cycleStart = Number(window.localStorage.getItem(cycleStartKey) || 0);
+      // On the first cycle, include earlier detail-page views too.
+      let cycleStart = Number(window.localStorage.getItem(cycleStartKey) || 1);
       if (!Number.isFinite(cycleStart) || cycleStart <= 0) {
-        cycleStart = Date.now();
+        cycleStart = 1;
+      }
+      if (!window.localStorage.getItem(cycleStartKey)) {
         window.localStorage.setItem(cycleStartKey, String(cycleStart));
       }
       fetch("/api/shopper/promotion-views?visitorId=" + encodeURIComponent(visitorId) + "&since=" + encodeURIComponent(String(cycleStart)), { cache: "no-store" })
