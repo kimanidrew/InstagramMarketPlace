@@ -2,7 +2,8 @@ import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store, Zap, ChartNoAxesCombined, XCircle } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store, Zap, ChartNoAxesCombined } from "lucide-react";
+import GlobalFeedbackTrigger from "@/components/global-feedback-trigger";
 import { AccountLiveRefresh } from "@/components/account-live-refresh";
 import { AccountTerminateStoreForm } from "@/components/account-terminate-store-form";
 
@@ -44,12 +45,12 @@ export default async function Account({ searchParams }: { searchParams: Promise<
       <form action={out} className="account-signout-form"><button className="account-signout"><LogOut size={15}/> Sign out</button></form>
     </section>
 
-    {q.instagram === "connected" && <div className="seller-alert success"><CheckCircle2 size={19}/><div><b>Instagram connected!</b><span>Your account is linked. Eligible posts can become marketplace products.</span></div></div>}
-    {q.storeTerminated === "1" && <div className="seller-alert success"><CheckCircle2 size={19}/><div><b>Shop terminated.</b><span>The Instagram connection and its marketplace listings have been removed from your account.</span></div></div>}
-    {q.storeTerminationError && <div className="seller-alert error"><XCircle size={19}/><div>{q.storeTerminationError === "notfound" ? "That connected shop could not be found in your account." : "Please select a connected shop and try again."}</div></div>}
-    {q.instagram_error && <div className="seller-alert error"><Instagram size={19}/><div>{q.instagram_error}</div></div>}
-    {q.error === "invalid" && <div className="seller-alert error"><Instagram size={19}/><div>Please enter a valid Instagram username.</div></div>}
-    {q.requested && <div className="seller-alert success"><CheckCircle2 size={19}/><div><b>Request submitted.</b><span>Your Instagram shop request is waiting for review.</span></div></div>}
+    {q.instagram === "connected" && <GlobalFeedbackTrigger type="success" title="Instagram connected!" message="Your account is linked. Eligible posts can become marketplace products." />}
+    {q.storeTerminated === "1" && <GlobalFeedbackTrigger type="success" title="Shop terminated" message="The Instagram connection and its marketplace listings have been removed from your account." />}
+    {q.storeTerminationError && <GlobalFeedbackTrigger type="error" title="Could not terminate shop" message={q.storeTerminationError === "notfound" ? "That connected shop could not be found in your account." : "Please select a connected shop and try again."} />}
+    {q.instagram_error && <GlobalFeedbackTrigger type="error" title="Instagram connection failed" message={q.instagram_error} />}
+    {q.error === "invalid" && <GlobalFeedbackTrigger type="error" title="Invalid Instagram username" message="Please enter a valid Instagram username." />}
+    {q.requested && <GlobalFeedbackTrigger type="success" title="Request submitted" message="Your Instagram shop request is waiting for review." />}
 
     <section className="account-overview-grid">
       <article><span className="account-overview-icon"><Store size={18}/></span><div><span>Connected shops</span><b>{connections.length}</b></div></article>
