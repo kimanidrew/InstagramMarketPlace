@@ -38,7 +38,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   return (
     <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" aria-label="Promoted shops, products and marketplace ads">
       {activeSlide.type === "store" && (
-        <Link href={"/store/" + activeSlide.store.username} className="shop-promo-slide shop-promo-store group grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1.05fr_.95fr]">
+        <Link href={"/store/" + activeSlide.store.username} key={activeSlide.key} className="shop-promo-slide shop-promo-enter shop-promo-store group grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1.05fr_.95fr]">
           <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
             <span className="shop-promo-label"><Sparkles size={11} /> Promoted shop</span>
             <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Meet <span className="text-[#d6ff63]">@{activeSlide.store.username}</span></h2>
@@ -53,7 +53,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
         </Link>
       )}
       {activeSlide.type === "product" && (
-        <Link href={"/" + (String(activeSlide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + activeSlide.product.productSlug} className="shop-promo-slide shop-promo-product group grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[.9fr_1.1fr]">
+        <Link href={"/" + (String(activeSlide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + activeSlide.product.productSlug} key={activeSlide.key} className="shop-promo-slide shop-promo-enter shop-promo-product group grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[.9fr_1.1fr]">
           <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
             <span className="shop-promo-label"><Sparkles size={11} /> Boosted listing</span>
             <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{activeSlide.product.productTitle || "A find worth sharing."}</h2>
@@ -67,7 +67,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
         </Link>
       )}
       {activeSlide.type === "ad" && (
-        <div className="shop-promo-slide shop-promo-ad grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1fr_.85fr]">
+        <div key={activeSlide.key} className="shop-promo-slide shop-promo-enter shop-promo-ad grid min-h-[230px] overflow-hidden sm:min-h-[260px] md:grid-cols-[1fr_.85fr]">
           <div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">
             <span className="shop-promo-label"><Megaphone size={11} /> Marketplace spotlight · Ad</span>
             <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Your next favourite shop is <span className="text-[#d6ff63]">closer than you think.</span></h2>
