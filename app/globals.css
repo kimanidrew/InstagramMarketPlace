@@ -3656,3 +3656,144 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
     padding:12px!important;
   }
 }
+
+
+/* SokoLink promoted listing — premium editorial showcase */
+.shop-page .shop-promo-carousel{
+  border:1px solid rgba(18,18,18,.06);
+  border-radius:30px;
+  background:#f3f0e8;
+  box-shadow:0 22px 60px rgba(28,24,17,.12);
+}
+.shop-page .shop-promo-product{
+  position:relative;
+  isolation:isolate;
+  grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
+  color:#fff;
+  background:
+    radial-gradient(ellipse at 12% 12%,rgba(255,255,255,.22),transparent 32%),
+    linear-gradient(125deg,#171713 0%,#4b3c2a 54%,#171713 100%);
+}
+.shop-page .shop-promo-product:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  background:linear-gradient(110deg,rgba(12,12,10,.38),transparent 68%);
+  pointer-events:none;
+}
+.shop-page .shop-promo-product>div:first-child{
+  padding:clamp(24px,4vw,54px);
+  min-width:0;
+}
+.shop-page .shop-promo-product .shop-promo-label{
+  border:1px solid rgba(255,255,255,.24);
+  background:linear-gradient(110deg,#ff3978,#f51d58);
+  color:#fff;
+  border-radius:999px;
+  padding:9px 14px;
+  font-size:10px;
+  letter-spacing:.09em;
+  box-shadow:0 8px 25px rgba(245,29,88,.25);
+}
+.shop-page .shop-promo-product h2{
+  max-width:12ch;
+  margin-top:22px;
+  color:#fff;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(32px,4.3vw,58px);
+  font-weight:700;
+  line-height:.99!important;
+  letter-spacing:-.045em;
+  text-wrap:balance;
+}
+.shop-page .shop-promo-product p{
+  max-width:34ch;
+  margin-top:16px;
+  color:rgba(255,255,255,.76);
+  font-size:14px;
+  line-height:1.7;
+}
+.shop-page .shop-promo-product>div:first-child>span.mt-6{
+  margin-top:25px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  background:#fff;
+  color:#171717;
+  padding:13px 19px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  transition:transform .25s,box-shadow .25s;
+}
+.shop-page .shop-promo-product:hover>div:first-child>span.mt-6{
+  transform:translateY(-3px);
+  box-shadow:0 16px 34px rgba(0,0,0,.24);
+}
+.shop-page .shop-promo-product-visual{
+  min-height:300px;
+  margin:14px;
+  overflow:hidden;
+  border-radius:24px;
+  background:linear-gradient(145deg,#e8d7bc,#9c7950);
+  box-shadow:0 16px 44px rgba(0,0,0,.22);
+}
+.shop-page .shop-promo-product-visual:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 38%,rgba(0,0,0,.26));
+  pointer-events:none;
+}
+.shop-page .shop-promo-product-visual img{
+  object-fit:cover;
+  object-position:center;
+  transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .5s;
+}
+.shop-page .shop-promo-product:hover .shop-promo-product-visual img{
+  transform:scale(1.045);
+  filter:saturate(1.06);
+}
+.shop-page .shop-promo-product-sticker{
+  z-index:1;
+  top:18px;
+  right:18px;
+  bottom:auto;
+  border:1px solid rgba(255,255,255,.32);
+  border-radius:999px;
+  background:rgba(18,18,16,.58);
+  color:#fff;
+  padding:10px 14px;
+  font-size:9px;
+  letter-spacing:.13em;
+  backdrop-filter:blur(14px);
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+.shop-page .shop-promo-controls{
+  right:24px;
+  bottom:19px;
+  gap:12px;
+}
+.shop-page .shop-promo-dots button{background:rgba(255,255,255,.45)}
+.shop-page .shop-promo-dots button.is-active{background:#fff;width:22px}
+.shop-page .shop-promo-controls>div:last-child button{
+  width:36px;height:36px;
+  border-color:rgba(255,255,255,.35);
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);
+}
+.shop-page .shop-promo-controls>div:last-child button:hover{background:rgba(255,255,255,.25)}
+@media(max-width:640px){
+  .shop-page .shop-promo-product{
+    grid-template-columns:minmax(0,1fr) 42%;
+    grid-template-rows:minmax(0,1fr);
+  }
+  .shop-page .shop-promo-product>div:first-child{padding:18px 10px 52px 18px}
+  .shop-page .shop-promo-product h2{font-size:clamp(23px,6vw,32px);line-height:1.04!important;margin-top:13px}
+  .shop-page .shop-promo-product p{font-size:11px;line-height:1.45;margin-top:9px}
+  .shop-page .shop-promo-product>div:first-child>span.mt-6{margin-top:13px;padding:9px 12px;font-size:10px}
+  .shop-page .shop-promo-product-visual{min-height:0;height:auto;margin:10px 10px 54px 0;border-radius:18px}
+  .shop-page .shop-promo-product-sticker{top:9px;right:8px;padding:7px 8px;font-size:7px}
+  .shop-page .shop-promo-controls{right:12px;bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .shop-page .shop-promo-product-visual img,.shop-page .shop-promo-product>div:first-child>span.mt-6{transition:none}
+}
