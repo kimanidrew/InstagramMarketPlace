@@ -779,8 +779,12 @@ html:has(.store-reviews-overlay){overflow:hidden}
 }
 .mobile-bottom-nav-item:active{transform:scale(.94)}
 .mobile-bottom-nav-item.is-active{
-  color:#fff;
-  background:#171717;
+  color:#f5f5f5;
+  background:transparent;
+}
+.mobile-bottom-nav-item.is-active .mobile-bottom-nav-icon,
+.mobile-bottom-nav-item.is-active .mobile-bottom-nav-label{
+  color:#f5f5f5;
 }
 .mobile-bottom-nav-icon{display:flex;align-items:center;justify-content:center}
 .mobile-bottom-nav-label{font-size:8px;font-weight:750;letter-spacing:.01em;line-height:1.1}
