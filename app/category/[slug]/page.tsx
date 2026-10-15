@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Layers3 } from "lucide-react";
+import { ArrowRight, Layers3 } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
@@ -92,7 +92,6 @@ export default async function CategoryDetailPage({ params }: { params: Promise<{
             <Layers3 className="mx-auto text-[#777]" size={28} />
             <h2 className="mt-4 text-xl font-black">No available listings yet</h2>
             <p className="mt-2 text-sm text-[#777]">Check back soon for new finds in {category.category}.</p>
-            <Link href="/categories" className="mt-6 inline-flex rounded-full bg-black px-5 py-3 text-xs font-bold text-white">Back to categories</Link>
           </div>
         ) : (
           <div className="space-y-12">
