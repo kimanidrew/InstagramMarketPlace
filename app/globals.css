@@ -3236,7 +3236,7 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 }
 
 
-/* For You category filters: flat surface and edge-to-edge category rail. */
+/* For You category rail: padded inner track, softly masked edges and tidy controls. */
 .for-you-filter-bar{
   padding:14px 0!important;
   box-shadow:none!important;
@@ -3246,23 +3246,70 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .for-you-filter-heading{
   padding-inline:clamp(16px,calc((100vw - 1180px)/2),max(16px,calc((100vw - 1180px)/2)));
 }
-.for-you-filter-scroller,
+.for-you-filter-scroller{
+  position:relative;
+  width:100%;
+  max-width:100%;
+  isolation:isolate;
+}
+.for-you-filter-scroller::before,
+.for-you-filter-scroller::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  z-index:1;
+  width:34px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .18s ease;
+}
+.for-you-filter-scroller::before{
+  left:0;
+  background:linear-gradient(90deg,rgba(255,255,255,.98),rgba(255,255,255,0));
+}
+.for-you-filter-scroller::after{
+  right:0;
+  background:linear-gradient(270deg,rgba(255,255,255,.98),rgba(255,255,255,0));
+}
+.for-you-filter-scroller:has(.for-you-filter-scroll-button.left-2)::before,
+.for-you-filter-scroller:has(.for-you-filter-scroll-button.right-2)::after{opacity:1}
 .for-you-filter-tags{
   width:100%;
   max-width:100%;
-}
-.for-you-filter-tags{
-  padding:2px 0 4px!important;
+  padding:3px 42px 6px!important;
   gap:9px;
+  scroll-padding-inline:42px;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
-.for-you-filter-chip.is-active,
+.for-you-filter-tags::-webkit-scrollbar{display:none}
+.for-you-filter-chip.is-active{box-shadow:0 3px 10px rgba(0,0,0,.1)}
 .for-you-filter-scroll-button{
-  box-shadow:none!important;
+  z-index:3;
+  width:32px;
+  height:32px;
+  border:1px solid rgba(20,20,20,.1);
+  background:rgba(255,255,255,.96);
+  color:#20201d;
+  box-shadow:0 3px 12px rgba(0,0,0,.12);
+  backdrop-filter:blur(8px);
+}
+.for-you-filter-scroll-button.left-2{left:5px}
+.for-you-filter-scroll-button.right-2{right:5px}
+.for-you-filter-scroll-button:hover{
+  background:#d6ff63;
+  color:#171717;
+  border-color:#d6ff63;
 }
 @media(max-width:640px){
   .for-you-filter-bar{padding:12px 0!important}
-  .for-you-filter-heading{padding-inline:11px}
-  .for-you-filter-tags{gap:8px}
+  .for-you-filter-heading{padding-inline:14px}
+  .for-you-filter-tags{padding-inline:38px!important;gap:8px;scroll-padding-inline:38px}
+  .for-you-filter-scroller::before,.for-you-filter-scroller::after{width:30px}
+  .for-you-filter-scroll-button{width:29px;height:29px}
+  .for-you-filter-scroll-button.left-2{left:4px}
+  .for-you-filter-scroll-button.right-2{right:4px}
 }
 
 
