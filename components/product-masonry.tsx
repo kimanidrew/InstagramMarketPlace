@@ -48,7 +48,7 @@ const storeSectionTitles = [
 ];
 
 function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex: number }) {
-  const batch = stores.slice(batchIndex * 2, batchIndex * 2 + 2);
+  const batch = stores.slice(batchIndex * 4, batchIndex * 4 + 4);
   if (!batch.length) return null;
   const heading = storeSectionTitles[batchIndex % storeSectionTitles.length];
 
@@ -62,36 +62,24 @@ function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex:
         </div>
         <Link href="/stores" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">All stores <ArrowRight size={12} /></Link>
       </div>
-      <div className="product-store-interlude-list flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:pb-0">
+      <div className="product-store-interlude-list grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {batch.map(({ store, posts }: any) => {
           const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
           const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
           return (
-            <Link key={store.id} href={"/store/" + store.username} className="group w-[86%] min-w-0 shrink-0 snap-start rounded-[21px] border border-black/[.05] bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:w-auto sm:shrink sm:rounded-[24px] sm:p-4">
-              <div className="flex min-w-0 items-center gap-3">
-                <span className="relative h-[58px] w-[58px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[66px] sm:w-[66px]">
-                  <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
-                    {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center text-sm font-black text-[#777]">@</span>}
-                  </span>
-                  {verified && <span className="absolute bottom-0 right-0 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-sm"><BadgeCheck size={13} fill="currentColor" className="text-white" /></span>}
+            <Link key={store.id} href={"/store/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[21px] border border-black/[.05] bg-white p-3 text-center transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
+              <span className="relative mb-3 block h-[68px] w-[68px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[76px] sm:w-[76px]">
+                <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
+                  {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center rounded-full text-sm font-black text-[#777]">@</span>}
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className="flex min-w-0 items-center gap-1.5">
-                    <b className="truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
-                    {pro && <Crown size={13} className="shrink-0 text-amber-500" />}
-                  </span>
-                  <span className="mt-1 block text-[10px] font-semibold text-[#888] sm:text-[11px]">{posts.length} listings · Instagram shop</span>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555] transition group-hover:text-black sm:text-[11px]">Explore shop <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
-                </span>
-              </div>
-              <span className="mt-3 grid grid-cols-3 gap-2 border-t border-black/[.05] pt-3">
-                {posts.slice(0, 3).map((post: any, index: number) => {
-                  const image = post.thumbnailUrl || post.mediaUrl;
-                  return <span key={post.id || index} className="block aspect-[4/3] overflow-hidden rounded-[11px] bg-[#f0f0ec]">
-                    {image ? <img src={image} alt="" loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" /> : <span className="flex h-full items-center justify-center text-[9px] font-bold text-[#999]">Listing</span>}
-                  </span>;
-                })}
+                {verified && <span className="absolute bottom-0 right-0 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-sm"><BadgeCheck size={13} fill="currentColor" className="text-white" /></span>}
               </span>
+              <span className="flex min-w-0 max-w-full items-center justify-center gap-1.5">
+                <b className="truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
+                {pro && <Crown size={13} className="shrink-0 text-amber-500" />}
+              </span>
+              <span className="mt-1 block text-[10px] font-semibold text-[#888] sm:text-[11px]">{posts.length} listings · Instagram shop</span>
+              <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555] transition group-hover:text-black sm:text-[11px]">Explore shop <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
             </Link>
           );
         })}
@@ -261,7 +249,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   products.forEach((product, index) => {
     productFeed.push({ type: "product", product });
     // Show the first store section after product 4, then after each 12 more products.
-    if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 2) {
+    if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 4) {
       productFeed.push({ type: "stores", batchIndex: Math.floor((index - 3) / 12) });
     }
     if (index === 7 && wishlistProducts.length > 0) productFeed.push({ type: "saved" });
