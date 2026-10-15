@@ -210,7 +210,7 @@ model GrowthRequest {
   userId       String
   connectionId String
   postId       String?
-  type         GrowthRequestType
+  type         String
   status       GrowthRequestStatus @default(PENDING)
   amount       Int
   createdAt    DateTime            @default(now())
@@ -234,6 +234,11 @@ enum AnalyticsEventType {
 enum PromotionTargetType {
   PRODUCT
   STORE
+}
+
+enum OfferingCategory {
+  PROMOTION
+  GROWTH
 }
 
 enum PromotionStatus {
@@ -269,6 +274,28 @@ model AnalyticsEvent {
   @@index([visitorId, createdAt])
 }
 
+model GrowthOffering {
+  id          String           @id @default(cuid())
+  code        String           @unique
+  name        String
+  category    OfferingCategory
+  targetType  PromotionTargetType?
+  description String           @default("")
+  price       Int
+  targetReach Int              @default(0)
+  reachMode   String           @default("FIXED")
+  durationDays Int             @default(7)
+  features    String[]         @default([])
+  active      Boolean          @default(true)
+  sortOrder   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  growthRequests GrowthRequest[]
+  campaigns   PromotionCampaign[]
+
+  @@index([category, active, sortOrder])
+}
+
 model PromotionCampaign {
   id              String               @id @default(cuid())
   userId          String
@@ -288,6 +315,9 @@ model PromotionCampaign {
   post            InstagramPost?       @relation(fields: [postId], references: [id], onDelete: Cascade)
   payment         PromotionPayment?
   events          AnalyticsEvent[]
+  offeringId      String?
+  durationDays    Int                  @default(7)
+  offering        GrowthOffering?      @relation(fields: [offeringId], references: [id], onDelete: SetNull)
 
   @@index([userId, createdAt])
   @@index([connectionId, status])
