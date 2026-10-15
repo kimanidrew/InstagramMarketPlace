@@ -51,7 +51,7 @@ export default async function Products({
             },
             orderBy: { lastViewedAt: "desc" },
             take: 7,
-          }).then((items) => filterAvailableInstagramMedia(items.map((item) => item.post)))
+          }).then((items) => filterAvailableInstagramMedia(items.map((item) => ({ ...item.post, historyViewedAt: item.lastViewedAt }))))
         : Promise.resolve([]),
       db().instagramPost.findMany({
         where: { isProduct: true, boostUntil: { gt: now } },
