@@ -7,6 +7,7 @@ import AdminRemoveStore from "@/components/admin-remove-store";
 import AdminGrowthActions from "@/components/admin-growth-actions";
 import AdminDashboardTabs from "@/components/admin-dashboard-tabs";
 import AdminWorkspaceNav from "@/components/admin-workspace-nav";
+import AdminOfferingsManager from "@/components/admin-offerings-manager";
 
 export const dynamic = "force-dynamic";
 
@@ -60,16 +61,18 @@ export default async function Admin({
 
   const q = await searchParams;
   const p = db();
-  const [requests, connections, products, users, growth] = await Promise.all([
+  const [requests, connections, products, users, growth, offerings, audienceSize] = await Promise.all([
     p.storeRequest.findMany({ include: { user: true }, orderBy: { createdAt: "desc" } }),
     p.instagramConnection.findMany({ include: { posts: { where: { isProduct: true }, select: { id: true } } } }),
     p.instagramPost.count({ where: { isProduct: true } }),
     p.user.count({ where: { role: "USER" } }),
     p.growthRequest.findMany({
       where: { status: "PENDING" },
-      include: { user: true, connection: true, post: true },
+      include: { user: true, connection: true, post: true, offering: true },
       orderBy: { createdAt: "desc" },
     }),
+    p.growthOffering.findMany({ orderBy: [{ category: "asc" }, { sortOrder: "asc" }, { createdAt: "asc" }] }),
+    p.user.count({ where: { role: "USER" } }),
   ]);
 
   const pending = requests.filter((request) => request.status === "PENDING");
@@ -214,6 +217,12 @@ export default async function Admin({
               content: <div className="admin-request-list">{rejected.length ? rejected.map(renderRequest) : <div className="admin-tab-empty"><Users size={22} /> <b>No rejected requests</b><span>Rejected applications will appear here.</span></div>}</div>,
             },
             {
+              id: "offerings",
+              label: "Plans & pricing",
+              count: offerings.length,
+              content: <AdminOfferingsManager initialOfferings={offerings.map((item) => ({ ...item, features: item.features }))} audienceSize={audienceSize} />,
+            },
+            {
               id: "growth",
               label: "Growth requests",
               count: growth.length,
@@ -225,7 +234,7 @@ export default async function Admin({
                       <div>
                         <span className="admin-growth-type">{item.type}</span>
                         <h3>@{item.connection.username}{item.post?.productTitle ? " · " + item.post.productTitle : ""}</h3>
-                        <p>{item.user.email} · KSh {item.amount.toLocaleString()} · {item.type === "BOOST" ? "7 days" : item.type === "PRO" ? "30 days" : "1 year"}</p>
+                        <p>{item.user.email} · KSh {item.amount.toLocaleString()} · {item.offering?.name || item.type} · {item.durationDays || item.offering?.durationDays || (item.type === "PRO" ? 30 : item.type === "VERIFIED" ? 365 : 7)} days</p>
                       </div>
                       <AdminGrowthActions id={item.id} />
                     </article>
