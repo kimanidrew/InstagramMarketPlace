@@ -41,6 +41,40 @@ export function SiteHeader({ user }: { user: any }) {
   }, [searchOpen, trendingTags.length]);
 
   useEffect(() => {
+    const query = searchQuery.trim();
+    if (!searchOpen || query.length < 2) {
+      setSearchSuggestions([]);
+      setSuggestionsLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setSuggestionsLoading(true);
+      try {
+        const response = await fetch(`/api/products?q=${encodeURIComponent(query)}&page=0&limit=6`, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+        if (!response.ok) throw new Error("Search suggestions request failed");
+        const data = await response.json();
+        if (!cancelled) setSearchSuggestions(Array.isArray(data.products) ? data.products.slice(0, 6) : []);
+      } catch (error) {
+        if (!cancelled && (error as Error).name !== "AbortError") setSearchSuggestions([]);
+      } finally {
+        if (!cancelled) setSuggestionsLoading(false);
+      }
+    }, 180);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [searchQuery, searchOpen]);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSearchOpen(false);
     };
@@ -119,13 +153,14 @@ export function SiteHeader({ user }: { user: any }) {
               {suggestionsLoading ? (
                 <div className="header-suggestions-loading"><span /><span /><span /></div>
               ) : searchSuggestions.map((item: any) => {
-                const image = item.mediaUrl || item.imageUrl || item.thumbnailUrl || item.media_url || item.thumbnail_url;
+                const image = item.thumbnailUrl || item.mediaUrl;
                 const username = item.connection?.username || item.username || "Instagram shop";
+                const profileImage = item.connection?.profileImageUrl;
                 const title = item.productTitle || item.caption?.split("\n")[0] || "View product";
                 return (
-                  <Link key={item.id} href={`/shop?q=${encodeURIComponent(title)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
+                  <Link key={item.id} href={`/archive/${encodeURIComponent(item.id)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
                     <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
-                    <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{(username[0] || "S").toUpperCase()}</span>@{username}</small></span>
+                    <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}</small></span>
                     <ArrowRight size={16} className="header-suggestion-arrow" />
                   </Link>
                 );
