@@ -2801,3 +2801,19 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   -webkit-box-orient:initial;
 }
 .shop-promo-slide h2 span{white-space:nowrap}
+
+
+/* Prevent glyphs and ellipses from being vertically clipped by tight line-height. */
+.shop-promo-slide h2{
+  line-height:1.2!important;
+  padding-block:2px 3px;
+  margin-block:10px 0;
+}
+.shop-promo-slide p{
+  line-height:1.55!important;
+  padding-block:2px;
+}
+@media(max-width:767px){
+  .shop-promo-slide h2{line-height:1.2!important;margin-top:8px;padding-block:2px 3px}
+  .shop-promo-slide p{line-height:1.5!important;padding-block:2px;margin-top:6px}
+}
