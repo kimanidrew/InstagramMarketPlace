@@ -3938,3 +3938,34 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-indicator{
   background:#fff!important;
 }
+
+/* Refined live-search panel and sliding underline for suggestion tabs. */
+.header-search-panel.is-open.has-suggestions{
+  background:radial-gradient(ellipse at 8% 0%,rgba(210,255,99,.075),transparent 36%),linear-gradient(145deg,#090909 0%,#050505 72%);
+  border-top:1px solid rgba(255,255,255,.08)!important;
+}
+.header-search-panel.is-open.has-suggestions .header-search-intro{margin-bottom:14px}
+.header-search-panel.is-open.has-suggestions .header-search-mark{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(214,255,99,.22);border-radius:12px;background:rgba(214,255,99,.09);color:#d6ff63}
+.header-search-panel.is-open.has-suggestions .header-search-form{gap:12px;padding:8px 9px 8px 15px;border:1px solid rgba(255,255,255,.13);border-radius:17px;background:linear-gradient(110deg,#171717,#101010);box-shadow:0 12px 30px rgba(0,0,0,.2);transition:border-color .2s,box-shadow .2s}
+.header-search-panel.is-open.has-suggestions .header-search-form:focus-within{border-color:rgba(214,255,99,.55);box-shadow:0 0 0 3px rgba(214,255,99,.07),0 14px 32px rgba(0,0,0,.25)}
+.header-search-panel.is-open.has-suggestions .header-search-form input{color:#fff}
+.header-search-panel.is-open.has-suggestions .header-search-form>button[type=submit]{border-radius:11px;background:#d6ff63;color:#101010;font-weight:900;transition:transform .2s,background .2s}
+.header-search-panel.is-open.has-suggestions .header-search-form>button[type=submit]:hover{transform:translateX(1px);background:#e2ff91}
+.header-search-panel.is-open.has-suggestions .header-search-suggestions{margin-top:14px;padding:12px;border:1px solid rgba(255,255,255,.09);border-radius:22px;background:linear-gradient(145deg,rgba(22,22,22,.97),rgba(9,9,9,.98));box-shadow:0 22px 55px rgba(0,0,0,.3);backdrop-filter:blur(18px)}
+.header-suggestion-tabs{position:relative;display:flex;gap:0;padding:0 4px;margin:0 0 12px;border:0;border-bottom:1px solid rgba(255,255,255,.12);border-radius:0;background:transparent}
+.header-suggestion-tab{position:relative;z-index:1;flex:1;min-height:42px;gap:7px;padding:0 10px 10px;border:0;border-radius:0;background:transparent!important;color:#8e8e8e;font-size:12px;font-weight:800;transition:color .2s ease}
+.header-suggestion-tab:hover{color:#fff}
+.header-suggestion-tab.active{color:#fff}
+.header-suggestion-tab span{min-width:19px;height:19px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#242424;color:#aaa;font-size:9px;transition:background .2s,color .2s}
+.header-suggestion-tab.active span{background:rgba(214,255,99,.13);border-color:rgba(214,255,99,.2);color:#d6ff63}
+.header-suggestion-tab-indicator{position:absolute;bottom:-1px;left:4px;width:calc((100% - 8px)/3);height:2px;border-radius:999px;background:#d6ff63;box-shadow:0 0 12px rgba(214,255,99,.35);transform:translateX(calc(var(--active-tab-index,0) * 100%));transition:transform .32s cubic-bezier(.22,.8,.25,1);pointer-events:none}
+.header-suggestion-item{position:relative;margin:3px 0;padding:10px;border:1px solid transparent;border-radius:15px;transition:background .2s,border-color .2s,transform .2s}
+.header-suggestion-item:hover{border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.055);transform:translateX(3px)}
+.header-suggestion-image{border:1px solid rgba(255,255,255,.08);border-radius:13px}
+.header-suggestion-copy strong{font-size:12px;line-height:1.45}
+.header-suggestion-copy small{font-size:10px}
+.header-suggestion-arrow{color:#777}
+.header-suggestions-label{padding:5px 8px 10px;color:#777;font-size:9px;letter-spacing:.16em}
+.header-suggestions-empty{margin:8px 0;padding:22px 12px;border:1px dashed rgba(255,255,255,.12);border-radius:14px;text-align:center;color:#969696;line-height:1.6}
+@media(max-width:640px){.header-search-panel.is-open.has-suggestions .header-search-suggestions{padding:9px;border-radius:18px}.header-suggestion-tab{min-height:39px;padding:0 5px 9px;font-size:11px}.header-suggestion-item{padding:8px}}
+@media(prefers-reduced-motion:reduce){.header-suggestion-tab-indicator,.header-suggestion-tab,.header-suggestion-item{transition:none!important}}
