@@ -172,7 +172,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   return (
     <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" style={{ height: bannerHeight, minHeight: bannerHeight }} aria-label="Promoted shops, products and marketplace ads">
       <div className="shop-promo-active" style={{ height: bannerHeight }}>
-        <PromoSlideContent slide={activeSlide} />
+        <PromoSlideContent key={activeSlide.key} slide={activeSlide} />
         {activeSlide.type === "store" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.store.id} onImpression={() => markImpression(activeSlide)} />}
         {activeSlide.type === "product" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.product.connectionId} postId={activeSlide.product.id} onImpression={() => markImpression(activeSlide)} />}
       </div>
