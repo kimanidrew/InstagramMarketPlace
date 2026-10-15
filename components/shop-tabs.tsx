@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, BadgeCheck, Bookmark, Compass, Grid2X2, Heart, SlidersHorizontal, Sparkles, Store, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, BadgeCheck, Bookmark, Compass, Heart, Sparkles, Store, TrendingUp } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductMasonry } from "@/components/product-masonry";
 import { AnalyticsImpression } from "@/components/analytics-impression";
@@ -11,8 +11,6 @@ import { recordAnalytics } from "@/lib/analytics-client";
 type ShopTab = "discover" | "trending" | "featured";
 
 export function ShopTabs({
-  tags = [],
-  initialTag = "",
   initialTab = "discover",
   wishlistProducts = [],
   recentlyViewedProducts = [],
@@ -21,8 +19,6 @@ export function ShopTabs({
   featuredProducts = [],
   now,
 }: {
-  tags?: string[];
-  initialTag?: string;
   initialTab?: ShopTab;
   wishlistProducts?: any[];
   recentlyViewedProducts?: any[];
@@ -46,38 +42,7 @@ export function ShopTabs({
       setClearingHistory(false);
     }
   };
-  const [selectedTag, setSelectedTag] = useState(initialTag);
   const currentNow = new Date(now);
-  const filterScrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const updateFilterScrollState = () => {
-    const el = filterScrollRef.current;
-    if (!el) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    setCanScrollLeft(el.scrollLeft > 1);
-    setCanScrollRight(el.scrollLeft < maxScroll - 1);
-  };
-
-  useEffect(() => {
-    const el = filterScrollRef.current;
-    if (!el) return;
-    updateFilterScrollState();
-    el.addEventListener("scroll", updateFilterScrollState, { passive: true });
-    window.addEventListener("resize", updateFilterScrollState);
-    return () => {
-      el.removeEventListener("scroll", updateFilterScrollState);
-      window.removeEventListener("resize", updateFilterScrollState);
-    };
-  }, [tags.length]);
-
-  const scrollFilters = (direction: "left" | "right") => {
-    const el = filterScrollRef.current;
-    if (!el) return;
-    const distance = Math.max(el.clientWidth * 0.72, 220);
-    el.scrollBy({ left: direction === "left" ? -distance : distance, behavior: "smooth" });
-  };
 
   const tabs = [
     { id: "discover" as const, label: "Discover", icon: Compass, copy: "Fresh finds & stores" },
@@ -85,24 +50,9 @@ export function ShopTabs({
     { id: "featured" as const, label: "Featured", icon: Sparkles, copy: "Growth-powered picks" },
   ];
 
-  const filterProducts = (items: any[]) =>
-    items.filter(
-      (product: any) =>
-        !selectedTag ||
-        product.tags?.some((t: any) => String(t.name).toLowerCase() === selectedTag),
-    );
-
-  const filteredTrendingProducts = filterProducts(trendingProducts);
-  const filteredFeaturedProducts = filterProducts(featuredProducts);
-  const filteredFeaturedStores = selectedTag
-    ? featuredStores.filter(({ posts }: any) =>
-        posts?.some((post: any) =>
-          post.tags?.some((t: any) => String(t.name).toLowerCase() === selectedTag),
-        ),
-      )
-    : featuredStores;
-
-  const emptyFilteredMessage = "No listings are available in #" + selectedTag + " for this section yet.";
+  const filteredTrendingProducts = trendingProducts;
+  const filteredFeaturedProducts = featuredProducts;
+  const filteredFeaturedStores = featuredStores;
 
   return (
     <div className="shop-tabs-wrap mt-0">
@@ -112,7 +62,7 @@ export function ShopTabs({
           return (
             <Link
               key={id}
-              href={"/shop?tab=" + id + (selectedTag ? "&tag=" + encodeURIComponent(selectedTag) : "")}
+              href={"/shop?tab=" + id}
               role="tab"
               aria-selected={selected}
               aria-controls={"shop-tab-panel-" + id}
@@ -130,68 +80,8 @@ export function ShopTabs({
         })}
       </div>
 
-      <div className="shop-filter-panel">
-        <div className="shop-filter-heading">
-          <div>
-            <span className="shop-filter-label"><SlidersHorizontal size={14} /> Filter by category</span>
-            
-          </div>
-          <span className="shop-filter-count">{selectedTag ? "#" + selectedTag : "All listings"}</span>
-        </div>
-        <div className="relative">
-          {canScrollLeft && (
-            <button
-              type="button"
-              onClick={() => scrollFilters("left")}
-              aria-label="Scroll categories left"
-              className="absolute left-0 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-md backdrop-blur-sm transition hover:scale-105"
-            >
-              <ArrowLeft size={14} />
-            </button>
-          )}
-          {canScrollRight && (
-            <button
-              type="button"
-              onClick={() => scrollFilters("right")}
-              aria-label="Scroll categories right"
-              className="absolute right-0 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-md backdrop-blur-sm transition hover:scale-105"
-            >
-              <ArrowRight size={14} />
-            </button>
-          )}
-          <div ref={filterScrollRef} className="shop-filter-chips snap-x snap-mandatory scroll-smooth px-1" role="group" aria-label="Product categories">
-          <button type="button" className={"chip " + (!selectedTag ? "chip-active" : "")} onClick={() => setSelectedTag("")}>All</button>
-          {tags.map((name) => (
-            <button
-              key={name}
-              type="button"
-              className={"chip " + (selectedTag === name.toLowerCase() ? "chip-active" : "")}
-              onClick={() => setSelectedTag(name.toLowerCase())}
-            >
-              #{name}
-            </button>
-          ))}
-          </div>
-        </div>
-      </div>
-
       <div className="shop-tab-panel" role="tabpanel" id={"shop-tab-panel-" + active}>
-        {selectedTag && active === "discover" ? (
-          <section className="shop-category-selection">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="eyebrow plain"><Grid2X2 size={13} /> Category selected</p>
-                <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-5xl">#{selectedTag}</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Products and services in this category, all in one place.</p>
-              </div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]">Products + Services</span>
-            </div>
-            <div className="mt-7">
-              <ProductMasonry q="" tag={selectedTag} />
-            </div>
-          </section>
-        ) : (
-          <>
+        <>
             {active === "discover" && (
               <div className="space-y-12">
                 <section>
@@ -349,7 +239,7 @@ export function ShopTabs({
                     ))}
                   </div>
                 ) : (
-                  <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{selectedTag ? emptyFilteredMessage : "Trending picks will appear as shoppers interact with listings."}</div>
+                  <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Trending picks will appear as shoppers interact with listings.</div>
                 )}
               </section>
             )}
@@ -388,13 +278,12 @@ export function ShopTabs({
                       ))}
                     </div>
                   ) : (
-                    <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{selectedTag ? emptyFilteredMessage : "Featured products appear here when a seller has an approved Boost running."}</div>
+                    <div className="mt-6 rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">Featured products appear here when a seller has an approved Boost running.</div>
                   )}
                 </section>
               </div>
             )}
-          </>
-        )}
+        </>
       </div>
     </div>
   );
