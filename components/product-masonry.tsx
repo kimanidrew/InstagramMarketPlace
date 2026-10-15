@@ -136,12 +136,25 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   useEffect(() => {
     const onWishlistUpdate = (event: Event) => {
       const detail = (event as CustomEvent<{ id: string; wishlisted: boolean }>).detail;
-      if (!detail?.id || detail.wishlisted !== false) return;
-      setSavedProducts((current) => current.filter((item) => item.id !== detail.id));
+      if (!detail?.id) return;
+
+      if (!detail.wishlisted) {
+        setSavedProducts((current) => current.filter((item) => item.id !== detail.id));
+        return;
+      }
+
+      // Add the just-saved listing immediately using the already-loaded feed data.
+      const product = products.find((item) => item.id === detail.id);
+      if (product) {
+        setSavedProducts((current) => [
+          product,
+          ...current.filter((item) => item.id !== detail.id),
+        ]);
+      }
     };
     window.addEventListener("listing-wishlist-updated", onWishlistUpdate);
     return () => window.removeEventListener("listing-wishlist-updated", onWishlistUpdate);
-  }, []);
+  }, [products]);
 
   useEffect(() => {
     pageRef.current = 0;
@@ -270,6 +283,10 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     }
     if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
   });
+  // Keep Saved for Later available even when the feed has fewer than eight products.
+  if (savedProducts.length > 0 && !productFeed.some((item) => item.type === "saved")) {
+    productFeed.push({ type: "saved" });
+  }
 
   return (
     <>
