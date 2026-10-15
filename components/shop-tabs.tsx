@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, Compass, Heart, Sparkles, Store, TrendingUp } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bookmark, Compass, Grid2X2, Heart, Sparkles, Store, TrendingUp } from "lucide-react";
+import { ProductMasonry } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { recordAnalytics } from "@/lib/analytics-client";
@@ -185,7 +186,7 @@ export function ShopTabs({
                   <section className="rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                       <div className="min-w-0">
-                        <p className="eyebrow plain"><Heart size={13} /> Saved for later</p>
+                        <p className="eyebrow plain"><Bookmark size={13} /> Saved for later</p>
                         <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
                         <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
                       </div>
