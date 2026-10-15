@@ -2824,9 +2824,10 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 .for-you-filter-sticky{
   position:sticky;
   z-index:40;
-  width:100%;
+  width:100vw;
   max-width:100vw;
   margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
   margin-bottom:24px;
   transition:top .2s ease;
   box-sizing:border-box;
