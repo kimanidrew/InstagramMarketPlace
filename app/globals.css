@@ -3595,3 +3595,28 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   .shop-promo-measure-slide>div:first-child{padding:16px 20px 8px!important}
   .shop-promo-measure-slide .shop-promo-store-visual,.shop-promo-measure-slide .shop-promo-product-visual,.shop-promo-measure-slide .shop-promo-ad-art{height:145px;min-height:145px}
 }
+
+
+/* Active /shop tab: solid black surface with white copy and icon. */
+.shop-page .shop-tab.shop-tab-active,
+.shop-page .shop-tab.shop-tab-active:hover{
+  background:#000!important;
+  color:#fff!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-copy b,
+.shop-page .shop-tab.shop-tab-active .shop-tab-copy small,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-copy b,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-copy small{
+  color:#fff!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-icon,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-icon{
+  background:#000!important;
+  border-color:#fff!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+.shop-page .shop-tab.shop-tab-active .shop-tab-indicator,
+.shop-page .shop-tab.shop-tab-active:hover .shop-tab-indicator{
+  background:#fff!important;
+}
