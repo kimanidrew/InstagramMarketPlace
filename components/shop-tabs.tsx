@@ -19,14 +19,14 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
   const className = "shop-promo-slide " + (measure ? "shop-promo-measure-slide " : "") + (slide.type === "store" ? "shop-promo-store" : slide.type === "product" ? "shop-promo-product" : "shop-promo-ad") + " group grid overflow-hidden " + (slide.type === "store" ? "md:grid-cols-[1.05fr_.95fr]" : slide.type === "product" ? "md:grid-cols-[.9fr_1.1fr]" : "md:grid-cols-[1fr_.85fr]");
   const copy = slide.type === "store" ? (
     <>
-      <span className="shop-promo-label"><Sparkles size={11} /> Promoted shop</span>
+      <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
       <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Meet <span className="text-[#d6ff63]">@{slide.store.username}</span></h2>
       <p className="mt-3 max-w-md text-sm leading-6 text-white/70">{slide.store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
       <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore shop <ArrowRight size={14} /></span>
     </>
   ) : slide.type === "product" ? (
     <>
-      <span className="shop-promo-label"><Sparkles size={11} /> Promoted listing</span>
+      <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
       <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{slide.product.productTitle || "A find worth sharing."}</h2>
       <p className="mt-3 max-w-md text-sm leading-6 text-black/60">Handpicked for a closer look. Discover the details, then shop directly from the seller.</p>
       <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white">Discover listing <ArrowRight size={14} /></span>
