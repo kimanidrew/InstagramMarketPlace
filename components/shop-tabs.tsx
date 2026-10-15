@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp } from "lucide-react";
-import { ProductMasonry, StoreInlineSection } from "@/components/product-masonry";
+import { ProductMasonry, StoreCard, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { analyticsVisitorId } from "@/lib/analytics-client";
@@ -299,16 +299,8 @@ export function ShopTabs({
                     <div><p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Featured store placement is reserved for approved marketplace growth through Verified or Pro.</p></div>
                     <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /> </Link>
                   </div>
-                  <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
-                    {filteredFeaturedStores.map(({ store, posts }: any) => (
-                      <Link key={store.id} href={"/store/" + store.username} className="group relative overflow-hidden rounded-[26px] border border-black/5 bg-[#f5f5f1] p-4 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_55px_rgba(0,0,0,.09)]">
-                        <div className="flex items-center gap-3">
-                          <div className="h-14 w-14 overflow-hidden rounded-full bg-white ring-4 ring-white shadow-sm">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center text-xs font-black">@</div>}</div>
-                          <div className="min-w-0"><div className="flex items-center gap-1.5"><b className="truncate text-sm">@{store.username}</b><BadgeCheck size={14} className="shrink-0" /></div><p className="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-[#999]">{posts.length} featured listings</p></div>
-                        </div>
-                        <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-3 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><span>Growth member</span><ArrowRight size={13} className="transition-transform group-hover:translate-x-1" /></div>
-                      </Link>
-                    ))}
+                  <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+                    {filteredFeaturedStores.map((entry: any) => <StoreCard key={entry.store.id} entry={entry} />)}
                   </div>
                 </section>
 
