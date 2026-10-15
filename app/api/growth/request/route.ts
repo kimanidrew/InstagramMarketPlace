@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   if (pending) return NextResponse.json({ request: pending, message: "A request for this plan is already waiting for review." });
 
   const growth = await prisma.growthRequest.create({
-    data: { userId: current.id, connectionId, postId: code === "BOOST" ? postId : null, type: code, amount: offering.price, offeringId: offering.id, durationDays: offering.durationDays },
+    data: { userId: current.id, connectionId, postId: code === "BOOST" ? postId : null, type: code, amount: offering.price, offeringId: offering.id, durationDays: offering.durationDays, offeringName: offering.name, offeringFeatures: offering.features },
   });
   return NextResponse.json({ request: growth, message: "Your " + offering.name + " request has been sent for admin review." });
 }
