@@ -10,6 +10,7 @@ export function SiteHeader({ user }: { user: any }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [trendingTags, setTrendingTags] = useState<Array<{ name: string; productCount: number }>>([]);
+  const [trendingTagsLoading, setTrendingTagsLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ export function SiteHeader({ user }: { user: any }) {
   useEffect(() => {
     if (!searchOpen || trendingTags.length > 0) return;
     let cancelled = false;
+    setTrendingTagsLoading(true);
     fetch("/api/trending-tags")
       .then((response) => response.ok ? response.json() : { tags: [] })
       .then((data) => {
@@ -29,6 +31,9 @@ export function SiteHeader({ user }: { user: any }) {
       })
       .catch(() => {
         if (!cancelled) setTrendingTags([]);
+      })
+      .finally(() => {
+        if (!cancelled) setTrendingTagsLoading(false);
       });
     return () => { cancelled = true; };
   }, [searchOpen, trendingTags.length]);
@@ -106,11 +111,18 @@ export function SiteHeader({ user }: { user: any }) {
               <span>Search</span><ArrowRight size={15} />
             </button>
           </form>
-          {trendingTags.length > 0 && (
-            <div className="header-trending-tags">
-              <div className="header-trending-heading"><span>Trending tags</span><span>Most products first</span></div>
+          {(trendingTagsLoading || trendingTags.length > 0) && (
+            <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
+              <div className="header-trending-heading"><span>Trending tags</span><span>{trendingTagsLoading ? "Finding popular tags…" : "Most products first"}</span></div>
               <div className="header-trending-list">
-                {trendingTags.map((tag) => (
+                {trendingTagsLoading ? (
+                  Array.from({ length: 6 }, (_, index) => (
+                    <span key={index} className="header-trending-tag-skeleton" aria-hidden="true">
+                      <span className={`header-trending-shimmer header-trending-shimmer-${index % 3}`} />
+                      <span className="header-trending-count-shimmer" />
+                    </span>
+                  ))
+                ) : trendingTags.map((tag) => (
                   <Link key={tag.name} href={`/shop?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
                     <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
                     <small>{tag.productCount}</small>
