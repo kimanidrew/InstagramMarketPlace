@@ -3984,3 +3984,35 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .header-suggestions-empty{margin:8px 0;padding:22px 12px;border:1px dashed rgba(255,255,255,.12);border-radius:14px;text-align:center;color:#969696;line-height:1.6}
 @media(max-width:640px){.header-search-panel.is-open.has-suggestions .header-search-suggestions{padding:9px;border-radius:18px}.header-suggestion-tab{min-height:39px;padding:0 5px 9px;font-size:11px}.header-suggestion-item{padding:8px}}
 @media(prefers-reduced-motion:reduce){.header-suggestion-tab-indicator,.header-suggestion-tab,.header-suggestion-item{transition:none!important}}
+
+
+/* Keep the full-bleed For You category filter inside the viewport. */
+.for-you-filter-sticky,
+.for-you-filter-bar,
+.for-you-filter-scroller {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.for-you-filter-sticky {
+  overflow-x: clip;
+}
+.for-you-filter-bar {
+  overflow-x: clip;
+}
+.for-you-filter-scroller {
+  overflow: hidden;
+}
+.for-you-filter-tags {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+@supports not (overflow: clip) {
+  .for-you-filter-sticky,
+  .for-you-filter-bar {
+    overflow-x: hidden;
+  }
+}
