@@ -171,18 +171,18 @@ export function ShopTabs({
                       const isVerified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > currentNow));
                       const isPro = Boolean(store.proUntil && new Date(store.proUntil) > currentNow);
                       return (
-                        <article key={store.id} className="discover-store-card group relative min-w-0 overflow-hidden rounded-[24px] border border-black/[.06] bg-white p-4 transition duration-300 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_16px_38px_rgba(0,0,0,.07)] sm:p-5">
+                        <article key={store.id} className="discover-store-card group relative min-w-0 overflow-hidden rounded-[26px] border border-black/[.06] bg-white p-4 transition duration-300 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_16px_38px_rgba(0,0,0,.07)] sm:p-5">
                           <AnalyticsImpression connectionId={store.id} />
-                          <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="flex h-full flex-col items-center text-center">
-                            <div className="discover-store-avatar relative mb-3 aspect-square w-[min(100%,176px)] shrink-0 overflow-hidden rounded-full bg-[#f1f1ed] p-[3px] sm:w-[min(100%,192px)]">
+                          <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="discover-store-profile flex flex-col items-center text-center">
+                            <div className="discover-store-avatar relative mb-3 aspect-square w-[min(100%,176px)] shrink-0 rounded-full bg-[#f1f1ed] p-[3px] sm:w-[min(100%,192px)]">
                               <div className="h-full w-full overflow-hidden rounded-full bg-white">
                                 {store.profileImageUrl ? (
-                                  <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                  <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-105" />
                                 ) : (
-                                  <div className="flex h-full w-full items-center justify-center text-2xl font-black text-[#777]">@</div>
+                                  <div className="flex h-full w-full items-center justify-center rounded-full text-2xl font-black text-[#777]">@</div>
                                 )}
                               </div>
-                              {isVerified && <span className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full border-[3px] border-white bg-blue-600 text-white shadow-md" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={18} fill="currentColor" className="text-white" /></span>}
+                              {isVerified && <span className="discover-store-verified absolute bottom-1 right-1 z-10 flex h-8 w-8 items-center justify-center rounded-full border-[3px] border-white bg-blue-600 text-white shadow-md" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={18} fill="currentColor" className="text-white" /></span>}
                             </div>
                             <div className="flex max-w-full items-center justify-center gap-1.5">
                               <b className="max-w-full truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
@@ -190,11 +190,38 @@ export function ShopTabs({
                             </div>
                             <span className="mt-1 text-[10px] font-semibold tracking-wide text-[#888]">Instagram shop</span>
                             {store.paidPromotionActive && <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#f1f5e8] px-2.5 py-1 text-[9px] font-extrabold text-[#536b27]"><Sparkles size={10} /> Promoted</span>}
-                            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f2] px-4 py-2 text-[11px] font-extrabold text-[#222] transition group-hover:bg-black group-hover:text-white">
+                            <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#f5f5f2] px-4 py-2 text-[11px] font-extrabold text-[#222] transition group-hover:bg-black group-hover:text-white">
                               Visit shop <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
                             </span>
                           </Link>
-                        </article>
+                          <div className="discover-store-products mt-5 border-t border-black/[.06] pt-4">
+                            <div className="mb-3 flex items-center justify-between gap-3">
+                              <span className="text-[10px] font-black uppercase tracking-[.13em] text-[#777]">From this shop</span>
+                              <Link href={"/store/" + store.username} className="text-[10px] font-extrabold text-[#777] transition hover:text-black">See all <ArrowRight size={11} className="inline" /></Link>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                              {posts.slice(0, 3).map((post: any, index: number) => {
+                                const image = post.thumbnailUrl || post.mediaUrl;
+                                const isService = String(post.listingType || post.type || "").toUpperCase() === "SERVICE";
+                                const listingHref = post.productSlug
+                                  ? "/" + (isService ? "service" : "product") + "/" + post.productSlug
+                                  : "/store/" + store.username;
+                                return (
+                                  <Link key={post.id || index} href={listingHref} aria-label={post.productTitle || "View shop listing"} className="discover-store-product group/item relative block aspect-[4/5] overflow-hidden rounded-[16px] bg-[#eeeee9]">
+                                    {image ? (
+                                      <img src={image} alt={post.productTitle || "Shop listing"} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover/item:scale-105" />
+                                    ) : (
+                                      <div className="flex h-full items-center justify-center text-[10px] font-bold text-[#888]">View item</div>
+                                    )}
+                                    <span className="discover-store-product-overlay absolute inset-x-0 bottom-0 line-clamp-2 px-2 pb-2 pt-7 text-left text-[10px] font-extrabold leading-tight text-white">
+                                      {post.productTitle || post.title || "Explore listing"}
+                                    </span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </article>              </article>
                       );
                     })}
                     {featuredStores.filter(({ posts }: any) => posts?.length > 0).length === 0 && (
