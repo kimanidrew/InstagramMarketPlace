@@ -1,9 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const offerings = [
+const offerings: Prisma.GrowthOfferingCreateInput[] = [
   { code: "product-reach-500", name: "Product Spotlight · 500", category: "PROMOTION", targetType: "PRODUCT", description: "Promote one product to a targeted slice of marketplace shoppers.", price: 100, targetReach: 500, reachMode: "FIXED", durationDays: 7, features: ["Product spotlight placement", "Campaign reach tracking", "Campaign history in analytics"], active: true, sortOrder: 10 },
   { code: "product-reach-1000", name: "Product Spotlight · 1,000", category: "PROMOTION", targetType: "PRODUCT", description: "Give one product more visibility across the marketplace.", price: 180, targetReach: 1000, reachMode: "FIXED", durationDays: 7, features: ["Product spotlight placement", "Campaign reach tracking", "Campaign history in analytics"], active: true, sortOrder: 20 },
   { code: "product-reach-2500", name: "Product Spotlight · 2,500", category: "PROMOTION", targetType: "PRODUCT", description: "A larger reach target for a product listing.", price: 400, targetReach: 2500, reachMode: "FIXED", durationDays: 7, features: ["Product spotlight placement", "Campaign reach tracking", "Campaign history in analytics"], active: true, sortOrder: 30 },
