@@ -72,7 +72,7 @@ function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex:
                 <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
                   {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center rounded-full text-sm font-black text-[#777]">@</span>}
                 </span>
-                {verified && <span className="absolute bottom-0 right-0 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-sm"><BadgeCheck size={13} fill="currentColor" className="text-white" /></span>}
+                {verified && <span className="absolute bottom-0 right-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm sm:h-[18px] sm:w-[18px]" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={16} strokeWidth={2.8} className="fill-[#2563eb] text-white sm:h-[18px] sm:w-[18px]" /></span>}
               </span>
               <span className="flex min-w-0 max-w-full items-center justify-center gap-1.5">
                 <b className="truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
