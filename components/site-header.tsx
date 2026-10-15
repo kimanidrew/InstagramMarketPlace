@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Bookmark, Search, SearchX, Sparkles, Store, UserRound } from "lucide-react";
+import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
@@ -104,7 +104,7 @@ export function SiteHeader({ user }: { user: any }) {
 
         <div className="ml-auto flex items-center gap-1">
           <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
-            {searchOpen ? <SearchX size={20} strokeWidth={2.2} /> : <Search size={19} />}
+            {searchOpen ? <X size={20} strokeWidth={2.2} /> : <Search size={19} />}
           </button>
           <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
