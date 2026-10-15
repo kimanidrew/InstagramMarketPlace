@@ -55,6 +55,8 @@ export function ScrollRestoration() {
   const isPopNavigation = useRef(false);
 
   useEffect(() => {
+    // Disable browser-managed restoration so the saved history-entry position wins consistently.
+    window.history.scrollRestoration = "manual";
     entryKey();
     savePosition();
 
