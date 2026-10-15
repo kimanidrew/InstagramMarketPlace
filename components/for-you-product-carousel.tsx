@@ -36,7 +36,6 @@ export function ForYouProductCarousel({ products, personalized }: { products: Pr
     return () => window.clearInterval(timer);
   }, [paused, products.length]);
 
-  if (!products.length) return null;
 
   return (
     <section aria-label="Recommended products" className="relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8">
@@ -52,7 +51,7 @@ export function ForYouProductCarousel({ products, personalized }: { products: Pr
           <button type="button" onClick={() => rail.current?.scrollBy({ left: 300, behavior: "smooth" })} aria-label="Next recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-black hover:text-white"><ArrowRight size={16} /></button>
         </div>
       </div>
-      <div ref={rail} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={() => setPaused(false)} className="relative flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-4">
+      {products.length > 0 ? <div ref={rail} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={() => setPaused(false)} className="relative flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-4">
         {products.map((p, index) => {
           const image = p.thumbnailUrl || p.mediaUrl;
           const href = "/" + (String(p.listingType).toUpperCase() === "SERVICE" ? "service" : "product") + "/" + p.productSlug;
@@ -72,13 +71,19 @@ export function ForYouProductCarousel({ products, personalized }: { products: Pr
           );
         })}
       </div>
-      <div className="relative mt-4 flex items-center justify-between sm:hidden">
+      </div> : <div className="relative rounded-2xl border border-dashed border-black/10 bg-white/70 px-5 py-8 text-center">
+        <Sparkles size={22} className="mx-auto text-[#999]" />
+        <p className="mt-3 text-sm font-extrabold text-[#222]">Your next favourite is just around the corner.</p>
+        <p className="mt-1 text-xs leading-5 text-[#777]">Listings will appear here as shops add products and services to SokoLink.</p>
+        <Link href="/shop" className="mt-4 inline-flex rounded-full bg-[#171717] px-4 py-2.5 text-xs font-bold text-white">Explore all listings</Link>
+      </div>}
+      {products.length > 1 && <div className="relative mt-4 flex items-center justify-between sm:hidden">
         <span className="text-[10px] font-semibold text-[#999]">Swipe to explore</span>
         <div className="flex gap-2">
           <button type="button" onClick={() => rail.current?.scrollBy({ left: -220, behavior: "smooth" })} aria-label="Previous recommendations" className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white"><ArrowLeft size={15} /></button>
           <button type="button" onClick={() => rail.current?.scrollBy({ left: 220, behavior: "smooth" })} aria-label="Next recommendations" className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white"><ArrowRight size={15} /></button>
         </div>
-      </div>
+      </div>}
     </section>
   );
 }
