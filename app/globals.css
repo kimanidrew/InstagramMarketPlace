@@ -4052,3 +4052,12 @@ html, body {
   html, body { overflow-x: hidden; }
   .for-you-filter-sticky { overflow-x: hidden !important; }
 }
+
+
+/* Keep For You category scroll controls inset 10px from each rail edge. */
+.for-you-filter-scroll-button.left-2 { left: 10px !important; }
+.for-you-filter-scroll-button.right-2 { right: 10px !important; }
+@media (max-width: 640px) {
+  .for-you-filter-scroll-button.left-2 { left: 10px !important; }
+  .for-you-filter-scroll-button.right-2 { right: 10px !important; }
+}
