@@ -1,13 +1,15 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { BadgeCheck, Crown, ArrowRight, LoaderCircle, Store } from "lucide-react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
 
 type ProductMasonryProps = {
   q?: string;
   tag?: string;
   personalized?: boolean;
+  stores?: any[];
 };
 
 function ProductShimmer({ compact = false }: { compact?: boolean }) {
@@ -34,6 +36,66 @@ function ProductShimmers({ count = 8 }: { count?: number }) {
         </div>
       ))}
     </div>
+  );
+}
+
+const storeSectionTitles = [
+  { eyebrow: "Meet the makers", title: "The people behind the products.", copy: "Take a moment to meet the shops bringing fresh finds to the marketplace." },
+  { eyebrow: "Fresh shops to explore", title: "More brands worth knowing.", copy: "Keep discovering independent businesses and the stories behind their posts." },
+  { eyebrow: "Good finds, good people", title: "Get to know your next favourite shop.", copy: "Browse more sellers and find something new to love." },
+  { eyebrow: "Around the marketplace", title: "A few more shops to discover.", copy: "Real businesses, fresh inspiration and more reasons to keep exploring." },
+];
+
+function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex: number }) {
+  const batch = stores.slice(batchIndex * 2, batchIndex * 2 + 2);
+  if (!batch.length) return null;
+  const heading = storeSectionTitles[batchIndex % storeSectionTitles.length];
+
+  return (
+    <section className="product-store-interlude my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:my-9 sm:rounded-[30px] sm:p-6" aria-label={heading.eyebrow}>
+      <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
+        <div className="min-w-0">
+          <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.14em] text-[#777] sm:text-[10px]"><Store size={12} /> {heading.eyebrow}</p>
+          <h3 className="mt-2 max-w-2xl text-xl font-black leading-tight tracking-[-.045em] text-[#171717] sm:text-2xl">{heading.title}</h3>
+          <p className="mt-1.5 max-w-xl text-xs leading-5 text-[#777] sm:text-sm">{heading.copy}</p>
+        </div>
+        <Link href="/stores" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">All stores <ArrowRight size={12} /></Link>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+        {batch.map(({ store, posts }: any) => {
+          const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
+          const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
+          return (
+            <Link key={store.id} href={"/store/" + store.username} className="group min-w-0 rounded-[21px] border border-black/[.05] bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="relative h-[58px] w-[58px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[66px] sm:w-[66px]">
+                  <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
+                    {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center text-sm font-black text-[#777]">@</span>}
+                  </span>
+                  {verified && <span className="absolute bottom-0 right-0 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-blue-600 text-white shadow-sm"><BadgeCheck size={13} fill="currentColor" className="text-white" /></span>}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex min-w-0 items-center gap-1.5">
+                    <b className="truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
+                    {pro && <Crown size={13} className="shrink-0 text-amber-500" />}
+                  </span>
+                  <span className="mt-1 block text-[10px] font-semibold text-[#888] sm:text-[11px]">{posts.length} listings · Instagram shop</span>
+                  <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555] transition group-hover:text-black sm:text-[11px]">Explore shop <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
+                </span>
+              </div>
+              <span className="mt-3 grid grid-cols-3 gap-2 border-t border-black/[.05] pt-3">
+                {posts.slice(0, 3).map((post: any, index: number) => {
+                  const image = post.thumbnailUrl || post.mediaUrl;
+                  return <span key={post.id || index} className="block aspect-[4/3] overflow-hidden rounded-[11px] bg-[#f0f0ec]">
+                    {image ? <img src={image} alt="" loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]" /> : <span className="flex h-full items-center justify-center text-[9px] font-bold text-[#999]">Listing</span>}
+                  </span>;
+                })}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -66,7 +128,7 @@ function LazyProductCard({ product }: { product: any }) {
   );
 }
 
-export function ProductMasonry({ q = "", tag = "", personalized = false }: ProductMasonryProps) {
+export function ProductMasonry({ q = "", tag = "", personalized = false, stores = [] }: ProductMasonryProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -197,9 +259,16 @@ export function ProductMasonry({ q = "", tag = "", personalized = false }: Produ
   return (
     <>
       <div className="columns-2 gap-3 sm:columns-2 sm:gap-5 md:columns-3 lg:columns-4">
-        {products.map((product) => (
-          <LazyProductCard key={product.id} product={product} />
-        ))}
+        {products.map((product, index) => {
+          const batchIndex = Math.floor((index + 1) / 12) - 1;
+          const showStoreSection = stores.length > batchIndex * 2 && (index + 1) % 12 === 0;
+          return (
+            <Fragment key={product.id}>
+              <LazyProductCard product={product} />
+              {showStoreSection && <StoreInlineSection stores={stores} batchIndex={batchIndex} />}
+            </Fragment>
+          );
+        })}
       </div>
 
       <div ref={sentinelRef} className="min-h-20 pt-3">
