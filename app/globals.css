@@ -3798,26 +3798,26 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 }
 
 
-/* Restore the original black active shop tab with white typography and icon. */
+/* Restore the earlier soft grey active shop tab styling. */
 .shop-page .shop-tab.shop-tab-active,
 .shop-page .shop-tab.shop-tab-active:hover{
-  background:#000!important;
-  color:#fff!important;
+  background:#e4e4e7!important;
+  color:#18181b!important;
 }
 .shop-page .shop-tab.shop-tab-active .shop-tab-copy b,
 .shop-page .shop-tab.shop-tab-active .shop-tab-copy small,
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-copy b,
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-copy small{
-  color:#fff!important;
+  color:#18181b!important;
 }
 .shop-page .shop-tab.shop-tab-active .shop-tab-icon,
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-icon{
-  background:#000!important;
-  border-color:#fff!important;
-  color:#fff!important;
+  background:#fff!important;
+  border-color:#d4d4d8!important;
+  color:#27272a!important;
   box-shadow:none!important;
 }
 .shop-page .shop-tab.shop-tab-active .shop-tab-indicator,
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-indicator{
-  background:#fff!important;
+  background:#52525b!important;
 }
