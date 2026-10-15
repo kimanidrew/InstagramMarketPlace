@@ -2045,3 +2045,11 @@ select:focus-visible,
   .header-search-hints{padding-top:10px}
 }
 @media(prefers-reduced-motion:reduce){.header-search-panel{transform:none}}
+
+
+/* Search panel: remove the frame and use a fully pill-shaped search field. */
+.header-search-panel{border-top:0!important;box-shadow:none!important}
+.header-search-form{border:0!important;border-radius:999px!important;box-shadow:inset 0 0 0 1px #343434,0 12px 32px rgba(0,0,0,.3)!important;overflow:hidden}
+.header-search-form:focus-within{border:0!important;box-shadow:inset 0 0 0 1px #777,0 0 0 3px rgba(255,255,255,.06),0 16px 38px rgba(0,0,0,.25)!important}
+.header-search-form button{border-radius:999px!important}
+@media(max-width:640px){.header-search-form{border-radius:999px!important}}
