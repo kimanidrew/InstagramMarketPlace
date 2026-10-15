@@ -52,7 +52,7 @@ function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex:
   const heading = storeSectionTitles[batchIndex % storeSectionTitles.length];
 
   return (
-    <section className="product-store-interlude my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:my-9 sm:rounded-[30px] sm:p-6" aria-label={heading.eyebrow}>
+    <section className="product-store-interlude column-span-all my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:my-9 sm:rounded-[30px] sm:p-6" aria-label={heading.eyebrow}>
       <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.14em] text-[#777] sm:text-[10px]"><Store size={12} /> {heading.eyebrow}</p>
@@ -61,12 +61,12 @@ function StoreInlineSection({ stores, batchIndex }: { stores: any[]; batchIndex:
         </div>
         <Link href="/stores" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">All stores <ArrowRight size={12} /></Link>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+      <div className="product-store-interlude-list flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:pb-0">
         {batch.map(({ store, posts }: any) => {
           const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
           const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
           return (
-            <Link key={store.id} href={"/store/" + store.username} className="group min-w-0 rounded-[21px] border border-black/[.05] bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
+            <Link key={store.id} href={"/store/" + store.username} className="group w-[86%] min-w-0 shrink-0 snap-start rounded-[21px] sm:w-auto sm:shrink" border border-black/[.05] bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
               <div className="flex min-w-0 items-center gap-3">
                 <span className="relative h-[58px] w-[58px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[66px] sm:w-[66px]">
                   <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
