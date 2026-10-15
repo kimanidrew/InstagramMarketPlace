@@ -2088,3 +2088,31 @@ select:focus-visible,
 
 /* Keep the expanded navbar search panel free of a top border. */
 .header-search-panel.is-open{border-top:0!important}
+
+
+/* Navbar trending tags: one horizontal rail on desktop and swipe-snap on mobile. */
+.header-trending-list{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:2px 1px 8px;
+  scroll-snap-type:x mandatory;
+  overscroll-behavior-x:contain;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.header-trending-list::-webkit-scrollbar{display:none}
+.header-trending-tag{flex:0 0 auto;white-space:nowrap;scroll-snap-align:start;scroll-snap-stop:normal}
+@media(max-width:640px){
+  .header-trending-list{
+    gap:7px;
+    margin-right:-2px;
+    padding:2px 2px 9px;
+    scroll-padding-inline:2px;
+  }
+  .header-trending-tag{flex:0 0 auto}
+}
