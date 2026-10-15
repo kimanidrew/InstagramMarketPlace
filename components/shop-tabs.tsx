@@ -6,7 +6,7 @@ import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, C
 import { ProductMasonry } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
-import { recordAnalytics } from "@/lib/analytics-client";
+import { analyticsVisitorId, recordAnalytics } from "@/lib/analytics-client";
 
 type ShopTab = "discover" | "trending" | "featured";
 
@@ -104,12 +104,26 @@ export function ShopTabs({
     setActive(initialTab);
   }, [initialTab]);
   const [recentItems, setRecentItems] = useState(recentlyViewedProducts);
+  const [recentStores, setRecentStores] = useState<any[]>([]);
   const [clearingHistory, setClearingHistory] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    const visitorId = analyticsVisitorId();
+    fetch("/api/shopper/stores-history?visitorId=" + encodeURIComponent(visitorId), { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : { stores: [] })
+      .then((data) => { if (!cancelled) setRecentStores(data.stores || []); })
+      .catch(() => { if (!cancelled) setRecentStores([]); });
+    return () => { cancelled = true; };
+  }, []);
   const clearRecentHistory = async () => {
     setClearingHistory(true);
     try {
-      const response = await fetch("/api/shopper/history", { method: "DELETE" });
-      if (response.ok) setRecentItems([]);
+      const [productsResponse, storesResponse] = await Promise.all([
+        fetch("/api/shopper/history", { method: "DELETE" }),
+        fetch("/api/shopper/stores-history?visitorId=" + encodeURIComponent(analyticsVisitorId()), { method: "DELETE" }),
+      ]);
+      if (productsResponse.ok) setRecentItems([]);
+      if (storesResponse.ok) setRecentStores([]);
     } finally {
       setClearingHistory(false);
     }
@@ -157,17 +171,17 @@ export function ShopTabs({
         <>
             {active === "discover" && (
               <div className="space-y-12">
-                {recentItems.length > 0 && (
+                {(recentItems.length > 0 || recentStores.length > 0) && (
                   <section className="rounded-[30px] border border-black/5 bg-white p-5 md:p-7">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                       <div>
                         <p className="eyebrow plain"><Sparkles size={13} /> Back on Your Shopping List</p>
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Pick Up Where You Left Off</h2>
-                        <p className="mt-2 text-sm text-[#777]">Revisit the products and services you recently checked out.</p>
+                        <p className="mt-2 text-sm text-[#777]">Revisit products, services and stores you recently checked out.</p>
                       </div>
                       <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="inline-flex shrink-0 items-center justify-center self-start rounded-full border border-black/10 px-4 py-2 text-[12px] font-black leading-5 text-[#666] transition hover:border-black hover:text-black disabled:opacity-50 sm:self-auto">{clearingHistory ? "Clearing…" : "Clear history"}</button>
                     </div>
-                    <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
+                    {recentItems.length > 0 && <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
                       {recentItems.slice(0, 7).map((x: any) => {
                         const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                         const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
@@ -185,7 +199,24 @@ export function ShopTabs({
                           </Link>
                         );
                       })}
-                    </div>
+                    </div>}
+                    {recentStores.length > 0 && (
+                      <div className={recentItems.length > 0 ? "mt-7" : "mt-6"}>
+                        <p className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[.13em] text-[#888]"><Store size={13} /> Recently visited stores</p>
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
+                          {recentStores.slice(0, 7).map((store: any) => (
+                            <Link key={store.id} href={"/store/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white">
+                              <span className="h-16 w-16 overflow-hidden rounded-full bg-[#ecece8] sm:h-[76px] sm:w-[76px]">
+                                {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
+                              </span>
+                              <b className="mt-3 max-w-full truncate text-xs font-extrabold text-[#171717]">@{store.username}</b>
+                              <span className="mt-1 text-[10px] font-semibold text-[#888]">{store.listingCount} listings</span>
+                              <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555]">Visit again <ArrowRight size={11} /></span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </section>
                 )}
 
