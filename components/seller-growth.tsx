@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { BadgeCheck, BarChart3, Check, ChevronDown, Image as ImageIcon, Megaphone, ShieldCheck, Sparkles, Store, Zap, Clock3, Users } from "lucide-react";
-import { GlobalFeedbackModal } from "@/components/global-feedback-modal";
 import { SellerAnalytics } from "@/components/seller-analytics";
 
 type Product = { id: string; productTitle: string | null; mediaUrl?: string | null; thumbnailUrl?: string | null; mediaType?: string | null; permalink?: string | null };
@@ -19,45 +18,9 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [busy, setBusy] = useState("");
   const [message, setMessage] = useState("");
-  const [durationDays, setDurationDays] = useState<7 | 30>(7);
-  const [targetReach, setTargetReach] = useState(500);
-  const [promoting, setPromoting] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; title: string; message: string } | null>(null);
   const selectedShop = useMemo(() => connections.find(c => c.id === selectedId) || connections[0], [connections, selectedId]);
   const products = selectedShop?.posts || [];
   const chosenProduct = products.find(p => p.id === selectedProductId) || products[0];
-
-  async function promoteProduct() {
-    if (!selectedShop || !chosenProduct || promoting) return;
-    setPromoting(true);
-    try {
-      const response = await fetch("/api/promotions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          connectionId: selectedShop.id,
-          targetType: "PRODUCT",
-          postId: chosenProduct.id,
-          targetReach,
-          durationDays,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok || !data.ok) {
-        setFeedback({ type: "error", title: "Promotion couldn't be started", message: data.error || "Please try again." });
-        return;
-      }
-      setFeedback({
-        type: "success",
-        title: "Your product is promoted!",
-        message: data.message || "Your product promotion is now active in demo mode. No M-Pesa prompt was sent and no money was charged.",
-      });
-    } catch {
-      setFeedback({ type: "error", title: "Connection problem", message: "We couldn't start this promotion. Check your connection and try again." });
-    } finally {
-      setPromoting(false);
-    }
-  }
 
   async function request(offering: GrowthOffering, connectionId: string) {
     setBusy(offering.id + connectionId);
@@ -143,7 +106,6 @@ export function SellerGrowth({ connections, embedded = false, initialTab = "stor
         onShopChange={setSelectedId}
       />
     </div>}
-    <GlobalFeedbackModal open={!!feedback} type={feedback?.type || "success"} title={feedback?.title || ""} message={feedback?.message || ""} onClose={() => setFeedback(null)} />
     <p className="growth-review-note"><ShieldCheck size={15}/> Verification and Pro Seller requests require admin approval. Approved verification lasts 12 months; Pro Seller lasts 30 days. Shop growth requests are reviewed by an admin.</p>
   </section>;
 }
