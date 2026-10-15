@@ -300,7 +300,7 @@ export function ShopTabs({
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Still loving these?</h2>
                         <p className="mt-2 text-sm text-[#777]">Your saved products and services are ready whenever you are.</p>
                       </div>
-                      <Link href="/wishlist" className="group inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full border border-[#deded8] bg-white px-3 py-2 text-[9px] font-semibold text-[#33332f] shadow-sm transition hover:border-[#222] hover:bg-[#222] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#555] focus-visible:ring-offset-2 sm:px-4 sm:text-[10px]">View full wishlist <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" /></Link>
+                      <Link href="/wishlist" className="group inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-[#e4e4e7] bg-[#f4f4f5] px-3 py-2 text-[10px] font-semibold tracking-[-.01em] text-[#3f3f46] shadow-none transition-colors duration-200 hover:border-[#d4d4d8] hover:bg-[#e4e4e7] hover:text-[#18181b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a1a1aa] focus-visible:ring-offset-2 sm:px-3.5 sm:text-[11px]">View full wishlist <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" /></Link>
                     </div>
                     <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
                       {wishlistProducts.slice(0, 7).map((x: any) => {
