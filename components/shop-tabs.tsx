@@ -158,7 +158,7 @@ export function ShopTabs({
             {active === "discover" && (
               <div className="space-y-12">
                 <section>
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-start sm:gap-5">
                     <div>
                       <p className="eyebrow plain"><Store size={13} /> Discover stores</p>
                       <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Meet the shops behind the posts.</h2>
@@ -257,7 +257,7 @@ export function ShopTabs({
 
                 {wishlistProducts.length > 0 && (
                   <section className="rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-start sm:gap-5">
                       <div className="min-w-0">
                         <p className="eyebrow plain"><Bookmark size={13} /> Saved for later</p>
                         <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
@@ -320,7 +320,7 @@ export function ShopTabs({
             {active === "featured" && (
               <div className="space-y-12">
                 <section>
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-start sm:gap-5">
                     <div><p className="eyebrow plain"><BadgeCheck size={13} /> Featured stores</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Shops worth discovering.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Featured store placement is reserved for approved marketplace growth through Verified or Pro.</p></div>
                     <Link href="/stores" className="inline-flex items-center gap-2 text-xs font-black">View all stores <ArrowRight size={14} /> </Link>
                   </div>
