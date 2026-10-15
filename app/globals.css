@@ -2084,3 +2084,7 @@ select:focus-visible,
 .header-search-content:focus,
 .header-search-content:focus-within,
 .header-search-content:focus-visible{border:0!important;outline:none!important;box-shadow:none!important}
+
+
+/* Keep the expanded navbar search panel free of a top border. */
+.header-search-panel.is-open{border-top:0!important}
