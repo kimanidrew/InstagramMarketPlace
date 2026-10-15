@@ -4,7 +4,6 @@ import "./seller-modal.css";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
-import { ScrollToTop } from "@/components/scroll-to-top";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
@@ -24,7 +23,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <html lang="en">
       <head><link rel="stylesheet" href={brandFontUrl} /></head>
       <body className="pb-24 lg:pb-0">
-        <ScrollToTop />
         <SiteHeader user={u} />
         {children}
 
