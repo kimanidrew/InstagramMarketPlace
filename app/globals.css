@@ -3463,3 +3463,10 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   .shop-tabs-wrap .product-feed-layout,
   .product-feed-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 9px;}
 }
+
+
+/* Remove the extra top margin on Shop feed interludes only. */
+.shop-tabs-wrap .product-store-interlude,
+.shop-tabs-wrap .product-feed-full-row{
+  margin-top:0!important;
+}
