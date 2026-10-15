@@ -9,6 +9,7 @@ import { BrandWordmark } from "@/components/brand-wordmark";
 export function SiteHeader({ user }: { user: any }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [trendingTags, setTrendingTags] = useState<Array<{ name: string; productCount: number }>>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -17,6 +18,20 @@ export function SiteHeader({ user }: { user: any }) {
       return () => cancelAnimationFrame(frame);
     }
   }, [searchOpen]);
+
+  useEffect(() => {
+    if (!searchOpen || trendingTags.length > 0) return;
+    let cancelled = false;
+    fetch("/api/trending-tags")
+      .then((response) => response.ok ? response.json() : { tags: [] })
+      .then((data) => {
+        if (!cancelled) setTrendingTags(Array.isArray(data.tags) ? data.tags : []);
+      })
+      .catch(() => {
+        if (!cancelled) setTrendingTags([]);
+      });
+    return () => { cancelled = true; };
+  }, [searchOpen, trendingTags.length]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -97,6 +112,19 @@ export function SiteHeader({ user }: { user: any }) {
             <Link href="/stores" onClick={() => setSearchOpen(false)}>Instagram shops</Link>
             <Link href="/categories" onClick={() => setSearchOpen(false)}>Categories</Link>
           </div>
+          {trendingTags.length > 0 && (
+            <div className="header-trending-tags">
+              <div className="header-trending-heading"><span>Trending tags</span><span>Most products first</span></div>
+              <div className="header-trending-list">
+                {trendingTags.map((tag) => (
+                  <Link key={tag.name} href={`/shop?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
+                    <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
+                    <small>{tag.productCount}</small>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>
