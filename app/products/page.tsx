@@ -10,24 +10,16 @@ export const dynamic = "force-dynamic";
 export default async function Products({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; tag?: string; tab?: string }>;
+  searchParams: Promise<{ q?: string; tab?: string }>;
 }) {
   const params = await searchParams;
   const text = params.q?.trim();
-  const tag = params.tag?.toLowerCase();
   const initialTab = params.tab === "trending" || params.tab === "featured" ? params.tab : "discover";
   const currentUser = await user();
   const now = new Date();
 
-  const [tags, wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topLiked, topSaved] =
+  const [wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topLiked, topSaved] =
     await Promise.all([
-      db().productTag.groupBy({
-        by: ["name"],
-        where: { post: { isProduct: true } },
-        _count: { name: true },
-        orderBy: { _count: { name: "desc" } },
-        take: 14,
-      }),
       currentUser
         ? db().instagramPost.findMany({
             where: {
@@ -180,8 +172,6 @@ export default async function Products({
 
         return (
           <ShopTabs
-            tags={tags.map((x) => x.name)}
-            initialTag={tag || ""}
             initialTab={initialTab}
             wishlistProducts={shopData.wishlistProducts}
             recentlyViewedProducts={shopData.recentlyViewedProducts}
