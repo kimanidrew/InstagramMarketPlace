@@ -48,6 +48,28 @@ const storeSectionTitles = [
   { eyebrow: "Around the marketplace", title: "A few more shops to discover.", copy: "Real businesses, fresh inspiration and more reasons to keep exploring." },
 ];
 
+export function StoreCard({ entry }: { entry: any }) {
+  const { store, posts } = entry;
+  const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
+  const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
+  return (
+    <Link href={"/store/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[21px] border border-black/[.05] bg-white p-3 text-center transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
+      <span className="relative mb-3 block h-[88px] w-[88px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[100px] sm:w-[100px]">
+        <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
+          {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center rounded-full text-sm font-black text-[#777]">@</span>}
+        </span>
+        {verified && <span className="absolute bottom-0 right-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm sm:h-[18px] sm:w-[18px]" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={16} strokeWidth={2.8} className="fill-[#2563eb] text-white sm:h-[18px] sm:w-[18px]" /></span>}
+      </span>
+      <span className="flex min-w-0 max-w-full items-center justify-center gap-1.5">
+        <b className="truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
+        {pro && <Crown size={13} className="shrink-0 text-amber-500" />}
+      </span>
+      <span className="mt-1 block text-[10px] font-semibold text-[#888] sm:text-[11px]">{posts.length} listings · Instagram shop</span>
+      <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555] transition group-hover:text-black sm:text-[11px]">Explore shop <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
+    </Link>
+  );
+}
+
 export function StoreInlineSection({ stores, batchIndex, variant = "discover" }: { stores: any[]; batchIndex: number; variant?: "discover" | "trending" }) {
   const batch = stores.slice(batchIndex * 4, batchIndex * 4 + 4);
   if (!batch.length) return null;
@@ -71,26 +93,7 @@ export function StoreInlineSection({ stores, batchIndex, variant = "discover" }:
         <Link href="/stores" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">All stores <ArrowRight size={12} /></Link>
       </div>
       <div className="product-store-interlude-list grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        {batch.map(({ store, posts }: any) => {
-          const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
-          const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
-          return (
-            <Link key={store.id} href={"/store/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[21px] border border-black/[.05] bg-white p-3 text-center transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
-              <span className="relative mb-3 block h-[88px] w-[88px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[100px] sm:w-[100px]">
-                <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
-                  {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center rounded-full text-sm font-black text-[#777]">@</span>}
-                </span>
-                {verified && <span className="absolute bottom-0 right-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm sm:h-[18px] sm:w-[18px]" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={16} strokeWidth={2.8} className="fill-[#2563eb] text-white sm:h-[18px] sm:w-[18px]" /></span>}
-              </span>
-              <span className="flex min-w-0 max-w-full items-center justify-center gap-1.5">
-                <b className="truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
-                {pro && <Crown size={13} className="shrink-0 text-amber-500" />}
-              </span>
-              <span className="mt-1 block text-[10px] font-semibold text-[#888] sm:text-[11px]">{posts.length} listings · Instagram shop</span>
-              <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555] transition group-hover:text-black sm:text-[11px]">Explore shop <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" /></span>
-            </Link>
-          );
-        })}
+        {batch.map((entry: any) => <StoreCard key={entry.store.id} entry={entry} />)}
       </div>
     </section>
   );
