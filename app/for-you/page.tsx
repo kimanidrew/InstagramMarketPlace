@@ -1,4 +1,4 @@
-import { Sparkles, Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { ForYouFilters } from "@/components/for-you-filters";
@@ -9,7 +9,9 @@ export const dynamic = "force-dynamic";
 
 export default async function ForYouPage() {
   const currentUser = await user();
-  const tags = await db().productTag.groupBy({
+  const database = db();
+
+  const tags = await database.productTag.groupBy({
     by: ["name"],
     where: { post: { isProduct: true } },
     _count: { name: true },
@@ -17,64 +19,71 @@ export default async function ForYouPage() {
     take: 14,
   });
 
-  const recentActivity = currentUser
+  const [viewed, saved, liked] = currentUser
     ? await Promise.all([
-        db().recentlyViewedProduct.findMany({
+        database.recentlyViewedProduct.findMany({
           where: { userId: currentUser.id, post: { isProduct: true } },
-          include: { post: { select: { id: true, tags: { select: { name: true } } } } },
+          select: { post: { select: { id: true, tags: { select: { name: true } } } } },
           orderBy: { lastViewedAt: "desc" },
           take: 10,
         }),
-        db().wishlistItem.findMany({
+        database.wishlistItem.findMany({
           where: { userId: currentUser.id, post: { isProduct: true } },
-          include: { post: { select: { id: true, tags: { select: { name: true } } } },
-          },
+          select: { post: { select: { id: true, tags: { select: { name: true } } } } },
           orderBy: { createdAt: "desc" },
           take: 10,
         }),
-        db().productLike.findMany({
+        database.productLike.findMany({
           where: { userId: currentUser.id, post: { isProduct: true } },
-          include: { post: { select: { id: true, tags: { select: { name: true } } } } },
+          select: { post: { select: { id: true, tags: { select: { name: true } } } } },
           orderBy: { createdAt: "desc" },
           take: 10,
         }),
       ])
     : [[], [], []];
 
-  const [viewed, saved, liked] = recentActivity;
-  const activity = [...viewed, ...saved, ...liked] as any[];
+  const activity = [...viewed, ...saved, ...liked];
   const excludedIds = [...new Set(activity.map((item) => item.post.id))];
-  const interestTags = [...new Set(activity.flatMap((item) => item.post.tags.map((tag: { name: string }) => tag.name)))];
+  const interestTags = [...new Set(activity.flatMap((item) => item.post.tags.map((tag) => tag.name)))];
+
+  const include = {
+    connection: true,
+    tags: true,
+    likes: true,
+    wishlistItems: true,
+    _count: { select: { likes: true, wishlistItems: true } },
+  } as const;
 
   let recommendations: any[] = [];
   if (interestTags.length) {
-    recommendations = await db().instagramPost.findMany({
+    recommendations = await database.instagramPost.findMany({
       where: {
         isProduct: true,
         id: { notIn: excludedIds },
         tags: { some: { name: { in: interestTags } } },
       },
-      include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
+      include,
       orderBy: [{ likes: { _count: "desc" } }, { instagramLikeCount: "desc" }, { timestamp: "desc" }],
       take: 12,
     });
   }
 
   if (recommendations.length < 6) {
-    const fallback = await db().instagramPost.findMany({
-      where: { isProduct: true, ...(excludedIds.length ? { id: { notIn: [...excludedIds, ...recommendations.map((item) => item.id)] } } : recommendations.length ? { id: { notIn: recommendations.map((item) => item.id) } } : {}) },
-      include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
+    const alreadyRecommended = recommendations.map((item) => item.id);
+    const omittedIds = [...new Set([...excludedIds, ...alreadyRecommended])];
+    const fallback = await database.instagramPost.findMany({
+      where: { isProduct: true, ...(omittedIds.length ? { id: { notIn: omittedIds } } : {}) },
+      include,
       orderBy: [{ likes: { _count: "desc" } }, { instagramLikeCount: "desc" }, { timestamp: "desc" }],
       take: 12,
     });
     recommendations = [...recommendations, ...fallback].slice(0, 12);
   }
 
-  // Do not suppress listings when Instagram blocks HEAD requests to its media URLs.
-  const carouselProducts = JSON.parse(JSON.stringify(recommendations.map((product: any) => ({
+  const carouselProducts = JSON.parse(JSON.stringify(recommendations.map((product) => ({
     ...product,
-    likedByCurrentUser: currentUser ? product.likes?.some((like: any) => like.userId === currentUser.id) : false,
-    wishlistedByCurrentUser: currentUser ? product.wishlistItems?.some((item: any) => item.userId === currentUser.id) : false,
+    likedByCurrentUser: Boolean(currentUser && product.likes?.some((like: any) => like.userId === currentUser.id)),
+    wishlistedByCurrentUser: Boolean(currentUser && product.wishlistItems?.some((item: any) => item.userId === currentUser.id)),
   }))));
 
   return (
@@ -89,12 +98,12 @@ export default async function ForYouPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6b6b66] sm:text-base">
             {currentUser
-              ? "A living mix shaped by what you like, save and revisit. Promoted listings are clearly prioritized, with more relevant finds as your shopping interests grow."
+              ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
               : "Explore a curated mix of marketplace finds. Sign in and like, save or revisit listings to make your feed more personal across devices."}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-[#444]"><Heart size={14} /> Your interests</span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-[#444]"><ShoppingBag size={14} /> Products & services</span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-[#444]"><ShoppingBag size={14} /> Products &amp; services</span>
             <Link href="/shop" className="inline-flex items-center gap-2 rounded-full bg-[#171717] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#383838]">Explore the shop</Link>
           </div>
         </div>
@@ -103,7 +112,7 @@ export default async function ForYouPage() {
 
       <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} />
 
-      <section aria-label="Personalized product recommendations">
+      <section aria-label="Personalized product recommendations" className="relative">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[.16em] text-[#888]">Picked for your next find</p>
