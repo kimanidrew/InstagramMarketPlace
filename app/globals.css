@@ -2707,3 +2707,23 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 @media(prefers-reduced-motion:reduce){
   .shop-promo-enter{animation:none;will-change:auto}
 }
+
+
+/* Keep carousel navigation above every animated slide and reserve a clear control lane. */
+.shop-promo-slide{
+  z-index:1;
+  box-sizing:border-box;
+  padding-bottom:48px;
+}
+.shop-promo-controls{
+  z-index:30!important;
+  isolation:isolate;
+}
+.shop-promo-controls>div:last-child button{
+  position:relative;
+  z-index:1;
+}
+@media(max-width:767px){
+  .shop-promo-slide{padding-bottom:48px}
+  .shop-promo-controls{bottom:10px}
+}
