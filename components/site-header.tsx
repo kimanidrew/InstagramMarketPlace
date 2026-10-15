@@ -237,7 +237,7 @@ export function SiteHeader({ user }: { user: any }) {
               )}
             </div>
           )}
-          {searchQuery.trim().length < 2 && (trendingTagsLoading || trendingTags.length > 0) && (
+          {(trendingTagsLoading || trendingTags.length > 0) && (
             <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
               <div className="header-trending-list">
                 {trendingTagsLoading ? (
