@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BadgeCheck, Crown, ArrowRight, LoaderCircle, Store } from "lucide-react";
+import { BadgeCheck, Bookmark, Crown, ArrowRight, LoaderCircle, Store } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
 
@@ -266,7 +266,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
           <section key="saved-for-later" className="product-feed-full-row rounded-[30px] border border-black/5 bg-[#f7f7f4] px-6 py-5 md:px-9 md:py-7">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
-                <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Store size={13} /> Saved for later</p>
+                <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Bookmark size={13} /> Saved for later</p>
                 <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
               </div>
