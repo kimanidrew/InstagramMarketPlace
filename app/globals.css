@@ -2233,3 +2233,24 @@ select:focus-visible,
 .header-suggestion-store-image{border-radius:50%;color:#aaa}
 .header-suggestion-store-image img{border-radius:50%}
 @media(max-width:640px){.header-suggestion-tab{gap:5px;min-height:32px;font-size:10px;padding:0 5px}}
+
+
+/* Full-height search results view: fixed search controls, scrollable suggestions */
+.header-search-panel.is-open.has-suggestions{height:calc(100dvh - 74px);max-height:none!important;overflow:hidden;display:flex;flex-direction:column;padding:14px 0 12px;box-sizing:border-box}
+.header-search-panel.is-open.has-suggestions .header-search-content{display:flex;flex:1;flex-direction:column;min-height:0;height:100%;overflow:hidden}
+.header-search-panel.is-open.has-suggestions .header-search-intro{flex:none}
+.header-search-panel.is-open.has-suggestions .header-search-form{flex:none}
+.header-search-panel.is-open.has-suggestions .header-search-suggestions{display:flex;flex:1;flex-direction:column;min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#666 #171717;padding:10px;margin-bottom:0}
+.header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar{width:8px}
+.header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar-track{margin:9px 2px;border-radius:999px;background:#171717}
+.header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar-thumb{border:2px solid #171717;border-radius:999px;background:linear-gradient(180deg,#858585,#4a4a4a)}
+.header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar-thumb:hover{background:#b5b5b5}
+.header-search-panel.is-open.has-suggestions .header-suggestion-tabs{flex:none}
+.header-search-panel.is-open.has-suggestions .header-suggestions-label{flex:none}
+.header-search-panel.is-open.has-suggestions .header-suggestion-item{flex:none}
+@media(max-width:640px){
+ .header-search-panel.is-open.has-suggestions{height:calc(100dvh - 62px);max-height:none!important;padding:10px 0 8px}
+ .header-search-panel.is-open.has-suggestions .header-search-content{width:calc(100% - 22px)}
+ .header-search-panel.is-open.has-suggestions .header-search-suggestions{margin-top:10px;flex:1;min-height:0;max-height:none;padding:8px;border-radius:16px}
+}
+@media(prefers-reduced-motion:reduce){.header-search-panel.is-open.has-suggestions .header-search-suggestions{scroll-behavior:auto}}
