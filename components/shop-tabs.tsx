@@ -174,7 +174,7 @@ export function ShopTabs({
                         <article key={store.id} className="discover-store-card group relative min-w-0 overflow-hidden rounded-[24px] border border-black/[.06] bg-white p-4 transition duration-300 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_16px_38px_rgba(0,0,0,.07)] sm:p-5">
                           <AnalyticsImpression connectionId={store.id} />
                           <Link href={"/store/" + store.username} onClick={() => recordAnalytics({ connectionId: store.id, type: "CLICK" })} className="flex h-full flex-col items-center text-center">
-                            <div className="discover-store-avatar relative mb-3 h-24 w-24 shrink-0 overflow-hidden rounded-full bg-[#f1f1ed] p-[3px] sm:h-28 sm:w-28">
+                            <div className="discover-store-avatar relative mb-3 aspect-square w-[min(100%,176px)] shrink-0 overflow-hidden rounded-full bg-[#f1f1ed] p-[3px] sm:w-[min(100%,192px)]">
                               <div className="h-full w-full overflow-hidden rounded-full bg-white">
                                 {store.profileImageUrl ? (
                                   <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
@@ -182,7 +182,7 @@ export function ShopTabs({
                                   <div className="flex h-full w-full items-center justify-center text-2xl font-black text-[#777]">@</div>
                                 )}
                               </div>
-                              {isVerified && <span className="absolute bottom-1 right-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-white text-blue-600" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={19} fill="currentColor" className="text-white" /></span>}
+                              {isVerified && <span className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full border-[3px] border-white bg-blue-600 text-white shadow-md" title="Verified shop" aria-label="Verified shop"><BadgeCheck size={18} fill="currentColor" className="text-white" /></span>}
                             </div>
                             <div className="flex max-w-full items-center justify-center gap-1.5">
                               <b className="max-w-full truncate text-sm font-extrabold tracking-[-.02em] text-[#171717] sm:text-base">@{store.username}</b>
