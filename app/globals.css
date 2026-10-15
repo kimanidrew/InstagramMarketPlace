@@ -2465,3 +2465,47 @@ header nav {
     top:70px;
   }
 }
+
+/* Black SokoLink shop-tabs wrapper with high-contrast, readable typography. */
+.shop-page .shop-tabs{
+  background:#080808!important;
+  border-color:#202020!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.16);
+}
+.shop-page .shop-tab{
+  color:#f4f4f5!important;
+}
+.shop-page .shop-tab-copy b{
+  color:inherit!important;
+  font-weight:750;
+  letter-spacing:-.015em;
+}
+.shop-page .shop-tab-copy small{
+  color:#a1a1aa!important;
+  font-weight:450;
+}
+.shop-page .shop-tab-icon{
+  background:#202020!important;
+  border-color:#303030!important;
+  color:#e4e4e7!important;
+}
+.shop-page .shop-tab-active{
+  background:#24202f!important;
+  color:#fff!important;
+}
+.shop-page .shop-tab-active .shop-tab-copy b,
+.shop-page .shop-tab-active .shop-tab-copy small{
+  color:#fff!important;
+}
+.shop-page .shop-tab-active .shop-tab-copy small{
+  color:#d4d4d8!important;
+}
+.shop-page .shop-tab-active .shop-tab-icon{
+  background:#6241c8!important;
+  border-color:#6241c8!important;
+  color:#fff!important;
+}
+.shop-page .shop-tab-indicator{
+  background:#a78bfa!important;
+}
+
