@@ -218,6 +218,9 @@ model GrowthRequest {
   user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   connection   InstagramConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   post         InstagramPost?      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  offeringId   String?
+  durationDays Int                 @default(0)
+  offering     GrowthOffering?     @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   @@index([userId, createdAt])
   @@index([connectionId, status])
   @@index([postId, status])
