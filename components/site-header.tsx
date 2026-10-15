@@ -113,7 +113,6 @@ export function SiteHeader({ user }: { user: any }) {
           </form>
           {(trendingTagsLoading || trendingTags.length > 0) && (
             <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
-              <div className="header-trending-heading"><span>Trending tags</span><span>{trendingTagsLoading ? "Finding popular tags…" : "Most products first"}</span></div>
               <div className="header-trending-list">
                 {trendingTagsLoading ? (
                   Array.from({ length: 6 }, (_, index) => (
