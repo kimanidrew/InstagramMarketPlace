@@ -294,13 +294,13 @@ export function ShopTabs({
 
                 {wishlistProducts.length > 0 && (
                   <section className="rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
-                    <div className="flex flex-row items-center justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <p className="eyebrow plain">Pick up where you left off</p>
-                        <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Still loving these?</h2>
-                        <p className="mt-2 text-sm text-[#777]">Your saved products and services are ready whenever you are.</p>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                      <div className="min-w-0">
+                        <p className="eyebrow plain"><Heart size={13} /> Saved for later</p>
+                        <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
+                        <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
                       </div>
-                      <Link href="/wishlist" className="group inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-[#e4e4e7] bg-[#f4f4f5] px-3 py-2 text-[10px] font-semibold tracking-[-.01em] text-[#3f3f46] shadow-none transition-colors duration-200 hover:border-[#d4d4d8] hover:bg-[#e4e4e7] hover:text-[#18181b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a1a1aa] focus-visible:ring-offset-2 sm:px-3.5 sm:text-[11px]">View full wishlist <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" /></Link>
+                      <Link href="/wishlist" className="group inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-full border border-black/10 bg-white px-4 py-2.5 text-xs font-black text-[#222] transition duration-200 hover:border-black hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#777] focus-visible:ring-offset-2 sm:self-auto">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
                     </div>
                     <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
                       {wishlistProducts.slice(0, 7).map((x: any) => {
