@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BadgeCheck, Bookmark, Crown, ArrowRight, LoaderCircle, Store } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
+import { WishlistButton } from "@/components/wishlist-button";
 
 type ProductMasonryProps = {
   q?: string;
@@ -119,6 +120,7 @@ function LazyProductCard({ product }: { product: any }) {
 
 export function ProductMasonry({ q = "", tag = "", personalized = false, stores = [], wishlistProducts = [] }: ProductMasonryProps) {
   const [products, setProducts] = useState<any[]>([]);
+  const [savedProducts, setSavedProducts] = useState<any[]>(wishlistProducts);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -126,6 +128,20 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   const pageRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    setSavedProducts(wishlistProducts);
+  }, [wishlistProducts]);
+
+  useEffect(() => {
+    const onWishlistUpdate = (event: Event) => {
+      const detail = (event as CustomEvent<{ id: string; wishlisted: boolean }>).detail;
+      if (!detail?.id || detail.wishlisted !== false) return;
+      setSavedProducts((current) => current.filter((item) => item.id !== detail.id));
+    };
+    window.addEventListener("listing-wishlist-updated", onWishlistUpdate);
+    return () => window.removeEventListener("listing-wishlist-updated", onWishlistUpdate);
+  }, []);
 
   useEffect(() => {
     pageRef.current = 0;
@@ -252,7 +268,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 4) {
       productFeed.push({ type: "stores", batchIndex: Math.floor((index - 3) / 12) });
     }
-    if (index === 7 && wishlistProducts.length > 0) productFeed.push({ type: "saved" });
+    if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
   });
 
   return (
@@ -273,15 +289,20 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
               <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
             </div>
             <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
-              {wishlistProducts.slice(0, 7).map((x: any) => {
+              {savedProducts.slice(0, 7).map((x: any) => {
                 const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                 const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
                 const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
                 const image = x.mediaUrl || x.thumbnailUrl;
                 return (
-                  <Link key={x.id} href={href} aria-label={x.productTitle || "Saved listing"} className="group block aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
-                    {isVideo && x.mediaUrl ? <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
-                  </Link>
+                  <div key={x.id} className="group relative aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
+                    <Link href={href} aria-label={x.productTitle || "Saved listing"} className="block h-full w-full">
+                      {isVideo && x.mediaUrl ? <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
+                    </Link>
+                    <div className="absolute right-2 top-2 z-10">
+                      <WishlistButton id={x.id} wishlisted compact />
+                    </div>
+                  </div>
                 );
               })}
             </div>
