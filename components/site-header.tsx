@@ -170,13 +170,6 @@ export function SiteHeader({ user }: { user: any }) {
 
       <div id="header-search-panel" className={"header-search-panel " + (searchOpen ? "is-open" : "") + (searchOpen && searchQuery.trim().length >= 2 ? " has-suggestions" : "")} aria-hidden={!searchOpen}>
         <div className="shell header-search-content">
-          <div className="header-search-intro">
-            <span className="header-search-mark"><Sparkles size={14} /></span>
-            <div>
-              <p>YOUR NEXT FAVOURITE FIND</p>
-              <span>Search across products, stores and categories.</span>
-            </div>
-          </div>
           <form action="/search" className="header-search-form" onSubmit={() => setSearchOpen(false)}>
             <Search size={19} className="shrink-0 text-[#888]" />
             <input
