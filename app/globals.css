@@ -2177,3 +2177,36 @@ select:focus-visible,
 @media(prefers-reduced-motion:reduce){
   .header-trending-shimmer::after,.header-trending-count-shimmer::after{animation:none;transform:none;background:rgba(255,255,255,.06)}
 }
+
+
+/* Live SokoLink search suggestions */
+.site-header .icon-btn.active{position:relative;background:#1d1d1d!important;color:#fff!important;box-shadow:inset 0 0 0 1px #454545!important}
+.site-header .icon-btn.active svg{filter:drop-shadow(0 2px 5px rgba(255,255,255,.16))}
+.header-search-panel.is-open{max-height:620px!important}
+.header-search-suggestions{margin-top:12px;padding:9px;border:1px solid #292929;border-radius:20px;background:linear-gradient(145deg,#111,#080808);box-shadow:0 18px 45px rgba(0,0,0,.28);animation:headerSuggestionsIn .2s ease-out;max-height:290px;overflow-y:auto}
+.header-suggestions-label{padding:6px 8px 9px;color:#777;font-size:9px;font-weight:900;letter-spacing:.14em}
+.header-suggestion-item{display:flex;align-items:center;gap:12px;padding:9px;border-radius:13px;color:#f4f4f4;transition:background .18s ease,transform .18s ease}
+.header-suggestion-item:hover{background:#202020;transform:translateX(2px)}
+.header-suggestion-image{display:grid;place-items:center;flex:none;width:48px;height:48px;overflow:hidden;border-radius:13px;background:#202020}
+.header-suggestion-image img{display:block;width:100%;height:100%;object-fit:cover}
+.header-suggestion-placeholder{display:grid;place-items:center;width:100%;height:100%;color:#aaa}
+.header-suggestion-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:6px}
+.header-suggestion-copy strong{overflow:hidden;color:#f4f4f4;font-size:12px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+.header-suggestion-copy small{display:flex;align-items:center;gap:6px;overflow:hidden;color:#8e8e8e;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+.header-suggestion-avatar{display:inline-grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#b7f7e8,#c7b4ff);color:#111;font-size:8px;font-weight:900}
+.header-suggestion-arrow{flex:none;color:#666;transition:color .18s ease,transform .18s ease}
+.header-suggestion-item:hover .header-suggestion-arrow{color:#fff;transform:translateX(2px)}
+.header-suggestions-empty{margin:0;padding:10px 8px 13px;color:#858585;font-size:11px}
+.header-suggestions-loading{display:grid;gap:8px;padding:5px 8px 10px}
+.header-suggestions-loading span{height:14px;border-radius:8px;background:linear-gradient(90deg,#191919,#333,#191919);background-size:200% 100%;animation:headerSuggestionsShimmer 1.2s ease-in-out infinite}
+.header-suggestions-loading span:nth-child(2){width:82%}.header-suggestions-loading span:nth-child(3){width:65%}
+@keyframes headerSuggestionsIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes headerSuggestionsShimmer{to{background-position:-200% 0}}
+@media(max-width:640px){
+ .header-search-panel.is-open{max-height:680px!important}
+ .header-search-suggestions{margin-top:10px;padding:7px;border-radius:16px;max-height:260px}
+ .header-suggestion-item{gap:10px;padding:8px}
+ .header-suggestion-image{width:43px;height:43px;border-radius:11px}
+ .header-suggestion-copy strong{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.header-search-suggestions,.header-suggestions-loading span{animation:none}}
