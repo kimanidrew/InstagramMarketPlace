@@ -130,9 +130,9 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   }, [progressKey, cycleStartKey, visitorId, allSlides.map((slide) => slide.key).join("|")]);
 
   const remainingSlides = promotionSlides.filter((slide) => !seenPromoKeys.includes(slide.key));
-  // If a fallback shop exists, keep at least one shop slide visible even after it has been seen.
-  const visibleRemaining = fallbackShop && !remainingSlides.some((slide) => slide.type === "store")
-    ? [...remainingSlides, shopSlides[0]].filter(Boolean) as PromoSlide[]
+  // Keep at least one shop slide visible even when every shop promotion has already been seen.
+  const visibleRemaining = shopSlides.length && !remainingSlides.some((slide) => slide.type === "store")
+    ? [...remainingSlides, shopSlides[0]]
     : remainingSlides;
   const slides = visibleRemaining.length ? visibleRemaining : promotionSlides;
 
