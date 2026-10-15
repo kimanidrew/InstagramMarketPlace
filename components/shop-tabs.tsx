@@ -69,26 +69,51 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
   const measureRef = React.useRef<HTMLDivElement>(null);
-  const progressKey = "imarket_promo_cycle_" + analyticsVisitorId();
+  const visitorId = analyticsVisitorId();
+  const progressKey = "imarket_promo_view_cycle_" + visitorId;
+  const cycleStartKey = progressKey + "_started";
 
   useEffect(() => {
+    let cancelled = false;
     try {
       const stored = JSON.parse(window.localStorage.getItem(progressKey) || "[]");
-      const validSeen = Array.isArray(stored)
-        ? stored.filter((key: unknown): key is string => typeof key === "string" && promotionSlides.some((slide) => slide.key === key))
+      const validStored = Array.isArray(stored)
+        ? stored.filter((key: unknown): key is string => typeof key === "string" && allSlides.some((slide) => slide.key === key))
         : [];
-      if (allSlides.length > 0 && allSlides.every((slide) => validSeen.includes(slide.key))) {
-        window.localStorage.setItem(progressKey, "[]");
-        setSeenPromoKeys([]);
-      } else {
-        setSeenPromoKeys(validSeen);
+      let cycleStart = Number(window.localStorage.getItem(cycleStartKey) || 0);
+      if (!Number.isFinite(cycleStart) || cycleStart <= 0) {
+        cycleStart = Date.now();
+        window.localStorage.setItem(cycleStartKey, String(cycleStart));
       }
+      fetch("/api/shopper/promotion-views?visitorId=" + encodeURIComponent(visitorId) + "&since=" + encodeURIComponent(String(cycleStart)), { cache: "no-store" })
+        .then((response) => response.ok ? response.json() : { storeConnectionIds: [], productPostIds: [] })
+        .then((data) => {
+          if (cancelled) return;
+          const viewedKeys = allSlides.filter((slide) =>
+            slide.type === "store"
+              ? Array.isArray(data.storeConnectionIds) && data.storeConnectionIds.includes(slide.store.id)
+              : slide.type === "product" && Array.isArray(data.productPostIds) && data.productPostIds.includes(slide.product.id)
+          ).map((slide) => slide.key);
+          const combined = [...new Set([...validStored, ...viewedKeys])];
+          const cycleComplete = allSlides.length > 0 && allSlides.every((slide) => combined.includes(slide.key));
+          if (cycleComplete) {
+            const nextStart = Date.now();
+            window.localStorage.setItem(progressKey, "[]");
+            window.localStorage.setItem(cycleStartKey, String(nextStart));
+            setSeenPromoKeys([]);
+          } else {
+            window.localStorage.setItem(progressKey, JSON.stringify(combined));
+            setSeenPromoKeys(combined);
+          }
+        })
+        .catch(() => { if (!cancelled) setSeenPromoKeys(validStored); });
     } catch {
       setSeenPromoKeys([]);
     }
-  // Reload cycle progress when the promotion inventory changes.
+    return () => { cancelled = true; };
+  // Refresh only when the visitor or active promotion inventory changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [progressKey, promotionSlides.length, allSlides.map((slide) => slide.key).join("|")]);
+  }, [progressKey, cycleStartKey, visitorId, allSlides.map((slide) => slide.key).join("|")]);
 
   const remainingSlides = promotionSlides.filter((slide) => !seenPromoKeys.includes(slide.key));
   const slides = (remainingSlides.length ? remainingSlides : promotionSlides).slice(0, 3);
@@ -102,20 +127,6 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 6500);
     return () => window.clearInterval(timer);
   }, [slides.length, slides.map((slide) => slide.key).join("|")]);
-
-  const markVisited = (key: string) => {
-    if (!allSlides.some((slide) => slide.key === key)) return;
-    const nextSeen = [...new Set([...seenPromoKeys, key])];
-    const cycleComplete = allSlides.every((slide) => nextSeen.includes(slide.key));
-    const persisted = cycleComplete ? [] : nextSeen;
-    try {
-      window.localStorage.setItem(progressKey, JSON.stringify(persisted));
-    } catch {
-      // The carousel still advances for this page view if browser storage is unavailable.
-    }
-    setSeenPromoKeys(persisted);
-    setIndex(0);
-  };
 
   useEffect(() => {
     const measure = () => {
@@ -145,7 +156,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   return (
     <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" style={{ height: bannerHeight, minHeight: bannerHeight }} aria-label="Promoted shops, products and marketplace ads">
       <div className="shop-promo-active" style={{ height: bannerHeight }}>
-        <PromoSlideContent slide={activeSlide} onVisit={markVisited} />
+        <PromoSlideContent slide={activeSlide} />
       </div>
       <div ref={measureRef} className="shop-promo-measurement" aria-hidden="true">
         {slides.map((slide) => <PromoSlideContent key={"measure-" + slide.key} slide={slide} measure />)}
