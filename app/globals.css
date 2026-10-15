@@ -2241,6 +2241,10 @@ select:focus-visible,
 .header-search-panel.is-open.has-suggestions .header-search-content{display:flex;flex:1;flex-direction:column;min-height:0;height:100%;overflow:hidden}
 .header-search-panel.is-open.has-suggestions .header-search-intro{flex:none}
 .header-search-panel.is-open.has-suggestions .header-search-form{flex:none}
+.header-search-panel.is-open.has-suggestions .header-trending-tags{flex:none;min-height:0;max-height:30vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#666 #171717}
+.header-search-panel.is-open.has-suggestions .header-trending-list{max-height:none;overflow:visible}
+.header-search-panel.is-open.has-suggestions .header-trending-tags::-webkit-scrollbar{width:6px}
+.header-search-panel.is-open.has-suggestions .header-trending-tags::-webkit-scrollbar-thumb{border-radius:999px;background:#666}
 .header-search-panel.is-open.has-suggestions .header-search-suggestions{display:flex;flex:1;flex-direction:column;min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#666 #171717;padding:10px;margin-bottom:0}
 .header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar{width:8px}
 .header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar-track{margin:9px 2px;border-radius:999px;background:#171717}
