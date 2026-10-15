@@ -5,7 +5,7 @@ import Link from "next/link";
 import { BadgeCheck, BarChart3, Check, ChevronDown, Megaphone, ShieldCheck, Sparkles, Store } from "lucide-react";
 import { SellerAnalytics } from "@/components/seller-analytics";
 
-type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: { id: string }[] };
+type Connection = { id: string; username: string; name?: string | null; profileImageUrl?: string | null; verifiedAt?: string | null; verifiedUntil?: string | null; proUntil?: string | null; posts: { id: string; productTitle?: string | null; thumbnailUrl?: string | null; mediaUrl?: string | null; mediaType?: string | null }[] };
 type GrowthOffering = { id: string; code: string; name: string; category: "PROMOTION" | "GROWTH"; description: string; price: number; durationDays: number; features: string[]; active: boolean };
 
 export function SellerGrowth({ connections, embedded = false, initialTab = "store" }: { connections: Connection[]; embedded?: boolean; initialTab?: "store" | "promotion" }) {
