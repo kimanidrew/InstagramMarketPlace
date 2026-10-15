@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp } from "lucide-react";
 import { ProductMasonry, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
@@ -241,8 +241,8 @@ export function ShopTabs({
                 {filteredTrendingProducts.length > 0 ? (
                   <div className="product-feed-layout mt-6">
                     {filteredTrendingProducts.map((product: any, index: number) => (
-                      <>
-                        <div key={product.id} className="product-feed-item min-w-0">
+                      <Fragment key={product.id}>
+                        <div className="product-feed-item min-w-0">
                           <ProductCard p={product} />
                         </div>
                         {(index === 3 || (index > 3 && (index - 3) % 12 === 0)) && trendingStores.length > Math.floor((index - 3) / 12) * 4 && (
@@ -250,7 +250,7 @@ export function ShopTabs({
                             <StoreInlineSection stores={trendingStores} batchIndex={Math.floor((index - 3) / 12)} variant="trending" />
                           </div>
                         )}
-                      </>
+                      </Fragment>
                     ))}
                   </div>
                 ) : (
