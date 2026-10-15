@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bookmark, Store, UserRound } from "lucide-react";
+import { Bookmark, Sparkles, Store, UserRound } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
@@ -17,6 +17,7 @@ export function SiteHeader({ user }: { user: any }) {
         <nav className="hidden items-center gap-1 lg:flex">
           {[
             ["/shop", "Shop"],
+            ["/for-you", "For You"],
             ["/stores", "Stores"],
             ["/categories", "Categories"],
             ["/how-it-works", "How it works"],
