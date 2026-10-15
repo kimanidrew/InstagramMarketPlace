@@ -49,7 +49,7 @@ export default function AdminOfferingsManager({ initialOfferings, audienceSize }
   }
 
   async function remove(item: Offering) {
-    if (busy || !window.confirm("Delete “" + item.name + ””? Existing campaign/request records will keep their saved price and duration, but this offering will no longer be available.")) return;
+    if (busy || !window.confirm("Delete “" + item.name + "”? Existing campaign/request records will keep their saved price and duration, but this offering will no longer be available.")) return;
     setBusy(true); setNotice(""); setError("");
     try {
       const response = await fetch("/api/admin/offerings?id=" + encodeURIComponent(item.id), { method: "DELETE" });
