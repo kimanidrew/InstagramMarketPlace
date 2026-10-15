@@ -138,7 +138,7 @@ export function ProductCard({ p }: { p: any }) {
             )}
             </span>
             {p.connection.verifiedAt && (!p.connection.verifiedUntil || new Date(p.connection.verifiedUntil) > new Date()) && (
-              <span className="absolute -bottom-0.5 -right-0.5 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm sm:h-[18px] sm:w-[18px]" title="Verified shop" aria-label="Verified shop">
+              <span className="absolute bottom-0 right-0 z-10 flex h-4 w-4 items-center justify-center rounded-full bg-white shadow-sm sm:h-[18px] sm:w-[18px]" title="Verified shop" aria-label="Verified shop">
                 <BadgeCheck size={16} strokeWidth={2.8} className="fill-[#2563eb] text-white sm:h-[18px] sm:w-[18px]" />
               </span>
             )}
