@@ -183,40 +183,33 @@ export function ShopTabs({
                       </div>
                       <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="inline-flex shrink-0 items-center justify-center self-start rounded-full border border-black/10 px-4 py-2 text-[12px] font-black leading-5 text-[#666] transition hover:border-black hover:text-black disabled:opacity-50 sm:self-auto">{clearingHistory ? "Clearing…" : "Clear history"}</button>
                     </div>
-                    {recentItems.length > 0 && <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
-                      {recentItems.slice(0, 7).map((x: any) => {
-                        const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
-                        const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
-                        const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
-                        const image = x.thumbnailUrl || x.mediaUrl;
-                        return (
-                          <Link key={x.id} href={href} aria-label={x.productTitle || "Recently viewed listing"} className="group block aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
-                            {isVideo && x.mediaUrl ? (
-                              <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
-                            ) : image ? (
-                              <img src={image} alt={x.productTitle || "Recently viewed listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>
-                            )}
-                          </Link>
-                        );
-                      })}
-                    </div>}
-                    {recentStores.length > 0 && (
-                      <div className={recentItems.length > 0 ? "mt-7" : "mt-6"}>
-                        <p className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[.13em] text-[#888]"><Store size={13} /> Recently visited stores</p>
-                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
-                          {recentStores.slice(0, 7).map((store: any) => (
-                            <Link key={store.id} href={"/store/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white">
-                              <span className="h-16 w-16 overflow-hidden rounded-full bg-[#ecece8] sm:h-[76px] sm:w-[76px]">
-                                {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
-                              </span>
-                              <b className="mt-3 max-w-full truncate text-xs font-extrabold text-[#171717]">@{store.username}</b>
-                              <span className="mt-1 text-[10px] font-semibold text-[#888]">{store.listingCount} listings</span>
-                              <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[#555]">Visit again <ArrowRight size={11} /></span>
+                    {(recentItems.length > 0 || recentStores.length > 0) && (
+                      <div className="mt-6 flex gap-3 overflow-x-auto pb-2">
+                        {[
+                          ...recentItems.slice(0, 7).map((item: any) => ({ kind: "product", item })),
+                          ...recentStores.slice(0, 7).map((item: any) => ({ kind: "store", item })),
+                        ].map(({ kind, item }: any) => kind === "product" ? (() => {
+                          const isVideo = String(item.mediaType || "").toUpperCase() === "VIDEO";
+                          const isService = String(item.listingType || "").toUpperCase() === "SERVICE";
+                          const href = "/" + (isService ? "service" : "product") + "/" + item.productSlug;
+                          const image = item.thumbnailUrl || item.mediaUrl;
+                          return (
+                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group block w-[112px] shrink-0 sm:w-[136px]">
+                              <div className="aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
+                                {isVideo && item.mediaUrl ? <video src={item.mediaUrl} poster={item.thumbnailUrl || undefined} muted loop playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={item.productTitle || "Recently viewed listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
+                              </div>
+                              <span className="mt-2 block truncate text-xs font-bold text-[#555]">{item.productTitle || (isService ? "Recently viewed service" : "Recently viewed product")}</span>
                             </Link>
-                          ))}
-                        </div>
+                          );
+                        })() : (
+                          <Link key={"store-" + item.id} href={"/store/" + item.username} className="group flex w-[112px] shrink-0 flex-col items-center sm:w-[136px]">
+                            <span className="block aspect-square w-full overflow-hidden rounded-[22px] bg-[#ecece8]">
+                              {item.profileImageUrl ? <img src={item.profileImageUrl} alt={"@" + item.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
+                            </span>
+                            <b className="mt-2 max-w-full truncate text-xs font-extrabold text-[#171717]">@{item.username}</b>
+                            <span className="mt-1 text-[10px] font-semibold text-[#888]">{item.listingCount} listings</span>
+                          </Link>
+                        ))}
                       </div>
                     )}
                   </section>
@@ -238,19 +231,31 @@ export function ShopTabs({
                   <div><p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.</p></div>
                   <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
                 </div>
-                {filteredTrendingProducts.length > 0 ? (
+                {(filteredTrendingProducts.length > 0 || trendingStores.length > 0) ? (
                   <div className="product-feed-layout mt-6">
-                    {filteredTrendingProducts.map((product: any, index: number) => (
-                      <Fragment key={product.id}>
-                        <div className="product-feed-item min-w-0">
-                          <ProductCard p={product} />
-                        </div>
-                        {(index === 3 || (index > 3 && (index - 3) % 12 === 0)) && trendingStores.length > Math.floor((index - 3) / 12) * 4 && (
-                          <div key={"trending-store-section-" + Math.floor((index - 3) / 12)} className="product-store-interlude-row">
-                            <StoreInlineSection stores={trendingStores} batchIndex={Math.floor((index - 3) / 12)} variant="trending" />
+                    {filteredTrendingProducts.map((product: any, index: number) => {
+                      const shouldInsertStores = index === 3 || (index > 3 && (index - 3) % 12 === 0);
+                      const batchIndex = Math.floor((index - 3) / 12);
+                      return (
+                        <Fragment key={product.id}>
+                          <div className="product-feed-item min-w-0">
+                            <ProductCard p={product} />
                           </div>
-                        )}
-                      </Fragment>
+                          {shouldInsertStores && batchIndex >= 0 && trendingStores.length > batchIndex * 4 && (
+                            <div key={"trending-store-section-" + batchIndex} className="product-store-interlude-row">
+                              <StoreInlineSection stores={trendingStores} batchIndex={batchIndex} variant="trending" />
+                            </div>
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                    {Array.from({ length: Math.ceil(trendingStores.length / 4) }, (_, batchIndex) => batchIndex).filter((batchIndex) => {
+                      const insertionIndex = batchIndex === 0 ? 3 : 3 + batchIndex * 12;
+                      return insertionIndex >= filteredTrendingProducts.length;
+                    }).map((batchIndex) => (
+                      <div key={"trending-store-section-tail-" + batchIndex} className="product-store-interlude-row">
+                        <StoreInlineSection stores={trendingStores} batchIndex={batchIndex} variant="trending" />
+                      </div>
                     ))}
                   </div>
                 ) : (
