@@ -3821,3 +3821,51 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .shop-page .shop-tab.shop-tab-active:hover .shop-tab-indicator{
   background:#52525b!important;
 }
+
+
+/* Stable, visible motion and reliable controls for the shop promotion carousel. */
+.shop-promo-active{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.shop-promo-active>.shop-promo-slide{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  min-height:0!important;
+  animation:shopPromoSlideIn .48s cubic-bezier(.22,.75,.25,1) both;
+  will-change:opacity,transform;
+}
+.shop-promo-controls{
+  pointer-events:none;
+  z-index:40!important;
+}
+.shop-promo-controls button{
+  pointer-events:auto;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.shop-promo-controls button:focus-visible{
+  outline:2px solid #d6ff63;
+  outline-offset:4px;
+}
+.shop-promo-dots button{
+  height:8px;
+  min-width:8px;
+  flex:0 0 auto;
+}
+.shop-promo-dots button.is-active{
+  width:24px;
+}
+@keyframes shopPromoSlideIn{
+  from{opacity:0;transform:translate3d(18px,0,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .shop-promo-active>.shop-promo-slide{
+    animation:none;
+    will-change:auto;
+  }
+}
