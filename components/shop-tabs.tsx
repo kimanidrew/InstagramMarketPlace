@@ -262,9 +262,6 @@ export function ShopTabs({
                       </Link>
                     ))}
                   </div>
-                  {selectedTag && filteredFeaturedStores.length === 0 && (
-                    <div className="col-span-full rounded-[26px] border border-dashed border-black/10 bg-[#fafaf8] p-10 text-center text-sm font-bold text-[#777]">{emptyFilteredMessage}</div>
-                  )}
                 </section>
 
                 <section>
