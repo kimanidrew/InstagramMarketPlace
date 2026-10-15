@@ -2220,3 +2220,16 @@ select:focus-visible,
 .header-search-form button.header-search-clear{display:flex;flex:0 0 32px;align-items:center;justify-content:center;width:32px;min-height:32px;height:32px;border:0;border-radius:50%;background:transparent;padding:0;color:#aaa;opacity:1;transition:background .18s ease,color .18s ease,transform .18s ease}
 .header-search-form button.header-search-clear:hover{background:#303030;color:#fff;transform:scale(1.05)}
 .header-search-form button.header-search-clear:focus-visible{outline:2px solid #aaa;outline-offset:2px}
+
+
+/* Search suggestion tabs */
+.header-suggestion-tabs{display:flex;gap:5px;padding:3px;margin-bottom:8px;border:1px solid #292929;border-radius:13px;background:#0b0b0b}
+.header-suggestion-tab{display:flex;flex:1;align-items:center;justify-content:center;gap:7px;min-height:34px;border:0;border-radius:9px;background:transparent;padding:0 8px;color:#929292;font-size:11px;font-weight:800;transition:background .18s ease,color .18s ease}
+.header-suggestion-tab span{display:inline-grid;min-width:18px;height:18px;place-items:center;border-radius:6px;background:#222;color:#aaa;font-size:9px;font-weight:900}
+.header-suggestion-tab:hover{color:#fff}
+.header-suggestion-tab.active{background:#f5f5f5;color:#111}
+.header-suggestion-tab.active span{background:#dedede;color:#111}
+.header-suggestion-category-icon{color:#d2d2d2}
+.header-suggestion-store-image{border-radius:50%;color:#aaa}
+.header-suggestion-store-image img{border-radius:50%}
+@media(max-width:640px){.header-suggestion-tab{gap:5px;min-height:32px;font-size:10px;padding:0 5px}}
