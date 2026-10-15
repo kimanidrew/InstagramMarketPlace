@@ -2077,3 +2077,10 @@ select:focus-visible,
   .header-trending-list{gap:6px}
   .header-trending-tag{padding:6px 9px;font-size:10px}
 }
+
+
+/* Navbar search: keep the content wrapper borderless, including while the search input is focused. */
+.header-search-content,
+.header-search-content:focus,
+.header-search-content:focus-within,
+.header-search-content:focus-visible{border:0!important;outline:none!important;box-shadow:none!important}
