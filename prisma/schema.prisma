@@ -220,6 +220,8 @@ model GrowthRequest {
   post         InstagramPost?      @relation(fields: [postId], references: [id], onDelete: Cascade)
   offeringId   String?
   durationDays Int                 @default(0)
+  offeringName String?
+  offeringFeatures String[]        @default([])
   offering     GrowthOffering?     @relation(fields: [offeringId], references: [id], onDelete: SetNull)
   @@index([userId, createdAt])
   @@index([connectionId, status])
@@ -320,6 +322,8 @@ model PromotionCampaign {
   events          AnalyticsEvent[]
   offeringId      String?
   durationDays    Int                  @default(7)
+  offeringName    String?
+  offeringFeatures String[]             @default([])
   offering        GrowthOffering?      @relation(fields: [offeringId], references: [id], onDelete: SetNull)
 
   @@index([userId, createdAt])
