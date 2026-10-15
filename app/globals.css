@@ -4016,3 +4016,39 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
     overflow-x: hidden;
   }
 }
+
+
+/* True viewport-width For You rail without creating document-level X overflow. */
+.for-you-filter-sticky {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-inline: calc(50% - 50vw) !important;
+  overflow-x: clip !important;
+}
+.for-you-filter-bar,
+.for-you-filter-scroller,
+.for-you-filter-tags {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+.for-you-filter-bar {
+  width: 100% !important;
+  padding-inline: 0 !important;
+}
+.for-you-filter-scroller {
+  width: 100% !important;
+  overflow: hidden !important;
+}
+.for-you-filter-tags {
+  width: 100% !important;
+  overflow-x: auto !important;
+}
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+@supports not (overflow: clip) {
+  html, body { overflow-x: hidden; }
+  .for-you-filter-sticky { overflow-x: hidden !important; }
+}
