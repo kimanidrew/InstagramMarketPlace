@@ -42,9 +42,10 @@ export async function GET(request: Request) {
 export async function DELETE(request: Request) {
   const visitorId = new URL(request.url).searchParams.get("visitorId") || "";
   if (!validVisitorId(visitorId)) return NextResponse.json({ error: "Invalid visitor." }, { status: 400 });
+  const connectionId = new URL(request.url).searchParams.get("connectionId") || undefined;
   try {
     await db().analyticsEvent.deleteMany({
-      where: { visitorId, type: "VIEW", postId: null },
+      where: { visitorId, type: "VIEW", postId: null, ...(connectionId ? { connectionId } : {}) },
     });
     return NextResponse.json({ ok: true });
   } catch {
