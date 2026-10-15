@@ -189,44 +189,12 @@ export function ShopTabs({
                   </section>
                 )}
 
-                {wishlistProducts.length > 0 && (
-                  <section className="rounded-[30px] border border-black/5 bg-[#f7f7f4] p-5 md:p-7">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="min-w-0">
-                        <p className="eyebrow plain"><Bookmark size={13} /> Saved for later</p>
-                        <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
-                        <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
-                      </div>
-                      <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
-                    </div>
-                    <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
-                      {wishlistProducts.slice(0, 7).map((x: any) => {
-                        const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
-                        const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
-                        const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
-                        const image = x.mediaUrl || x.thumbnailUrl;
-                        return (
-                          <Link key={x.id} href={href} aria-label={x.productTitle || "Saved listing"} className="group block aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
-                            {isVideo && x.mediaUrl ? (
-                              <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
-                            ) : image ? (
-                              <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>
-                            )}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </section>
-                )}
-
                 <section id="shop-all">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
                     <span className="text-xs font-bold text-[#999]">Products & services</span>
                   </div>
-                  <div className="mt-6"><ProductMasonry q="" tag="" stores={filteredFeaturedStores} /></div>
+                  <div className="mt-6"><ProductMasonry q="" tag="" stores={filteredFeaturedStores} wishlistProducts={wishlistProducts} /></div>
                 </section>
               </div>
             )}
