@@ -1,12 +1,20 @@
 import { Sparkles, Heart, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { user } from "@/lib/auth";
-import { ProductMasonry } from "@/components/product-masonry";
+import { ForYouFilters } from "@/components/for-you-filters";
+import { db } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export default async function ForYouPage() {
   const currentUser = await user();
+  const tags = await db().productTag.groupBy({
+    by: ["name"],
+    where: { post: { isProduct: true } },
+    _count: { name: true },
+    orderBy: { _count: { name: "desc" } },
+    take: 14,
+  });
 
   return (
     <main className="shell min-h-screen py-8 md:py-12">
@@ -40,7 +48,7 @@ export default async function ForYouPage() {
           </div>
           <span className="hidden rounded-full border border-black/10 px-3 py-2 text-[10px] font-bold text-[#777] sm:inline-flex">Endless discovery</span>
         </div>
-        <ProductMasonry personalized />
+        <ForYouFilters tags={tags.map((item) => item.name)} />
       </section>
     </main>
   );
