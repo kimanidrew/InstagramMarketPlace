@@ -2454,3 +2454,14 @@ header nav {
   .shop-page .shop-tab-indicator{left:20%;right:20%;bottom:1px}
   .shop-page .shop-filter-panel{margin-bottom:22px}
 }
+
+
+/* Keep a comfortable gap between the sticky shop tabs and the navbar. */
+.shop-page .shop-tabs{
+  top:94px;
+}
+@media(max-width:640px){
+  .shop-page .shop-tabs{
+    top:84px;
+  }
+}
