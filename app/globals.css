@@ -2466,13 +2466,13 @@ header nav {
   }
 }
 
-/* Let shop tabs rise to the very top when the navbar hides on downward scroll. */
+/* Keep shop tabs 10px from the top when the navbar hides on downward scroll. */
 body:has(.site-header.is-hidden) .shop-page .shop-tabs{
-  top:0;
+  top:10px;
 }
 @media(max-width:640px){
   body:has(.site-header.is-hidden) .shop-page .shop-tabs{
-    top:0;
+    top:10px;
   }
 }
 
