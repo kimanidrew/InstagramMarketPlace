@@ -2128,3 +2128,52 @@ select:focus-visible,
   outline:none!important;
   box-shadow:none!important;
 }
+
+
+/* Trending tag loading skeleton: reserve the row immediately so the search panel feels instant. */
+.header-trending-tag-skeleton{
+  display:inline-flex;
+  flex:0 0 auto;
+  align-items:center;
+  gap:8px;
+  min-height:33px;
+  padding:7px 10px;
+  border:0;
+  border-radius:999px;
+  background:#141414;
+  scroll-snap-align:start;
+  overflow:hidden;
+}
+.header-trending-shimmer,
+.header-trending-count-shimmer{
+  position:relative;
+  display:block;
+  flex:none;
+  height:9px;
+  width:48px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#292929;
+}
+.header-trending-shimmer-1{width:65px}
+.header-trending-shimmer-2{width:39px}
+.header-trending-count-shimmer{width:19px;height:19px;border-radius:50%;background:#242424}
+.header-trending-shimmer::after,
+.header-trending-count-shimmer::after{
+  position:absolute;
+  inset:0;
+  content:"";
+  transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+  animation:headerTrendingShimmer 1.25s ease-in-out infinite;
+}
+@keyframes headerTrendingShimmer{100%{transform:translateX(100%)}}
+@media(max-width:640px){
+  .header-trending-tag-skeleton{min-height:31px;padding:6px 9px}
+  .header-trending-shimmer{width:42px}
+  .header-trending-shimmer-1{width:56px}
+  .header-trending-shimmer-2{width:34px}
+}
+@media(prefers-reduced-motion:reduce){
+  .header-trending-shimmer::after,.header-trending-count-shimmer::after{animation:none;transform:none;background:rgba(255,255,255,.06)}
+}
