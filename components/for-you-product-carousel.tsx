@@ -70,7 +70,6 @@ export function ForYouProductCarousel({ products, personalized }: { products: Pr
             </article>
           );
         })}
-      </div>
       </div> : <div className="relative rounded-2xl border border-dashed border-black/10 bg-white/70 px-5 py-8 text-center">
         <Sparkles size={22} className="mx-auto text-[#999]" />
         <p className="mt-3 text-sm font-extrabold text-[#222]">Your next favourite is just around the corner.</p>
