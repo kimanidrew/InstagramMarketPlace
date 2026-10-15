@@ -206,9 +206,9 @@ export function ShopTabs({
                   <div className="flex items-center gap-2 rounded-full border border-black/5 bg-[#f7f7f4] px-3 py-2 text-[10px] font-black uppercase tracking-[.12em] text-[#777]"><Heart size={12} /> Likes <span>+</span> <Bookmark size={12} /> Saves</div>
                 </div>
                 {filteredTrendingProducts.length > 0 ? (
-                  <div className="mt-6 columns-2 gap-3 sm:columns-2 sm:gap-5 md:columns-3 lg:columns-4">
+                  <div className="product-feed-layout mt-6">
                     {filteredTrendingProducts.map((product: any) => (
-                      <div key={product.id} className="mb-7 min-w-0 break-inside-avoid sm:mb-9">
+                      <div key={product.id} className="product-feed-item min-w-0">
                         <ProductCard p={product} />
                       </div>
                     ))}
