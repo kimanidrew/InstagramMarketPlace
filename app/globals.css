@@ -2260,3 +2260,11 @@ select:focus-visible,
  .header-search-panel.is-open.has-suggestions .header-search-suggestions{margin-top:10px;flex:1;min-height:0;max-height:none;padding:8px;border-radius:16px}
 }
 @media(prefers-reduced-motion:reduce){.header-search-panel.is-open.has-suggestions .header-search-suggestions{scroll-behavior:auto}}
+
+
+/* Keep the mobile bottom navigation behind the expanded search overlay. */
+@media(max-width:1023px){
+  .mobile-bottom-nav{z-index:10!important}
+  .site-header.search-overlay-open{position:sticky;top:0;z-index:100!important}
+  .site-header.search-overlay-open .header-search-panel.is-open{position:relative;z-index:101}
+}
