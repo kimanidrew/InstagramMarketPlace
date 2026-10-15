@@ -46,7 +46,10 @@ export function SiteHeader({ user }: { user: any }) {
           {user && <Link href="/account/analytics" className="nav-link">Grow your own shop</Link>}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1">\n          <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">\n            {searchOpen ? <X size={19} /> : <Search size={19} />}\n          </button>
+        <div className="ml-auto flex items-center gap-1">
+          <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
+            {searchOpen ? <X size={19} /> : <Search size={19} />}
+          </button>
           <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
           </Link>
