@@ -3208,3 +3208,29 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
   .shop-promo-slide>div:first-child>a.mt-6{margin-top:8px!important;padding:8px 11px!important;font-size:10px!important}
   .shop-promo-product-sticker{right:10px;bottom:10px;max-width:calc(100% - 20px);min-height:30px;padding:7px 10px;font-size:8px}
 }
+
+
+/* Precisely align the animated heart and the inline like count on product cards. */
+.product-card-like-line{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:5px;
+  min-height:16px;
+  line-height:16px;
+  vertical-align:middle;
+}
+.product-card-like-line-icon{
+  display:block;
+  width:14px;
+  height:14px;
+  flex:0 0 14px;
+  align-self:center;
+}
+.product-card-like-line b,
+.product-card-like-line span{
+  display:inline-flex;
+  align-items:center;
+  min-height:16px;
+  line-height:16px;
+}
