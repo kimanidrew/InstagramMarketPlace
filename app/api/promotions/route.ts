@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       if (targetType === "PRODUCT" && postId) {
         await prisma.instagramPost.update({ where: { id: postId }, data: { boostUntil: endsAt } });
       }
-      return NextResponse.json({ ok: true, demoMode: true, campaignId: campaign.id, message: "Promotion activated instantly in demo mode for " + (durationDays + " days") + ". No M-Pesa prompt was sent and no money was charged." });
+      return NextResponse.json({ ok: true, demoMode: true, campaignId: campaign.id, message: "Promotion activated instantly in demo mode for " + durationDays + " days. No M-Pesa prompt was sent and no money was charged." });
     }
     try {
       const token = await accessToken(cfg.base, cfg.key, cfg.secret);
