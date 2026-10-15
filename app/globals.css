@@ -2679,12 +2679,11 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   grid-template-rows:minmax(0,1fr);
 }
 .shop-promo-enter{
-  animation:shopPromoEnter .72s cubic-bezier(.2,.75,.25,1) both;
-  will-change:opacity,transform;
+  animation:shopPromoEnter .28s ease-out both;
 }
 @keyframes shopPromoEnter{
-  from{opacity:0;transform:translateY(14px) scale(.99);filter:blur(3px)}
-  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+  from{opacity:.88}
+  to{opacity:1}
 }
 .shop-promo-controls{pointer-events:none}
 .shop-promo-controls button{pointer-events:auto}
@@ -2705,7 +2704,7 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   .shop-promo-store-visual,.shop-promo-product-visual,.shop-promo-ad-art{height:145px;min-height:145px}
 }
 @media(prefers-reduced-motion:reduce){
-  .shop-promo-enter{animation:none;will-change:auto}
+  .shop-promo-enter{animation:none}
 }
 
 
