@@ -1,1 +1,10 @@
-import Link from"next/link";import{Instagram,ShieldCheck,Tags}from"lucide-react";export default function How(){return <main className="shell py-16 md:py-24"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#888]">Simple by design</p><h1 className="mt-4 max-w-4xl text-5xl font-black tracking-[-.06em] sm:text-7xl">Your Instagram becomes a storefront.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-[#666]">Sellers keep posting on Instagram. The marketplace organizes those posts for shoppers.</p><div className="mt-14 grid gap-5 md:grid-cols-3">{[[Instagram,"Request","Sign up, enter the Instagram username and wait for admin review."],[ShieldCheck,"Approve & accept","After approval, the seller is sent to Instagram Manage Access to accept the app connection."],[Tags,"Publish products","Admin connects the account token. Every post with #InstagramMarket becomes a product; other hashtags become categories."]].map(([I,t,d])=>{const X=I as any;return <div className="card p-7" key={String(t)}><X/><h2 className="mt-8 text-xl font-bold">{String(t)}</h2><p className="mt-3 text-sm leading-7 text-[#666]">{String(d)}</p></div>})}</div><div className="mt-10 rounded-[28px] bg-[#f7f7f5] p-8"><h2 className="text-2xl font-black">For shoppers</h2><p className="mt-3 text-sm leading-7 text-[#666]">Browse without signing in. Sign in only when you want to like a product inside this marketplace. Use Open Instagram to visit the original post and interact there.</p><Link href="/signup" className="mt-6 inline-block rounded-full bg-black px-6 py-3 text-sm font-semibold text-white">Create account</Link></div></main>}
+import HowItWorksGuide from "@/components/how-it-works-guide";
+
+export const metadata = {
+  title: "How SokoLink Works | Instagram Marketplace",
+  description: "Learn how to discover products, request a shop, connect Instagram and publish listings on SokoLink.",
+};
+
+export default function HowItWorksPage() {
+  return <HowItWorksGuide />;
+}
