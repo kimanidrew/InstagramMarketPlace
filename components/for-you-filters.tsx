@@ -1,12 +1,43 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, SlidersHorizontal } from "lucide-react";
 import { ProductMasonry } from "@/components/product-masonry";
 
 export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
   const [selectedTag, setSelectedTag] = useState("");
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(true);
+  const [headerHidden, setHeaderHidden] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const updateScrollEdges = useCallback(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    const maxScroll = Math.max(0, element.scrollWidth - element.clientWidth);
+    setAtStart(element.scrollLeft <= 2);
+    setAtEnd(maxScroll <= 2 || element.scrollLeft >= maxScroll - 2);
+  }, []);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    updateScrollEdges();
+    const observer = new ResizeObserver(updateScrollEdges);
+    observer.observe(element);
+    window.addEventListener("resize", updateScrollEdges);
+    const handleScroll = () => {
+      const header = document.querySelector(".site-header");
+      setHeaderHidden(!!header?.classList.contains("is-hidden"));
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateScrollEdges);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [updateScrollEdges, tags.length]);
 
   const scroll = (direction: "left" | "right") => {
     const element = scrollRef.current;
@@ -19,32 +50,34 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
 
   return (
     <div>
-      <div className="mb-5 rounded-[24px] border border-black/5 bg-[#f7f7f4] p-4 sm:p-5">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[.12em] text-[#555]">
-            <SlidersHorizontal size={14} /> Filter by category
-          </span>
-          <span className="shrink-0 text-[11px] font-bold text-[#888]">
-            {selectedTag ? "#" + selectedTag : "All listings"}
-          </span>
-        </div>
-        <div className="relative">
-          <button type="button" onClick={() => scroll("left")} aria-label="Scroll categories left" className="absolute left-0 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-sm backdrop-blur-sm transition hover:bg-[#eee]">
-            <ArrowLeft size={14} />
-          </button>
-          <button type="button" onClick={() => scroll("right")} aria-label="Scroll categories right" className="absolute right-0 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-sm backdrop-blur-sm transition hover:bg-[#eee]">
-            <ArrowRight size={14} />
-          </button>
-          <div ref={scrollRef} className="flex snap-x snap-mandatory gap-2 overflow-x-auto scroll-smooth px-10 py-1" role="group" aria-label="Product categories">
-            <button type="button" onClick={() => setSelectedTag("")} className={"shrink-0 snap-start rounded-full border px-4 py-2 text-xs font-bold transition " + (!selectedTag ? "border-black bg-black text-white" : "border-black/10 bg-white text-[#555] hover:border-black/30 hover:bg-[#eee]")}>All</button>
-            {tags.map((name) => {
-              const active = selectedTag === name.toLowerCase();
-              return (
-                <button key={name} type="button" onClick={() => setSelectedTag(name.toLowerCase())} className={"shrink-0 snap-start rounded-full border px-4 py-2 text-xs font-bold transition " + (active ? "border-black bg-black text-white" : "border-black/10 bg-white text-[#555] hover:border-black/30 hover:bg-[#eee]")}>
-                  #{name}
-                </button>
-              );
-            })}
+      <div className="for-you-filter-sticky" style={{ top: headerHidden ? 0 : 74 }}>
+        <div className="for-you-filter-bar">
+          <div className="for-you-filter-heading">
+            <span className="inline-flex min-w-0 items-center gap-2 text-xs font-black uppercase tracking-[.12em] text-[#252525] sm:text-sm">
+              <SlidersHorizontal size={16} /> Filter by category
+            </span>
+            <span className="shrink-0 text-[11px] font-extrabold text-[#555] sm:text-xs">
+              {selectedTag ? "#" + selectedTag : "All listings"}
+            </span>
+          </div>
+          <div className="for-you-filter-scroller">
+            {!atStart && <button type="button" onClick={() => scroll("left")} aria-label="Scroll categories left" className="for-you-filter-scroll-button left-2">
+              <ArrowLeft size={16} />
+            </button>}
+            {!atEnd && <button type="button" onClick={() => scroll("right")} aria-label="Scroll categories right" className="for-you-filter-scroll-button right-2">
+              <ArrowRight size={16} />
+            </button>}
+            <div ref={scrollRef} onScroll={updateScrollEdges} className="for-you-filter-tags hide-scrollbar" role="group" aria-label="Product categories">
+              <button type="button" onClick={() => setSelectedTag("")} className={"for-you-filter-chip " + (!selectedTag ? "is-active" : "")}>All</button>
+              {tags.map((name) => {
+                const active = selectedTag === name.toLowerCase();
+                return (
+                  <button key={name} type="button" onClick={() => setSelectedTag(name.toLowerCase())} className={"for-you-filter-chip " + (active ? "is-active" : "")}>
+                    #{name}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
