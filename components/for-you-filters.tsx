@@ -8,7 +8,6 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
   const [selectedTag, setSelectedTag] = useState("");
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(true);
-  const [headerHidden, setHeaderHidden] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const updateScrollEdges = useCallback(() => {
@@ -26,16 +25,9 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
     const observer = new ResizeObserver(updateScrollEdges);
     observer.observe(element);
     window.addEventListener("resize", updateScrollEdges);
-    const handleScroll = () => {
-      const header = document.querySelector(".site-header");
-      setHeaderHidden(!!header?.classList.contains("is-hidden"));
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
     return () => {
       observer.disconnect();
       window.removeEventListener("resize", updateScrollEdges);
-      window.removeEventListener("scroll", handleScroll);
     };
   }, [updateScrollEdges, tags.length]);
 
@@ -50,7 +42,7 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
 
   return (
     <div>
-      <div className="for-you-filter-sticky" style={{ top: headerHidden ? 0 : 74 }}>
+      <div className="for-you-filter-sticky">
         <div className="for-you-filter-bar">
           <div className="for-you-filter-heading">
             <span className="inline-flex min-w-0 items-center gap-2 text-xs font-black uppercase tracking-[.12em] text-[#252525] sm:text-sm">
