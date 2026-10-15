@@ -66,6 +66,9 @@ export async function POST(request: Request) {
     const payment = await prisma.promotionPayment.create({ data: { campaignId: campaign.id, phoneNumber: phoneNumber || "DEMO", amount, status: "INITIATED", provider: demoMode ? "DEMO" : "MPESA", ...(demoMode ? { resultDescription: "Demo activation only. No real payment was requested or charged." } : {}) } });
     if (demoMode) {
       await prisma.promotionCampaign.update({ where: { id: campaign.id }, data: { status: "ACTIVE", startsAt, endsAt } });
+      if (targetType === "PRODUCT" && postId) {
+        await prisma.instagramPost.update({ where: { id: postId }, data: { boostUntil: endsAt } });
+      }
       return NextResponse.json({ ok: true, demoMode: true, campaignId: campaign.id, message: "Promotion activated instantly in demo mode for " + (durationDays + " days") + ". No M-Pesa prompt was sent and no money was charged." });
     }
     try {
