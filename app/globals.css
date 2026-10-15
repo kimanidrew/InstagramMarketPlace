@@ -2279,3 +2279,21 @@ select:focus-visible,
   .site-header a[href="/account"],
   .site-header a[href="/login"]{display:none!important}
 }
+
+/* Hide scrollbar indicators throughout the app on mobile, while preserving scrolling. */
+@media (max-width: 1023px) {
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+}
