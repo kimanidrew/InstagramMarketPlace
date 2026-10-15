@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp } from "lucide-react";
-import { ProductMasonry } from "@/components/product-masonry";
+import { ProductMasonry, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { analyticsVisitorId } from "@/lib/analytics-client";
@@ -88,6 +88,7 @@ export function ShopTabs({
   recentlyViewedProducts = [],
   featuredStores = [],
   trendingProducts = [],
+  trendingStores = [],
   featuredProducts = [],
   now,
 }: {
@@ -96,6 +97,7 @@ export function ShopTabs({
   recentlyViewedProducts?: any[];
   featuredStores?: any[];
   trendingProducts?: any[];
+  trendingStores?: any[];
   featuredProducts?: any[];
   now: string;
 }) {
@@ -238,10 +240,17 @@ export function ShopTabs({
                 </div>
                 {filteredTrendingProducts.length > 0 ? (
                   <div className="product-feed-layout mt-6">
-                    {filteredTrendingProducts.map((product: any) => (
-                      <div key={product.id} className="product-feed-item min-w-0">
-                        <ProductCard p={product} />
-                      </div>
+                    {filteredTrendingProducts.map((product: any, index: number) => (
+                      <>
+                        <div key={product.id} className="product-feed-item min-w-0">
+                          <ProductCard p={product} />
+                        </div>
+                        {(index === 3 || (index > 3 && (index - 3) % 12 === 0)) && trendingStores.length > Math.floor((index - 3) / 12) * 4 && (
+                          <div key={"trending-store-section-" + Math.floor((index - 3) / 12)} className="product-store-interlude-row">
+                            <StoreInlineSection stores={trendingStores} batchIndex={Math.floor((index - 3) / 12)} variant="trending" />
+                          </div>
+                        )}
+                      </>
                     ))}
                   </div>
                 ) : (
