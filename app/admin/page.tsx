@@ -7,6 +7,7 @@ import AdminRemoveStore from "@/components/admin-remove-store";
 import AdminGrowthActions from "@/components/admin-growth-actions";
 import AdminDashboardTabs from "@/components/admin-dashboard-tabs";
 import AdminWorkspaceNav from "@/components/admin-workspace-nav";
+import GlobalFeedbackTrigger from "@/components/global-feedback-trigger";
 import AdminOfferingsManager from "@/components/admin-offerings-manager";
 
 export const dynamic = "force-dynamic";
@@ -162,10 +163,10 @@ export default async function Admin({
           ))}
         </div>
 
-        {q.error && <p className="account-alert error">{q.error}</p>}
-        {q.approved && <p className="account-alert success"><CheckCircle2 size={18} /> Store approved. The seller can now accept the tester invitation and connect.</p>}
-        {q.rejected && <p className="account-alert success"><CheckCircle2 size={18} /> Store request rejected.</p>}
-        {q.removed && <p className="account-alert success"><CheckCircle2 size={18} /> Store removed successfully. Its connection and marketplace data are gone.</p>}
+        {q.error && <GlobalFeedbackTrigger type="error" title="Admin action failed" message={q.error} />}
+        {q.approved && <GlobalFeedbackTrigger type="success" title="Store approved" message="The seller can now accept the tester invitation and connect." />}
+        {q.rejected && <GlobalFeedbackTrigger type="success" title="Store request rejected" message="The store request was rejected successfully." />}
+        {q.removed && <GlobalFeedbackTrigger type="success" title="Store removed" message="The store connection and its marketplace data have been removed." />}
 
         <AdminDashboardTabs
           tabs={[
