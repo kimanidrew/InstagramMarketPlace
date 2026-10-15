@@ -2,7 +2,9 @@ import { Sparkles, Heart, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { ForYouFilters } from "@/components/for-you-filters";
+import { ForYouProductCarousel } from "@/components/for-you-product-carousel";
 import { db } from "@/lib/prisma";
+import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +18,68 @@ export default async function ForYouPage() {
     take: 14,
   });
 
+  const recentActivity = currentUser
+    ? await Promise.all([
+        db().recentlyViewedProduct.findMany({
+          where: { userId: currentUser.id, post: { isProduct: true } },
+          include: { post: { select: { id: true, tags: { select: { name: true } } } } },
+          orderBy: { lastViewedAt: "desc" },
+          take: 10,
+        }),
+        db().wishlistItem.findMany({
+          where: { userId: currentUser.id, post: { isProduct: true } },
+          include: { post: { select: { id: true, tags: { select: { name: true } } } },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        }),
+        db().productLike.findMany({
+          where: { userId: currentUser.id, post: { isProduct: true } },
+          include: { post: { select: { id: true, tags: { select: { name: true } } } } },
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        }),
+      ])
+    : [[], [], []];
+
+  const [viewed, saved, liked] = recentActivity;
+  const activity = [...viewed, ...saved, ...liked] as any[];
+  const excludedIds = [...new Set(activity.map((item) => item.post.id))];
+  const interestTags = [...new Set(activity.flatMap((item) => item.post.tags.map((tag: { name: string }) => tag.name)))];
+
+  let recommendations: any[] = [];
+  if (interestTags.length) {
+    recommendations = await db().instagramPost.findMany({
+      where: {
+        isProduct: true,
+        id: { notIn: excludedIds },
+        tags: { some: { name: { in: interestTags } } },
+      },
+      include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
+      orderBy: [{ likes: { _count: "desc" } }, { instagramLikeCount: "desc" }, { timestamp: "desc" }],
+      take: 12,
+    });
+  }
+
+  if (recommendations.length < 6) {
+    const fallback = await db().instagramPost.findMany({
+      where: { isProduct: true, ...(excludedIds.length ? { id: { notIn: [...excludedIds, ...recommendations.map((item) => item.id)] } } : recommendations.length ? { id: { notIn: recommendations.map((item) => item.id) } } : {}) },
+      include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
+      orderBy: [{ likes: { _count: "desc" } }, { instagramLikeCount: "desc" }, { timestamp: "desc" }],
+      take: 12,
+    });
+    recommendations = [...recommendations, ...fallback].slice(0, 12);
+  }
+
+  const availableRecommendations = await filterAvailableInstagramMedia(recommendations);
+  const carouselProducts = JSON.parse(JSON.stringify(availableRecommendations.map((product: any) => ({
+    ...product,
+    likedByCurrentUser: currentUser ? product.likes?.some((like: any) => like.userId === currentUser.id) : false,
+    wishlistedByCurrentUser: currentUser ? product.wishlistItems?.some((item: any) => item.userId === currentUser.id) : false,
+  }))));
+
   return (
-    <main className="shell min-h-screen py-8 md:py-12">
+    <main className="shell min-h-screen py-5 md:py-8">
       <section className="relative mb-8 overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] px-5 py-8 sm:px-8 md:mb-10 md:px-12 md:py-12">
         <div className="relative z-10 max-w-3xl">
           <p className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#666]">
@@ -39,6 +101,8 @@ export default async function ForYouPage() {
         </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-20 h-64 w-64 rounded-full border-[36px] border-white/70 sm:right-6 sm:top-[-7rem] sm:h-80 sm:w-80" />
       </section>
+
+      <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} />
 
       <section aria-label="Personalized product recommendations">
         <div className="mb-5 flex items-end justify-between gap-4">
