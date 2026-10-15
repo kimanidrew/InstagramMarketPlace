@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Check, Edit3, Plus, Save, Trash2, X } from "lucide-react";
 
 type Offering = {
@@ -18,7 +18,7 @@ export default function AdminOfferingsManager({ initialOfferings, audienceSize }
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const promotionCount = useMemo(() => items.filter(x => x.category === "PROMOTION").length, [items]);
-  const growthCount = items.length - promotionCount;
+  const growthCount = items.length - promotionCount;\n  useEffect(() => {\n    if (notice) window.dispatchEvent(new CustomEvent("sokolink:feedback", { detail: { type: "success", title: "Changes saved", message: notice } }));\n  }, [notice]);\n  useEffect(() => {\n    if (error) window.dispatchEvent(new CustomEvent("sokolink:feedback", { detail: { type: "error", title: "Could not complete action", message: error } }));\n  }, [error]);
 
   function edit(item: Offering) { setDraft({ ...item, features: [...item.features] }); setNotice(""); setError(""); }
   function update<K extends keyof Draft>(key: K, value: Draft[K]) { setDraft(current => current ? { ...current, [key]: value } : current); }
