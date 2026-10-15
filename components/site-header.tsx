@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Bookmark, Search, Sparkles, Store, UserRound, X } from "lucide-react";
+import { ArrowRight, Bookmark, Search, SearchX, Sparkles, Store, UserRound } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
@@ -11,6 +11,8 @@ export function SiteHeader({ user }: { user: any }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [trendingTags, setTrendingTags] = useState<Array<{ name: string; productCount: number }>>([]);
   const [trendingTagsLoading, setTrendingTagsLoading] = useState(false);
+  const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export function SiteHeader({ user }: { user: any }) {
 
         <div className="ml-auto flex items-center gap-1">
           <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
-            {searchOpen ? <X size={19} /> : <Search size={19} />}
+            {searchOpen ? <SearchX size={20} strokeWidth={2.2} /> : <Search size={19} />}
           </button>
           <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
@@ -111,6 +113,26 @@ export function SiteHeader({ user }: { user: any }) {
               <span>Search</span><ArrowRight size={15} />
             </button>
           </form>
+          {searchOpen && searchQuery.trim().length >= 2 && (
+            <div className="header-search-suggestions" role="listbox" aria-label="Search suggestions">
+              <div className="header-suggestions-label">{suggestionsLoading ? "Finding matches…" : searchSuggestions.length ? "SUGGESTED FOR YOU" : "No matching products yet"}</div>
+              {suggestionsLoading ? (
+                <div className="header-suggestions-loading"><span /><span /><span /></div>
+              ) : searchSuggestions.map((item: any) => {
+                const image = item.mediaUrl || item.imageUrl || item.thumbnailUrl || item.media_url || item.thumbnail_url;
+                const username = item.connection?.username || item.username || "Instagram shop";
+                const title = item.productTitle || item.caption?.split("\n")[0] || "View product";
+                return (
+                  <Link key={item.id} href={`/shop?q=${encodeURIComponent(title)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
+                    <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
+                    <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{(username[0] || "S").toUpperCase()}</span>@{username}</small></span>
+                    <ArrowRight size={16} className="header-suggestion-arrow" />
+                  </Link>
+                );
+              })}
+              {!suggestionsLoading && searchSuggestions.length === 0 && <p className="header-suggestions-empty">Try a product name, shop username or category.</p>}
+            </div>
+          )}
           {(trendingTagsLoading || trendingTags.length > 0) && (
             <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
               <div className="header-trending-list">
