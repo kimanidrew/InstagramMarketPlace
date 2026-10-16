@@ -3482,7 +3482,21 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 /* Remove the extra top margin on Shop feed interludes only. */
 .shop-tabs-wrap .product-store-interlude,
 .shop-tabs-wrap .product-feed-full-row{
-  margin-top:0!important;
+  margin-block:14px!important;
+}
+
+/* Keep inserted Shop sections evenly spaced and compact between product batches. */
+.shop-tabs-wrap .product-store-interlude{
+  padding-block:14px!important;
+}
+.shop-tabs-wrap .product-store-interlude .mb-4{
+  margin-bottom:10px!important;
+}
+.shop-tabs-wrap .product-store-interlude-list{
+  gap:10px!important;
+}
+.shop-tabs-wrap .product-feed-full-row{
+  padding-block:16px!important;
 }
 
 /* Prevent Shop promo banner title and description glyphs from clipping vertically. */
