@@ -129,7 +129,7 @@ export default async function ForYouPage() {
             </div>
           </div>
         </div>
-        <div className="relative z-10 -mx-3 -mt-9 flex min-h-[170px] w-full min-w-0 items-center justify-center sm:mx-0 md:-mt-11 md:min-h-[220px] lg:min-h-[240px]">
+        <div className="relative z-10 -mx-3 -mt-9 flex min-h-[170px] w-full min-w-0 items-center justify-center rounded-[2rem] bg-[linear-gradient(145deg,rgba(237,232,255,.92),rgba(255,237,249,.86))] shadow-[inset_0_1px_0_rgba(255,255,255,.9)] ring-1 ring-white/70 sm:mx-0 md:-mt-11 md:min-h-[220px] lg:min-h-[240px]">
           <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
         </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#eeebff]/70 blur-3xl md:right-0 md:top-10 md:h-[28rem] md:w-[28rem]" />
