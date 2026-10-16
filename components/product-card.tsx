@@ -100,6 +100,8 @@ export function ProductCard({ p }: { p: any }) {
               <img
                 src={img}
                 alt={p.productTitle || "Product"}
+                loading="lazy"
+                decoding="async"
                 className="block h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
               />
             </Link>
@@ -137,6 +139,8 @@ export function ProductCard({ p }: { p: any }) {
               <img
                 src={p.connection.profileImageUrl}
                 alt={"@" + p.connection.username}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
             ) : (
