@@ -95,10 +95,9 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 </div>
               )}
 
-              <div className="mt-7 grid grid-cols-3 gap-2">
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.instagramLikeCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">IG likes</p></div>
+              <div className="mt-7 grid grid-cols-2 gap-2">
+                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{(product.instagramLikeCount + product.likes.length).toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Total likes</p></div>
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.likes.length}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Likes</p></div>
               </div>
 
               <div className="mt-7 flex flex-col gap-3">
