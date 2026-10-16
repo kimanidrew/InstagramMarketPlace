@@ -95,7 +95,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
                 {cleanCaption || "Discover this service from @" + service.connection.username + " and contact the provider directly on Instagram for pricing, availability and details."}
               </p>
 
-              {tags.length > 0 && <div className="mt-6 flex flex-wrap gap-2">{tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555]">#{tag.name}</Link>)}</div>}
+              {tags.length > 0 && <div className="mt-6 flex flex-wrap gap-2">{tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555]">{tag.name}</Link>)}</div>}
 
               <div className="mt-7 grid grid-cols-3 gap-2">
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.instagramLikeCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">IG likes</p></div>
