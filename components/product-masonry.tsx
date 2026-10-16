@@ -83,7 +83,7 @@ export function StoreInlineSection({ stores, batchIndex, variant = "discover" }:
     : storeSectionTitles[batchIndex % storeSectionTitles.length];
 
   return (
-    <section className="product-store-interlude column-span-all my-7 rounded-[26px] border border-black/[.06] bg-[#f7f7f4] px-5 py-4 sm:my-9 sm:rounded-[30px] sm:px-8 sm:py-6" aria-label={heading.eyebrow}>
+    <section className={"product-store-interlude column-span-all rounded-[26px] border border-black/[.06] bg-[#f7f7f4] px-5 py-4 sm:rounded-[30px] sm:px-8 sm:py-6 " + (variant === "trending" ? "mt-4 mb-7 md:mt-[30px] sm:mb-9" : "my-7 sm:my-9")} aria-label={heading.eyebrow}>
       <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.14em] text-[#777] sm:text-[10px]"><Store size={12} /> {heading.eyebrow}</p>
