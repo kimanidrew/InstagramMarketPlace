@@ -51,8 +51,18 @@ export default async function Store({
   if (!store) notFound();
 
   const detectedAccent = await getProfileAccentColor(store.profileImageUrl);
-  const storeAccentColor = detectedAccent !== "#a78bfa" ? detectedAccent : (store.profileAccentColor || detectedAccent);
-  if (store.profileImageUrl && storeAccentColor !== store.profileAccentColor) {
+  // Keep the accent scoped to this store. If Instagram blocks the image fetch, prefer
+  // this store's saved color; otherwise derive a stable per-store fallback, never a
+  // shared color that makes every shop look identical.
+  const usernameHue = [...store.username.toLowerCase()].reduce((h, char) => (h * 31 + char.charCodeAt(0)) % 360, 0);
+  const storeFallbackAccent = `hsl(${usernameHue} 62% 68%)`;
+  const storeAccentColor =
+    detectedAccent !== "#a78bfa"
+      ? detectedAccent
+      : store.profileAccentColor && store.profileAccentColor !== "#a78bfa"
+        ? store.profileAccentColor
+        : storeFallbackAccent;
+  if (storeAccentColor !== store.profileAccentColor) {
     await db().instagramConnection.update({ where: { id: store.id }, data: { profileAccentColor: storeAccentColor } }).catch(() => null);
   }
   const posts = await filterAvailableInstagramMedia(store.posts);
