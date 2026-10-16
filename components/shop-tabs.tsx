@@ -51,7 +51,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
   const slideContent = <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
-  if (slide.type === "store") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/store/" + slide.store.username} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-store " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
+  if (slide.type === "store") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/stores/" + slide.store.username} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-store " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
   if (slide.type === "product") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }
@@ -340,7 +340,7 @@ export function ShopTabs({
                             </Link>
                           );
                         })() : (
-                          <Link key={"store-" + item.id} href={"/store/" + item.username} className="group relative flex h-[148px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[160px] sm:w-[136px]">
+                          <Link key={"store-" + item.id} href={"/stores/" + item.username} className="group relative flex h-[148px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[160px] sm:w-[136px]">
                             <button type="button" aria-label="Remove store from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("store-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("store", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
                             <span className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-[#ecece8] sm:h-[76px] sm:w-[76px]">
                               {item.profileImageUrl ? <img src={item.profileImageUrl} alt={"@" + item.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
