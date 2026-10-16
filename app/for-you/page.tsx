@@ -156,27 +156,34 @@ export default async function ForYouPage() {
         <div aria-hidden="true" className="pointer-events-none absolute bottom-[-5rem] right-[28%] h-56 w-56 rounded-full bg-[#f4c9ed]/35 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute right-[12%] top-[16%] hidden rotate-12 text-3xl font-black text-[#9b80ff]/40 md:block">✦</div>
         <div aria-hidden="true" className="pointer-events-none absolute right-[44%] bottom-[18%] hidden text-xl text-[#d98be9]/50 md:block">✧</div>
-        <div className="relative z-20 flex min-w-0 max-w-[430px] flex-col justify-center py-4 text-center sm:py-6 md:py-1 md:text-left">
-          <p className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#e8e2ff] bg-white/75 px-3 py-1.5 text-[10px] font-bold text-[#6652ce] shadow-sm md:mx-0">
-            <Sparkles size={13} /> YOUR PERSONAL SHOPPING EDIT
+        <div className="relative z-20 flex min-w-0 max-w-[470px] flex-col justify-center py-1.5 text-center sm:py-2 md:py-1 md:text-left">
+          <p className="mx-auto inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#5945d6] sm:text-xs md:mx-0">
+            <Sparkles size={15} fill="currentColor" /> Personalised for you
           </p>
-          <h1 className="mx-auto mt-4 max-w-[390px] text-[clamp(2.4rem,4.2vw,4rem)] font-black leading-[.96] tracking-[-.075em] text-[#171526] md:mx-0">
-            Good finds. <span className="bg-gradient-to-r from-[#5539dc] to-[#bb4bc7] bg-clip-text text-transparent">Your kind.</span>
+          <h1 className="mt-2 mx-auto max-w-[440px] text-[clamp(2.35rem,4.2vw,4.1rem)] font-black leading-[.94] tracking-[-.085em] text-[#171526] md:mx-0">
+            Made for <span className="bg-gradient-to-r from-[#472cff] via-[#7b2cff] to-[#b23bd1] bg-clip-text text-transparent">you.</span>
           </h1>
-          <p className="mx-auto mt-3 max-w-[340px] text-sm leading-6 text-[#68667b] md:mx-0">
+          <p className="mx-auto mt-2 max-w-[390px] text-[12px] leading-5 text-[#65657d] sm:text-sm sm:leading-7 md:mx-0">
             {currentUser
-              ? "A fresh mix of products and shops inspired by what catches your eye."
-              : "Discover lovely finds and shops from across SokoLink. Your picks get more personal as you browse."}
+              ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
+              : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 md:justify-start">
-            {(tags.length ? tags.slice(0, 3).map((tag) => tag.name) : ["Fashion", "Beauty", "Home"]).map((category) => (
-              <Link key={category} href="/categories" className="rounded-full border border-white/90 bg-white/70 px-3 py-1.5 text-[11px] font-semibold text-[#625d7a] transition hover:border-[#d6ccff] hover:bg-white hover:text-[#5540c8]">
-                {category}
-              </Link>
-            ))}
-            <Link href="/shop" className="inline-flex items-center gap-1.5 rounded-full bg-[#201a3c] px-4 py-2 text-[11px] font-bold text-white shadow-[0_6px_18px_rgba(40,30,90,.14)] transition hover:-translate-y-0.5 hover:bg-[#4e3bc5]">
-              Explore shop <ArrowRight size={13} />
-            </Link>
+          <div className="mt-3 flex flex-col items-center gap-3 md:items-start">
+            <span className="inline-flex items-center gap-2 text-[10px] font-extrabold tracking-[.14em] text-[#6b5bd2] sm:text-[11px]"><span aria-hidden="true" className="h-[3px] w-9 rounded-full bg-gradient-to-r from-[#8b7aff] via-[#b99aff] to-[#d6a6f0] [clip-path:ellipse(50%_100%_at_50%_100%)] sm:w-12" />EXPLORE CATEGORIES<span aria-hidden="true" className="h-[3px] w-9 rounded-full bg-gradient-to-l from-[#8b7aff] via-[#b99aff] to-[#d6a6f0] [clip-path:ellipse(50%_100%_at_50%_100%)] sm:w-12" /></span>
+            <div className="flex max-w-full flex-wrap justify-center gap-2 md:justify-start">
+              {(tags.length ? tags.slice(0, 5).map((tag) => tag.name) : ["Fashion", "Beauty", "Home", "Accessories", "Services"]).map((category, index) => (
+                <Link
+                  key={category}
+                  href="/shop"
+                  className={index === 0
+                    ? "group inline-flex items-center gap-1.5 rounded-full border border-[#ded8ff] bg-white/80 px-2.5 py-1 text-[10px] font-bold text-[#5540c8] shadow-[0_4px_14px_rgba(86,64,200,.08)] transition duration-200 hover:-translate-y-0.5 hover:border-[#bdb0ff] hover:bg-[#f5f2ff] sm:text-[11px]"
+                    : "group inline-flex items-center gap-1.5 rounded-full border border-[#e9e7f2] bg-white/55 px-2.5 py-1 text-[10px] font-semibold text-[#65627a] transition duration-200 hover:-translate-y-0.5 hover:border-[#d3caff] hover:bg-white hover:text-[#5540c8] sm:text-[11px]"}
+                >
+                  {category}
+                  <ArrowRight size={11} className="opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
         <div className="relative z-10 -mx-3 -mt-[4.5rem] flex min-h-[170px] w-full min-w-0 items-center justify-center sm:mx-0 md:-mt-[5.5rem] md:min-h-[220px] lg:min-h-[240px]">
