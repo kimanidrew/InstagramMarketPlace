@@ -5,22 +5,22 @@ import { usePathname } from "next/navigation";
 type SkeletonProps = { count?: number; variant?: "products" | "categories" | "stores" | "rows" };
 
 const PAGE_LOADING_COPY: Array<{ match: RegExp; eyebrow: string; title: string; description: string }> = [
-  { match: /^\/for-you(?:\/|$)/, eyebrow: "MADE FOR YOUR TASTE", title: "YOUR NEXT GREAT FIND IS LOADING", description: "We’re bringing your personal picks together." },
-  { match: /^\/shop(?:\/|$)/, eyebrow: "GOOD FINDS AHEAD", title: "THE SHOP IS GETTING READY", description: "A little moment while we line up the good stuff." },
-  { match: /^\/categories(?:\/|$)/, eyebrow: "FIND YOUR THING", title: "CATEGORIES ARE ON THEIR WAY", description: "We’re getting every corner of the shop ready to explore." },
-  { match: /^\/category(?:\/|$)/, eyebrow: "EXPLORE YOUR INTERESTS", title: "YOUR CATEGORY IS LOADING", description: "We’re gathering the finds that belong here." },
-  { match: /^\/products?(?:\/|$)/, eyebrow: "WORTH A CLOSER LOOK", title: "PRODUCTS ARE GETTING READY", description: "Just a moment while we bring the details together." },
-  { match: /^\/stores?(?:\/|$)/, eyebrow: "MEET THE SELLERS", title: "DISCOVERING GREAT STORES", description: "We’re getting shop profiles ready for you." },
-  { match: /^\/store(?:\/|$)/, eyebrow: "MEET THE MAKERS", title: "THIS SHOP IS GETTING READY", description: "We’re bringing this seller’s collection into view." },
-  { match: /^\/search(?:\/|$)/, eyebrow: "LET’S FIND IT", title: "YOUR RESULTS ARE LOADING", description: "We’re looking for something you’ll love." },
-  { match: /^\/wishlist(?:\/|$)/, eyebrow: "SAVED FOR LATER", title: "YOUR FAVOURITES ARE LOADING", description: "All the things you’ve saved, gathered in one place." },
-  { match: /^\/account(?:\/|$)/, eyebrow: "YOUR SPACE", title: "GETTING YOUR ACCOUNT READY", description: "We’re bringing your seller tools together." },
-  { match: /^\/notifications(?:\/|$)/, eyebrow: "YOU’RE IN THE LOOP", title: "CHECKING YOUR UPDATES", description: "Your latest activity will be right here." },
-  { match: /^\/login(?:\/|$)/, eyebrow: "WELCOME BACK", title: "GETTING THINGS READY", description: "One moment and you’ll be on your way." },
-  { match: /^\/signup(?:\/|$)/, eyebrow: "YOUR NEXT CHAPTER", title: "MAKING ROOM FOR YOU", description: "We’re getting your sign-up page ready." },
-  { match: /^\/how-it-works(?:\/|$)/, eyebrow: "SIMPLE BY DESIGN", title: "HERE’S HOW IT ALL COMES TOGETHER", description: "We’re getting the SokoLink guide ready for you." },
-  { match: /^\/service(?:\/|$)/, eyebrow: "SERVICES WORTH DISCOVERING", title: "GETTING THIS SERVICE READY", description: "We’re bringing the details into view." },
-  { match: /^\/admin(?:\/|$)/, eyebrow: "SELLER CONTROL CENTRE", title: "PREPARING YOUR DASHBOARD", description: "Your management tools are on their way." },
+  { match: /^\/for-you(?:\/|$)/, eyebrow: "Made for your taste", title: "Your next great find is loading", description: "We’re bringing your personal picks together." },
+  { match: /^\/shop(?:\/|$)/, eyebrow: "Good finds ahead", title: "The shop is getting ready", description: "A little moment while we line up the good stuff." },
+  { match: /^\/categories(?:\/|$)/, eyebrow: "Find your thing", title: "Categories are on their way", description: "We’re getting every corner of the shop ready to explore." },
+  { match: /^\/category(?:\/|$)/, eyebrow: "Explore your interests", title: "Your category is loading", description: "We’re gathering the finds that belong here." },
+  { match: /^\/products?(?:\/|$)/, eyebrow: "Worth a closer look", title: "Products are getting ready", description: "Just a moment while we bring the details together." },
+  { match: /^\/stores?(?:\/|$)/, eyebrow: "Meet the sellers", title: "Discovering great stores", description: "We’re getting shop profiles ready for you." },
+  { match: /^\/store(?:\/|$)/, eyebrow: "Meet the makers", title: "This shop is getting ready", description: "We’re bringing this seller’s collection into view." },
+  { match: /^\/search(?:\/|$)/, eyebrow: "Let’s find it", title: "Your results are loading", description: "We’re looking for something you’ll love." },
+  { match: /^\/wishlist(?:\/|$)/, eyebrow: "Saved for later", title: "Your favourites are loading", description: "All the things you’ve saved, gathered in one place." },
+  { match: /^\/account(?:\/|$)/, eyebrow: "Your space", title: "Getting your account ready", description: "We’re bringing your seller tools together." },
+  { match: /^\/notifications(?:\/|$)/, eyebrow: "You’re in the loop", title: "Checking your updates", description: "Your latest activity will be right here." },
+  { match: /^\/login(?:\/|$)/, eyebrow: "Welcome back", title: "Getting things ready", description: "One moment and you’ll be on your way." },
+  { match: /^\/signup(?:\/|$)/, eyebrow: "Your next chapter", title: "Making room for you", description: "We’re getting your sign-up page ready." },
+  { match: /^\/how-it-works(?:\/|$)/, eyebrow: "Simple by design", title: "Here’s how it all comes together", description: "We’re getting the SokoLink guide ready for you." },
+  { match: /^\/service(?:\/|$)/, eyebrow: "Services worth discovering", title: "Getting this service ready", description: "We’re bringing the details into view." },
+  { match: /^\/admin(?:\/|$)/, eyebrow: "Seller control centre", title: "Preparing your dashboard", description: "Your management tools are on their way." },
 ];
 
 export function LoadingSkeleton({ variant = "products" }: SkeletonProps) {
@@ -34,7 +34,7 @@ export function PageLoadingSkeleton({ title = true }: { title?: boolean }) {
   if (pathname === "/") return null;
 
   const pageCopy = PAGE_LOADING_COPY.find((item) => item.match.test(pathname));
-  const heading = typeof title === "string" ? title : pageCopy?.title ?? "GOOD THINGS ARE ON THE WAY";
+  const heading = typeof title === "string" ? title : pageCopy?.title ?? "Good things are on the way";
   const eyebrow = pageCopy?.eyebrow ?? "A MOMENT, PLEASE";
   const description = pageCopy?.description ?? "We’re getting this page ready for you.";
 
