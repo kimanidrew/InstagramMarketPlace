@@ -43,7 +43,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
 
 
   return (
-    <section aria-label="Recommended products" className={compact ? "relative min-w-0 overflow-visible bg-transparent p-0" : "relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8"}>
+    <section aria-label="Recommended products" className={compact ? "relative block w-full min-w-0 overflow-visible bg-transparent p-0" : "relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8"}>
       {!compact && <div className="pointer-events-none absolute -right-12 -top-16 h-52 w-52 rounded-full bg-white/80 blur-2xl" />}
       <div className={compact ? "hidden" : "relative mb-4 flex items-end justify-between gap-3 sm:mb-6"}>
         <div className="min-w-0">
@@ -58,7 +58,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
       </div>
       {products.length > 0 ? (compact ? (
         <div
-          className="relative mx-auto h-[390px] w-full max-w-[760px] overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px]"
+          className="relative mx-auto block h-[390px] w-full min-w-0 max-w-[760px] overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px]"
           style={{ perspective: "1000px" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
@@ -80,7 +80,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
               <article
                 data-recommendation-card
                 key={p.id}
-                className="absolute left-1/2 top-1/2 w-[64%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 sm:w-[62%] md:w-[65%] lg:w-[64%]"
+                className="absolute left-1/2 top-1/2 block w-[64%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 sm:w-[62%] md:w-[65%] lg:w-[64%]"
                 style={{
                   transform: `translate(-50%, -50%) translateX(${x}%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
