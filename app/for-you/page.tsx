@@ -168,19 +168,24 @@ export default async function ForYouPage() {
               ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
               : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
-          <div className="mt-3 flex flex-col items-center gap-3 md:items-start">
-            <span className="inline-flex items-center gap-2 text-[10px] font-extrabold tracking-[.14em] text-[#6b5bd2] sm:text-[11px]"><span aria-hidden="true" className="h-[3px] w-9 rounded-full bg-gradient-to-r from-[#8b7aff] via-[#b99aff] to-[#d6a6f0] [clip-path:ellipse(50%_100%_at_50%_100%)] sm:w-12" />EXPLORE CATEGORIES<span aria-hidden="true" className="h-[3px] w-9 rounded-full bg-gradient-to-l from-[#8b7aff] via-[#b99aff] to-[#d6a6f0] [clip-path:ellipse(50%_100%_at_50%_100%)] sm:w-12" /></span>
+          <div className="mt-4 w-full max-w-[430px] md:mt-5">
+            <div className="mb-2.5 flex items-center justify-center gap-2 md:justify-start">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-xl border border-[#e7e0ff] bg-white/80 text-[#7658e8] shadow-[0_3px_10px_rgba(93,67,190,.07)]">
+                <Sparkles size={13} />
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-[.16em] text-[#77718f] sm:text-[11px]">Explore categories</span>
+              <span className="h-px flex-1 max-w-14 bg-gradient-to-r from-[#d8ceff] to-transparent" />
+            </div>
             <div className="flex max-w-full flex-wrap justify-center gap-2 md:justify-start">
               {(tags.length ? tags.slice(0, 5).map((tag) => tag.name) : ["Fashion", "Beauty", "Home", "Accessories", "Services"]).map((category, index) => (
                 <Link
                   key={category}
                   href="/shop"
-                  className={index === 0
-                    ? "group inline-flex items-center gap-1.5 rounded-full border border-[#ded8ff] bg-white/80 px-2.5 py-1 text-[10px] font-bold text-[#5540c8] shadow-[0_4px_14px_rgba(86,64,200,.08)] transition duration-200 hover:-translate-y-0.5 hover:border-[#bdb0ff] hover:bg-[#f5f2ff] sm:text-[11px]"
-                    : "group inline-flex items-center gap-1.5 rounded-full border border-[#e9e7f2] bg-white/55 px-2.5 py-1 text-[10px] font-semibold text-[#65627a] transition duration-200 hover:-translate-y-0.5 hover:border-[#d3caff] hover:bg-white hover:text-[#5540c8] sm:text-[11px]"}
+                  className="group inline-flex items-center gap-2 rounded-xl border border-white/90 bg-white/75 px-3 py-2 text-[10px] font-bold text-[#4d4965] shadow-[0_3px_12px_rgba(57,44,108,.045)] ring-1 ring-[#e9e5f7]/80 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#d7ccff] hover:bg-white hover:text-[#5e43d0] hover:shadow-[0_7px_18px_rgba(93,67,190,.10)] sm:text-[11px]"
                 >
+                  <span className={"h-1.5 w-1.5 rounded-full " + (index === 0 ? "bg-[#8765ee]" : index === 1 ? "bg-[#d88cc8]" : index === 2 ? "bg-[#76b7ad]" : index === 3 ? "bg-[#e6b36e]" : "bg-[#8a9ee8]")} />
                   {category}
-                  <ArrowRight size={11} className="opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+                  <ArrowRight size={11} className="ml-0.5 text-[#a5a0b8] transition-all group-hover:translate-x-0.5 group-hover:text-[#7052dc]" />
                 </Link>
               ))}
             </div>
