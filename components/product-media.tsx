@@ -125,7 +125,7 @@ export function ProductMedia({
         playsInline
         muted
         loop
-        preload="metadata"
+        preload="none"
         aria-label={alt || "Product video"}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
