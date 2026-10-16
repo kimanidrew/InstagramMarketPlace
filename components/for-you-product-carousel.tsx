@@ -80,7 +80,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
               <article
                 data-recommendation-card
                 key={p.id}
-                className="absolute top-[80%] block w-[58%] max-w-[340px] -translate-y-1/2 sm:w-[56%] md:w-[58%] lg:w-[56%]"
+                className="absolute top-[90%] block w-[58%] max-w-[340px] -translate-y-1/2 sm:w-[56%] md:w-[58%] lg:w-[56%]"
                 style={{
                   left: `calc(50% + ${x}%)`,
                   transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
@@ -95,7 +95,6 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 pb-4 pt-16 text-white sm:px-4 sm:pb-5 sm:pt-20">
                     <p className="mb-1 text-[9px] font-medium text-white/75 sm:text-xs">{p.tags?.find(t => t.name.toLowerCase() !== "instamart")?.name || "Discover"}</p>
                     <p className="line-clamp-2 text-xs font-extrabold leading-snug sm:text-base">{p.productTitle || "Explore this find"}</p>
-                    <p className="mt-2 text-[9px] font-semibold text-white/90 sm:text-xs">KSh • Price coming soon</p>
                   </div>
                   <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-[#e5ffe6] px-2.5 py-1.5 text-[9px] font-bold text-[#176d31] shadow-sm sm:left-4 sm:top-4 sm:px-3 sm:text-xs"><Sparkles size={11} /> {offset === 0 ? "Trending" : "For you"}</span>
                   <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-sm sm:right-4 sm:top-4 sm:h-9 sm:w-9"><Heart size={17} /></span>
