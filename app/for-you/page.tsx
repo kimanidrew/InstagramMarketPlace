@@ -68,16 +68,21 @@ export default async function ForYouPage() {
     });
   }
 
-  if (recommendations.length < 6) {
+  if (recommendations.length < 12) {
+    // Fill the carousel with popular listings, even if the shopper has already
+    // viewed, liked or saved them. Excluding every interacted-with item can
+    // leave the carousel empty for shoppers with a small catalogue.
     const alreadyRecommended = recommendations.map((item) => item.id);
-    const omittedIds = [...new Set([...excludedIds, ...alreadyRecommended])];
     const fallback = await database.instagramPost.findMany({
-      where: { isProduct: true, ...(omittedIds.length ? { id: { notIn: omittedIds } } : {}) },
+      where: {
+        isProduct: true,
+        ...(alreadyRecommended.length ? { id: { notIn: alreadyRecommended } } : {}),
+      },
       include,
       orderBy: [{ likes: { _count: "desc" } }, { instagramLikeCount: "desc" }, { timestamp: "desc" }],
-      take: 12,
+      take: 12 - recommendations.length,
     });
-    recommendations = [...recommendations, ...fallback].slice(0, 12);
+    recommendations = [...recommendations, ...fallback];
   }
 
   const carouselProducts = JSON.parse(JSON.stringify(recommendations.map((product) => ({
