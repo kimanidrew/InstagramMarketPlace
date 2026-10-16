@@ -3473,6 +3473,12 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .shop-tabs-wrap .product-feed-full-row,
 .product-store-interlude-row,
 .product-feed-full-row{grid-column:1 / -1;min-width:0;width:100%;}
+
+/* Pull sections inserted into the Shop and For You product feeds up by 30px. */
+.product-feed-layout > .product-store-interlude-row,
+.product-feed-layout > .product-feed-full-row{
+  margin-top:-30px!important;
+}
 @media(max-width:640px){
   .shop-tabs-wrap .product-feed-layout,
   .product-feed-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 9px;}
