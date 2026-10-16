@@ -5573,3 +5573,20 @@ html, body {
 *::after {
   border-color: #e8e8e8 !important;
 }
+
+
+/* Keep trending categories below the search input and tighten their vertical spacing. */
+.site-header .header-search-panel .header-trending-tags {
+  position: relative !important;
+  top: auto !important;
+  transform: none !important;
+  margin-top: 0 !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  min-height: 0 !important;
+  box-sizing: border-box !important;
+}
+.site-header .header-search-panel .header-trending-tags .header-trending-tag {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
