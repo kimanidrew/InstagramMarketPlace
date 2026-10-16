@@ -5,7 +5,7 @@ import sharp from "sharp";
 export async function getProfileAccentColor(imageUrl?: string | null): Promise<string> {
   if (!imageUrl) return "#a78bfa";
   try {
-    const response = await fetch(imageUrl, { cache: "no-store", signal: AbortSignal.timeout(8000) });
+    const response = await fetch(imageUrl, { cache: "no-store", signal: AbortSignal.timeout(12000), headers: { "User-Agent": "Mozilla/5.0 (compatible; SokoLink/1.0)", Accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8" } });
     if (!response.ok) return "#a78bfa";
     const bytes = Buffer.from(await response.arrayBuffer());
     const { data, info } = await sharp(bytes).resize(36, 36, { fit: "cover" }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -20,6 +20,16 @@ export async function getProfileAccentColor(imageUrl?: string | null): Promise<s
       const bucket = buckets.get(key) || { count: 0, r: 0, g: 0, b: 0 };
       bucket.count++; bucket.r += r; bucket.g += g; bucket.b += b;
       buckets.set(key, bucket);
+    }
+    // If the image is mostly monochrome/pastel, retry using all pixels rather than a generic fallback.
+    if (!buckets.size) {
+      for (let i = 0; i < data.length; i += info.channels) {
+        const r = data[i], g = data[i + 1], b = data[i + 2];
+        const key = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+        const bucket = buckets.get(key) || { count: 0, r: 0, g: 0, b: 0 };
+        bucket.count++; bucket.r += r; bucket.g += g; bucket.b += b;
+        buckets.set(key, bucket);
+      }
     }
     const winner = [...buckets.values()].sort((a, b) => b.count - a.count)[0];
     if (!winner) return "#a78bfa";
