@@ -92,7 +92,7 @@ export default async function ForYouPage() {
     wishlistedByCurrentUser: Boolean(currentUser && product.wishlistItems?.some((item: any) => item.userId === currentUser.id)),
   }))));
 
-  const carouselStores = await database.instagramConnection.findMany({
+  const storeCandidates = await database.instagramConnection.findMany({
     where: { posts: { some: { isProduct: true } } },
     select: {
       id: true,
@@ -102,14 +102,38 @@ export default async function ForYouPage() {
       profileImageUrl: true,
       verifiedUntil: true,
       proUntil: true,
-      _count: { select: { posts: { where: { isProduct: true } } } },
+      posts: {
+        where: { isProduct: true },
+        select: { id: true, mediaUrl: true },
+        orderBy: { timestamp: "desc" },
+        take: 8,
+      },
     },
-    take: 12,
+    orderBy: { updatedAt: "desc" },
+    take: 30,
   });
+
+  // Only recommend stores with at least one listing whose media is reachable.
+  const carouselStores = (await Promise.all(storeCandidates.map(async (store) => {
+    const availablePosts = await filterAvailableInstagramMedia(store.posts);
+    return availablePosts.length
+      ? { ...store, _count: { posts: availablePosts.length } }
+      : null;
+  }))).filter((store): store is NonNullable<typeof store> => store !== null);
 
   const mixedCarouselItems = [
     ...carouselProducts,
-    ...carouselStores.map((store) => ({ ...store, cardType: "store" })),
+    ...carouselStores.map((store) => ({
+      id: store.id,
+      username: store.username,
+      name: store.name,
+      biography: store.biography,
+      profileImageUrl: store.profileImageUrl,
+      verifiedUntil: store.verifiedUntil,
+      proUntil: store.proUntil,
+      _count: store._count,
+      cardType: "store" as const,
+    })),
   ].sort(() => Math.random() - 0.5).slice(0, 16);
 
   return (
