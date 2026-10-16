@@ -14,7 +14,13 @@ export function ProductCard({ p }: { p: any }) {
   const [wishlistSaved, setWishlistSaved] = useState(Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length));
   const [likeFlash, setLikeFlash] = useState(false);
   const [wishlistFlash, setWishlistFlash] = useState(false);
-  const likeCountRef = useRef(likeCount);\n\n  useEffect(() => {\n    const nextCount = Number(p.totalLikes ?? (Number(p.instagramLikeCount ?? p.like_count ?? 0) + Number(p._count?.likes ?? p.likes?.length ?? 0)));\n    likeCountRef.current = nextCount;\n    setLikeCount(nextCount);\n  }, [p.id, p.totalLikes, p.instagramLikeCount, p.like_count, p._count?.likes, p.likes?.length]);
+  const likeCountRef = useRef(likeCount);
+
+  useEffect(() => {
+    const nextCount = Number(p.totalLikes ?? (Number(p.instagramLikeCount ?? p.like_count ?? 0) + Number(p._count?.likes ?? p.likes?.length ?? 0)));
+    likeCountRef.current = nextCount;
+    setLikeCount(nextCount);
+  }, [p.id, p.totalLikes, p.instagramLikeCount, p.like_count, p._count?.likes, p.likes?.length]);
   const wishlistCountRef = useRef(wishlistCount);
   const cardRef = useRef<HTMLElement | null>(null);
 
