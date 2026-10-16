@@ -93,7 +93,12 @@ export default async function ForYouPage() {
 
   return (
     <main className="min-h-screen w-full">
-      <section className="relative isolate grid min-h-0 w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 pb-2 pt-2 sm:px-8 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-2 md:px-10 md:py-2 lg:px-12">
+      <section className="relative isolate grid min-h-0 w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_78%_42%,rgba(190,173,255,.42),transparent_34%),radial-gradient(ellipse_at_95%_88%,rgba(255,198,235,.42),transparent_30%),radial-gradient(ellipse_at_5%_95%,rgba(218,211,255,.5),transparent_28%),linear-gradient(115deg,#fff_0%,#fcfbff_48%,#faf7ff_75%,#fff7fc_100%)] px-5 pb-2 pt-2 sm:px-8 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-2 md:px-10 md:py-2 lg:px-12">
+        <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-28 h-64 w-64 rounded-full border border-[#d9d0ff]/60 bg-gradient-to-br from-white/80 to-[#dcd2ff]/30 blur-[1px] sm:h-80 sm:w-80" />
+        <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-5 h-24 w-24 rounded-full bg-gradient-to-br from-white/70 to-[#d8ccff]/40 blur-2xl sm:h-36 sm:w-36" />
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-[-5rem] right-[28%] h-56 w-56 rounded-full bg-[#f4c9ed]/35 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute right-[12%] top-[16%] hidden rotate-12 text-3xl font-black text-[#9b80ff]/40 md:block">✦</div>
+        <div aria-hidden="true" className="pointer-events-none absolute right-[44%] bottom-[18%] hidden text-xl text-[#d98be9]/50 md:block">✧</div>
         <div className="relative z-20 flex min-w-0 max-w-[470px] flex-col justify-center py-3 text-center sm:py-4 md:py-3 md:text-left">
           <p className="mx-auto inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#5945d6] sm:text-xs md:mx-0">
             <Sparkles size={15} fill="currentColor" /> Personalised for you
