@@ -9,7 +9,7 @@ import { recordAnalytics } from "@/lib/analytics-client";
 import { useEffect, useRef, useState } from "react";
 
 export function ProductCard({ p }: { p: any }) {
-  const [likeCount, setLikeCount] = useState(p.likes?.length || 0);
+  const [likeCount, setLikeCount] = useState((p.instagramLikeCount || 0) + (p.likes?.length || 0));
   const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
   const [wishlistSaved, setWishlistSaved] = useState(Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length));
   const [likeFlash, setLikeFlash] = useState(false);
