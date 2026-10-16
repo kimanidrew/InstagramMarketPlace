@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Heart } from "lucide-react";
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-import { ProductCard } from "@/components/product-card";
+import { OptimizedProductGrid } from "@/components/optimized-product-grid";
 
 export const dynamic = "force-dynamic";
 
@@ -58,10 +58,8 @@ export default async function Wishlist() {
       </div>
 
       {ps.length > 0 ? (
-        <div className="mt-10 columns-2 [column-gap:1rem] md:columns-3 md:[column-gap:1.5rem] lg:columns-4">
-          {ps.map((x) => (
-            <ProductCard key={x.id} p={x} />
-          ))}
+        <div className="mt-10">
+          <OptimizedProductGrid products={ps} />
         </div>
       ) : (
         <div className="mt-10 rounded-[30px] bg-[#f6f6f3] py-20 text-center">
