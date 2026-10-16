@@ -279,7 +279,7 @@ export function SiteHeader({ user }: { user: any }) {
                 )) : <p className="header-suggestions-empty">No matching categories in these results yet.</p>
               ) : (
                 storeSuggestions.length ? storeSuggestions.map((store: any) => (
-                  <a key={store.id || store.username} href={`/store/${encodeURIComponent(store.username)}`} className="header-suggestion-item header-suggestion-store" onClick={() => setSearchOpen(false)}>
+                  <a key={store.id || store.username} href={`/stores/${encodeURIComponent(store.username)}`} className="header-suggestion-item header-suggestion-store" onClick={() => setSearchOpen(false)}>
                     <span className="header-suggestion-image header-suggestion-store-image">{store.profileImageUrl ? <img src={store.profileImageUrl} alt="" loading="lazy" /> : <Store size={19} />}</span>
                     <span className="header-suggestion-copy"><strong>@{store.username}</strong><small>View Instagram shop</small></span>
                     <ArrowRight size={16} className="header-suggestion-arrow" />
