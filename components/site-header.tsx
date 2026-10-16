@@ -223,25 +223,27 @@ export function SiteHeader({ user }: { user: any }) {
           </form>
           {searchOpen && searchQuery.trim().length >= 2 && (
             <div className="header-search-suggestions" role="region" aria-label="Search suggestions">
-              <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type" style={{ "--active-tab-index": ["Products", "Services", "Categories", "Stores", "Pages"].indexOf(activeSuggestionTab) } as React.CSSProperties}>
-                {(["Products", "Categories", "Stores"] as const).map((tab) => {
-                  const count = tab === "Products" ? searchSuggestions.length : tab === "Categories" ? categorySuggestions.length : storeSuggestions.length;
-                  return (
-                    <button
-                      key={tab}
-                      type="button"
-                      role="tab"
-                      aria-selected={activeSuggestionTab === tab}
-                      className={"header-suggestion-tab " + (activeSuggestionTab === tab ? "active" : "")}
-                      onClick={() => setActiveSuggestionTab(tab)}
-                    >
-                      {tab}<span>{count}</span>
-                    </button>
-                  );
-                })}
-                <span className="header-suggestion-tab-indicator" aria-hidden="true" />
-              </div>
-              <div className="header-suggestion-results">
+              <div className="header-suggestion-layout">
+                <aside className="header-suggestion-sidebar" aria-label="Suggestion categories">
+                  <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type">
+                    {(["Products", "Services", "Categories", "Stores", "Pages"] as const).map((tab) => {
+                      const count = tab === "Products" ? productSuggestions.length : tab === "Services" ? serviceSuggestions.length : tab === "Categories" ? categorySuggestions.length : tab === "Stores" ? storeSuggestions.length : pageSuggestions.length;
+                      return (
+                        <button
+                          key={tab}
+                          type="button"
+                          role="tab"
+                          aria-selected={activeSuggestionTab === tab}
+                          className={"header-suggestion-tab " + (activeSuggestionTab === tab ? "active" : "")}
+                          onClick={() => setActiveSuggestionTab(tab)}
+                        >
+                          {tab}<span>{count}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </aside>
+                <div className="header-suggestion-results">
               <div className="header-suggestions-label">
                 {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Services" ? "SERVICE MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : activeSuggestionTab === "Stores" ? "MATCHING STORES" : "SOKOLINK PAGES"}
               </div>
@@ -286,6 +288,7 @@ export function SiteHeader({ user }: { user: any }) {
                   </a>
                 )) : <p className="header-suggestions-empty">No matching stores in these results yet.</p>
               )}
+                </div>
               </div>
             </div>
           )}
