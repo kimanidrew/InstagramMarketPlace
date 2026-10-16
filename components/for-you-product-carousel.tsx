@@ -82,7 +82,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
           {products.map((p, index) => {
             const isStore = p.cardType === "store";
             const image = isStore ? p.profileImageUrl : (p.thumbnailUrl || p.mediaUrl);
-            const href = isStore ? `/store/${encodeURIComponent(p.username || "")}` : "/" + (String(p.listingType).toUpperCase() === "SERVICE" ? "service" : "product") + "/" + p.productSlug;
+            const href = isStore ? `/stores/${encodeURIComponent(p.username || "")}` : "/" + (String(p.listingType).toUpperCase() === "SERVICE" ? "service" : "product") + "/" + p.productSlug;
             const total = products.length;
             let offset = (index - activeIndex + total) % total;
             if (offset > Math.floor(total / 2)) offset -= total;
