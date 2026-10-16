@@ -93,7 +93,7 @@ export default async function ForYouPage() {
 
   return (
     <main className="shell min-h-screen py-5 md:py-8">
-      <section className="relative isolate mb-8 grid min-h-[590px] overflow-hidden rounded-[30px] border border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 py-8 sm:px-8 md:mb-10 md:min-h-[650px] md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-3 md:px-10 md:py-10 lg:px-12">
+      <section className="relative isolate mb-8 grid min-h-[590px] overflow-hidden rounded-[30px] border border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 py-8 sm:px-8 md:mb-10 md:min-h-[650px] md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-2 md:px-10 md:py-10 lg:px-12">
         <div className="relative z-20 min-w-0 max-w-[470px]">
           <p className="inline-flex items-center gap-2 rounded-full border border-[#e8e6ff] bg-[#f0efff] px-4 py-2.5 text-xs font-semibold text-[#5145ff] shadow-[0_5px_18px_rgba(89,75,255,.08)]">
             <Sparkles size={15} fill="currentColor" /> Personalised for you
@@ -120,7 +120,7 @@ export default async function ForYouPage() {
             Explore the shop <ArrowRight size={21} />
           </Link>
         </div>
-        <div className="relative z-10 -mx-3 mt-2 block w-full min-w-0 self-stretch sm:mx-0 md:mt-0 md:flex md:items-center md:justify-center">
+        <div className="relative z-10 -mx-3 mt-2 flex min-h-[390px] w-full min-w-0 items-center justify-center sm:mx-0 md:mt-0 md:min-h-[500px] lg:min-h-[540px]">
           <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
         </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#eeebff]/70 blur-3xl md:right-0 md:top-10 md:h-[28rem] md:w-[28rem]" />
