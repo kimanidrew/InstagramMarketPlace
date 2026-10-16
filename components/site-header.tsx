@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
 export function SiteHeader({ user }: { user: any }) {
+  const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -141,10 +143,16 @@ export function SiteHeader({ user }: { user: any }) {
             ["/stores", "Stores"],
             ["/categories", "Categories"],
             ["/how-it-works", "How it works"],
-          ].map(([href, label]) => (
-            <a key={href} href={href} className="nav-link">{label}</a>
-          ))}
-          {user && <a href="/account/analytics" className="nav-link">Grow your own shop</a>}
+          ].map(([href, label]) => {
+            const active = pathname === href || (href !== "/shop" && pathname.startsWith(href + "/"));
+            return (
+              <a key={href} href={href} className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>{label}</a>
+            );
+          })}
+          {user && (() => {
+            const active = pathname === "/account/analytics" || pathname.startsWith("/account/analytics/");
+            return <a href="/account/analytics" className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>Grow your own shop</a>;
+          })()}
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
