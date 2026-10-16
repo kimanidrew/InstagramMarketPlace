@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Instagram, Sparkles, Star } from "lucide-react";
 import { LikeButton } from "@/components/like-button";
+import { TotalLikesStat } from "@/components/total-likes-stat";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
@@ -96,7 +97,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               )}
 
               <div className="mt-7 grid grid-cols-2 gap-2">
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{(product.instagramLikeCount + product.likes.length).toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Total likes</p></div>
+                <TotalLikesStat id={product.id} initialCount={Number(product.instagramLikeCount || 0) + product.likes.length} />
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
               </div>
 
