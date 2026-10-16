@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BadgeCheck, Bookmark, Crown, ArrowRight, LoaderCircle, Store } from "lucide-react";
+import { BadgeCheck, Bookmark, Crown, ArrowRight, LoaderCircle, Store, Sparkles } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -284,14 +284,41 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     );
   }
 
-  const productFeed: Array<{ type: "product"; product: any } | { type: "stores"; batchIndex: number } | { type: "saved" }> = [];
+  type FeedItem =
+    | { type: "product"; product: any }
+    | { type: "stores"; batchIndex: number }
+    | { type: "recommendations"; batchIndex: number; products: any[] }
+    | { type: "saved" };
+  const productFeed: FeedItem[] = [];
+  const recommendationIndexes = new Set<number>();
+  const recommendationSections = new Map<number, any[]>();
+
+  // Start after product index 18, then repeat every 12 indexes. Each section
+  // features every third product from the following run and skips those items
+  // in the main feed so a listing is never shown twice.
+  for (let sectionIndex = 18, batchIndex = 0; sectionIndex < products.length; sectionIndex += 12, batchIndex++) {
+    const picks = [sectionIndex + 1, sectionIndex + 4, sectionIndex + 7, sectionIndex + 10]
+      .filter((index) => index < products.length);
+    const pickedProducts = picks.map((index) => {
+      recommendationIndexes.add(index);
+      return products[index];
+    });
+    if (pickedProducts.length) recommendationSections.set(sectionIndex, pickedProducts);
+  }
+
   products.forEach((product, index) => {
-    productFeed.push({ type: "product", product });
+    if (!recommendationIndexes.has(index)) productFeed.push({ type: "product", product });
+
     // Show the first store section after product 4, then after each 12 more products.
     if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 4) {
       productFeed.push({ type: "stores", batchIndex: Math.floor((index - 3) / 12) });
     }
     if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
+
+    if (recommendationSections.has(index)) {
+      const batchIndex = Math.floor((index - 18) / 12);
+      productFeed.push({ type: "recommendations", batchIndex, products: recommendationSections.get(index)! });
+    }
   });
   // Keep Saved for Later available even when the feed has fewer than eight products.
   if (savedProducts.length > 0 && !productFeed.some((item) => item.type === "saved")) {
@@ -305,6 +332,22 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
           <div key={item.product.id} className="product-feed-item"><LazyProductCard product={item.product} /></div>
         ) : item.type === "stores" ? (
           <div key={"store-section-" + item.batchIndex} className="product-store-interlude-row"><StoreInlineSection stores={stores} batchIndex={item.batchIndex} /></div>
+        ) : item.type === "recommendations" ? (
+          <section key={"recommended-products-" + item.batchIndex} className="product-feed-full-row product-recommendations-interlude rounded-[26px] border border-black/[.06] bg-[#f7f7f4] px-5 py-5 sm:rounded-[30px] sm:px-8 sm:py-8" aria-label="Picked for you">
+            <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
+              <div className="min-w-0">
+                <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.14em] text-[#777] sm:text-[10px]"><Sparkles size={12} /> Picked for you</p>
+                <h3 className="mt-2 max-w-2xl text-xl font-black leading-tight tracking-[-.045em] text-[#171717] sm:text-2xl">A few things you might love.</h3>
+                <p className="mt-1.5 max-w-xl text-xs leading-5 text-[#777] sm:text-sm">More finds worth a closer look, picked as you keep exploring.</p>
+              </div>
+              <Link href="/shop" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">Explore shop <ArrowRight size={12} /></Link>
+            </div>
+            <div className="product-recommendations-list grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+              {item.products.map((recommended: any) => (
+                <div key={recommended.id} className="min-w-0"><ProductCard p={recommended} /></div>
+              ))}
+            </div>
+          </section>
         ) : (
           <section key="saved-for-later" className="product-feed-full-row rounded-[30px] border border-black/5 bg-[#f7f7f4] px-6 py-5 md:px-9 md:py-7">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
