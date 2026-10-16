@@ -5012,3 +5012,22 @@ html, body {
     min-height: 0;
   }
 }
+
+
+/* Suggestions act as a page-level overlay and lock background scrolling while open. */
+.site-header .header-suggestions-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(18, 18, 18, 0.22);
+  cursor: default;
+}
+.site-header .header-search-panel.is-open.has-suggestions {
+  position: relative;
+  z-index: 60;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-search-content,
+.site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions {
+  position: relative;
+  z-index: 61;
+}
