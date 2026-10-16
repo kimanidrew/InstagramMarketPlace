@@ -157,7 +157,7 @@ export default async function ForYouPage() {
               : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
           <div className="mt-3 flex flex-col items-center gap-3 md:items-start">
-            <span className="inline-flex items-center gap-2 text-[10px] font-extrabold tracking-[.14em] text-[#6b5bd2] sm:text-[11px]"><span aria-hidden="true" className="h-px w-5 rounded-full bg-gradient-to-r from-[#8b7aff] to-[#d6a6f0]" />EXPLORE CATEGORIES<span aria-hidden="true" className="h-px w-5 rounded-full bg-gradient-to-r from-[#d6a6f0] to-[#8b7aff]" /></span>
+            <span className="inline-flex items-center gap-2 text-[10px] font-extrabold tracking-[.14em] text-[#6b5bd2] sm:text-[11px]"><span aria-hidden="true" className="h-[3px] w-9 rounded-full bg-gradient-to-r from-[#8b7aff] via-[#b99aff] to-[#d6a6f0] [clip-path:ellipse(50%_100%_at_50%_100%)] sm:w-12" />EXPLORE CATEGORIES<span aria-hidden="true" className="h-[3px] w-9 rounded-full bg-gradient-to-l from-[#8b7aff] via-[#b99aff] to-[#d6a6f0] [clip-path:ellipse(50%_100%_at_50%_100%)] sm:w-12" /></span>
             <div className="flex max-w-full flex-wrap justify-center gap-2 md:justify-start">
               {(tags.length ? tags.slice(0, 5).map((tag) => tag.name) : ["Fashion", "Beauty", "Home", "Accessories", "Services"]).map((category, index) => (
                 <Link
