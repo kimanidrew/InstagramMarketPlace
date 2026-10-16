@@ -5258,3 +5258,9 @@ html, body {
   border-color: #bdbdbd !important;
   box-shadow: 0 0 0 3px rgba(0,0,0,.045) !important;
 }
+
+
+/* Make the product counts beside the bottom trending category tags white. */
+.site-header .header-search-panel .header-trending-tag small {
+  color: #fff !important;
+}
