@@ -231,7 +231,7 @@ export function SiteHeader({ user }: { user: any }) {
                   const profileImage = item.connection?.profileImageUrl;
                   const title = item.productTitle || item.caption?.split("\\n")[0] || "View product";
                   return (
-                    <a key={item.id} href={`/archive/${encodeURIComponent(item.id)}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
+                    <a key={item.id} href={`/search?type=products&q=${encodeURIComponent(searchQuery.trim())}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
                       <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
                       <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}</small></span>
                       <ArrowRight size={16} className="header-suggestion-arrow" />
