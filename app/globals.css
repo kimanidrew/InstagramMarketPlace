@@ -4005,7 +4005,7 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .header-suggestion-tab.active{color:#fff}
 .header-suggestion-tab span{min-width:19px;height:19px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:#242424;color:#aaa;font-size:9px;transition:background .2s,color .2s}
 .header-suggestion-tab.active span{background:rgba(214,255,99,.13);border-color:rgba(214,255,99,.2);color:#d6ff63}
-.header-suggestion-tab-indicator{position:absolute;bottom:-1px;left:4px;width:calc((100% - 8px)/3);height:2px;border-radius:999px;background:#d6ff63;box-shadow:0 0 12px rgba(214,255,99,.35);transform:translateX(calc(var(--active-tab-index,0) * 100%));transition:transform .32s cubic-bezier(.22,.8,.25,1);pointer-events:none}
+.header-suggestion-tab-indicator{position:absolute;bottom:-1px;left:4px;width:calc((100% - 8px)/5);height:2px;border-radius:999px;background:#d6ff63;box-shadow:0 0 12px rgba(214,255,99,.35);transform:translateX(calc(var(--active-tab-index,0) * 100%));transition:transform .32s cubic-bezier(.22,.8,.25,1);pointer-events:none}
 .header-suggestion-item{position:relative;margin:3px 0;padding:10px;border:1px solid transparent;border-radius:15px;transition:background .2s,border-color .2s,transform .2s}
 .header-suggestion-item:hover{border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.055);transform:translateX(3px)}
 .header-suggestion-image{border:1px solid rgba(255,255,255,.08);border-radius:13px}
