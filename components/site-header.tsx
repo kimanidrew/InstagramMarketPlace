@@ -263,8 +263,8 @@ export function SiteHeader({ user }: { user: any }) {
                     <ArrowRight size={16} className="header-suggestion-arrow" />
                   </a>
                 )) : <p className="header-suggestions-empty">No matching stores in these results yet.</p>
-              </div>
               )}
+              </div>
             </div>
           )}
           {(trendingTagsLoading || trendingTags.length > 0) && (
