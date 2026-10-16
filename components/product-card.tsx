@@ -163,7 +163,7 @@ export function ProductCard({ p }: { p: any }) {
                 key={t.name}
                 className="rounded-full bg-[#f5f5f5] px-2.5 py-1 text-[10px]"
               >
-                #{t.name}
+                {t.name}
               </Link>
             ))}
         </div>
