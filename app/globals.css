@@ -5120,3 +5120,16 @@ html, body {
 @media (max-width: 380px) {
   .optimized-product-grid { gap: 16px 8px; }
 }
+
+
+/* Search field: emphasize the top and bottom edges, but remove the bottom edge while focused. */
+.site-header .header-search-form {
+  border-top: 1px solid #dedede !important;
+  border-bottom: 1px solid #dedede !important;
+  box-shadow: none !important;
+}
+.site-header .header-search-form:focus-within {
+  border-top: 1px solid #dedede !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+}
