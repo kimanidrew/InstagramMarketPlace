@@ -236,6 +236,20 @@ export function SiteHeader({ user }: { user: any }) {
               <span>Search</span><ArrowRight size={15} />
             </button>
           </form>
+          {(trendingTagsLoading || trendingTags.length > 0) && (
+            <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
+              <div className="header-trending-list">
+                {trendingTagsLoading ? (
+<span className="header-trending-loading-dots" role="status" aria-label="Loading trending categories"><i /><i /><i /></span>
+                ) : trendingTags.map((tag) => (
+                  <a key={tag.name} href={`/search?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
+                    <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
+                    <small>{tag.productCount}</small>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
           {searchOpen && searchQuery.trim().length >= 2 && (
             <div className="header-search-suggestions" role="region" aria-label="Search suggestions">
               <div className="header-suggestion-layout">
@@ -304,20 +318,6 @@ export function SiteHeader({ user }: { user: any }) {
                 )) : <p className="header-suggestions-empty">No matching stores in these results yet.</p>
               )}
                 </div>
-              </div>
-            </div>
-          )}
-          {(trendingTagsLoading || trendingTags.length > 0) && (
-            <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
-              <div className="header-trending-list">
-                {trendingTagsLoading ? (
-<span className="header-trending-loading-dots" role="status" aria-label="Loading trending categories"><i /><i /><i /></span>
-                ) : trendingTags.map((tag) => (
-                  <a key={tag.name} href={`/search?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
-                    <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
-                    <small>{tag.productCount}</small>
-                  </a>
-                ))}
               </div>
             </div>
           )}
