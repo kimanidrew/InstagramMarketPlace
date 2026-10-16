@@ -6,6 +6,12 @@ import { ArrowLeft, ArrowRight, Heart, Sparkles } from "lucide-react";
 
 type Product = {
   id: string;
+  cardType?: "product" | "store";
+  username?: string | null;
+  name?: string | null;
+  biography?: string | null;
+  profileImageUrl?: string | null;
+  _count?: { posts?: number };
   productTitle?: string | null;
   productSlug?: string | null;
   mediaUrl?: string | null;
@@ -66,8 +72,9 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
           onBlurCapture={() => setPaused(false)}
         >
           {products.map((p, index) => {
-            const image = p.thumbnailUrl || p.mediaUrl;
-            const href = "/" + (String(p.listingType).toUpperCase() === "SERVICE" ? "service" : "product") + "/" + p.productSlug;
+            const isStore = p.cardType === "store";
+            const image = isStore ? p.profileImageUrl : (p.thumbnailUrl || p.mediaUrl);
+            const href = isStore ? `/shop?store=${encodeURIComponent(p.username || "")}` : "/" + (String(p.listingType).toUpperCase() === "SERVICE" ? "service" : "product") + "/" + p.productSlug;
             const total = products.length;
             let offset = (index - activeIndex + total) % total;
             if (offset > Math.floor(total / 2)) offset -= total;
@@ -92,13 +99,25 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                 }}
               >
                 <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[22px] border-[4px] border-white bg-white shadow-[0_28px_55px_rgba(30,25,75,.24)] sm:rounded-[26px] md:rounded-[30px]">
-                  {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#100d20]/95 via-[#100d20]/65 to-transparent px-4 pb-5 pt-20 text-white sm:px-5 sm:pb-6 sm:pt-24">
-                    <p className="mb-2 inline-flex max-w-full items-center rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.13em] text-white/90 backdrop-blur-md sm:text-[10px]">{p.tags?.find(t => t.name.toLowerCase() !== "instamart")?.name || "Discover"}</p>
-                    <p className="line-clamp-2 text-[15px] font-black leading-[1.2] tracking-[-.035em] drop-shadow-sm sm:text-xl md:text-[22px]">{p.productTitle || "Explore this find"}</p>
-                  </div>
-                  <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/95 px-3 py-2 text-[9px] font-extrabold tracking-wide text-[#4132a8] shadow-[0_8px_24px_rgba(20,15,60,.16)] backdrop-blur sm:left-4 sm:top-4 sm:px-3.5 sm:text-[10px]"><Sparkles size={11} /> {offset === 0 ? "Trending" : "For you"}</span>
-                  <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/35 bg-black/30 text-white shadow-lg backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-[#5945ff] sm:right-4 sm:top-4 sm:h-10 sm:w-10"><Heart size={17} /></span>
+                  {isStore ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_15%,rgba(255,255,255,.95),transparent_38%),linear-gradient(145deg,#eeeaff,#fcecf7_55%,#e8e4ff)] px-5 text-center">
+                      <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white shadow-[0_12px_30px_rgba(68,49,145,.18)] sm:h-28 sm:w-28">
+                        {image ? <img src={image} alt={p.username || "Store"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover" /> : <span className="text-3xl font-black text-[#6551c8]">{(p.name || p.username || "S").slice(0, 1).toUpperCase()}</span>}
+                      </div>
+                      <span className="mt-4 inline-flex items-center gap-1 rounded-full border border-white/80 bg-white/75 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[.14em] text-[#6551c8]"><Sparkles size={11} /> Discover store</span>
+                      <p className="mt-2 line-clamp-1 max-w-full text-lg font-black tracking-tight text-[#201a3c] sm:text-xl">{p.name || "SokoLink Store"}</p>
+                      <p className="mt-1 text-xs font-semibold text-[#716a8c]">@{p.username}</p>
+                      <p className="mt-2 text-[10px] font-medium text-[#716a8c]">{p._count?.posts || 0} listings</p>
+                    </div>
+                  ) : <>
+                    {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#100d20]/95 via-[#100d20]/65 to-transparent px-4 pb-5 pt-20 text-white sm:px-5 sm:pb-6 sm:pt-24">
+                      <p className="mb-2 inline-flex max-w-full items-center rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.13em] text-white/90 backdrop-blur-md sm:text-[10px]">{p.tags?.find(t => t.name.toLowerCase() !== "instamart")?.name || "Discover"}</p>
+                      <p className="line-clamp-2 text-[15px] font-black leading-[1.2] tracking-[-.035em] drop-shadow-sm sm:text-xl md:text-[22px]">{p.productTitle || "Explore this find"}</p>
+                    </div>
+                    <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-white/95 px-3 py-2 text-[9px] font-extrabold tracking-wide text-[#4132a8] shadow-[0_8px_24px_rgba(20,15,60,.16)] backdrop-blur sm:left-4 sm:top-4 sm:px-3.5 sm:text-[10px]"><Sparkles size={11} /> {offset === 0 ? "Trending" : "For you"}</span>
+                    <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/35 bg-black/30 text-white shadow-lg backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-[#5945ff] sm:right-4 sm:top-4 sm:h-10 sm:w-10"><Heart size={17} /></span>
+                  </>}
                 </Link>
               </article>
             );
