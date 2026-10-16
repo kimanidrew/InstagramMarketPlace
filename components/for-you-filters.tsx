@@ -81,7 +81,7 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
                 const active = selectedTag === name.toLowerCase();
                 return (
                   <button key={name} type="button" onClick={() => setSelectedTag(name.toLowerCase())} className={"for-you-filter-chip " + (active ? "is-active" : "")}>
-                    #{name}
+                    {name}
                   </button>
                 );
               })}
