@@ -39,7 +39,7 @@ export function StoreReviewsDrawer({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <a className="store-reviews-backdrop" href={"/store/" + username} aria-label="Close reviews" />
+        <a className="store-reviews-backdrop" href={"/stores/" + username} aria-label="Close reviews" />
         <motion.aside
           className="store-reviews-drawer"
           initial={{ x: "100%" }}
@@ -54,7 +54,7 @@ export function StoreReviewsDrawer({
               <h2>Reviews</h2>
               <p>@{username}</p>
             </div>
-            <a href={"/store/" + username} className="store-reviews-close" aria-label="Close reviews">
+            <a href={"/stores/" + username} className="store-reviews-close" aria-label="Close reviews">
               <X size={19} />
             </a>
           </div>
