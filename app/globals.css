@@ -4178,3 +4178,68 @@ html, body {
     right: 30px !important;
   }
 }
+
+/* Store hero: clean white surface and refined, readable typography. */
+.store-hero{
+  background:#fff!important;
+  color:#171717!important;
+  border-bottom:1px solid #ededed;
+}
+.store-hero-orb{display:none!important}
+.store-hero-inner{
+  padding-top:clamp(32px,4.5vw,60px);
+  padding-bottom:clamp(32px,4.5vw,60px);
+}
+.store-profile{align-items:center;gap:clamp(18px,2.5vw,32px)}
+.store-avatar{box-shadow:0 8px 26px rgba(17,24,39,.12)}
+.store-avatar-check{border-color:#fff!important}
+.store-kicker{color:#737373!important}
+.store-hero-copy h1{
+  display:block;
+  max-width:100%;
+  margin-top:10px;
+  color:#171717;
+  font-size:clamp(1.8rem,4vw,3.4rem);
+  font-weight:850;
+  line-height:1.12;
+  letter-spacing:-.055em;
+  white-space:normal;
+  overflow:visible;
+  overflow-wrap:anywhere;
+  text-overflow:clip;
+}
+.store-hero-bio{
+  max-width:620px;
+  margin-top:12px;
+  color:#666!important;
+  font-size:clamp(13px,1.05vw,15px);
+  line-height:1.7;
+  letter-spacing:0;
+}
+.store-hero-stats{gap:8px;margin-top:18px}
+.store-hero-stats span{
+  border-color:#e9e9e9;
+  background:#f7f7f7;
+  color:#626262;
+  font-size:11px;
+  line-height:1.35;
+}
+.store-hero-stats b{color:#171717;font-size:12px}
+.store-hero-actions{gap:9px}
+.store-review-button{background:#171717;color:#fff}
+.store-instagram-button{
+  border:1px solid #dedede;
+  background:#fff;
+  color:#171717;
+}
+.store-instagram-button:hover{background:#f6f6f6}
+.store-profile-pro{box-shadow:none}
+@media(max-width:760px){
+  .store-hero-inner{padding-top:28px;padding-bottom:30px}
+  .store-profile{gap:14px}
+  .store-hero-copy h1{max-width:100%;font-size:clamp(1.45rem,6vw,2rem);line-height:1.18}
+  .store-hero-bio{margin-top:10px;font-size:12px}
+  .store-hero-stats{margin-top:14px;gap:6px}
+  .store-hero-stats span{padding:7px 9px}
+}
+
