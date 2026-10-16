@@ -148,7 +148,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   <div className="px-1 pt-3">
                     <p className="line-clamp-2 text-xs font-extrabold leading-5 text-[#202020] group-hover:underline sm:text-sm">{p.productTitle || "Explore this find"}</p>
                     <span className="mt-1.5 block truncate text-[10px] font-semibold text-[#858585] sm:text-[11px]">@{p.connection?.username || "SokoLink seller"}</span>
-                    <div className="mt-2 flex flex-wrap gap-1">{p.tags?.filter(t => t.name.toLowerCase() !== "instamart").slice(0, 2).map(t => <span key={t.name} className="rounded-full bg-white px-2 py-1 text-[9px] font-semibold text-[#777]">#{t.name}</span>)}</div>
+                    <div className="mt-2 flex flex-wrap gap-1">{p.tags?.filter(t => t.name.toLowerCase() !== "instamart").slice(0, 2).map(t => <span key={t.name} className="rounded-full bg-white px-2 py-1 text-[9px] font-semibold text-[#777]">{t.name}</span>)}</div>
                   </div>
                 </Link>
               </article>
