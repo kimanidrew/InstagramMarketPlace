@@ -5083,3 +5083,40 @@ html, body {
     width: 94px !important;
   }
 }
+
+
+/* Restore a clear, accessible outline around the main navbar search input. */
+.site-header .header-search-form,
+.site-header .header-search-form:focus-within {
+  border: 1px solid #dedede !important;
+  border-radius: 999px !important;
+  box-shadow: none !important;
+  background: #fff !important;
+}
+.site-header .header-search-form:focus-within {
+  border-color: #bdbdbd !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.045) !important;
+}
+.site-header .header-search-form input { outline: none !important; }
+
+/* Shared viewport-aware product grid for wishlist and individual store pages. */
+.optimized-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 12px;
+  min-width: 0;
+}
+.optimized-product-grid > * {
+  min-width: 0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 390px;
+}
+@media (min-width: 640px) {
+  .optimized-product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 18px; }
+}
+@media (min-width: 1024px) {
+  .optimized-product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px 22px; }
+}
+@media (max-width: 380px) {
+  .optimized-product-grid { gap: 16px 8px; }
+}
