@@ -4161,3 +4161,20 @@ html, body {
     z-index: 10 !important;
   }
 }
+
+
+/* Keep category scroll controls comfortably inset from the viewport edges. */
+.for-you-filter-scroll-button.left-2 {
+  left: 20px !important;
+}
+.for-you-filter-scroll-button.right-2 {
+  right: 20px !important;
+}
+@media (max-width: 640px) {
+  .for-you-filter-scroll-button.left-2 {
+    left: 18px !important;
+  }
+  .for-you-filter-scroll-button.right-2 {
+    right: 18px !important;
+  }
+}
