@@ -72,7 +72,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
             let offset = (index - activeIndex + total) % total;
             if (offset > Math.floor(total / 2)) offset -= total;
             const visible = Math.abs(offset) <= 2;
-            const x = offset * (Math.abs(offset) === 1 ? 15 : 25);
+            const x = offset === 0 ? 0 : Math.sign(offset) * (Math.abs(offset) === 1 ? 15 : 25);
             const y = offset === 0 ? 0 : Math.abs(offset) * 9;
             const rotate = offset === 0 ? 0 : offset * 6;
             const scale = offset === 0 ? 1 : Math.max(0.76, 0.94 - Math.abs(offset) * 0.075);
@@ -82,7 +82,8 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                 key={p.id}
                 className="absolute top-1/2 block w-[58%] max-w-[340px] -translate-y-1/2 sm:w-[56%] md:w-[58%] lg:w-[56%]"
                 style={{
-                  left: `calc(50% + ${x}%)`,\n                  transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
+                  left: `calc(50% + ${x}%)`,
+                  transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
                   zIndex: 20 - Math.abs(offset),
                   pointerEvents: visible ? "auto" : "none",
