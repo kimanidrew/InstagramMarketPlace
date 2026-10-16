@@ -4488,3 +4488,38 @@ html, body {
   .site-header .header-search-panel.is-open{background:#fff!important}
   .site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions{background:#fff!important}
 }
+
+
+/* Animated underline for the current primary navigation page. */
+.site-header nav .nav-link{
+  position:relative;
+  isolation:isolate;
+}
+.site-header nav .nav-link::after{
+  content:"";
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff5576 0%,#7657e8 100%);
+  transform:scaleX(0);
+  transform-origin:center;
+  opacity:0;
+  transition:transform .28s cubic-bezier(.2,.75,.25,1),opacity .2s ease;
+  pointer-events:none;
+}
+.site-header nav .nav-link:hover::after,
+.site-header nav .nav-link:focus-visible::after,
+.site-header nav .nav-link.is-active::after{
+  transform:scaleX(1);
+  opacity:1;
+}
+.site-header nav .nav-link.is-active{
+  color:#171717!important;
+  background:transparent!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header nav .nav-link::after{transition:none}
+}
