@@ -248,7 +248,7 @@ export function SiteHeader({ user }: { user: any }) {
               {suggestionsLoading ? (
                 <div className="header-suggestions-loading"><span /><span /><span /></div>
               ) : activeSuggestionTab === "Products" ? (
-                productSuggestions.length ? productSuggestions.map((item: any) => {
+                productSuggestions.length ? <div className="header-suggestion-product-grid">{productSuggestions.map((item: any) => {
                   const image = item.thumbnailUrl || item.mediaUrl;
                   const username = item.connection?.username || item.username || "Instagram shop";
                   const profileImage = item.connection?.profileImageUrl;
@@ -260,7 +260,7 @@ export function SiteHeader({ user }: { user: any }) {
                       <ArrowRight size={16} className="header-suggestion-arrow" />
                     </a>
                   );
-                }) : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
+                })}</div> : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
               ) : activeSuggestionTab === "Services" ? (
                 serviceSuggestions.length ? serviceSuggestions.map((item: any) => {
                   const image = item.thumbnailUrl || item.mediaUrl;
@@ -293,12 +293,7 @@ export function SiteHeader({ user }: { user: any }) {
             <div className="header-trending-tags" aria-busy={trendingTagsLoading}>
               <div className="header-trending-list">
                 {trendingTagsLoading ? (
-                  Array.from({ length: 6 }, (_, index) => (
-                    <span key={index} className="header-trending-tag-skeleton" aria-hidden="true">
-                      <span className={`header-trending-shimmer header-trending-shimmer-${index % 3}`} />
-                      <span className="header-trending-count-shimmer" />
-                    </span>
-                  ))
+<span className="header-trending-loading-dots" role="status" aria-label="Loading trending categories"><i /><i /><i /></span>
                 ) : trendingTags.map((tag) => (
                   <a key={tag.name} href={`/search?tag=${encodeURIComponent(tag.name)}`} onClick={() => setSearchOpen(false)} className="header-trending-tag">
                     <span>{tag.name.startsWith("#") ? tag.name : `#${tag.name}`}</span>
