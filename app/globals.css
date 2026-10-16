@@ -4181,7 +4181,7 @@ html, body {
 
 /* Store hero: clean white surface and refined, readable typography. */
 .store-hero{
-  background:#fff!important;
+  background:linear-gradient(120deg, color-mix(in srgb, var(--store-accent, #a78bfa) 24%, white), #fff 52%, color-mix(in srgb, var(--store-accent, #a78bfa) 18%, #f8fafc));
   color:#171717!important;
   border-bottom:1px solid #ededed;
 }
