@@ -3479,15 +3479,13 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 }
 
 
-/* Remove the extra top margin on Shop feed interludes only. */
+/* Keep inserted Shop sections evenly spaced with compact, balanced inner padding. */
 .shop-tabs-wrap .product-store-interlude,
 .shop-tabs-wrap .product-feed-full-row{
   margin-block:14px!important;
 }
-
-/* Keep inserted Shop sections evenly spaced and compact between product batches. */
 .shop-tabs-wrap .product-store-interlude{
-  padding-block:14px!important;
+  padding-block:20px!important;
 }
 .shop-tabs-wrap .product-store-interlude .mb-4{
   margin-bottom:10px!important;
@@ -3495,8 +3493,22 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 .shop-tabs-wrap .product-store-interlude-list{
   gap:10px!important;
 }
-.shop-tabs-wrap .product-feed-full-row{
-  padding-block:16px!important;
+.shop-tabs-wrap .product-feed-full-row:not(.product-recommendations-interlude){
+  padding-block:24px!important;
+}
+.shop-tabs-wrap .product-recommendations-interlude{
+  padding-block:20px!important;
+}
+@media(min-width:640px){
+  .shop-tabs-wrap .product-store-interlude{
+    padding-block:32px!important;
+  }
+  .shop-tabs-wrap .product-feed-full-row:not(.product-recommendations-interlude){
+    padding-block:36px!important;
+  }
+  .shop-tabs-wrap .product-recommendations-interlude{
+    padding-block:32px!important;
+  }
 }
 
 /* Prevent Shop promo banner title and description glyphs from clipping vertically. */
