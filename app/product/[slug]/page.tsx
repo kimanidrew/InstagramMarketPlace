@@ -68,7 +68,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
               </div>
 
-              <Link href={"/store/" + product.connection.username} className="mt-5 inline-flex items-center rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-xs font-bold text-[#555] transition hover:border-black hover:text-black">
+              <Link href={"/stores/" + product.connection.username} className="mt-5 inline-flex items-center rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-xs font-bold text-[#555] transition hover:border-black hover:text-black">
                 @{product.connection.username}
               </Link>
 
