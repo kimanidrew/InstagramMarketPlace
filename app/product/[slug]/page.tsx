@@ -104,7 +104,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               <div className="mt-7 flex flex-col gap-3">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
                 <div className="flex flex-wrap gap-3">
-                  <LikeButton id={product.id} count={product.likes.length} initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+                  <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
                   <WishlistButton id={product.id} count={product.wishlistItems.length} wishlisted={product.wishlistItems.length > 0} />
                   {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-black/[0.1] bg-white px-5 py-3.5 text-sm font-bold transition hover:-translate-y-0.5 hover:border-black hover:bg-black hover:text-white"><Instagram size={16} /> View original post <ArrowUpRight size={14} /></a>}
                 </div>
