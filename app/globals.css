@@ -4421,3 +4421,70 @@ html, body {
 .page-loader-description{max-width:370px;margin:13px 0 0;color:#777482;font-size:13px;font-weight:500;line-height:1.7;text-wrap:balance}
 .loading-page .activity-loader-wrap{min-height:0;width:100%;flex:0 0 auto;padding:24px 0 0}
 @media(max-width:480px){.page-loader-content{padding-inline:24px}.page-loader-headline{font-size:clamp(25px,8vw,34px)}.page-loader-description{font-size:12px}}
+
+
+/* White SokoLink navigation with consistent dark typography and icon contrast. */
+.site-header{
+  background:rgba(255,255,255,.98)!important;
+  color:#171717!important;
+  border-bottom:1px solid #eaeaea!important;
+  box-shadow:0 4px 18px rgba(0,0,0,.035);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+}
+.site-header:hover{box-shadow:0 8px 28px rgba(0,0,0,.07)}
+.site-header .brand{color:#171717!important;font-weight:900;letter-spacing:-.065em}
+.site-header .brand span{color:#777!important}
+.site-header .brand sup{color:#555!important}
+.site-header .nav-link{color:#444!important;font-size:13px;font-weight:750;letter-spacing:-.015em}
+.site-header .nav-link:hover{background:#f2f2f2!important;color:#111!important}
+.site-header .icon-btn{color:#333!important}
+.site-header .icon-btn:hover,
+.site-header .icon-btn.active{background:#f1f1f1!important;color:#111!important}
+.site-header .icon-btn svg{stroke:currentColor}
+.site-header .header-search-panel{
+  background:#fff!important;
+  border-top-color:#ededed!important;
+  box-shadow:0 18px 30px rgba(0,0,0,.055);
+}
+.site-header .header-search-form{
+  background:#fff!important;border-color:#e5e5e5!important;color:#222!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.045)!important;
+}
+.site-header .header-search-form:focus-within{
+  background:#fff!important;border-color:#c8c8c8!important;
+  box-shadow:0 0 0 3px rgba(0,0,0,.045)!important;
+}
+.site-header .header-search-form input{background:transparent!important;color:#171717!important}
+.site-header .header-search-form input::placeholder{color:#858585!important}
+.site-header .header-search-form>svg{color:#777!important}
+.site-header .header-search-form button[type="submit"]{background:#171717!important;color:#fff!important}
+.site-header .header-search-clear{background:#f3f3f3!important;color:#555!important}
+.site-header .header-search-suggestions{
+  background:#fff!important;border:1px solid #ededed!important;border-radius:18px!important;
+  box-shadow:0 16px 40px rgba(0,0,0,.07)!important;
+}
+.site-header .header-suggestion-tabs{border-bottom-color:#ededed!important}
+.site-header .header-suggestion-tab{color:#737373!important}
+.site-header .header-suggestion-tab:hover,
+.site-header .header-suggestion-tab.active{color:#171717!important}
+.site-header .header-suggestion-tab span{background:#f2f2f2!important;border-color:#e8e8e8!important;color:#666!important}
+.site-header .header-suggestion-tab.active span{background:#eaeaea!important;border-color:#ddd!important;color:#222!important}
+.site-header .header-suggestion-tab-indicator{background:#171717!important;box-shadow:none!important}
+.site-header .header-suggestion-item{background:#fff!important;border-color:transparent!important;color:#171717!important}
+.site-header .header-suggestion-item:hover{background:#f8f8f8!important;border-color:#eee!important}
+.site-header .header-suggestion-image{border-color:#eee!important;background:#f6f6f6!important}
+.site-header .header-suggestion-copy strong{color:#222!important;font-weight:750!important}
+.site-header .header-suggestion-copy small{color:#777!important}
+.site-header .header-suggestion-arrow{color:#777!important}
+.site-header .header-suggestions-label{color:#777!important}
+.site-header .header-suggestions-empty{background:#fafafa!important;border-color:#e5e5e5!important;color:#777!important}
+.site-header .header-trending-tags{background:#fff!important}
+.site-header .header-trending-tag{background:#f7f7f7!important;border-color:#e8e8e8!important;color:#333!important}
+.site-header .header-trending-tag small{color:#777!important}
+.site-header .header-trending-tag:hover{background:#eee!important;color:#111!important}
+@media(max-width:640px){
+  .site-header .shell{color:#171717}
+  .site-header .header-search-panel.is-open{background:#fff!important}
+  .site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions{background:#fff!important}
+}
