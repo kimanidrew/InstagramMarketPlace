@@ -80,6 +80,7 @@ model InstagramConnection {
   name              String?
   biography         String?
   profileImageUrl   String?
+  profileAccentColor String?
   encryptedToken    String
   expiresAt          DateTime?
   lastSyncedAt      DateTime?
