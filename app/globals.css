@@ -5590,3 +5590,17 @@ html, body {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
 }
+
+
+/* Search focus should thicken the border without changing its neutral color. */
+.site-header .header-search-form,
+.site-header .header-search-form:focus,
+.site-header .header-search-form:focus-within,
+.site-header .header-search-form input:focus {
+  border-color: #e8e8e8 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.site-header .header-search-form:focus-within {
+  border-width: 2px !important;
+}
