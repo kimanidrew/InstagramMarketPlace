@@ -1,4 +1,4 @@
-import { Heart, ShoppingBag, Sparkles } from "lucide-react";
+import { ArrowRight, Heart, ShoppingBag, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { ForYouFilters } from "@/components/for-you-filters";
@@ -93,32 +93,40 @@ export default async function ForYouPage() {
 
   return (
     <main className="shell min-h-screen py-5 md:py-8">
-      <section className="relative mb-8 grid gap-7 overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] px-5 py-7 sm:px-8 md:mb-10 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] md:items-center md:gap-8 md:px-10 md:py-10">
-        <div className="relative z-10 min-w-0 max-w-3xl">
-          <p className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#666]">
-            <Sparkles size={13} /> Your personal shopping feed
+      <section className="relative isolate mb-8 grid min-h-[590px] overflow-hidden rounded-[30px] border border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 py-8 sm:px-8 md:mb-10 md:min-h-[650px] md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-3 md:px-10 md:py-10 lg:px-12">
+        <div className="relative z-20 min-w-0 max-w-[470px]">
+          <p className="inline-flex items-center gap-2 rounded-full border border-[#e8e6ff] bg-[#f0efff] px-4 py-2.5 text-xs font-semibold text-[#5145ff] shadow-[0_5px_18px_rgba(89,75,255,.08)]">
+            <Sparkles size={15} fill="currentColor" /> Personalised for you
           </p>
-          <h1 className="mt-5 text-4xl font-black leading-[.98] tracking-[-.06em] text-[#171717] sm:text-5xl md:text-6xl">
-            Made for <span className="text-[#777]">you.</span>
+          <h1 className="mt-6 text-[clamp(2.8rem,5vw,5rem)] font-black leading-[.98] tracking-[-.075em] text-[#171d29]">
+            Made for <span className="bg-gradient-to-r from-[#472cff] via-[#7b2cff] to-[#b23bd1] bg-clip-text text-transparent">you.</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6b6b66] sm:text-base">
+          <p className="mt-6 max-w-[430px] text-base leading-7 text-[#68718a] sm:text-lg sm:leading-9">
             {currentUser
               ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
-              : "Explore a curated mix of marketplace finds. Sign in and like, save or revisit listings to make your feed more personal across devices."}
+              : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-[#444]"><Heart size={14} /> Your interests</span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-[#444]"><ShoppingBag size={14} /> Products &amp; services</span>
-            <Link href="/shop" className="inline-flex items-center gap-2 rounded-full bg-[#171717] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#383838]">Explore the shop</Link>
+          <div className="mt-7 flex flex-col gap-3">
+            <Link href="/for-you#your-interests" className="group flex w-fit items-center gap-4 rounded-full pr-3 text-sm font-semibold text-[#171d29] transition hover:text-[#5945ff] sm:text-base">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f0efff] text-[#5945ff] shadow-[0_4px_10px_rgba(74,60,255,.09)]"><Heart size={26} /></span>
+              <span>Your interests</span><ArrowRight size={19} className="ml-1 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link href="/shop" className="group flex w-fit items-center gap-4 rounded-full pr-3 text-sm font-semibold text-[#171d29] transition hover:text-[#5945ff] sm:text-base">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f0efff] text-[#5945ff] shadow-[0_4px_10px_rgba(74,60,255,.09)]"><ShoppingBag size={26} /></span>
+              <span>Products &amp; services</span>
+            </Link>
           </div>
+          <Link href="/shop" className="mt-7 inline-flex min-h-[58px] items-center gap-4 rounded-full bg-[#171d29] px-7 py-4 text-sm font-bold text-white shadow-[0_10px_24px_rgba(23,29,41,.12)] transition hover:-translate-y-0.5 hover:bg-[#2a3040] sm:text-base">
+            Explore the shop <ArrowRight size={21} />
+          </Link>
         </div>
-        <div className="relative z-10 min-w-0">
+        <div className="relative z-10 -mx-3 mt-2 min-w-0 sm:mx-0 md:mt-0">
           <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
         </div>
-        <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-20 h-64 w-64 rounded-full border-[36px] border-white/70 sm:right-6 sm:top-[-7rem] sm:h-80 sm:w-80" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#eeebff]/70 blur-3xl md:right-0 md:top-10 md:h-[28rem] md:w-[28rem]" />
       </section>
 
-      <section aria-label="Personalized product recommendations" className="relative">
+      <section id="your-interests" aria-label="Personalized product recommendations" className="relative">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[.16em] text-[#888]">Picked for your next find</p>
