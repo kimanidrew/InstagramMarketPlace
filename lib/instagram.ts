@@ -2,6 +2,7 @@ import "server-only";
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
 import { db } from "@/lib/prisma";
 import { classifyProductTags } from "@/lib/ai-tags";
+import { getProfileAccentColor } from "@/lib/profile-color";
 
 const V = () => process.env.INSTAGRAM_GRAPH_API_VERSION || "v24.0";
 const key = () =>
@@ -231,12 +232,15 @@ export async function connect(token: string, connectedByUserId?: string) {
     );
   }
 
+  const profileAccentColor = await getProfileAccentColor(m.profile_picture_url);
+
   const data = {
     igUserId: id,
     username: m.username,
     name: m.name,
     biography: m.biography,
     profileImageUrl: m.profile_picture_url,
+    profileAccentColor,
     encryptedToken: enc(stored.token),
     expiresAt: stored.expiresAt,
     ...(connectedByUserId
@@ -306,12 +310,15 @@ export async function replaceConnectionToken(
     );
   }
 
+  const profileAccentColor = await getProfileAccentColor(m.profile_picture_url);
+
   return db().instagramConnection.update({
     where: { id: connectionId },
     data: {
       name: m.name,
       biography: m.biography,
       profileImageUrl: m.profile_picture_url,
+      profileAccentColor,
       encryptedToken: enc(stored.token),
       expiresAt: stored.expiresAt,
     },
@@ -405,12 +412,15 @@ export async function sync(id: string) {
     fields: "username,name,biography,profile_picture_url",
   });
 
+  const profileAccentColor = await getProfileAccentColor(profile.profile_picture_url);
+
   await p.instagramConnection.update({
     where: { id },
     data: {
       name: profile.name,
       biography: profile.biography,
       profileImageUrl: profile.profile_picture_url,
+      profileAccentColor,
     },
   });
 
