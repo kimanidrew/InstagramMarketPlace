@@ -52,6 +52,19 @@ export function SiteHeader({ user }: { user: any }) {
   }, [searchOpen]);
 
   useEffect(() => {
+    const lockPageScroll = searchOpen && searchQuery.trim().length >= 2;
+    if (!lockPageScroll) return;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+    };
+  }, [searchOpen, searchQuery]);
+
+  useEffect(() => {
     if (!searchOpen || trendingTags.length > 0) return;
     let cancelled = false;
     setTrendingTagsLoading(true);
@@ -188,6 +201,8 @@ export function SiteHeader({ user }: { user: any }) {
           </button>
         </div>
       </div>
+
+      {searchOpen && searchQuery.trim().length >= 2 && <div className="header-suggestions-backdrop" aria-hidden="true" />}
 
       <div id="header-search-panel" className={"header-search-panel " + (searchOpen ? "is-open" : "") + (searchOpen && searchQuery.trim().length >= 2 ? " has-suggestions" : "")} aria-hidden={!searchOpen}>
         <div className="shell header-search-content">
