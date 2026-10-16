@@ -293,10 +293,11 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   const recommendationIndexes = new Set<number>();
   const recommendationSections = new Map<number, any[]>();
 
-  // Start after product index 18, then repeat every 12 indexes. Each section
-  // features every third product from the following run and skips those items
-  // in the main feed so a listing is never shown twice.
-  for (let sectionIndex = 18; sectionIndex < products.length; sectionIndex += 12) {
+  // Place the first recommendation section immediately after product index 15
+  // (the 16th listing), then repeat every 12 indexes to preserve the feed rhythm.
+  // Recommended products are taken from later positions and omitted from the main
+  // feed so listings are never duplicated and the grid stays aligned.
+  for (let sectionIndex = 15; sectionIndex < products.length; sectionIndex += 12) {
     const picks = [sectionIndex + 1, sectionIndex + 4, sectionIndex + 7, sectionIndex + 10]
       .filter((index) => index < products.length);
     const pickedProducts = picks.map((index) => {
@@ -316,7 +317,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
 
     if (recommendationSections.has(index)) {
-      const batchIndex = Math.floor((index - 18) / 12);
+      const batchIndex = Math.floor((index - 15) / 12);
       productFeed.push({ type: "recommendations", batchIndex, products: recommendationSections.get(index)! });
     }
   });
