@@ -95,7 +95,7 @@ export default async function ForYouPage() {
     <main className="min-h-screen w-full">
       <section className="relative isolate grid min-h-[430px] w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 pb-5 pt-4 sm:min-h-[460px] sm:px-8 md:min-h-[500px] md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-2 md:px-10 md:py-5 lg:px-12">
         <div className="relative z-20 flex min-w-0 max-w-[470px] flex-col justify-center py-8 text-center sm:py-10 md:py-12 md:text-left">
-          <p className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#e5e0ff] bg-white/80 px-4 py-2.5 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#5945d6] shadow-[0_8px_24px_rgba(83,65,190,.10)] backdrop-blur-md sm:text-xs md:mx-0">
+          <p className="mx-auto inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#5945d6] sm:text-xs md:mx-0">
             <Sparkles size={15} fill="currentColor" /> Personalised for you
           </p>
           <h1 className="mt-5 mx-auto max-w-[440px] text-[clamp(2.7rem,4.8vw,4.8rem)] font-black leading-[.94] tracking-[-.085em] text-[#171526] md:mx-0">
