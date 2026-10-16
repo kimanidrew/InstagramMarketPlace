@@ -44,10 +44,11 @@ export function LikeButton({ id, count, compact = false, initialLiked = false }:
       aria-label={liked ? "Unlike listing" : "Like listing"}
       title={liked ? "Unlike listing" : "Like listing"}
       aria-busy={busy}
+      aria-pressed={liked}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
         (compact ? "h-10 w-10 shadow-sm " : "px-5 py-3 text-sm font-semibold ") +
-        (liked ? "bg-[#ff3b6b] text-white" : "bg-white/95 text-black")
+        (liked ? "bg-[#ff3b6b] text-white ring-2 ring-white/80 shadow-md shadow-[#ff3b6b]/30" : "bg-white/95 text-black ring-1 ring-black/5")
       }
     >
       <Heart size={compact ? 17 : 16} fill={liked ? "currentColor" : "none"} strokeWidth={liked ? 2.5 : 2} />
