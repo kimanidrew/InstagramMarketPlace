@@ -91,7 +91,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
               {tags.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555] transition hover:border-black hover:bg-black hover:text-white">#{tag.name}</Link>)}
+                  {tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555] transition hover:border-black hover:bg-black hover:text-white">{tag.name}</Link>)}
                 </div>
               )}
 
