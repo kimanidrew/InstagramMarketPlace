@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BadgeCheck, Crown, Instagram, MessageCircle, Star, ArrowUpRight } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
-import { ProductCard } from "@/components/product-card";
+import { OptimizedProductGrid } from "@/components/optimized-product-grid";
 import { StoreReviewsDrawer } from "@/components/store-reviews-drawer";
 import { notFound } from "next/navigation";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
@@ -132,7 +132,7 @@ export default async function Store({
 
         {posts.length > 0 ? (
           <div className="store-product-grid">
-            {posts.map((post: any) => <ProductCard key={post.id} p={post} />)}
+            <OptimizedProductGrid products={posts} />
           </div>
         ) : (
           <div className="store-empty">
