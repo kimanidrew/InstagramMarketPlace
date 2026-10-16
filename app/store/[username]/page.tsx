@@ -112,7 +112,6 @@ export default async function Store({
             <h2>Shop from @{store.username}</h2>
             <p>Products and services shared by this store on Instagram.</p>
           </div>
-          <Link href="/products" className="store-browse-link">Browse marketplace <ArrowUpRight size={14} /></Link>
         </div>
 
         {posts.length > 0 ? (
