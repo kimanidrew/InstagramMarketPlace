@@ -93,22 +93,22 @@ export default async function ForYouPage() {
 
   return (
     <main className="min-h-screen w-full">
-      <section className="relative isolate grid min-h-[430px] w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 pb-5 pt-4 sm:min-h-[460px] sm:px-8 md:min-h-[500px] md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-2 md:px-10 md:py-5 lg:px-12">
-        <div className="relative z-20 flex min-w-0 max-w-[470px] flex-col justify-center py-8 text-center sm:py-10 md:py-12 md:text-left">
+      <section className="relative isolate grid min-h-0 w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_68%_48%,rgba(220,216,255,.58),transparent_42%),linear-gradient(110deg,#fff_0%,#fcfbff_55%,#fff_100%)] px-5 pb-2 pt-2 sm:px-8 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-2 md:px-10 md:py-2 lg:px-12">
+        <div className="relative z-20 flex min-w-0 max-w-[470px] flex-col justify-center py-3 text-center sm:py-4 md:py-3 md:text-left">
           <p className="mx-auto inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#5945d6] sm:text-xs md:mx-0">
             <Sparkles size={15} fill="currentColor" /> Personalised for you
           </p>
-          <h1 className="mt-5 mx-auto max-w-[440px] text-[clamp(2.7rem,4.8vw,4.8rem)] font-black leading-[.94] tracking-[-.085em] text-[#171526] md:mx-0">
+          <h1 className="mt-3 mx-auto max-w-[440px] text-[clamp(2.35rem,4.2vw,4.1rem)] font-black leading-[.94] tracking-[-.085em] text-[#171526] md:mx-0">
             Made for <span className="bg-gradient-to-r from-[#472cff] via-[#7b2cff] to-[#b23bd1] bg-clip-text text-transparent">you.</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-[390px] text-[14px] leading-7 text-[#65657d] sm:text-base sm:leading-8 md:mx-0">
+          <p className="mx-auto mt-3 max-w-[390px] text-[13px] leading-6 text-[#65657d] sm:text-sm sm:leading-7 md:mx-0">
             {currentUser
               ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
               : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
 
         </div>
-        <div className="relative z-10 -mx-3 mt-0 flex min-h-[340px] w-full min-w-0 items-center justify-center sm:mx-0 md:mt-0 md:min-h-[420px] lg:min-h-[450px]">
+        <div className="relative z-10 -mx-3 mt-0 flex min-h-[270px] w-full min-w-0 items-center justify-center sm:mx-0 md:mt-0 md:min-h-[330px] lg:min-h-[350px]">
           <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
         </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#eeebff]/70 blur-3xl md:right-0 md:top-10 md:h-[28rem] md:w-[28rem]" />
