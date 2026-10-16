@@ -58,7 +58,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
       </div>
       {products.length > 0 ? (compact ? (
         <div
-          className="relative mx-auto block h-[390px] w-full min-w-0 max-w-[760px] shrink-0 overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px]"
+          className="relative mx-auto block h-[390px] w-full min-w-0 max-w-[760px] shrink-0 overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px] motion-reduce:!transition-none"
           style={{ perspective: "1000px" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
@@ -87,7 +87,8 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
                   zIndex: 20 - Math.abs(offset),
                   pointerEvents: visible ? "auto" : "none",
-                  transition: "transform 850ms cubic-bezier(.22,1,.36,1), opacity 650ms ease",
+                  transition: "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 900ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  willChange: "transform, opacity",
                 }}
               >
                 <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[22px] border-[2px] border-white/90 bg-white shadow-[0_28px_55px_rgba(30,25,75,.24)] sm:rounded-[26px] md:rounded-[30px]">
