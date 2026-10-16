@@ -5604,3 +5604,20 @@ html, body {
 .site-header .header-search-form:focus-within {
   border-width: 2px !important;
 }
+
+
+/* Refine suggestion tabs: a little more vertical padding and a consistent active state. */
+.site-header .header-search-panel .header-suggestion-tabs button,
+.site-header .header-search-panel .header-suggestion-tabs [role="tab"] {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  color: #222 !important;
+}
+.site-header .header-search-panel .header-suggestion-tabs button[aria-selected="true"],
+.site-header .header-search-panel .header-suggestion-tabs [role="tab"][aria-selected="true"],
+.site-header .header-search-panel .header-suggestion-tabs button.active,
+.site-header .header-search-panel .header-suggestion-tabs [role="tab"].active {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #e8e8e8 !important;
+}
