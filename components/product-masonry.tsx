@@ -296,7 +296,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   // Start after product index 18, then repeat every 12 indexes. Each section
   // features every third product from the following run and skips those items
   // in the main feed so a listing is never shown twice.
-  for (let sectionIndex = 18, batchIndex = 0; sectionIndex < products.length; sectionIndex += 12, batchIndex++) {
+  for (let sectionIndex = 18; sectionIndex < products.length; sectionIndex += 12) {
     const picks = [sectionIndex + 1, sectionIndex + 4, sectionIndex + 7, sectionIndex + 10]
       .filter((index) => index < products.length);
     const pickedProducts = picks.map((index) => {
