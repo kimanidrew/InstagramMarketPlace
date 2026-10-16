@@ -227,6 +227,7 @@ export function SiteHeader({ user }: { user: any }) {
                 })}
                 <span className="header-suggestion-tab-indicator" aria-hidden="true" />
               </div>
+              <div className="header-suggestion-results">
               <div className="header-suggestions-label">
                 {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : "MATCHING STORES"}
               </div>
@@ -262,6 +263,7 @@ export function SiteHeader({ user }: { user: any }) {
                     <ArrowRight size={16} className="header-suggestion-arrow" />
                   </a>
                 )) : <p className="header-suggestions-empty">No matching stores in these results yet.</p>
+              </div>
               )}
             </div>
           )}
