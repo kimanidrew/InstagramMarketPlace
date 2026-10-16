@@ -116,8 +116,9 @@ export default async function ForYouPage() {
               <span>Products &amp; services</span>
             </Link>
           </div>
-          <Link href="/shop" className="mt-4 inline-flex min-h-[48px] items-center gap-3 rounded-full bg-[#171d29] px-6 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(23,29,41,.12)] transition hover:-translate-y-0.5 hover:bg-[#2a3040] sm:text-base">
-            Explore the shop <ArrowRight size={21} />
+          <Link href="/shop" className="group relative mt-4 inline-flex min-h-[50px] items-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-[#27213f] via-[#5140d8] to-[#8b36cb] px-6 py-3 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(91,65,210,.28)] ring-1 ring-white/50 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_34px_rgba(91,65,210,.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7564ff] focus-visible:ring-offset-2 sm:text-base">
+            <span aria-hidden="true" className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
+            <span className="relative">Explore the shop</span><span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-1"><ArrowRight size={17} /></span>
           </Link>
         </div>
         <div className="relative z-10 -mx-3 mt-0 flex min-h-[340px] w-full min-w-0 items-center justify-center sm:mx-0 md:mt-0 md:min-h-[420px] lg:min-h-[450px]">
