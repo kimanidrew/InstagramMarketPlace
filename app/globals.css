@@ -5031,3 +5031,55 @@ html, body {
   position: relative;
   z-index: 61;
 }
+
+
+/* Keep suggestion categories in a left rail with results flexing on the right. */
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-layout {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+  width: 100%;
+  min-width: 0;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-sidebar {
+  display: block !important;
+  flex: 0 0 124px !important;
+  width: 124px !important;
+  min-width: 0;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tabs {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100%;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results {
+  display: block !important;
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tab span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #222 !important;
+  color: #fff !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1;
+}
+@media (max-width: 640px) {
+  .site-header .header-search-panel.is-open.has-suggestions .header-suggestion-layout {
+    flex-direction: row !important;
+    gap: 7px !important;
+  }
+  .site-header .header-search-panel.is-open.has-suggestions .header-suggestion-sidebar {
+    flex: 0 0 94px !important;
+    width: 94px !important;
+  }
+}
