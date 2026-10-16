@@ -4243,3 +4243,18 @@ html, body {
   .store-hero-stats span{padding:7px 9px}
 }
 
+
+/* Store hero gradient follows the dominant color sampled from the live Instagram profile image. */
+.store-hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--store-accent, #a78bfa) 38%, white) 0%, transparent 54%),
+    radial-gradient(ellipse at 92% 20%, color-mix(in srgb, var(--store-accent, #a78bfa) 28%, #fce7f3) 0%, transparent 48%),
+    linear-gradient(120deg, color-mix(in srgb, var(--store-accent, #a78bfa) 15%, white), #fff 48%, color-mix(in srgb, var(--store-accent, #a78bfa) 12%, #f8fafc));
+}
+.store-hero-orb{opacity:.34;filter:blur(2px);background:color-mix(in srgb, var(--store-accent, #a78bfa) 60%, white)}
+.store-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(115deg,transparent 35%,color-mix(in srgb,var(--store-accent,#a78bfa) 9%,transparent) 65%,transparent)}
+.store-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:start;gap:18px}
+@media(max-width:1100px){.store-product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}}
+@media(max-width:760px){.store-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media(max-width:380px){.store-product-grid{gap:8px}}
