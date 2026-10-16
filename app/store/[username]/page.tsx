@@ -7,6 +7,7 @@ import { StoreReviewsDrawer } from "@/components/store-reviews-drawer";
 import { notFound } from "next/navigation";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { getProfileAccentColor } from "@/lib/profile-color";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,11 @@ export default async function Store({
 
   if (!store) notFound();
 
+  const detectedAccent = await getProfileAccentColor(store.profileImageUrl);
+  const storeAccentColor = detectedAccent !== "#a78bfa" ? detectedAccent : (store.profileAccentColor || detectedAccent);
+  if (store.profileImageUrl && storeAccentColor !== store.profileAccentColor) {
+    await db().instagramConnection.update({ where: { id: store.id }, data: { profileAccentColor: storeAccentColor } }).catch(() => null);
+  }
   const posts = await filterAvailableInstagramMedia(store.posts);
   const average =
     store.reviews.length > 0
@@ -61,7 +67,7 @@ export default async function Store({
   return (
     <main className="store-page">
       <AnalyticsTracker connectionId={store.id} type="VIEW" />
-      <section className="store-hero" style={{ "--store-accent": store.profileAccentColor || "#a78bfa" } as React.CSSProperties}>
+      <section className="store-hero" style={{ "--store-accent": storeAccentColor } as React.CSSProperties}>
         <div className="store-hero-orb store-hero-orb-a" />
         <div className="store-hero-orb store-hero-orb-b" />
         <div className="shell store-hero-inner">
