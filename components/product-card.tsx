@@ -10,11 +10,16 @@ import { useEffect, useRef, useState } from "react";
 
 export function ProductCard({ p }: { p: any }) {
   const [likeCount, setLikeCount] = useState(Number(p.totalLikes ?? (Number(p.instagramLikeCount ?? p.like_count ?? 0) + Number(p._count?.likes ?? p.likes?.length ?? 0))));
+  const [isLiked, setIsLiked] = useState(Boolean(p.likedByCurrentUser));
   const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
   const [wishlistSaved, setWishlistSaved] = useState(Boolean(p.wishlistedByCurrentUser ?? p.wishlistItems?.length));
   const [likeFlash, setLikeFlash] = useState(false);
   const [wishlistFlash, setWishlistFlash] = useState(false);
   const likeCountRef = useRef(likeCount);
+
+  useEffect(() => {
+    setIsLiked(Boolean(p.likedByCurrentUser));
+  }, [p.id, p.likedByCurrentUser]);
 
   useEffect(() => {
     const nextCount = Number(p.totalLikes ?? (Number(p.instagramLikeCount ?? p.like_count ?? 0) + Number(p._count?.likes ?? p.likes?.length ?? 0)));
@@ -26,8 +31,9 @@ export function ProductCard({ p }: { p: any }) {
 
   useEffect(() => {
     const onLike = (event: Event) => {
-      const detail = (event as CustomEvent<{ id: string; count: number }>).detail;
+      const detail = (event as CustomEvent<{ id: string; count: number; liked?: boolean }>).detail;
       if (detail?.id === p.id) {
+        if (typeof detail.liked === "boolean") setIsLiked(detail.liked);
         const changed = detail.count !== likeCountRef.current;
         likeCountRef.current = detail.count;
         setLikeCount(detail.count);
@@ -121,7 +127,7 @@ export function ProductCard({ p }: { p: any }) {
 
       <div className="pt-3 sm:pt-4">
         <div className={"product-card-like-line " + (likeFlash ? "is-updated" : "")} aria-label={likeCount.toLocaleString() + " likes"}>
-          <Heart size={14} strokeWidth={2.4} className={"product-card-like-line-icon " + (likeFlash ? "is-animated" : "")} />
+          <Heart size={14} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
           <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
           <span>likes</span>
         </div>
