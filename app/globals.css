@@ -4300,3 +4300,10 @@ html, body {
 .activity-loader-label{font-size:12px;font-weight:650;letter-spacing:.01em;color:#77738d}
 .loading-page-heading{min-height:0;margin:0}
 @media(prefers-reduced-motion:reduce){.activity-loader-spinner{animation-duration:2s}}
+
+
+/* Full-viewport activity loader for navigation and page transitions. */
+.loading-page{box-sizing:border-box;display:flex;min-height:100svh;flex-direction:column;align-items:center;justify-content:center;padding:24px!important}
+.loading-page-heading{display:none!important}
+.loading-page .activity-loader-wrap{min-height:100svh;flex:1;align-self:stretch}
+.activity-loader-wrap{min-height:100svh}
