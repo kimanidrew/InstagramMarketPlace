@@ -43,10 +43,11 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false 
       aria-label={saved ? "Remove from wishlist" : "Add to wishlist"}
       title={saved ? "Remove from wishlist" : "Add to wishlist"}
       aria-busy={busy}
+      aria-pressed={saved}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
         (compact ? "h-10 w-10 shadow-sm " : "px-5 py-3.5 text-sm font-bold ") +
-        "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 backdrop-blur-sm"
+        (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-2 ring-white/90 shadow-md shadow-black/10" : "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 ring-1 ring-white/25 backdrop-blur-sm")
       }
     >
       <Bookmark size={compact ? 17 : 16} fill={saved ? "currentColor" : "none"} strokeWidth={saved ? 2.5 : 2} />
