@@ -119,17 +119,19 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
             const image = p.thumbnailUrl || p.mediaUrl;
             const href = "/" + (String(p.listingType).toUpperCase() === "SERVICE" ? "service" : "product") + "/" + p.productSlug;
             return (
-              <article data-recommendation-card key={p.id} className="group w-[68%] min-w-[68%] snap-start sm:w-[36%] sm:min-w-[36%] md:w-[24%] md:min-w-[24%]">
-                <Link href={href} className="relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-white sm:rounded-[24px]">
-                  {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={index > 3 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
-                  <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1.5 text-[9px] font-black text-[#222] backdrop-blur"><Sparkles size={11} /> {personalized ? "For you" : "Popular find"}</span>
-                  <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/65 px-2 py-1.5 text-[10px] font-bold text-white backdrop-blur"><Heart size={12} /> {(p.instagramLikeCount || 0).toLocaleString()}</span>
+              <article data-recommendation-card key={p.id} className="w-[68%] min-w-[68%] snap-start sm:w-[36%] sm:min-w-[36%] md:w-[24%] md:min-w-[24%]">
+                <Link href={href} className="group block rounded-[20px] outline-none transition-transform duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-[#7564ff] focus-visible:ring-offset-2 sm:rounded-[24px]">
+                  <div className="relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-white sm:rounded-[24px]">
+                    {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={index > 3 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
+                    <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1.5 text-[9px] font-black text-[#222] backdrop-blur"><Sparkles size={11} /> {personalized ? "For you" : "Popular find"}</span>
+                    <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/65 px-2 py-1.5 text-[10px] font-bold text-white backdrop-blur"><Heart size={12} /> {(p.instagramLikeCount || 0).toLocaleString()}</span>
+                  </div>
+                  <div className="px-1 pt-3">
+                    <p className="line-clamp-2 text-xs font-extrabold leading-5 text-[#202020] group-hover:underline sm:text-sm">{p.productTitle || "Explore this find"}</p>
+                    <span className="mt-1.5 block truncate text-[10px] font-semibold text-[#858585] sm:text-[11px]">@{p.connection?.username || "SokoLink seller"}</span>
+                    <div className="mt-2 flex flex-wrap gap-1">{p.tags?.filter(t => t.name.toLowerCase() !== "instamart").slice(0, 2).map(t => <span key={t.name} className="rounded-full bg-white px-2 py-1 text-[9px] font-semibold text-[#777]">#{t.name}</span>)}</div>
+                  </div>
                 </Link>
-                <div className="px-1 pt-3">
-                  <Link href={href} className="line-clamp-2 text-xs font-extrabold leading-5 text-[#202020] hover:underline sm:text-sm">{p.productTitle || "Explore this find"}</Link>
-                  <Link href={"/store/" + p.connection?.username} className="mt-1.5 block truncate text-[10px] font-semibold text-[#858585] sm:text-[11px]">@{p.connection?.username || "SokoLink seller"}</Link>
-                  <div className="mt-2 flex flex-wrap gap-1">{p.tags?.filter(t => t.name.toLowerCase() !== "instamart").slice(0, 2).map(t => <span key={t.name} className="rounded-full bg-white px-2 py-1 text-[9px] font-semibold text-[#777]">#{t.name}</span>)}</div>
-                </div>
               </article>
             );
           })}
