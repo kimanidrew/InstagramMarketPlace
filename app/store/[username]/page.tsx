@@ -61,7 +61,7 @@ export default async function Store({
   return (
     <main className="store-page">
       <AnalyticsTracker connectionId={store.id} type="VIEW" />
-      <section className="store-hero">
+      <section className="store-hero" style={{ "--store-accent": store.profileAccentColor || "#a78bfa" } as React.CSSProperties}>
         <div className="store-hero-orb store-hero-orb-a" />
         <div className="store-hero-orb store-hero-orb-b" />
         <div className="shell store-hero-inner">
