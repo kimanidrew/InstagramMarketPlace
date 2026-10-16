@@ -88,8 +88,8 @@ export default async function ForYouPage() {
 
   return (
     <main className="shell min-h-screen py-5 md:py-8">
-      <section className="relative mb-8 overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] px-5 py-8 sm:px-8 md:mb-10 md:px-12 md:py-12">
-        <div className="relative z-10 max-w-3xl">
+      <section className="relative mb-8 grid gap-7 overflow-hidden rounded-[30px] border border-black/5 bg-[#f7f7f4] px-5 py-7 sm:px-8 md:mb-10 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] md:items-center md:gap-8 md:px-10 md:py-10">
+        <div className="relative z-10 min-w-0 max-w-3xl">
           <p className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[.16em] text-[#666]">
             <Sparkles size={13} /> Your personal shopping feed
           </p>
@@ -107,10 +107,11 @@ export default async function ForYouPage() {
             <Link href="/shop" className="inline-flex items-center gap-2 rounded-full bg-[#171717] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#383838]">Explore the shop</Link>
           </div>
         </div>
+        <div className="relative z-10 min-w-0">
+          <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
+        </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-20 h-64 w-64 rounded-full border-[36px] border-white/70 sm:right-6 sm:top-[-7rem] sm:h-80 sm:w-80" />
       </section>
-
-      <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} />
 
       <section aria-label="Personalized product recommendations" className="relative">
         <div className="mb-5 flex items-end justify-between gap-4">
