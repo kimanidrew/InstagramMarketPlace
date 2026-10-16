@@ -111,8 +111,8 @@ export default async function ForYouPage() {
               ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
               : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
-          <div className="mt-2.5 flex flex-col items-center gap-1.5 md:items-start">
-            <span className="text-[9px] font-black uppercase tracking-[.18em] text-[#8b87a5]">Explore popular categories</span>
+          <div className="mt-3 flex flex-col items-center gap-3 md:items-start">
+            <span className="inline-flex items-center gap-2 text-[10px] font-extrabold tracking-[.14em] text-[#6b5bd2] sm:text-[11px]"><span aria-hidden="true" className="h-px w-5 rounded-full bg-gradient-to-r from-[#8b7aff] to-[#d6a6f0]" />EXPLORE CATEGORIES<span aria-hidden="true" className="h-px w-5 rounded-full bg-gradient-to-r from-[#d6a6f0] to-[#8b7aff]" /></span>
             <div className="flex max-w-full flex-wrap justify-center gap-2 md:justify-start">
               {(tags.length ? tags.slice(0, 5).map((tag) => tag.name) : ["Fashion", "Beauty", "Home", "Accessories", "Services"]).map((category, index) => (
                 <Link
