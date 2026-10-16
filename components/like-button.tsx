@@ -24,9 +24,10 @@ export function LikeButton({ id, count, compact = false, initialLiked = false }:
       }
       if (!r.ok) throw new Error("Like request failed");
       const d = await r.json();
+      const totalLikes = typeof d.totalLikes === "number" ? d.totalLikes : d.localLikes;
       setLiked(d.liked);
-      setN(d.localLikes);
-      window.dispatchEvent(new CustomEvent("listing-like-updated", { detail: { id, liked: d.liked, count: d.localLikes } }));
+      setN(totalLikes);
+      window.dispatchEvent(new CustomEvent("listing-like-updated", { detail: { id, liked: d.liked, count: totalLikes } }));
     } catch {
       setLiked(!nextLiked);
       setN(n);
@@ -50,7 +51,7 @@ export function LikeButton({ id, count, compact = false, initialLiked = false }:
       }
     >
       <Heart size={compact ? 17 : 16} fill={liked ? "currentColor" : "none"} strokeWidth={liked ? 2.5 : 2} />
-      {!compact && <span>{n} likes</span>}
+      {!compact && <span>{n.toLocaleString()} likes</span>}
     </button>
   );
 }
