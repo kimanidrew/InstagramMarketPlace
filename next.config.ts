@@ -1,1 +1,1 @@
-import type {NextConfig} from "next";const config:NextConfig={images:{remotePatterns:[{protocol:"https",hostname:"**"}]},async rewrites(){return [{source:"/shop",destination:"/products"}]}};export default config;
+import type {NextConfig} from "next";const config:NextConfig={images:{remotePatterns:[{protocol:"https",hostname:"**"}]},async redirects(){return [{source:"/store/:username",destination:"/stores/:username",permanent:true}]},async rewrites(){return [{source:"/shop",destination:"/products"}]}};export default config;
