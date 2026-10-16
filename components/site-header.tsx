@@ -261,6 +261,14 @@ export function SiteHeader({ user }: { user: any }) {
                     </a>
                   );
                 }) : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
+              ) : activeSuggestionTab === "Services" ? (
+                serviceSuggestions.length ? serviceSuggestions.map((item: any) => {
+                  const image = item.thumbnailUrl || item.mediaUrl;
+                  const username = item.connection?.username || "Instagram shop";
+                  return <a key={item.id} href={`/service/${item.productSlug}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}><span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><BriefcaseBusiness size={18} /></span>}</span><span className="header-suggestion-copy"><strong>{item.productTitle || "View service"}</strong><small>Service · @{username}</small></span><ArrowRight size={16} className="header-suggestion-arrow" /></a>;
+                }) : <p className="header-suggestions-empty">No matching services yet. Try another search.</p>
+              ) : activeSuggestionTab === "Pages" ? (
+                pageSuggestions.length ? pageSuggestions.map((page: any) => { const Icon = page.icon; return <a key={page.href} href={page.href} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}><span className="header-suggestion-image header-suggestion-category-icon"><Icon size={19} /></span><span className="header-suggestion-copy"><strong>{page.title}</strong><small>{page.description}</small></span><ArrowRight size={16} className="header-suggestion-arrow" /></a>; }) : <p className="header-suggestions-empty">No matching SokoLink pages. Try another search.</p>
               ) : activeSuggestionTab === "Categories" ? (
                 categorySuggestions.length ? categorySuggestions.map((category: any) => (
                   <a key={category.name} href={`/search?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
