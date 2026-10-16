@@ -150,7 +150,7 @@ export default async function ForYouPage() {
 
   return (
     <main className="min-h-screen w-full">
-      <section className="relative z-0 isolate grid min-h-0 w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_78%_42%,rgba(190,173,255,.42),transparent_34%),radial-gradient(ellipse_at_95%_88%,rgba(255,198,235,.42),transparent_30%),radial-gradient(ellipse_at_5%_95%,rgba(218,211,255,.5),transparent_28%),linear-gradient(115deg,#fff_0%,#fcfbff_48%,#faf7ff_75%,#fff7fc_100%)] px-4 pb-0 pt-1 sm:px-6 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-1 md:px-8 md:py-1 lg:px-10">
+      <section className="relative z-0 isolate grid min-h-0 w-full overflow-hidden border-b border-[#eeeef8] bg-[radial-gradient(ellipse_at_78%_42%,rgba(190,173,255,.42),transparent_34%),radial-gradient(ellipse_at_95%_88%,rgba(255,198,235,.42),transparent_30%),radial-gradient(ellipse_at_5%_95%,rgba(218,211,255,.5),transparent_28%),linear-gradient(115deg,#fff_0%,#fcfbff_48%,#faf7ff_75%,#fff7fc_100%)] px-4 pb-0 pt-1 sm:px-6 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-1 md:px-8 md:pl-[52px] md:py-1 lg:px-10 lg:pl-[60px]">
         <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-28 h-64 w-64 rounded-full border border-[#d9d0ff]/60 bg-gradient-to-br from-white/80 to-[#dcd2ff]/30 blur-[1px] sm:h-80 sm:w-80" />
         <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-5 h-24 w-24 rounded-full bg-gradient-to-br from-white/70 to-[#d8ccff]/40 blur-2xl sm:h-36 sm:w-36" />
         <div aria-hidden="true" className="pointer-events-none absolute bottom-[-5rem] right-[28%] h-56 w-56 rounded-full bg-[#f4c9ed]/35 blur-3xl" />
