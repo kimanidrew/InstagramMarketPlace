@@ -293,11 +293,19 @@ export function SiteHeader({ user }: { user: any }) {
                   );
                 })}</div> : <p className="header-suggestions-empty">No matching products yet. Try another search.</p>
               ) : activeSuggestionTab === "Services" ? (
-                serviceSuggestions.length ? serviceSuggestions.map((item: any) => {
+                serviceSuggestions.length ? <div className="header-suggestion-product-grid">{serviceSuggestions.map((item: any) => {
                   const image = item.thumbnailUrl || item.mediaUrl;
-                  const username = item.connection?.username || "Instagram shop";
-                  return <a key={item.id} href={`/service/${item.productSlug}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}><span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><BriefcaseBusiness size={18} /></span>}</span><span className="header-suggestion-copy"><strong>{item.productTitle || "View service"}</strong><small>Service · @{username}</small></span><ArrowRight size={16} className="header-suggestion-arrow" /></a>;
-                }) : <p className="header-suggestions-empty">No matching services yet. Try another search.</p>
+                  const username = item.connection?.username || item.username || "Instagram shop";
+                  const profileImage = item.connection?.profileImageUrl;
+                  const title = item.productTitle || item.caption?.split("\\n")[0] || "View service";
+                  return (
+                    <a key={item.id} href={`/service/${item.productSlug}`} className="header-suggestion-item header-suggestion-service-card" onClick={() => setSearchOpen(false)}>
+                      <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><BriefcaseBusiness size={18} /></span>}</span>
+                      <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}<em>Service</em></small></span>
+                      <ArrowRight size={16} className="header-suggestion-arrow" />
+                    </a>
+                  );
+                })}</div> : <p className="header-suggestions-empty">No matching services yet. Try another search.</p>
               ) : activeSuggestionTab === "Pages" ? (
                 pageSuggestions.length ? pageSuggestions.map((page: any) => { const Icon = page.icon; return <a key={page.href} href={page.href} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}><span className="header-suggestion-image header-suggestion-category-icon"><Icon size={19} /></span><span className="header-suggestion-copy"><strong>{page.title}</strong><small>{page.description}</small></span><ArrowRight size={16} className="header-suggestion-arrow" /></a>; }) : <p className="header-suggestions-empty">No matching SokoLink pages. Try another search.</p>
               ) : activeSuggestionTab === "Categories" ? (
