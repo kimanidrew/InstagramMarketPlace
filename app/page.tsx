@@ -238,7 +238,7 @@ export default async function Home() {
                 })).map(({ store, index, src, alt }) => (
                   <Link
                     key={index}
-                    href={"/store/" + store.username}
+                    href={"/stores/" + store.username}
                     className={"community-photo community-photo-" + (index === 0 ? "main" : index === 1 ? "top" : index === 2 ? "bottom" : "side")}
                   >
                     <img src={src} alt={alt} />
