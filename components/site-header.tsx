@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound } from "lucide-react";
+import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound, Compass, Heart, CircleHelp, ShoppingBag, BriefcaseBusiness } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
@@ -14,7 +14,7 @@ export function SiteHeader({ user }: { user: any }) {
   const [trendingTags, setTrendingTags] = useState<Array<{ name: string; productCount: number }>>([]);
   const [trendingTagsLoading, setTrendingTagsLoading] = useState(false);
   const [searchSuggestions, setSearchSuggestions] = useState<any[]>([]);
-  const [activeSuggestionTab, setActiveSuggestionTab] = useState<"Products" | "Categories" | "Stores">("Products");
+  const [activeSuggestionTab, setActiveSuggestionTab] = useState<"Products" | "Services" | "Categories" | "Stores" | "Pages">("Products");
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -103,6 +103,20 @@ export function SiteHeader({ user }: { user: any }) {
     };
   }, [searchQuery, searchOpen]);
 
+  const productSuggestions = searchSuggestions.filter((item: any) => String(item.listingType || "").toUpperCase() !== "SERVICE");
+  const serviceSuggestions = searchSuggestions.filter((item: any) => String(item.listingType || "").toUpperCase() === "SERVICE");
+
+  const searchablePages = [
+    { title: "Shop", description: "Browse all products and listings", href: "/shop", terms: "shop products marketplace listings browse", icon: ShoppingBag },
+    { title: "For You", description: "Personalised picks and recommendations", href: "/for-you", terms: "for you personalised recommendations interests", icon: Compass },
+    { title: "Stores", description: "Discover Instagram shops and sellers", href: "/stores", terms: "stores shops sellers instagram businesses", icon: Store },
+    { title: "Categories", description: "Explore products by category", href: "/categories", terms: "categories types collections explore", icon: Sparkles },
+    { title: "How it works", description: "Learn how SokoLink works", href: "/how-it-works", terms: "help guide how it works about getting started", icon: CircleHelp },
+    { title: "Wishlist", description: "Return to your saved listings", href: "/wishlist", terms: "wishlist saved favourites favorites", icon: Heart },
+    ...(user ? [{ title: "Grow your own shop", description: "Manage your shop growth and analytics", href: "/account/analytics", terms: "grow shop seller analytics promotions insights", icon: BriefcaseBusiness }] : []),
+  ];
+  const pageSuggestions = searchablePages.filter((page) => (page.title + " " + page.description + " " + page.terms).toLowerCase().includes(searchQuery.trim().toLowerCase())).slice(0, 6);
+
   const categoryMap = new Map<string, { name: string }>();
   searchSuggestions.forEach((item: any) => {
     (item.tags || []).forEach((tag: any) => {
@@ -185,8 +199,8 @@ export function SiteHeader({ user }: { user: any }) {
               name="q"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search products, stores or categories..."
-              aria-label="Search products, stores or categories"
+              placeholder="Search anything on SokoLink..."
+              aria-label="Search anything on SokoLink"
               tabIndex={searchOpen ? 0 : -1}
             />
             {searchQuery.length > 0 && (
@@ -209,7 +223,7 @@ export function SiteHeader({ user }: { user: any }) {
           </form>
           {searchOpen && searchQuery.trim().length >= 2 && (
             <div className="header-search-suggestions" role="region" aria-label="Search suggestions">
-              <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type" style={{ "--active-tab-index": ["Products", "Categories", "Stores"].indexOf(activeSuggestionTab) } as React.CSSProperties}>
+              <div className="header-suggestion-tabs" role="tablist" aria-label="Suggestion type" style={{ "--active-tab-index": ["Products", "Services", "Categories", "Stores", "Pages"].indexOf(activeSuggestionTab) } as React.CSSProperties}>
                 {(["Products", "Categories", "Stores"] as const).map((tab) => {
                   const count = tab === "Products" ? searchSuggestions.length : tab === "Categories" ? categorySuggestions.length : storeSuggestions.length;
                   return (
@@ -229,18 +243,18 @@ export function SiteHeader({ user }: { user: any }) {
               </div>
               <div className="header-suggestion-results">
               <div className="header-suggestions-label">
-                {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : "MATCHING STORES"}
+                {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Services" ? "SERVICE MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : activeSuggestionTab === "Stores" ? "MATCHING STORES" : "SOKOLINK PAGES"}
               </div>
               {suggestionsLoading ? (
                 <div className="header-suggestions-loading"><span /><span /><span /></div>
               ) : activeSuggestionTab === "Products" ? (
-                searchSuggestions.length ? searchSuggestions.map((item: any) => {
+                productSuggestions.length ? productSuggestions.map((item: any) => {
                   const image = item.thumbnailUrl || item.mediaUrl;
                   const username = item.connection?.username || item.username || "Instagram shop";
                   const profileImage = item.connection?.profileImageUrl;
                   const title = item.productTitle || item.caption?.split("\\n")[0] || "View product";
                   return (
-                    <a key={item.id} href={`/search?type=products&q=${encodeURIComponent(searchQuery.trim())}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
+                    <a key={item.id} href={`/${String(item.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product"}/${item.productSlug}`} className="header-suggestion-item" onClick={() => setSearchOpen(false)}>
                       <span className="header-suggestion-image">{image ? <img src={image} alt="" loading="lazy" /> : <span className="header-suggestion-placeholder"><Store size={18} /></span>}</span>
                       <span className="header-suggestion-copy"><strong>{title}</strong><small><span className="header-suggestion-avatar">{profileImage ? <img src={profileImage} alt="" loading="lazy" /> : (username[0] || "S").toUpperCase()}</span>@{username}</small></span>
                       <ArrowRight size={16} className="header-suggestion-arrow" />
