@@ -80,7 +80,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
               <article
                 data-recommendation-card
                 key={p.id}
-                className="absolute top-[68%] block w-[58%] max-w-[340px] -translate-y-1/2 sm:w-[56%] md:w-[58%] lg:w-[56%]"
+                className="absolute top-[80%] block w-[58%] max-w-[340px] -translate-y-1/2 sm:w-[56%] md:w-[58%] lg:w-[56%]"
                 style={{
                   left: `calc(50% + ${x}%)`,
                   transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
