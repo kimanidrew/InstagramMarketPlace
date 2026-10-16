@@ -25,11 +25,23 @@ type Product = {
 
 export function ForYouProductCarousel({ products, personalized, compact = false }: { products: Product[]; personalized: boolean; compact?: boolean }) {
   const rail = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLElement>(null);
   const [paused, setPaused] = useState(false);
+  const [inViewport, setInViewport] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (paused || products.length < 2) return;
+    const element = carouselRef.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setInViewport(entry.isIntersecting && entry.intersectionRatio >= 0.15);
+    }, { threshold: [0, 0.15] });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (paused || !inViewport || products.length < 2) return;
     const timer = window.setInterval(() => {
       if (compact) {
         setActiveIndex((current) => (current + 1) % products.length);
@@ -45,11 +57,11 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
       }
     }, compact ? 3400 : 4200);
     return () => window.clearInterval(timer);
-  }, [paused, products.length, compact]);
+  }, [paused, inViewport, products.length, compact]);
 
 
   return (
-    <section aria-label="Recommended products" className={compact ? "relative block w-full min-w-0 overflow-visible bg-transparent p-0" : "relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8"}>
+    <section ref={carouselRef} aria-label="Recommended products" className={compact ? "relative block w-full min-w-0 overflow-visible bg-transparent p-0" : "relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8"}>
       {!compact && <div className="pointer-events-none absolute -right-12 -top-16 h-52 w-52 rounded-full bg-white/80 blur-2xl" />}
       <div className={compact ? "hidden" : "relative mb-4 flex items-end justify-between gap-3 sm:mb-6"}>
         <div className="min-w-0">
