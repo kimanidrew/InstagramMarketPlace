@@ -5133,3 +5133,73 @@ html, body {
   border-bottom-color: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* Restore the original dark/lime suggestion styling while preserving the page overlay and right-side results grid. */
+.site-header .header-search-panel.is-open.has-suggestions {
+  background: radial-gradient(ellipse at 8% 0%, rgba(210,255,99,.075), transparent 36%), linear-gradient(145deg,#090909 0%,#050505 72%) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions {
+  background: linear-gradient(145deg,rgba(22,22,22,.97),rgba(9,9,9,.98)) !important;
+  border: 1px solid rgba(255,255,255,.09) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 22px 55px rgba(0,0,0,.3) !important;
+  backdrop-filter: blur(18px);
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-sidebar,
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestions-label {
+  background: #101010 !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tabs {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tab {
+  border-color: transparent !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: #8e8e8e !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tab:hover,
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tab.active {
+  border-color: rgba(255,255,255,.08) !important;
+  background: rgba(255,255,255,.055) !important;
+  color: #fff !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tab span {
+  background: #242424 !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  color: #fff !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-tab.active span {
+  background: rgba(214,255,99,.13) !important;
+  border-color: rgba(214,255,99,.2) !important;
+  color: #d6ff63 !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-item:hover {
+  border-color: rgba(255,255,255,.08) !important;
+  background: rgba(255,255,255,.055) !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestions-label {
+  color: #aaa !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results {
+  background: transparent !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results .header-suggestions-label {
+  background: #101010 !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 9px !important;
+}
+@media (max-width: 640px) {
+  .site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions {
+    border-radius: 18px !important;
+  }
+  .site-header .header-search-panel.is-open.has-suggestions .header-suggestion-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
