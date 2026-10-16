@@ -5504,3 +5504,36 @@ html, body {
     font-size: 12px !important;
   }
 }
+
+
+/* Final search-panel spacing and scrollbar polish. */
+.site-header .header-search-panel .header-trending-tags {
+  margin-top: -10px !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions {
+  padding-bottom: 12px !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results {
+  padding-bottom: 24px !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #bdbdbd transparent !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results::-webkit-scrollbar {
+  width: 10px !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results::-webkit-scrollbar-thumb {
+  min-height: 32px !important;
+  background: #bdbdbd !important;
+  border: 2px solid #fff !important;
+  border-radius: 999px !important;
+}
+@media (max-width: 640px) {
+  .site-header .header-search-panel.is-open.has-suggestions .header-suggestion-results {
+    padding-bottom: 20px !important;
+  }
+}
