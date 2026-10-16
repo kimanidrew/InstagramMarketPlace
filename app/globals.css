@@ -4732,3 +4732,10 @@ html, body {
     height:12px!important;
   }
 }
+
+
+/* Raise the full-page loader content slightly for a tighter centered composition. */
+.page-loader-content{
+  position:relative;
+  top:-50px;
+}
