@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Layers3, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Layers3 } from "lucide-react";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
@@ -36,26 +36,6 @@ export default async function CategoriesPage() {
 
   return (
     <main className="category-discovery-page min-h-screen bg-white pb-20">
-      <section className="category-discovery-hero relative overflow-hidden bg-[#10110f] text-white">
-        <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-32 h-[360px] w-[360px] rounded-full border-[70px] border-[#d6ff63]/10 sm:right-[8%]" />
-        <div aria-hidden="true" className="pointer-events-none absolute bottom-[-140px] left-[15%] h-[280px] w-[280px] rounded-full bg-[#d6ff63]/10 blur-3xl" />
-        <div className="shell relative py-16 sm:py-24">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.06] px-3.5 py-2 text-[10px] font-extrabold uppercase tracking-[.18em] text-[#d6ff63]">
-            <Sparkles size={13} /> Browse by interest
-          </div>
-          <div className="mt-7 grid gap-8 lg:grid-cols-[1fr_.7fr] lg:items-end">
-            <div>
-              <h1 className="max-w-3xl text-5xl font-black leading-[.94] tracking-[-.07em] sm:text-7xl">Find your next <span className="text-[#d6ff63]">favourite.</span></h1>
-              <p className="mt-6 max-w-xl text-sm leading-7 text-white/65 sm:text-base">Explore categories built around real products and services from Instagram shops. Start with a collection, then discover the sellers behind it.</p>
-            </div>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
-              <div className="rounded-2xl border border-white/10 bg-white/[.06] px-5 py-4"><span className="block text-3xl font-black">{visible.length}</span><span className="mt-1 block text-[10px] font-bold uppercase tracking-[.12em] text-white/55">Categories</span></div>
-              <div className="rounded-2xl border border-white/10 bg-white/[.06] px-5 py-4"><span className="block text-3xl font-black">{visible.reduce((sum, category) => sum + category.products.length, 0)}+</span><span className="mt-1 block text-[10px] font-bold uppercase tracking-[.12em] text-white/55">Featured finds</span></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="shell pt-10 sm:pt-14">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div><p className="text-[10px] font-black uppercase tracking-[.18em] text-[#777]">Curated for discovery</p><h2 className="mt-2 text-3xl font-black tracking-[-.055em] sm:text-4xl">Explore categories</h2><p className="mt-2 max-w-xl text-sm leading-6 text-[#666]">A little preview from every corner of the marketplace.</p></div>
