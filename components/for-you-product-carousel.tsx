@@ -43,9 +43,9 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
 
 
   return (
-    <section aria-label="Recommended products" className={compact ? "relative min-w-0 overflow-hidden rounded-[24px] border border-black/[.06] bg-white/75 p-3 sm:rounded-[28px] sm:p-4 md:p-5" : "relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8"}>
-      <div className="pointer-events-none absolute -right-12 -top-16 h-52 w-52 rounded-full bg-white/80 blur-2xl" />
-      <div className={compact ? "relative mb-3 flex items-end justify-between gap-2" : "relative mb-4 flex items-end justify-between gap-3 sm:mb-6"}>
+    <section aria-label="Recommended products" className={compact ? "relative min-w-0 overflow-visible bg-transparent p-0" : "relative mb-9 overflow-hidden rounded-[28px] border border-black/[.06] bg-[#f7f7f4] p-4 sm:mb-11 sm:rounded-[34px] sm:p-6 md:p-8"}>
+      {!compact && <div className="pointer-events-none absolute -right-12 -top-16 h-52 w-52 rounded-full bg-white/80 blur-2xl" />}
+      <div className={compact ? "hidden" : "relative mb-4 flex items-end justify-between gap-3 sm:mb-6"}>
         <div className="min-w-0">
           <p className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[.16em] text-[#777] sm:text-[10px]"><Sparkles size={13} /> {personalized ? "Picked around your interests" : "A little inspiration to start"}</p>
           <h2 className={compact ? "mt-1.5 text-lg font-black leading-tight tracking-[-.055em] text-[#171717] sm:text-xl md:text-2xl" : "mt-2 text-2xl font-black leading-tight tracking-[-.055em] text-[#171717] sm:text-3xl md:text-4xl"}>{personalized ? "More of what you love." : "Find your next favourite."}</h2>
@@ -58,7 +58,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
       </div>
       {products.length > 0 ? (compact ? (
         <div
-          className="relative h-[270px] overflow-hidden sm:h-[300px] md:h-[330px]"
+          className="relative h-[390px] overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px]"
           style={{ perspective: "1000px" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
@@ -72,15 +72,15 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
             let offset = (index - activeIndex + total) % total;
             if (offset > Math.floor(total / 2)) offset -= total;
             const visible = Math.abs(offset) <= 2;
-            const x = offset === 0 ? 0 : offset * (Math.abs(offset) === 1 ? 34 : 49);
-            const y = offset === 0 ? 0 : Math.abs(offset) * 7;
-            const rotate = offset === 0 ? 0 : offset * 7;
-            const scale = offset === 0 ? 1 : Math.max(0.72, 0.91 - Math.abs(offset) * 0.075);
+            const x = offset * (Math.abs(offset) === 1 ? 88 : 142);
+            const y = offset === 0 ? 0 : Math.abs(offset) * 9;
+            const rotate = offset === 0 ? 0 : offset * 6;
+            const scale = offset === 0 ? 1 : Math.max(0.76, 0.94 - Math.abs(offset) * 0.075);
             return (
               <article
                 data-recommendation-card
                 key={p.id}
-                className="absolute left-1/2 top-1/2 w-[67%] max-w-[250px] -translate-x-1/2 -translate-y-1/2 sm:w-[64%] md:w-[68%]"
+                className="absolute left-1/2 top-[47%] w-[66%] max-w-[365px] -translate-x-1/2 -translate-y-1/2 sm:w-[62%] md:w-[67%] lg:w-[64%]"
                 style={{
                   transform: `translate(-50%, -50%) translateX(${x}%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
@@ -89,14 +89,15 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   transition: "transform 850ms cubic-bezier(.22,1,.36,1), opacity 650ms ease",
                 }}
               >
-                <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[20px] border border-white/80 bg-white shadow-[0_22px_45px_rgba(0,0,0,.18)] sm:rounded-[24px]">
+                <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[22px] border-[2px] border-white/90 bg-white shadow-[0_28px_55px_rgba(30,25,75,.24)] sm:rounded-[26px] md:rounded-[30px]">
                   {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-3 pb-3 pt-12 text-white sm:px-4 sm:pb-4">
-                    <span className="mb-1 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[8px] font-black text-[#222]"><Sparkles size={10} /> {personalized ? "For you" : "Popular find"}</span>
-                    <p className="line-clamp-1 text-[11px] font-extrabold sm:text-xs">{p.productTitle || "Explore this find"}</p>
-                    <p className="mt-1 truncate text-[9px] font-semibold text-white/75">@{p.connection?.username || "SokoLink seller"}</p>
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-3 pb-4 pt-16 text-white sm:px-4 sm:pb-5 sm:pt-20">
+                    <p className="mb-1 text-[9px] font-medium text-white/75 sm:text-xs">{p.tags?.find(t => t.name.toLowerCase() !== "instamart")?.name || "Discover"}</p>
+                    <p className="line-clamp-2 text-xs font-extrabold leading-snug sm:text-base">{p.productTitle || "Explore this find"}</p>
+                    <p className="mt-2 text-[9px] font-semibold text-white/90 sm:text-xs">KSh • Price coming soon</p>
                   </div>
-                  <span className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1.5 text-[9px] font-bold text-white"><Heart size={11} /> {(p.instagramLikeCount || 0).toLocaleString()}</span>
+                  <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-[#e5ffe6] px-2.5 py-1.5 text-[9px] font-bold text-[#176d31] shadow-sm sm:left-4 sm:top-4 sm:px-3 sm:text-xs"><Sparkles size={11} /> {offset === 0 ? "Trending" : "For you"}</span>
+                  <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-sm sm:right-4 sm:top-4 sm:h-9 sm:w-9"><Heart size={17} /></span>
                 </Link>
               </article>
             );
