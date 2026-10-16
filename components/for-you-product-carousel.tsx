@@ -91,7 +91,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   willChange: "transform, opacity",
                 }}
               >
-                <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[22px] border-[2px] border-white/90 bg-white shadow-[0_28px_55px_rgba(30,25,75,.24)] sm:rounded-[26px] md:rounded-[30px]">
+                <Link href={href} className="group relative block aspect-[4/5] overflow-hidden rounded-[22px] border-[4px] border-white bg-white shadow-[0_28px_55px_rgba(30,25,75,.24)] sm:rounded-[26px] md:rounded-[30px]">
                   {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#100d20]/95 via-[#100d20]/65 to-transparent px-4 pb-5 pt-20 text-white sm:px-5 sm:pb-6 sm:pt-24">
                     <p className="mb-2 inline-flex max-w-full items-center rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.13em] text-white/90 backdrop-blur-md sm:text-[10px]">{p.tags?.find(t => t.name.toLowerCase() !== "instamart")?.name || "Discover"}</p>
