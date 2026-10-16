@@ -4248,9 +4248,9 @@ html, body {
 .store-hero{
   position:relative;isolation:isolate;overflow:hidden;
   background:
-    radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--store-accent, #a78bfa) 38%, white) 0%, transparent 54%),
-    radial-gradient(ellipse at 92% 20%, color-mix(in srgb, var(--store-accent, #a78bfa) 28%, #fce7f3) 0%, transparent 48%),
-    linear-gradient(120deg, color-mix(in srgb, var(--store-accent, #a78bfa) 15%, white), #fff 48%, color-mix(in srgb, var(--store-accent, #a78bfa) 12%, #f8fafc));
+    radial-gradient(ellipse at 8% 0%, color-mix(in srgb, var(--store-accent, #a78bfa) 62%, white) 0%, transparent 58%),
+    radial-gradient(ellipse at 92% 20%, color-mix(in srgb, var(--store-accent, #a78bfa) 46%, #fce7f3) 0%, transparent 52%),
+    linear-gradient(120deg, color-mix(in srgb, var(--store-accent, #a78bfa) 34%, white), #fff 48%, color-mix(in srgb, var(--store-accent, #a78bfa) 28%, #f8fafc));
 }
 .store-hero-orb{opacity:.34;filter:blur(2px);background:color-mix(in srgb, var(--store-accent, #a78bfa) 60%, white)}
 .store-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(115deg,transparent 35%,color-mix(in srgb,var(--store-accent,#a78bfa) 9%,transparent) 65%,transparent)}
