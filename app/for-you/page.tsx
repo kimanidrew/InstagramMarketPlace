@@ -120,7 +120,7 @@ export default async function ForYouPage() {
             Explore the shop <ArrowRight size={21} />
           </Link>
         </div>
-        <div className="relative z-10 -mx-3 mt-2 min-w-0 sm:mx-0 md:mt-0">
+        <div className="relative z-10 -mx-3 mt-2 flex min-w-0 w-full items-center justify-center sm:mx-0 md:mt-0">
           <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
         </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#eeebff]/70 blur-3xl md:right-0 md:top-10 md:h-[28rem] md:w-[28rem]" />
