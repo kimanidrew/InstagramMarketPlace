@@ -136,7 +136,7 @@ export function ProductCard({ p }: { p: any }) {
         </p>
 
         <Link
-          href={"/store/" + p.connection.username}
+          href={"/stores/" + p.connection.username}
           className="mt-2 flex min-w-0 max-w-full items-center gap-2"
         >
           <span className="relative h-7 w-7 shrink-0 overflow-visible rounded-full sm:h-8 sm:w-8">
