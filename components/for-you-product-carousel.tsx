@@ -51,7 +51,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
           <h2 className={compact ? "mt-1.5 text-lg font-black leading-tight tracking-[-.055em] text-[#171717] sm:text-xl md:text-2xl" : "mt-2 text-2xl font-black leading-tight tracking-[-.055em] text-[#171717] sm:text-3xl md:text-4xl"}>{personalized ? "More of what you love." : "Find your next favourite."}</h2>
           <p className={compact ? "mt-1 max-w-xl text-[11px] leading-4 text-[#777] sm:text-xs" : "mt-1.5 max-w-xl text-xs leading-5 text-[#777] sm:text-sm"}>{personalized ? "Inspired by products you've viewed, liked or saved." : "A handpicked starting point from across SokoLink. Your picks get more personal as you browse."}</p>
         </div>
-        <div className="hidden shrink-0 items-center gap-2 sm:flex">
+        <div className={compact ? "hidden" : "hidden shrink-0 items-center gap-2 sm:flex"}>
           <button type="button" onClick={() => rail.current?.scrollBy({ left: -300, behavior: "smooth" })} aria-label="Previous recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-black hover:text-white"><ArrowLeft size={16} /></button>
           <button type="button" onClick={() => rail.current?.scrollBy({ left: 300, behavior: "smooth" })} aria-label="Next recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-black hover:text-white"><ArrowRight size={16} /></button>
         </div>
@@ -139,7 +139,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
         <p className="mt-1 text-xs leading-5 text-[#777]">Listings will appear here as shops add products and services to SokoLink.</p>
         <Link href="/shop" className="mt-4 inline-flex rounded-full bg-[#171717] px-4 py-2.5 text-xs font-bold text-white">Explore all listings</Link>
       </div>}
-      {products.length > 1 && <div className="relative mt-4 flex items-center justify-between sm:hidden">
+      {!compact && products.length > 1 && <div className="relative mt-4 flex items-center justify-between sm:hidden">
         <span className="text-[10px] font-semibold text-[#999]">Swipe to explore</span>
         <div className="flex gap-2">
           <button type="button" onClick={() => rail.current?.scrollBy({ left: -220, behavior: "smooth" })} aria-label="Previous recommendations" className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white"><ArrowLeft size={15} /></button>
