@@ -1,9 +1,10 @@
-import { ArrowRight, Heart, ShoppingBag, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { user } from "@/lib/auth";
 import { ForYouFilters } from "@/components/for-you-filters";
 import { ForYouProductCarousel } from "@/components/for-you-product-carousel";
 import { db } from "@/lib/prisma";
+import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
 
