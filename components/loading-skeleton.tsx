@@ -14,7 +14,8 @@ export function PageLoadingSkeleton({ title = true }: { title?: boolean }) {
 
 function ActivityLoader({ label }: { label: string }) {
   return <div className="activity-loader-wrap" role="status" aria-live="polite" aria-label={label}>
-    <span className="activity-loader-spinner" aria-hidden="true" />
-    <span className="activity-loader-label">{label}…</span>
-  </div>;
+    <span className="activity-loader-orbit" aria-hidden="true"><span className="activity-loader-core" /><span className="activity-loader-spark activity-loader-spark-one" /><span className="activity-loader-spark activity-loader-spark-two" /></span>
+    <span className="activity-loader-dots" aria-hidden="true"><i /><i /><i /></span>
+    <span className="activity-loader-label">{label}<span className="activity-loader-ellipsis">...</span></span>
+  </div>
 }
