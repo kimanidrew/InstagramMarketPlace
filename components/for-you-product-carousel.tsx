@@ -58,7 +58,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
       </div>
       {products.length > 0 ? (compact ? (
         <div
-          className="relative h-[390px] overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px]"
+          className="relative mx-auto h-[390px] w-full max-w-[760px] overflow-hidden sm:h-[450px] md:h-[500px] lg:h-[540px]"
           style={{ perspective: "1000px" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
@@ -72,7 +72,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
             let offset = (index - activeIndex + total) % total;
             if (offset > Math.floor(total / 2)) offset -= total;
             const visible = Math.abs(offset) <= 2;
-            const x = offset * (Math.abs(offset) === 1 ? 88 : 142);
+            const x = offset * (Math.abs(offset) === 1 ? 82 : 132);
             const y = offset === 0 ? 0 : Math.abs(offset) * 9;
             const rotate = offset === 0 ? 0 : offset * 6;
             const scale = offset === 0 ? 1 : Math.max(0.76, 0.94 - Math.abs(offset) * 0.075);
@@ -80,7 +80,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
               <article
                 data-recommendation-card
                 key={p.id}
-                className="absolute left-1/2 top-[47%] w-[66%] max-w-[365px] -translate-x-1/2 -translate-y-1/2 sm:w-[62%] md:w-[67%] lg:w-[64%]"
+                className="absolute left-1/2 top-1/2 w-[64%] max-w-[360px] -translate-x-1/2 -translate-y-1/2 sm:w-[62%] md:w-[65%] lg:w-[64%]"
                 style={{
                   transform: `translate(-50%, -50%) translateX(${x}%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
