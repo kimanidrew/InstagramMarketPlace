@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Heart, Sparkles } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 
 type Product = {
   id: string;
@@ -69,10 +69,6 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
           <h2 className={compact ? "mt-1.5 text-lg font-black leading-tight tracking-[-.055em] text-[#171717] sm:text-xl md:text-2xl" : "mt-2 text-2xl font-black leading-tight tracking-[-.055em] text-[#171717] sm:text-3xl md:text-4xl"}>{personalized ? "More of what you love." : "Find your next favourite."}</h2>
           <p className={compact ? "mt-1 max-w-xl text-[11px] leading-4 text-[#777] sm:text-xs" : "mt-1.5 max-w-xl text-xs leading-5 text-[#777] sm:text-sm"}>{personalized ? "Inspired by products you've viewed, liked or saved." : "A handpicked starting point from across SokoLink. Your picks get more personal as you browse."}</p>
         </div>
-        <div className={compact ? "hidden" : "hidden shrink-0 items-center gap-2 sm:flex"}>
-          <button type="button" onClick={() => rail.current?.scrollBy({ left: -300, behavior: "smooth" })} aria-label="Previous recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-black hover:text-white"><ArrowLeft size={16} /></button>
-          <button type="button" onClick={() => rail.current?.scrollBy({ left: 300, behavior: "smooth" })} aria-label="Next recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white transition hover:bg-black hover:text-white"><ArrowRight size={16} /></button>
-        </div>
       </div>
       {products.length > 0 ? (compact ? (
         <div
@@ -135,8 +131,6 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
             );
           })}
           {products.length > 1 && <>
-            <button type="button" onClick={() => setActiveIndex((current) => (current - 1 + products.length) % products.length)} aria-label="Previous recommendation" className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/90 text-[#34265f] shadow-[0_8px_24px_rgba(25,18,65,.2)] backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-[#5140d8] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7564ff] sm:left-3 sm:h-11 sm:w-11"><ArrowLeft size={15} /></button>
-            <button type="button" onClick={() => setActiveIndex((current) => (current + 1) % products.length)} aria-label="Next recommendation" className="absolute right-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/90 text-[#34265f] shadow-[0_8px_24px_rgba(25,18,65,.2)] backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-[#5140d8] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7564ff] sm:right-3 sm:h-11 sm:w-11"><ArrowRight size={15} /></button>
             <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1.5">
               {products.slice(0, Math.min(products.length, 8)).map((p, dotIndex) => (
                 <button key={p.id} type="button" aria-label={`Show recommendation ${dotIndex + 1}`} onClick={() => setActiveIndex(dotIndex)} className={dotIndex === activeIndex % Math.min(products.length, 8) ? "h-1.5 w-4 rounded-full bg-[#171717] transition-all" : "h-1.5 w-1.5 rounded-full bg-black/15 transition-all"} />
@@ -173,13 +167,6 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
         <p className="mt-3 text-sm font-extrabold text-[#222]">Your next favourite is just around the corner.</p>
         <p className="mt-1 text-xs leading-5 text-[#777]">Listings will appear here as shops add products and services to SokoLink.</p>
         <Link href="/shop" className="mt-4 inline-flex rounded-full bg-[#171717] px-4 py-2.5 text-xs font-bold text-white">Explore all listings</Link>
-      </div>}
-      {!compact && products.length > 1 && <div className="relative mt-4 flex items-center justify-between sm:hidden">
-        <span className="text-[10px] font-semibold text-[#999]">Swipe to explore</span>
-        <div className="flex gap-2">
-          <button type="button" onClick={() => rail.current?.scrollBy({ left: -220, behavior: "smooth" })} aria-label="Previous recommendations" className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white"><ArrowLeft size={15} /></button>
-          <button type="button" onClick={() => rail.current?.scrollBy({ left: 220, behavior: "smooth" })} aria-label="Next recommendations" className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-white"><ArrowRight size={15} /></button>
-        </div>
       </div>}
     </section>
   );
