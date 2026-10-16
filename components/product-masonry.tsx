@@ -53,7 +53,7 @@ export function StoreCard({ entry }: { entry: any }) {
   const verified = Boolean(store.verifiedAt && (!store.verifiedUntil || new Date(store.verifiedUntil) > new Date()));
   const pro = Boolean(store.proUntil && new Date(store.proUntil) > new Date());
   return (
-    <Link href={"/store/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[21px] border border-black/[.05] bg-white p-3 text-center transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
+    <Link href={"/stores/" + store.username} className="group flex min-w-0 flex-col items-center rounded-[21px] border border-black/[.05] bg-white p-3 text-center transition duration-300 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_12px_30px_rgba(0,0,0,.06)] sm:rounded-[24px] sm:p-4">
       <span className="relative mb-3 block h-[88px] w-[88px] shrink-0 overflow-visible rounded-full bg-[#f0f0ec] p-[2px] sm:h-[100px] sm:w-[100px]">
         <span className="block h-full w-full overflow-hidden rounded-full bg-[#f0f0ec]">
           {store.profileImageUrl ? <img src={store.profileImageUrl} alt={"@" + store.username} className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center rounded-full text-sm font-black text-[#777]">@</span>}
