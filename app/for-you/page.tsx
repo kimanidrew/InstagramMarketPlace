@@ -119,7 +119,7 @@ export default async function ForYouPage() {
     return availablePosts.length
       ? { ...store, _count: { posts: availablePosts.length } }
       : null;
-  }))).filter((store): store is NonNullable<typeof store> => store !== null);
+  }))).filter((store) => store !== null);
 
   const mixedCarouselItems = [
     ...carouselProducts,
