@@ -5565,3 +5565,11 @@ html, body {
     top: 68px !important;
   }
 }
+
+
+/* Global border color standardization. */
+*,
+*::before,
+*::after {
+  border-color: #e8e8e8 !important;
+}
