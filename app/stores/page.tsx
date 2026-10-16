@@ -54,7 +54,7 @@ export default async function Stores() {
         {availableStores.map(({ store, posts, promoted, activeVerified, activePro }) => (
           <Link
             key={store.id}
-            href={"/store/" + store.username}
+            href={"/stores/" + store.username}
             className="card p-6"
           >
             <div className="flex items-center gap-4">
