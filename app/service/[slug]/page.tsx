@@ -77,7 +77,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
                 {service.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
               </div>
 
-              <Link href={"/store/" + service.connection.username} className="mt-5 inline-flex rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-xs font-bold text-[#555]">
+              <Link href={"/stores/" + service.connection.username} className="mt-5 inline-flex rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-xs font-bold text-[#555]">
                 @{service.connection.username}
               </Link>
 
