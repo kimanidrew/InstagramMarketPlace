@@ -53,7 +53,7 @@ export function StoreCarousel({ stores }: { stores: Store[] }) {
         <div ref={railRef} className="hide-scrollbar mt-12 flex gap-5 overflow-x-auto scroll-smooth overscroll-x-contain">
           {stores.map((store, index) => (
             <motion.div key={store.username} className="w-[270px] shrink-0" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: .45, delay: index * .06 }}>
-              <Link href={"/store/" + store.username} className="group block">
+              <Link href={"/stores/" + store.username} className="group block">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-white shadow-sm">
                   {store.profileImageUrl ? (
                     <img src={store.profileImageUrl} alt={store.name || "@" + store.username} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
