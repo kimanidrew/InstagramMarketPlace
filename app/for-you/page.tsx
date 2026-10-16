@@ -106,7 +106,23 @@ export default async function ForYouPage() {
               ? "A living mix shaped by what you like, save and revisit. Discover products and services selected around your interests."
               : "A living mix of finds picked for you. Discover products and services, then make your feed more personal as you browse."}
           </p>
-
+          <div className="mt-4 flex flex-col items-center gap-2.5 md:items-start">
+            <span className="text-[9px] font-black uppercase tracking-[.18em] text-[#8b87a5]">Explore popular categories</span>
+            <div className="flex max-w-full flex-wrap justify-center gap-2 md:justify-start">
+              {(tags.length ? tags.slice(0, 5).map((tag) => tag.name) : ["Fashion", "Beauty", "Home", "Accessories", "Services"]).map((category, index) => (
+                <Link
+                  key={category}
+                  href="/shop"
+                  className={index === 0
+                    ? "group inline-flex items-center gap-1.5 rounded-full border border-[#ded8ff] bg-white/80 px-3 py-1.5 text-[10px] font-bold text-[#5540c8] shadow-[0_4px_14px_rgba(86,64,200,.08)] transition duration-200 hover:-translate-y-0.5 hover:border-[#bdb0ff] hover:bg-[#f5f2ff] sm:text-[11px]"
+                    : "group inline-flex items-center gap-1.5 rounded-full border border-[#e9e7f2] bg-white/55 px-3 py-1.5 text-[10px] font-semibold text-[#65627a] transition duration-200 hover:-translate-y-0.5 hover:border-[#d3caff] hover:bg-white hover:text-[#5540c8] sm:text-[11px]"}
+                >
+                  {category}
+                  <ArrowRight size={11} className="opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="relative z-10 -mx-3 mt-0 flex min-h-[270px] w-full min-w-0 items-center justify-center sm:mx-0 md:mt-0 md:min-h-[330px] lg:min-h-[350px]">
           <ForYouProductCarousel products={carouselProducts} personalized={interestTags.length > 0} compact />
