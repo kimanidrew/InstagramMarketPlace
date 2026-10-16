@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 type SkeletonProps = { count?: number; variant?: "products" | "categories" | "stores" | "rows" };
 
 export function LoadingSkeleton({ count = 8, variant = "products" }: SkeletonProps) {
