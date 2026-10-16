@@ -92,7 +92,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   left: `calc(50% + ${x}%)`,
                   transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
-                  zIndex: 20 - Math.abs(offset),
+                  zIndex: 2 - Math.abs(offset),
                   pointerEvents: visible ? "auto" : "none",
                   transition: "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 900ms cubic-bezier(0.16, 1, 0.3, 1)",
                   willChange: "transform, opacity",
@@ -125,7 +125,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
           {products.length > 1 && <>
             <button type="button" onClick={() => setActiveIndex((current) => (current - 1 + products.length) % products.length)} aria-label="Previous recommendation" className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/90 text-[#34265f] shadow-[0_8px_24px_rgba(25,18,65,.2)] backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-[#5140d8] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7564ff] sm:left-3 sm:h-11 sm:w-11"><ArrowLeft size={15} /></button>
             <button type="button" onClick={() => setActiveIndex((current) => (current + 1) % products.length)} aria-label="Next recommendation" className="absolute right-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/90 text-[#34265f] shadow-[0_8px_24px_rgba(25,18,65,.2)] backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-[#5140d8] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7564ff] sm:right-3 sm:h-11 sm:w-11"><ArrowRight size={15} /></button>
-            <div className="absolute bottom-1 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1.5">
+            <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1.5">
               {products.slice(0, Math.min(products.length, 8)).map((p, dotIndex) => (
                 <button key={p.id} type="button" aria-label={`Show recommendation ${dotIndex + 1}`} onClick={() => setActiveIndex(dotIndex)} className={dotIndex === activeIndex % Math.min(products.length, 8) ? "h-1.5 w-4 rounded-full bg-[#171717] transition-all" : "h-1.5 w-1.5 rounded-full bg-black/15 transition-all"} />
               ))}
