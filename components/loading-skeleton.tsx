@@ -18,6 +18,9 @@ const PAGE_LOADING_COPY: Array<{ match: RegExp; eyebrow: string; title: string; 
   { match: /^\/notifications(?:\/|$)/, eyebrow: "YOU’RE IN THE LOOP", title: "CHECKING YOUR UPDATES", description: "Your latest activity will be right here." },
   { match: /^\/login(?:\/|$)/, eyebrow: "WELCOME BACK", title: "GETTING THINGS READY", description: "One moment and you’ll be on your way." },
   { match: /^\/signup(?:\/|$)/, eyebrow: "YOUR NEXT CHAPTER", title: "MAKING ROOM FOR YOU", description: "We’re getting your sign-up page ready." },
+  { match: /^\/how-it-works(?:\/|$)/, eyebrow: "SIMPLE BY DESIGN", title: "HERE’S HOW IT ALL COMES TOGETHER", description: "We’re getting the SokoLink guide ready for you." },
+  { match: /^\/service(?:\/|$)/, eyebrow: "SERVICES WORTH DISCOVERING", title: "GETTING THIS SERVICE READY", description: "We’re bringing the details into view." },
+  { match: /^\/admin(?:\/|$)/, eyebrow: "SELLER CONTROL CENTRE", title: "PREPARING YOUR DASHBOARD", description: "Your management tools are on their way." },
 ];
 
 export function LoadingSkeleton({ variant = "products" }: SkeletonProps) {
