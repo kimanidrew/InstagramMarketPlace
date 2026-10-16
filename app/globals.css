@@ -4411,7 +4411,7 @@ html, body {
 /* Shared page-specific loading copy sits above the animated dot loader. */
 .page-loader-content{display:flex;width:min(100%,560px);min-height:100svh;flex-direction:column;align-items:center;justify-content:center;margin-inline:auto;padding:32px 20px 48px;text-align:center}
 .page-loader-eyebrow{display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;color:#7867d8;font-size:10px;font-weight:800;letter-spacing:.19em;line-height:1.5}
-.page-loader-headline{max-width:560px;margin:0;color:#17151f;font-size:clamp(26px,5vw,42px);font-weight:800;letter-spacing:-.065em;line-height:1.06;text-wrap:balance}
+.page-loader-headline{max-width:600px;margin:0;color:#17151f;font-size:clamp(32px,6vw,52px);font-weight:900;letter-spacing:-.065em;line-height:1.02;text-wrap:balance}
 .page-loader-description{max-width:370px;margin:13px 0 0;color:#777482;font-size:13px;font-weight:500;line-height:1.7;text-wrap:balance}
 .loading-page .activity-loader-wrap{min-height:0;width:100%;flex:0 0 auto;padding:24px 0 0}
 @media(max-width:480px){.page-loader-content{padding-inline:24px}.page-loader-headline{font-size:clamp(25px,8vw,34px)}.page-loader-description{font-size:12px}}
