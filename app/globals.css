@@ -4894,3 +4894,121 @@ html, body {
   .site-header .header-suggestions-loading span,
   .site-header .header-trending-loading-dots i { animation: none !important; opacity: .8; }
 }
+
+
+/* Search suggestions: hide scroll controls and keep the category rail sticky on the left. */
+.site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions {
+  display: block !important;
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions::-webkit-scrollbar,
+.site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.site-header .header-suggestion-layout {
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  min-width: 0;
+  max-height: 270px;
+}
+.site-header .header-suggestion-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  z-index: 2;
+  min-width: 0;
+  padding: 0;
+  background: #fff;
+}
+.site-header .header-suggestion-tabs {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch;
+  gap: 4px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+}
+.site-header .header-suggestion-tab {
+  display: flex;
+  width: 100%;
+  min-height: 37px !important;
+  flex: none !important;
+  align-items: center;
+  justify-content: space-between !important;
+  gap: 6px;
+  padding: 0 9px !important;
+  border: 1px solid #fff !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  color: #626262 !important;
+  text-align: left;
+  font-size: 11px !important;
+}
+.site-header .header-suggestion-tab:hover,
+.site-header .header-suggestion-tab.active {
+  border-color: #ededed !important;
+  background: #f7f7f7 !important;
+  color: #111 !important;
+}
+.site-header .header-suggestion-tab span {
+  flex: 0 0 auto;
+}
+.site-header .header-suggestion-results {
+  min-width: 0;
+  max-height: 270px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  padding: 0 2px 2px 0;
+}
+.site-header .header-suggestion-results::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.site-header .header-suggestion-results .header-suggestions-label {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 5px 2px 9px !important;
+  background: #fff !important;
+}
+.site-header .header-suggestion-product-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 640px) {
+  .site-header .header-search-panel.is-open.has-suggestions .header-search-suggestions {
+    display: block !important;
+    overflow: hidden !important;
+  }
+  .site-header .header-suggestion-layout {
+    grid-template-columns: 94px minmax(0, 1fr);
+    gap: 7px;
+    max-height: none;
+    height: 100%;
+    min-height: 0;
+  }
+  .site-header .header-suggestion-sidebar {
+    position: sticky;
+    top: 0;
+  }
+  .site-header .header-suggestion-tab {
+    min-height: 35px !important;
+    padding: 0 6px !important;
+    font-size: 10px !important;
+  }
+  .site-header .header-suggestion-results {
+    max-height: calc(100dvh - 205px);
+    min-height: 0;
+  }
+}
