@@ -6653,13 +6653,13 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 }
 
 
-/* Keep the sticky shop tabs flush beneath the visible navbar. */
+/* Keep the sticky shop tabs directly below the visible navbar without overlap. */
 .shop-page .shop-tabs{
-  top:64px!important;
+  top:80px!important;
 }
 @media(max-width:640px){
   .shop-page .shop-tabs{
-    top:64px!important;
+    top:70px!important;
   }
 }
 
