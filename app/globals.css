@@ -5822,3 +5822,16 @@ html, body {
   .store-directory-category-scroller::before, .store-directory-category-scroller::after { width: 54px; }
   .store-directory-category { min-height: 36px !important; padding: 9px 14px !important; font-size: 12px !important; }
 }
+
+
+/* Let the Stores filter rail follow the navbar's visible/hidden state. */
+.store-directory-tools.is-header-hidden {
+  top: 0 !important;
+}
+.store-directory-category-scroller.is-at-start::before {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+.store-directory-category-scroller.is-at-start .for-you-filter-scroll-button.left-2 {
+  display: none !important;
+}
