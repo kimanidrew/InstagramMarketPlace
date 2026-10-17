@@ -53,6 +53,8 @@ function contrastTheme(accent: string) {
   const match = /^#?([0-9a-f]{6})$/i.exec(accent.trim());
   const lightTheme = {
     text: "#3d3048",
+    prefix: "#756482",
+    label: "#756482",
     muted: "rgb(61 48 72 / 82%)",
     chip: "rgb(255 249 239 / 68%)",
     ctaBg: "#3d3048",
@@ -60,6 +62,8 @@ function contrastTheme(accent: string) {
   };
   const darkTheme = {
     text: "#fff1df",
+    prefix: "#e2cfe9",
+    label: "#e2cfe9",
     muted: "rgb(255 241 223 / 88%)",
     chip: "rgb(255 247 232 / 18%)",
     ctaBg: "#fff0dc",
@@ -106,11 +110,11 @@ function SpotlightStoreCard({ entry, measure = false }: { entry: StoreEntry; mea
       tabIndex={measure ? -1 : undefined}
       aria-hidden={measure ? true : undefined}
       className="store-directory-showcase-card store-directory-showcase-promo"
-      style={{ "--store-accent": store.profileAccentColor || accentForStore(store.username), "--store-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).text, "--store-muted": contrastTheme(store.profileAccentColor || accentForStore(store.username)).muted, "--store-chip-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).chip, "--store-cta-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaBg, "--store-cta-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaText, "--showcase-index": 0 } as CSSProperties}
+      style={{ "--store-accent": store.profileAccentColor || accentForStore(store.username), "--store-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).text, "--store-prefix": contrastTheme(store.profileAccentColor || accentForStore(store.username)).prefix, "--store-label": contrastTheme(store.profileAccentColor || accentForStore(store.username)).label, "--store-muted": contrastTheme(store.profileAccentColor || accentForStore(store.username)).muted, "--store-chip-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).chip, "--store-cta-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaBg, "--store-cta-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaText, "--showcase-index": 0 } as CSSProperties}
     >
       <div className="store-directory-showcase-promo-copy">
         <div className="store-directory-showcase-promo-label"><Sparkles size={12} /> {promoted ? "Promoted shop" : "Shop spotlight"}</div>
-        <div className="store-directory-showcase-promo-title">Meet <span>@{store.username}</span>{activeVerified && <BadgeCheck size={18} fill="currentColor" />}</div>
+        <div className="store-directory-showcase-promo-title"><span className="store-directory-showcase-promo-prefix">Meet</span> <span className="store-directory-showcase-promo-username">@{store.username}</span>{activeVerified && <BadgeCheck size={18} fill="currentColor" />}</div>
         <p>{store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
         <div className="store-directory-showcase-promo-meta">
           <span>{posts.length} {posts.length === 1 ? "listing" : "listings"}</span>
