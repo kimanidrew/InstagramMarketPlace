@@ -6564,3 +6564,20 @@ html, body {
 .store-directory-showcase-promo-label svg {
   color: #755c82 !important;
 }
+
+
+/* Keep the banner skeleton background airy even when the store accent is dark. */
+.store-directory-showcase-skeleton {
+  background: color-mix(in srgb, var(--store-accent, #e8d4ff) 28%, #fff8ef) !important;
+}
+.store-directory-showcase-skeleton-visual {
+  background: color-mix(in srgb, var(--store-accent, #e8d4ff) 20%, #f5effb) !important;
+}
+.store-directory-skeleton-line,
+.store-directory-skeleton-tile,
+.store-directory-skeleton-avatar {
+  background: color-mix(in srgb, var(--store-accent, #e8d4ff) 18%, #f4eef7) !important;
+}
+.store-directory-skeleton-avatar {
+  border-color: #fff8ef !important;
+}
