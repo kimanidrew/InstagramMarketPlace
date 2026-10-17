@@ -194,7 +194,6 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
             );
           })()}
         </div>
-        <div className="store-directory-showcase-footer"><span><i /> FRESH SHOPS, EVERY ROTATION</span><span>Curated for discovery <ArrowUpRight size={13} /></span></div>
       </section>
 
       <CategoryFilterSection
