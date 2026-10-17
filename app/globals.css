@@ -5835,3 +5835,38 @@ html, body {
 .store-directory-category-scroller.is-at-start .for-you-filter-scroll-button.left-2 {
   display: none !important;
 }
+
+
+/* Use state-rendered fades so the left edge is truly absent at scrollLeft 0. */
+.store-directory-category-scroller::before,
+.store-directory-category-scroller::after {
+  content: none !important;
+  display: none !important;
+}
+.store-directory-category-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 62px;
+  z-index: 2;
+  pointer-events: none;
+}
+.store-directory-category-fade-left {
+  left: 0;
+  background: linear-gradient(to right, #fff 0%, rgba(255,255,255,.88) 42%, rgba(255,255,255,0) 100%);
+}
+.store-directory-category-fade-right {
+  right: 0;
+  background: linear-gradient(to left, #fff 0%, rgba(255,255,255,.88) 42%, rgba(255,255,255,0) 100%);
+}
+.store-directory-category-scroller .for-you-filter-scroll-button {
+  z-index: 3 !important;
+}
+.store-directory-category-scroller.is-at-start .for-you-filter-scroll-button.left-2 {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+@media (max-width: 640px) {
+  .store-directory-category-fade { width: 54px; }
+}
