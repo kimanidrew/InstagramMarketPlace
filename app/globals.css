@@ -6510,3 +6510,34 @@ html, body {
 .store-directory-showcase-promo-title svg,
 .store-directory-showcase-promo-meta svg,
 .store-directory-showcase-promo-cta svg { color: currentColor; }
+
+
+/* Match the banner loading state to the first store's own accent and contrast palette. */
+.store-directory-showcase-skeleton {
+  background: var(--store-accent, #e8d4ff);
+  border-color: color-mix(in srgb, var(--store-text, #3d3048) 14%, transparent);
+}
+.store-directory-showcase-skeleton-copy {
+  color: var(--store-text, #3d3048);
+}
+.store-directory-skeleton-line,
+.store-directory-skeleton-tile,
+.store-directory-skeleton-avatar {
+  background: color-mix(in srgb, var(--store-text, #3d3048) 13%, var(--store-accent, #e8d4ff));
+}
+.store-directory-skeleton-line::after,
+.store-directory-skeleton-tile::after,
+.store-directory-skeleton-avatar::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--store-cta-text, #fff2df) 44%, transparent),
+    transparent
+  );
+}
+.store-directory-showcase-skeleton-visual {
+  background: color-mix(in srgb, var(--store-accent, #e8d4ff) 82%, var(--store-text, #3d3048));
+}
+.store-directory-skeleton-avatar {
+  border-color: color-mix(in srgb, var(--store-accent, #e8d4ff) 78%, var(--store-text, #3d3048));
+}
