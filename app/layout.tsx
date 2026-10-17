@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site-header";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { BrandWordmark } from "@/components/brand-wordmark";
 import { GlobalFeedbackProvider } from "@/components/global-feedback-provider";
+import { PageLoadGate } from "@/components/page-load-gate";
 
 const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
 const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Montserrat").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
@@ -24,6 +25,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <html lang="en">
       <head><link rel="stylesheet" href={brandFontUrl} /></head>
       <body className="pb-24 lg:pb-0">
+        <PageLoadGate />
         <GlobalFeedbackProvider>
           <SiteHeader user={u} />
           {children}
