@@ -6337,3 +6337,20 @@ html, body {
     padding: 12px !important;
   }
 }
+
+
+/* The showcase hero keeps horizontal gutters only; remove vertical outer padding. */
+.store-directory-hero.store-directory-showcase {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: clamp(20px, 3.1vw, 38px) !important;
+  padding-right: clamp(20px, 3.1vw, 38px) !important;
+}
+@media (max-width: 480px) {
+  .store-directory-hero.store-directory-showcase {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
