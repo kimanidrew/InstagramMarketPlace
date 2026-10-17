@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { BadgeCheck, Crown, ArrowUpRight, PackageOpen } from "lucide-react";
+import { BadgeCheck, Crown, ArrowUpRight, PackageOpen, Search } from "lucide-react";
 import { CategoryFilterSection } from "@/components/category-filter-section";
 
 type StorePost = {
