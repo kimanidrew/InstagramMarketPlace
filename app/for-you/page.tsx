@@ -198,13 +198,6 @@ export default async function ForYouPage() {
       </section>
 
       <section id="your-interests" aria-label="Personalized product recommendations" className="shell relative z-10 bg-white py-8 md:py-10">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[.16em] text-[#888]">Picked for your next find</p>
-            <h2 className="mt-2 text-2xl font-black tracking-[-.04em] text-[#1c1c1a] sm:text-3xl">Your For You feed</h2>
-          </div>
-          <span className="hidden rounded-full border border-black/10 px-3 py-2 text-[10px] font-bold text-[#777] sm:inline-flex">Endless discovery</span>
-        </div>
         <ForYouFilters tags={tags.map((item) => item.name)} />
       </section>
     </main>
