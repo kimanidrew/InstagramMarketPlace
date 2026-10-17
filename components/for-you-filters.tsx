@@ -13,6 +13,7 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
   return (
     <div>
       <CategoryFilterSection
+        variant="for-you"
         eyebrow="Picked for your next find"
         title="Your For You feed"
         ariaLabel="Filter For You products by category"
