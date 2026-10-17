@@ -6541,3 +6541,15 @@ html, body {
 .store-directory-skeleton-avatar {
   border-color: color-mix(in srgb, var(--store-accent, #e8d4ff) 78%, var(--store-text, #3d3048));
 }
+
+
+/* Distinguish the spotlight eyebrow and title prefix from the shop username. */
+.store-directory-showcase-promo-label {
+  color: var(--store-label, #756482) !important;
+}
+.store-directory-showcase-promo-title .store-directory-showcase-promo-prefix {
+  color: var(--store-prefix, #756482) !important;
+}
+.store-directory-showcase-promo-title .store-directory-showcase-promo-username {
+  color: var(--store-text, #3d3048) !important;
+}
