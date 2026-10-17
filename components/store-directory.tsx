@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BadgeCheck, Crown, Search, ArrowUpRight, PackageOpen, SlidersHorizontal, ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { BadgeCheck, Crown, Search, ArrowUpRight, PackageOpen } from "lucide-react";
+import { CategoryFilterRail } from "@/components/category-filter-rail";
 
 type StorePost = {
   id: string;
@@ -35,30 +36,7 @@ type StoreEntry = {
 export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   const [category, setCategory] = useState("All stores");
   const [query, setQuery] = useState("");
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(true);
   const [headerHidden, setHeaderHidden] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const updateScrollEdges = useCallback(() => {
-    const element = scrollRef.current;
-    if (!element) return;
-    const maxScroll = Math.max(0, element.scrollWidth - element.clientWidth);
-    const left = Math.max(0, element.scrollLeft);
-    const firstItem = element.firstElementChild as HTMLElement | null;
-    const lastItem = element.lastElementChild as HTMLElement | null;
-    const viewport = element.getBoundingClientRect();
-    const firstItemIsAtStart = !firstItem || firstItem.getBoundingClientRect().left >= viewport.left - 4;
-    const lastItemIsAtEnd = !lastItem || lastItem.getBoundingClientRect().right <= viewport.right + 4;
-    // Determine the edges from the actual visible category items, not scrollLeft alone.
-    setAtStart(left <= 4 || firstItemIsAtStart);
-    setAtEnd(maxScroll <= 4 || left >= maxScroll - 4 || lastItemIsAtEnd);
-  }, []);
-  const scrollCategories = (direction: "left" | "right") => {
-    const element = scrollRef.current;
-    if (!element) return;
-    const amount = Math.max(element.clientWidth * 0.72, 220);
-    element.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
-  };
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
     stores.forEach(({ posts }) => posts.forEach((post) => {
@@ -69,19 +47,11 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   }, [stores]);
 
   useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) return;
-    // Normalize the initial position so the left controls start hidden.
-    element.scrollLeft = 0;
-    updateScrollEdges();
-    const observer = new ResizeObserver(updateScrollEdges);
-    observer.observe(element);
-    window.addEventListener("resize", updateScrollEdges);
     const handleScroll = () => setHeaderHidden(!!document.querySelector(".site-header")?.classList.contains("is-hidden"));
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => { observer.disconnect(); window.removeEventListener("resize", updateScrollEdges); window.removeEventListener("scroll", handleScroll); };
-  }, [updateScrollEdges, categories.length]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const filtered = useMemo(() => stores.filter(({ store, posts }) => {
     const matchingPosts = category === "All stores" || posts.some((post) => post.category?.trim() === category);
@@ -124,20 +94,12 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
               {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search">×</button>}
             </label>
           </div>
-          <div data-at-start={atStart} data-at-end={atEnd} className={`store-directory-category-scroller${atStart ? " is-at-start" : ""}`}>
-            {!atStart && <span className="store-directory-category-fade store-directory-category-fade-left" aria-hidden="true" />}
-            {!atEnd && <span className="store-directory-category-fade store-directory-category-fade-right" aria-hidden="true" />}
-            {!atStart && <button type="button" onClick={() => scrollCategories("left")} aria-label="Scroll categories left" className="for-you-filter-scroll-button left-2"><ArrowLeft size={16} /></button>}
-            {!atEnd && <button type="button" onClick={() => scrollCategories("right")} aria-label="Scroll categories right" className="for-you-filter-scroll-button right-2"><ArrowRight size={16} /></button>}
-            <div ref={scrollRef} onScroll={updateScrollEdges} className="store-directory-category-row hide-scrollbar" role="group" aria-label="Shop categories">
-              {categories.map((name) => (
-                <button type="button" key={name} onClick={() => setCategory(name)} className={"store-directory-category" + (category === name ? " is-active" : "")} aria-pressed={category === name}>
-                  {name}
-                  {name === "All stores" && <span>{stores.length}</span>}
-                </button>
-              ))}
-            </div>
-          </div>
+          <CategoryFilterRail
+            ariaLabel="Shop categories"
+            selectedValue={category}
+            onSelect={setCategory}
+            items={categories.map((name) => ({ label: name, value: name, ...(name === "All stores" ? { count: stores.length } : {}) }))}
+          />
         </div>
       </section>
 
