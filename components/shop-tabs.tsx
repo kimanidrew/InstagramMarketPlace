@@ -7,6 +7,7 @@ import { ProductMasonry, StoreCard, StoreInlineSection } from "@/components/prod
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { analyticsVisitorId } from "@/lib/analytics-client";
+import { SpotlightStoreCard, type StoreEntry } from "@/components/store-directory";
 
 type ShopTab = "discover" | "trending" | "featured";
 
@@ -16,15 +17,21 @@ type PromoSlide =
   | { type: "ad"; key: string };
 
 function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSlide; measure?: boolean; onVisit?: (key: string) => void }) {
-  const className = "shop-promo-slide " + (measure ? "shop-promo-measure-slide " : "") + (slide.type === "store" ? "shop-promo-store" : slide.type === "product" ? "shop-promo-product" : "shop-promo-ad") + " group grid overflow-hidden " + (slide.type === "store" ? "md:grid-cols-[1.05fr_.95fr]" : slide.type === "product" ? "md:grid-cols-[.9fr_1.1fr]" : "md:grid-cols-[1fr_.85fr]");
-  const copy = slide.type === "store" ? (
-    <>
-      <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
-      <h2 className="mt-4 max-w-xl text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">Meet <span className="text-[#d6ff63]">@{slide.store.username}</span></h2>
-      <p className="mt-3 max-w-md text-sm leading-6 text-white/70">{slide.store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
-      <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore shop <ArrowRight size={14} /></span>
-    </>
-  ) : slide.type === "product" ? (
+  if (slide.type === "store") {
+    const now = Date.now();
+    const entry: StoreEntry = {
+      store: slide.store,
+      posts: slide.posts,
+      promoted: Boolean(slide.store.paidPromotionActive),
+      activeVerified: Boolean(slide.store.verifiedAt && (!slide.store.verifiedUntil || new Date(slide.store.verifiedUntil).getTime() > now)),
+      activePro: Boolean(slide.store.proUntil && new Date(slide.store.proUntil).getTime() > now),
+    };
+    const card = <SpotlightStoreCard entry={entry} measure={measure} onVisit={() => onVisit?.(slide.key)} />;
+    return measure ? <div className="shop-promo-measure-slide shop-promo-shared-store-measure">{card}</div> : card;
+  }
+
+  const className = "shop-promo-slide " + (measure ? "shop-promo-measure-slide " : "") + (slide.type === "product" ? "shop-promo-product" : "shop-promo-ad") + " group grid overflow-hidden " + (slide.type === "product" ? "md:grid-cols-[.9fr_1.1fr]" : "md:grid-cols-[1fr_.85fr]");
+  const copy = slide.type === "product" ? (
     <>
       <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
       <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{slide.product.productTitle || "A find worth sharing."}</h2>
@@ -39,19 +46,12 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       <Link href="/stores" className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore all shops <ArrowRight size={14} /></Link>
     </>
   );
-  const visual = slide.type === "store" ? (
-    <div className="shop-promo-store-visual relative min-h-[150px] overflow-hidden sm:min-h-[200px]">
-      {slide.posts.slice(0, 3).map((post: any, i: number) => <img key={post.id} src={post.thumbnailUrl || post.mediaUrl} alt="" className={"shop-promo-float shop-promo-float-" + i} />)}
-      {slide.store.profileImageUrl && <img src={slide.store.profileImageUrl} alt="" className="shop-promo-store-avatar" />}
-      <span className="shop-promo-orbit" />
-    </div>
-  ) : slide.type === "product" ? (
+  const visual = slide.type === "product" ? (
     <div className="shop-promo-product-visual"><img src={slide.product.thumbnailUrl || slide.product.mediaUrl} alt={slide.product.productTitle || "Promoted listing"} /><span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span></div>
   ) : (
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
   const slideContent = <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
-  if (slide.type === "store") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/stores/" + slide.store.username} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-store " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
   if (slide.type === "product") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }

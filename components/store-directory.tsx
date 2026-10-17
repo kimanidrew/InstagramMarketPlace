@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { BadgeCheck, Crown, ArrowUpRight, PackageOpen, Search, Sparkles } from "lucide-react";
 import { CategoryFilterSection } from "@/components/category-filter-section";
 
-type StorePost = {
+export type StorePost = {
   id: string;
   mediaUrl: string | null;
   thumbnailUrl?: string | null;
@@ -16,7 +16,7 @@ type StorePost = {
   mediaType?: string | null;
   listingType?: string | null;
 };
-type StoreEntry = {
+export type StoreEntry = {
   store: {
     id: string;
     username: string;
@@ -102,14 +102,15 @@ function chooseShowcase(items: StoreEntry[], previouslySeen: string[]) {
   return { selected, seen: [...seen] };
 }
 
-function SpotlightStoreCard({ entry, measure = false }: { entry: StoreEntry; measure?: boolean }) {
+export function SpotlightStoreCard({ entry, measure = false, onVisit }: { entry: StoreEntry; measure?: boolean; onVisit?: () => void }) {
   const { store, posts, promoted, activeVerified, activePro } = entry;
   return (
     <Link
       href={"/stores/" + store.username}
       tabIndex={measure ? -1 : undefined}
       aria-hidden={measure ? true : undefined}
-      className="store-directory-showcase-card store-directory-showcase-promo"
+      className={"store-directory-showcase-card store-directory-showcase-promo" + (measure ? " store-directory-showcase-measure-card" : "")}
+      onClick={onVisit}
       style={{ "--store-accent": store.profileAccentColor || accentForStore(store.username), "--store-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).text, "--store-prefix": contrastTheme(store.profileAccentColor || accentForStore(store.username)).prefix, "--store-label": contrastTheme(store.profileAccentColor || accentForStore(store.username)).label, "--store-muted": contrastTheme(store.profileAccentColor || accentForStore(store.username)).muted, "--store-chip-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).chip, "--store-cta-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaBg, "--store-cta-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaText, "--showcase-index": 0 } as CSSProperties}
     >
       <div className="store-directory-showcase-promo-copy">

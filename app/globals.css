@@ -6588,3 +6588,13 @@ html, body {
 .store-directory-skeleton-avatar {
   border-color: #fff8ef !important;
 }
+
+
+/* Reuse the exact /stores spotlight card for shop-banner store slides. */
+.shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo {
+  width: 100% !important; height: 100% !important; min-height: 100% !important;
+  max-height: none !important; box-sizing: border-box !important; border-radius: 24px !important;
+}
+.shop-promo-shared-store-measure { display:block!important; width:100%!important; height:auto!important; min-height:0!important; padding:0!important; overflow:visible!important; }
+.shop-promo-shared-store-measure > .store-directory-showcase-measure-card { width:100%!important; height:auto!important; min-height:310px!important; max-height:none!important; box-sizing:border-box!important; }
+@media (max-width:760px) { .shop-promo-shared-store-measure > .store-directory-showcase-measure-card { min-height:250px!important; } }
