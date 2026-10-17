@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { BadgeCheck, Crown, ArrowUpRight, PackageOpen, Search, Sparkles } from "lucide-react";
 import { CategoryFilterSection } from "@/components/category-filter-section";
 
@@ -71,10 +71,44 @@ function chooseShowcase(items: StoreEntry[], previouslySeen: string[]) {
   return { selected, seen: [...seen] };
 }
 
+function SpotlightStoreCard({ entry, measure = false }: { entry: StoreEntry; measure?: boolean }) {
+  const { store, posts, promoted, activeVerified, activePro } = entry;
+  return (
+    <Link
+      href={"/stores/" + store.username}
+      tabIndex={measure ? -1 : undefined}
+      aria-hidden={measure ? true : undefined}
+      className="store-directory-showcase-card store-directory-showcase-promo"
+      style={{ "--store-accent": accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
+    >
+      <div className="store-directory-showcase-promo-copy">
+        <div className="store-directory-showcase-promo-label"><Sparkles size={12} /> {promoted ? "Promoted shop" : "Shop spotlight"}</div>
+        <div className="store-directory-showcase-promo-title">Meet <span>@{store.username}</span>{activeVerified && <BadgeCheck size={18} fill="currentColor" />}</div>
+        <p>{store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
+        <div className="store-directory-showcase-promo-meta">
+          <span>{posts.length} {posts.length === 1 ? "listing" : "listings"}</span>
+          {activePro && <span><Crown size={12} /> Pro seller</span>}
+          {activeVerified && <span><BadgeCheck size={12} /> Verified</span>}
+        </div>
+        <span className="store-directory-showcase-promo-cta">Explore shop <ArrowUpRight size={15} /></span>
+      </div>
+      <div className="store-directory-showcase-promo-visual">
+        {posts.slice(0, 3).map((post, index) => {
+          const postImage = post.thumbnailUrl || post.mediaUrl;
+          return postImage ? <img key={post.id} src={postImage} alt="" loading="lazy" className={"store-directory-showcase-float store-directory-showcase-float-" + index} /> : null;
+        })}
+        {store.profileImageUrl && <img src={store.profileImageUrl} alt="" loading="lazy" className="store-directory-showcase-promo-avatar" />}
+        {!posts.some((post) => post.thumbnailUrl || post.mediaUrl) && <span className="store-directory-showcase-promo-placeholder"><PackageOpen size={30} /></span>}
+        <span className="store-directory-showcase-promo-orbit" />
+      </div>
+    </Link>
+  );
+}
+
 export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   const [category, setCategory] = useState("All stores");
   const [query, setQuery] = useState("");
-  const [showcaseStores, setShowcaseStores] = useState<StoreEntry[]>([]);
+  const [showcaseStores, setShowcaseStores] = useState<StoreEntry[]>([]);\n  const showcaseRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (!stores.length) return;
     let previouslySeen: string[] = [];
@@ -137,6 +171,28 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     return () => window.clearInterval(interval);
   }, [stores]);
 
+  useEffect(() => {
+    const section = showcaseRef.current;
+    if (!section) return;
+    const measureCards = () => {
+      const cards = section.querySelectorAll<HTMLElement>(".store-directory-showcase-measure .store-directory-showcase-card");
+      let maxHeight = 0;
+      cards.forEach((card) => { maxHeight = Math.max(maxHeight, card.getBoundingClientRect().height); });
+      if (maxHeight > 0) section.style.setProperty("--store-showcase-card-height", maxHeight + "px");
+    };
+    measureCards();
+    const observer = new ResizeObserver(measureCards);
+    observer.observe(section);
+    const images = section.querySelectorAll("img");
+    images.forEach((img) => img.addEventListener("load", measureCards));
+    window.addEventListener("resize", measureCards);
+    return () => {
+      observer.disconnect();
+      images.forEach((img) => img.removeEventListener("load", measureCards));
+      window.removeEventListener("resize", measureCards);
+    };
+  }, [showcaseStores]);
+
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
     stores.forEach(({ posts }) => posts.forEach((post) => {
@@ -157,42 +213,12 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
 
   return (
     <div className="store-directory">
-      <section className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
+      <section ref={showcaseRef} className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
         <div className="store-directory-showcase-stage">
-          {showcaseStores[0] && (() => {
-            const { store, posts, promoted, activeVerified, activePro } = showcaseStores[0];
-            const firstPost = posts[0];
-            const image = firstPost?.thumbnailUrl || firstPost?.mediaUrl;
-            return (
-              <Link
-                key={store.id}
-                href={"/stores/" + store.username}
-                className="store-directory-showcase-card store-directory-showcase-promo"
-                style={{ "--store-accent": accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
-              >
-                <div className="store-directory-showcase-promo-copy">
-                  <div className="store-directory-showcase-promo-label"><Sparkles size={12} /> {promoted ? "Promoted shop" : "Shop spotlight"}</div>
-                  <div className="store-directory-showcase-promo-title">Meet <span>@{store.username}</span>{activeVerified && <BadgeCheck size={18} fill="currentColor" />}</div>
-                  <p>{store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
-                  <div className="store-directory-showcase-promo-meta">
-                    <span>{posts.length} {posts.length === 1 ? "listing" : "listings"}</span>
-                    {activePro && <span><Crown size={12} /> Pro seller</span>}
-                    {activeVerified && <span><BadgeCheck size={12} /> Verified</span>}
-                  </div>
-                  <span className="store-directory-showcase-promo-cta">Explore shop <ArrowUpRight size={15} /></span>
-                </div>
-                <div className="store-directory-showcase-promo-visual">
-                  {posts.slice(0, 3).map((post, index) => {
-                    const postImage = post.thumbnailUrl || post.mediaUrl;
-                    return postImage ? <img key={post.id} src={postImage} alt="" loading="lazy" className={"store-directory-showcase-float store-directory-showcase-float-" + index} /> : null;
-                  })}
-                  {store.profileImageUrl && <img src={store.profileImageUrl} alt="" loading="lazy" className="store-directory-showcase-promo-avatar" />}
-                  {!posts.some((post) => post.thumbnailUrl || post.mediaUrl) && <span className="store-directory-showcase-promo-placeholder"><PackageOpen size={30} /></span>}
-                  <span className="store-directory-showcase-promo-orbit" />
-                </div>
-              </Link>
-            );
-          })()}
+          {showcaseStores[0] && <SpotlightStoreCard entry={showcaseStores[0]} />}
+        </div>
+        <div className="store-directory-showcase-measure" aria-hidden="true">
+          {showcaseStores.map((entry) => <SpotlightStoreCard key={entry.store.id} entry={entry} measure />)}
         </div>
       </section>
 
