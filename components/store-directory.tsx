@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { BadgeCheck, Crown, Search, ArrowUpRight, PackageOpen } from "lucide-react";
-import { CategoryFilterRail } from "@/components/category-filter-rail";
+import { useMemo, useState } from "react";
+import { BadgeCheck, Crown, ArrowUpRight, PackageOpen } from "lucide-react";
+import { CategoryFilterSection } from "@/components/category-filter-section";
 
 type StorePost = {
   id: string;
@@ -36,7 +36,6 @@ type StoreEntry = {
 export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   const [category, setCategory] = useState("All stores");
   const [query, setQuery] = useState("");
-  const [headerHidden, setHeaderHidden] = useState(false);
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
     stores.forEach(({ posts }) => posts.forEach((post) => {
@@ -45,13 +44,6 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     }));
     return ["All stores", ...Array.from(counts.keys()).sort((a, b) => a.localeCompare(b))];
   }, [stores]);
-
-  useEffect(() => {
-    const handleScroll = () => setHeaderHidden(!!document.querySelector(".site-header")?.classList.contains("is-hidden"));
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const filtered = useMemo(() => stores.filter(({ store, posts }) => {
     const matchingPosts = category === "All stores" || posts.some((post) => post.category?.trim() === category);
@@ -81,27 +73,18 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
         </div>
       </section>
 
-      <section className={`store-directory-tools${headerHidden ? " is-header-hidden" : ""}`} aria-label="Filter shops">
-        <div className="store-directory-filter-bar">
-          <div className="store-directory-tools-top">
-            <div>
-              <span className="store-directory-eyebrow">BROWSE BY CATEGORY</span>
-              <h2>Explore the shops</h2>
-            </div>
-            <label className="store-directory-search">
-              <Search size={17} />
-              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search shops or products" aria-label="Search shops or products" />
-              {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search">×</button>}
-            </label>
-          </div>
-          <CategoryFilterRail
-            ariaLabel="Shop categories"
-            selectedValue={category}
-            onSelect={setCategory}
-            items={categories.map((name) => ({ label: name, value: name, ...(name === "All stores" ? { count: stores.length } : {}) }))}
-          />
-        </div>
-      </section>
+      <CategoryFilterSection
+        eyebrow="BROWSE BY CATEGORY"
+        title="Explore the shops"
+        ariaLabel="Filter shops by category"
+        selectedValue={category}
+        onSelect={setCategory}
+        items={categories.map((name) => ({ label: name, value: name, ...(name === "All stores" ? { count: stores.length } : {}) }))}
+        searchValue={query}
+        onSearchChange={setQuery}
+        searchPlaceholder="Search shops or products"
+        searchLabel="Search shops or products"
+      />
 
       <section className="store-directory-results">
         <div className="store-directory-results-head">
