@@ -102,7 +102,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
         </div>
       </section>
 
-      <section className="store-directory-tools" aria-label="Filter shops">
+      <section className={`store-directory-tools${headerHidden ? " is-header-hidden" : ""}`} aria-label="Filter shops">
         <div className="store-directory-filter-bar">
           <div className="store-directory-tools-top">
             <div>
