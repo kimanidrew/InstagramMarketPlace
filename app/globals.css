@@ -6662,3 +6662,11 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     top:64px!important;
   }
 }
+
+
+/* Navbar unread notification count: red badge with no outline. */
+.site-header .notification-bell-count{
+  background:#ef4444!important;
+  border:0!important;
+  box-shadow:none!important;
+}
