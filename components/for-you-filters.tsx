@@ -14,8 +14,8 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
     <div>
       <CategoryFilterSection
         variant="for-you"
-        eyebrow="Picked for your next find"
-        title="Your For You feed"
+        eyebrow="PICKED FOR YOUR NEXT FIND"
+        title="For Your Feed"
         ariaLabel="Filter For You products by category"
         selectedValue={selectedTag}
         onSelect={setSelectedTag}
