@@ -51,15 +51,28 @@ function accentForStore(username: string) {
 }
 function contrastTheme(accent: string) {
   const match = /^#?([0-9a-f]{6})$/i.exec(accent.trim());
-  if (!match) return { text: "#171717", muted: "rgb(23 23 23 / 76%)", chip: "rgb(255 255 255 / 42%)", ctaBg: "#171717", ctaText: "#ffffff" };
+  const lightTheme = {
+    text: "#3d3048",
+    muted: "rgb(61 48 72 / 82%)",
+    chip: "rgb(255 249 239 / 68%)",
+    ctaBg: "#3d3048",
+    ctaText: "#fff2df",
+  };
+  const darkTheme = {
+    text: "#fff1df",
+    muted: "rgb(255 241 223 / 88%)",
+    chip: "rgb(255 247 232 / 18%)",
+    ctaBg: "#fff0dc",
+    ctaText: "#3d3048",
+  };
+  if (!match) return lightTheme;
   const value = match[1];
   const linear = [0, 2, 4].map((offset) => {
     const channel = parseInt(value.slice(offset, offset + 2), 16) / 255;
     return channel <= 0.04045 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
   });
   const luminance = linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
-  if (luminance > 0.42) return { text: "#171717", muted: "rgb(23 23 23 / 76%)", chip: "rgb(255 255 255 / 42%)", ctaBg: "#171717", ctaText: "#ffffff" };
-  return { text: "#ffffff", muted: "rgb(255 255 255 / 86%)", chip: "rgb(0 0 0 / 22%)", ctaBg: "#ffffff", ctaText: "#171717" };
+  return luminance > 0.42 ? lightTheme : darkTheme;
 }
 
 
