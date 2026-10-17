@@ -20,7 +20,6 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
         selectedValue={selectedTag}
         onSelect={setSelectedTag}
         items={[{ label: "All", value: "" }, ...tags.map((name) => ({ label: name, value: name.toLowerCase() }))]}
-        actionHref="/categories"
         actionLabel="Endless discovery"
       />
       <ProductMasonry personalized tag={selectedTag} />
