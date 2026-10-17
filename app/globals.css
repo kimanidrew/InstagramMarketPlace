@@ -6389,3 +6389,34 @@ html, body {
     min-height: 250px;
   }
 }
+
+
+/* Reserve the spotlight carousel's space immediately, before store data is measured. */
+.store-directory-hero.store-directory-showcase .store-directory-showcase-stage {
+  min-height: var(--store-showcase-card-height, 380px) !important;
+}
+.store-directory-showcase-stage > .store-directory-showcase-card.store-directory-showcase-promo {
+  height: var(--store-showcase-card-height, 380px) !important;
+  min-height: var(--store-showcase-card-height, 380px) !important;
+}
+.store-directory-showcase-measure {
+  width: calc(100% - clamp(20px, 3.1vw, 38px) * 2) !important;
+}
+@media (max-width: 760px) {
+  .store-directory-hero.store-directory-showcase .store-directory-showcase-stage {
+    min-height: var(--store-showcase-card-height, 330px) !important;
+  }
+  .store-directory-showcase-stage > .store-directory-showcase-card.store-directory-showcase-promo {
+    height: var(--store-showcase-card-height, 330px) !important;
+    min-height: var(--store-showcase-card-height, 330px) !important;
+  }
+}
+@media (max-width: 480px) {
+  .store-directory-hero.store-directory-showcase .store-directory-showcase-stage {
+    min-height: var(--store-showcase-card-height, 310px) !important;
+  }
+  .store-directory-showcase-stage > .store-directory-showcase-card.store-directory-showcase-promo {
+    height: var(--store-showcase-card-height, 310px) !important;
+    min-height: var(--store-showcase-card-height, 310px) !important;
+  }
+}
