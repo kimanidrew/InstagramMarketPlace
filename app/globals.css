@@ -6011,3 +6011,29 @@ html, body {
   .store-directory-showcase-count { align-self: flex-start; }
   .store-directory-showcase-footer { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
+
+
+/* Single-card store carousel layout */
+.store-directory-showcase-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 430px);
+  justify-content: center;
+  gap: 0;
+  min-height: 0;
+}
+.store-directory-showcase-card {
+  width: 100%;
+  animation: store-showcase-slide-in .65s cubic-bezier(.2,.75,.25,1) both;
+}
+.store-directory-showcase-image { aspect-ratio: 1.9; }
+@keyframes store-showcase-slide-in {
+  from { opacity: 0; transform: translateX(24px) scale(.985); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@media (max-width: 760px) {
+  .store-directory-showcase-stage { grid-template-columns: minmax(0, 390px); }
+  .store-directory-showcase-image { aspect-ratio: 1.7; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .store-directory-showcase-card { animation: none; }
+}
