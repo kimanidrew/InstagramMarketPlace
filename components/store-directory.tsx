@@ -22,6 +22,7 @@ type StoreEntry = {
     username: string;
     biography?: string | null;
     profileImageUrl?: string | null;
+    profileAccentColor?: string | null;
     verifiedAt?: string | Date | null;
     verifiedUntil?: string | Date | null;
     proUntil?: string | Date | null;
@@ -79,7 +80,7 @@ function SpotlightStoreCard({ entry, measure = false }: { entry: StoreEntry; mea
       tabIndex={measure ? -1 : undefined}
       aria-hidden={measure ? true : undefined}
       className="store-directory-showcase-card store-directory-showcase-promo"
-      style={{ "--store-accent": accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
+      style={{ "--store-accent": store.profileAccentColor || accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
     >
       <div className="store-directory-showcase-promo-copy">
         <div className="store-directory-showcase-promo-label"><Sparkles size={12} /> {promoted ? "Promoted shop" : "Shop spotlight"}</div>
