@@ -6354,3 +6354,38 @@ html, body {
     padding-right: 14px !important;
   }
 }
+
+
+/* Keep every spotlight carousel slide at the tallest measured card's height. */
+.store-directory-hero.store-directory-showcase {
+  position: relative;
+}
+.store-directory-showcase-stage > .store-directory-showcase-card.store-directory-showcase-promo {
+  height: var(--store-showcase-card-height, auto) !important;
+  min-height: var(--store-showcase-card-height, 310px) !important;
+  box-sizing: border-box !important;
+}
+.store-directory-showcase-measure {
+  position: absolute !important;
+  top: 0 !important;
+  left: -100000px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  contain: layout style;
+}
+.store-directory-showcase-measure .store-directory-showcase-card.store-directory-showcase-promo {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 310px;
+  box-sizing: border-box !important;
+}
+@media (max-width: 760px) {
+  .store-directory-showcase-measure .store-directory-showcase-card.store-directory-showcase-promo {
+    min-height: 250px;
+  }
+}
