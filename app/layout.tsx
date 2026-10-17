@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 import "./seller-modal.css";
 import Link from "next/link";

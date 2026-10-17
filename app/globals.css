@@ -179,6 +179,14 @@
 
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/PlusJakartaSans-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:#fff;color:#111;font-family:"Plus Jakarta Sans",Arial,Helvetica,sans-serif;font-weight:500;letter-spacing:-.012em}
