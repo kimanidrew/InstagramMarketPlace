@@ -30,9 +30,12 @@ export function PageLoadGate() {
         '[data-page-hero], .store-directory-showcase, .store-directory-showcase-stage, .shop-promo-carousel, .for-you-hero, main > section:first-of-type, main > section:first-child'
       );
       if (hero) {
-        const images = Array.from(hero.querySelectorAll("img")).filter(
-          (image) => image.loading !== "lazy"
-        );
+        const images = Array.from(hero.querySelectorAll("img"));
+        // Banner imagery is critical to the first impression, so promote lazy hero images
+        // while the overlay is visible and wait for either load or error.
+        images.forEach((image) => {
+          if (image.loading === "lazy") image.loading = "eager";
+        });
         await Promise.all(images.map(waitForImage));
       }
     } catch {
