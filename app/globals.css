@@ -6216,3 +6216,34 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   .store-directory-showcase-card { animation: none; }
 }
+
+
+/* Stores showcase: let the rotating shop card stand alone at full available width. */
+.store-directory-showcase {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.store-directory-showcase-stage {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  justify-content: stretch !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+.store-directory-showcase-card.store-directory-showcase-promo {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
