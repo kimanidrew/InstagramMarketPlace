@@ -197,7 +197,7 @@ export default async function ForYouPage() {
         <div aria-hidden="true" className="pointer-events-none absolute -right-20 top-1/4 h-72 w-72 rounded-full bg-[#eeebff]/70 blur-3xl md:right-0 md:top-10 md:h-[28rem] md:w-[28rem]" />
       </section>
 
-      <section id="your-interests" aria-label="Personalized product recommendations" className="shell relative z-10 bg-white py-8 md:py-10">
+      <section id="your-interests" aria-label="Personalized product recommendations" className="shell relative z-10 bg-white pt-0 pb-8 md:pb-10">
         <ForYouFilters tags={tags.map((item) => item.name)} />
       </section>
     </main>
