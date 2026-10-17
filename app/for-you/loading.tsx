@@ -1,5 +1,5 @@
-import { PageLoadingSkeleton } from "@/components/loading-skeleton";
+import { BannerFirstLoader } from "@/components/banner-first-loader";
 
 export default function Loading() {
-  return <PageLoadingSkeleton />;
+  return <BannerFirstLoader />;
 }
