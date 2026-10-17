@@ -175,25 +175,28 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
               <Link
                 key={store.id}
                 href={"/stores/" + store.username}
-                className="store-directory-showcase-card"
+                className="store-directory-showcase-card store-directory-showcase-promo"
                 style={{ "--store-accent": accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
               >
-                <div className="store-directory-showcase-card-top">
-                  <div className={"store-directory-showcase-avatar" + (activeVerified ? " is-verified" : "")}>
-                    {store.profileImageUrl ? <img src={store.profileImageUrl} alt="" loading="lazy" /> : <span>{store.username.slice(0, 1).toUpperCase()}</span>}
+                <div className="store-directory-showcase-promo-copy">
+                  <div className="store-directory-showcase-promo-label"><Sparkles size={12} /> {promoted ? "Promoted shop" : "Shop spotlight"}</div>
+                  <div className="store-directory-showcase-promo-title">Meet <span>@{store.username}</span>{activeVerified && <BadgeCheck size={18} fill="currentColor" />}</div>
+                  <p>{store.biography?.trim() || "Discover the shop behind the posts and explore their latest finds."}</p>
+                  <div className="store-directory-showcase-promo-meta">
+                    <span>{posts.length} {posts.length === 1 ? "listing" : "listings"}</span>
+                    {activePro && <span><Crown size={12} /> Pro seller</span>}
+                    {activeVerified && <span><BadgeCheck size={12} /> Verified</span>}
                   </div>
-                  <span className="store-directory-showcase-open"><ArrowUpRight size={14} /></span>
+                  <span className="store-directory-showcase-promo-cta">Explore shop <ArrowUpRight size={15} /></span>
                 </div>
-                <div className="store-directory-showcase-image">
-                  {image ? <img src={image} alt="" loading="lazy" /> : <span><PackageOpen size={24} /></span>}
-                  <span className="store-directory-showcase-image-count">{posts.length} {posts.length === 1 ? "find" : "finds"}</span>
-                </div>
-                <div className="store-directory-showcase-card-bottom">
-                  <div className="store-directory-showcase-name">@{store.username}{activeVerified && <BadgeCheck size={13} fill="currentColor" />}</div>
-                  <div className="store-directory-showcase-badges">
-                    {promoted && <span className="is-promoted">Promoted</span>}
-                    {activePro && <span><Crown size={10} /> Pro</span>}
-                  </div>
+                <div className="store-directory-showcase-promo-visual">
+                  {posts.slice(0, 3).map((post, index) => {
+                    const postImage = post.thumbnailUrl || post.mediaUrl;
+                    return postImage ? <img key={post.id} src={postImage} alt="" loading="lazy" className={"store-directory-showcase-float store-directory-showcase-float-" + index} /> : null;
+                  })}
+                  {store.profileImageUrl && <img src={store.profileImageUrl} alt="" loading="lazy" className="store-directory-showcase-promo-avatar" />}
+                  {!posts.some((post) => post.thumbnailUrl || post.mediaUrl) && <span className="store-directory-showcase-promo-placeholder"><PackageOpen size={30} /></span>}
+                  <span className="store-directory-showcase-promo-orbit" />
                 </div>
               </Link>
             );
