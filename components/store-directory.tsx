@@ -158,14 +158,6 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   return (
     <div className="store-directory">
       <section className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
-        <div className="store-directory-showcase-heading">
-          <div>
-            <span className="store-directory-eyebrow"><Sparkles size={12} /> THE SOKOLINK COMMUNITY</span>
-            <h1>Meet your next<br /><span>favourite shops.</span></h1>
-            <p>A rotating showcase of standout stores, with fresh finds picked just for your next browse.</p>
-          </div>
-          <div className="store-directory-showcase-count"><b>{stores.length}</b><span>shops to discover</span></div>
-        </div>
         <div className="store-directory-showcase-stage">
           {showcaseStores[0] && (() => {
             const { store, posts, promoted, activeVerified, activePro } = showcaseStores[0];
