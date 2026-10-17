@@ -192,7 +192,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
       images.forEach((img) => img.removeEventListener("load", measureCards));
       window.removeEventListener("resize", measureCards);
     };
-  }, [showcaseStores]);
+  }, [stores]);
 
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
@@ -216,10 +216,10 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     <div className="store-directory">
       <section ref={showcaseRef} className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
         <div className="store-directory-showcase-stage">
-          {showcaseStores[0] && <SpotlightStoreCard entry={showcaseStores[0]} />}
+          {showcaseStores[0] && <SpotlightStoreCard key={showcaseStores[0].store.id} entry={showcaseStores[0]} />}
         </div>
         <div className="store-directory-showcase-measure" aria-hidden="true">
-          {showcaseStores.map((entry) => <SpotlightStoreCard key={entry.store.id} entry={entry} measure />)}
+          {stores.map((entry) => <SpotlightStoreCard key={entry.store.id} entry={entry} measure />)}
         </div>
       </section>
 
