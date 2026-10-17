@@ -6420,3 +6420,79 @@ html, body {
     min-height: var(--store-showcase-card-height, 310px) !important;
   }
 }
+
+
+/* Skeleton shown immediately while the first featured shop is being selected. */
+.store-directory-showcase-skeleton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, .9fr);
+  width: 100%;
+  height: var(--store-showcase-card-height, 380px);
+  min-height: var(--store-showcase-card-height, 380px);
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  border-radius: 24px;
+  background: #fff;
+  box-sizing: border-box;
+}
+.store-directory-showcase-skeleton-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  padding: clamp(20px, 2.5vw, 32px);
+}
+.store-directory-skeleton-line,
+.store-directory-skeleton-tile,
+.store-directory-skeleton-avatar {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: #eeeeee;
+}
+.store-directory-skeleton-line::after,
+.store-directory-skeleton-tile::after,
+.store-directory-skeleton-avatar::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+  animation: store-directory-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+.store-directory-skeleton-label { width: 118px; height: 12px; border-radius: 99px; }
+.store-directory-skeleton-title { width: min(78%, 330px); height: 30px; border-radius: 8px; }
+.store-directory-skeleton-description { width: min(92%, 390px); height: 12px; border-radius: 99px; }
+.store-directory-skeleton-description.short { width: min(65%, 270px); }
+.store-directory-skeleton-meta { width: 150px; height: 14px; margin-top: 4px; border-radius: 99px; }
+.store-directory-skeleton-cta { width: 124px; height: 38px; margin-top: 6px; border-radius: 99px; }
+.store-directory-showcase-skeleton-visual {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  background: #f7f7f7;
+}
+.store-directory-skeleton-tile { position: absolute; width: 39%; height: 56%; border-radius: 16px; }
+.store-directory-skeleton-tile.tile-one { top: 13%; left: 9%; transform: rotate(-9deg); }
+.store-directory-skeleton-tile.tile-two { top: 21%; right: 8%; transform: rotate(8deg); }
+.store-directory-skeleton-tile.tile-three { bottom: 7%; left: 29%; width: 43%; height: 45%; transform: rotate(-2deg); }
+.store-directory-skeleton-avatar { position: absolute; width: 58px; height: 58px; left: 50%; top: 50%; transform: translate(-50%,-50%); border: 5px solid #f7f7f7; border-radius: 50%; }
+@keyframes store-directory-skeleton-shimmer { 100% { transform: translateX(100%); } }
+@media (max-width: 760px) {
+  .store-directory-showcase-skeleton { grid-template-columns: minmax(0, 1fr) minmax(125px, .72fr); border-radius: 20px; }
+  .store-directory-showcase-skeleton-copy { gap: 13px; padding: 18px; }
+  .store-directory-skeleton-title { height: 24px; }
+  .store-directory-skeleton-tile { border-radius: 10px; }
+}
+@media (max-width: 480px) {
+  .store-directory-showcase-skeleton { grid-template-columns: minmax(0, 1fr) minmax(100px, .62fr); border-radius: 18px; }
+  .store-directory-showcase-skeleton-copy { gap: 11px; padding: 16px; }
+  .store-directory-skeleton-avatar { width: 42px; height: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .store-directory-skeleton-line::after,
+  .store-directory-skeleton-tile::after,
+  .store-directory-skeleton-avatar::after { animation: none; }
+}
