@@ -13,14 +13,14 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
   return (
     <div>
       <CategoryFilterSection
-        eyebrow="YOUR DISCOVERY FEED"
-        title="Find your kind of thing"
+        eyebrow="Picked for your next find"
+        title="Your For You feed"
         ariaLabel="Filter For You products by category"
         selectedValue={selectedTag}
         onSelect={setSelectedTag}
         items={[{ label: "All", value: "" }, ...tags.map((name) => ({ label: name, value: name.toLowerCase() }))]}
         actionHref="/categories"
-        actionLabel="All categories"
+        actionLabel="Endless discovery"
       />
       <ProductMasonry personalized tag={selectedTag} />
     </div>
