@@ -6598,3 +6598,38 @@ html, body {
 .shop-promo-shared-store-measure { display:block!important; width:100%!important; height:auto!important; min-height:0!important; padding:0!important; overflow:visible!important; }
 .shop-promo-shared-store-measure > .store-directory-showcase-measure-card { width:100%!important; height:auto!important; min-height:310px!important; max-height:none!important; box-sizing:border-box!important; }
 @media (max-width:760px) { .shop-promo-shared-store-measure > .store-directory-showcase-measure-card { min-height:250px!important; } }
+
+/* Shop tabs span the viewport and tuck flush to the top when the navbar hides. */
+.shop-page .shop-tabs{
+  position:sticky;
+  left:50%;
+  width:100vw;
+  max-width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  border-left:0!important;
+  border-right:0!important;
+  border-radius:0!important;
+}
+.shop-page .shop-tab{
+  flex:1 1 0%;
+  min-width:0;
+  justify-content:center;
+}
+body:has(.site-header.is-hidden) .shop-page .shop-tabs{
+  top:0!important;
+}
+@media(max-width:640px){
+  .shop-page .shop-tabs{
+    top:70px;
+    padding-left:8px;
+    padding-right:8px;
+  }
+  body:has(.site-header.is-hidden) .shop-page .shop-tabs{
+    top:0!important;
+  }
+  .shop-page .shop-tab{
+    padding-left:8px;
+    padding-right:8px;
+  }
+}
