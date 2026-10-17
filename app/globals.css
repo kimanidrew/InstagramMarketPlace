@@ -5911,31 +5911,3 @@ html, body {
 @media (max-width: 640px) {
   .store-directory-filter-action { width: fit-content; min-height: 38px; }
 }
-
-
-/* For You filter typography follows the editorial scale and accent used in its hero above. */
-.for-you-category-filter-section .store-directory-eyebrow {
-  color: #5945d6;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: .12em;
-  line-height: 1.5;
-}
-.for-you-category-filter-section .store-directory-tools-top h2 {
-  margin-top: 8px;
-  color: #171526;
-  font-size: clamp(28px, 3.8vw, 42px);
-  font-weight: 900;
-  line-height: .99;
-  letter-spacing: -.065em;
-}
-.for-you-category-filter-section .store-directory-filter-action {
-  font-size: 11px;
-  font-weight: 850;
-  letter-spacing: -.015em;
-}
-@media (max-width: 640px) {
-  .for-you-category-filter-section .store-directory-tools-top h2 {
-    font-size: clamp(27px, 7vw, 34px);
-  }
-}
