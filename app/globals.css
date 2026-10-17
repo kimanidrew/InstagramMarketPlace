@@ -5870,3 +5870,20 @@ html, body {
 @media (max-width: 640px) {
   .store-directory-category-fade { width: 54px; }
 }
+
+
+/* Mirror the right-edge control logic for the left edge using explicit React state. */
+.store-directory-category-scroller[data-at-start="true"] .store-directory-category-fade-left,
+.store-directory-category-scroller[data-at-start="true"] .for-you-filter-scroll-button.left-2 {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+.store-directory-category-scroller[data-at-end="true"] .store-directory-category-fade-right,
+.store-directory-category-scroller[data-at-end="true"] .for-you-filter-scroll-button.right-2 {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
