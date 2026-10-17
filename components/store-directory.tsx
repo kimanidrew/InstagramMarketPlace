@@ -115,7 +115,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
               {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search">×</button>}
             </label>
           </div>
-          <div className="store-directory-category-scroller">
+          <div className={`store-directory-category-scroller${atStart ? " is-at-start" : ""}`}>
             {!atStart && <button type="button" onClick={() => scrollCategories("left")} aria-label="Scroll categories left" className="for-you-filter-scroll-button left-2"><ArrowLeft size={16} /></button>}
             {!atEnd && <button type="button" onClick={() => scrollCategories("right")} aria-label="Scroll categories right" className="for-you-filter-scroll-button right-2"><ArrowRight size={16} /></button>}
             <div ref={scrollRef} onScroll={updateScrollEdges} className="store-directory-category-row hide-scrollbar" role="group" aria-label="Shop categories">
