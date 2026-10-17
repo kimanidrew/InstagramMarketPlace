@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { BadgeCheck, Crown, ArrowUpRight, PackageOpen, Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { BadgeCheck, Crown, ArrowUpRight, PackageOpen, Search, Sparkles } from "lucide-react";
 import { CategoryFilterSection } from "@/components/category-filter-section";
 
 type StorePost = {
@@ -33,9 +33,86 @@ type StoreEntry = {
   promoted: boolean;
 };
 
+function shuffleStores(items: StoreEntry[]) {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+function accentForStore(username: string) {
+  const accents = ["#d9f0a5", "#f6c7a6", "#c9d8ff", "#f5bfdc", "#b9e7df", "#e8d4ff", "#f4df9b", "#c5e0b4"];
+  let hash = 0;
+  for (let i = 0; i < username.length; i++) hash = (hash * 31 + username.charCodeAt(i)) | 0;
+  return accents[Math.abs(hash) % accents.length];
+}
+
+const SEEN_STORES_KEY = "sokolink-stores-showcase-seen-v1";
+const SHOWCASE_SIZE = 6;
+
+function chooseShowcase(items: StoreEntry[], previouslySeen: string[]) {
+  if (!items.length) return { selected: [] as StoreEntry[], seen: previouslySeen };
+  const promoted = shuffleStores(items.filter((item) => item.promoted));
+  const regular = shuffleStores(items.filter((item) => !item.promoted));
+  const randomized = [...promoted, ...regular];
+  const seen = new Set(previouslySeen);
+  let fresh = randomized.filter((item) => !seen.has(item.store.id));
+  if (!fresh.length) {
+    seen.clear();
+    fresh = randomized;
+  }
+  const selected = fresh.slice(0, SHOWCASE_SIZE);
+  if (selected.length < SHOWCASE_SIZE) {
+    const selectedIds = new Set(selected.map((item) => item.store.id));
+    selected.push(...shuffleStores(randomized.filter((item) => !selectedIds.has(item.store.id))).slice(0, SHOWCASE_SIZE - selected.length));
+  }
+  selected.forEach((item) => seen.add(item.store.id));
+  return { selected, seen: [...seen] };
+}
+
 export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   const [category, setCategory] = useState("All stores");
   const [query, setQuery] = useState("");
+  const [showcaseStores, setShowcaseStores] = useState<StoreEntry[]>([]);
+  useEffect(() => {
+    if (!stores.length) return;
+    let previouslySeen: string[] = [];
+    try {
+      previouslySeen = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
+    } catch {
+      previouslySeen = [];
+    }
+    const next = chooseShowcase(stores, previouslySeen);
+    setShowcaseStores(next.selected);
+    try {
+      window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify(next.seen));
+    } catch {
+      // The showcase still works when session storage is unavailable.
+    }
+  }, [stores]);
+
+  useEffect(() => {
+    if (stores.length <= SHOWCASE_SIZE) return;
+    const interval = window.setInterval(() => {
+      let previouslySeen: string[] = [];
+      try {
+        previouslySeen = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
+      } catch {
+        previouslySeen = [];
+      }
+      const next = chooseShowcase(stores, previouslySeen);
+      setShowcaseStores(next.selected);
+      try {
+        window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify(next.seen));
+      } catch {
+        // The carousel can continue without session storage.
+      }
+    }, 5200);
+    return () => window.clearInterval(interval);
+  }, [stores]);
+
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
     stores.forEach(({ posts }) => posts.forEach((post) => {
@@ -56,21 +133,48 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
 
   return (
     <div className="store-directory">
-      <section className="store-directory-hero">
-        <div className="store-directory-hero-copy">
-          <span className="store-directory-eyebrow">THE SOKOLINK COMMUNITY</span>
-          <h1>Find your next<br /><span>favourite shop.</span></h1>
-          <p>Explore independent Instagram shops, browse their latest finds, and discover something worth keeping.</p>
-          <div className="store-directory-summary">
-            <span><b>{stores.length}</b> shops to explore</span>
-            <i />
-            <span><b>{stores.reduce((total, item) => total + item.posts.length, 0)}</b> listings to discover</span>
+      <section className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
+        <div className="store-directory-showcase-heading">
+          <div>
+            <span className="store-directory-eyebrow"><Sparkles size={12} /> THE SOKOLINK COMMUNITY</span>
+            <h1>Meet your next<br /><span>favourite shops.</span></h1>
+            <p>A rotating showcase of standout stores, with fresh finds picked just for your next browse.</p>
           </div>
+          <div className="store-directory-showcase-count"><b>{stores.length}</b><span>shops to discover</span></div>
         </div>
-        <div className="store-directory-hero-art" aria-hidden="true">
-          <div className="store-directory-art-card store-directory-art-card-back"><span>DISCOVER</span><b>Good finds.<br />Great shops.</b><div className="store-directory-art-swatch" /></div>
-          <div className="store-directory-art-card store-directory-art-card-front"><span>YOUR NEXT FIND</span><div className="store-directory-art-shapes"><i /><i /><i /></div><b>Made to be<br />discovered.</b></div>
+        <div className="store-directory-showcase-stage" key={showcaseStores.map((item) => item.store.id).join("-")}>
+          {showcaseStores.map(({ store, posts, promoted, activeVerified, activePro }, index) => {
+            const firstPost = posts[0];
+            const image = firstPost?.thumbnailUrl || firstPost?.mediaUrl;
+            return (
+              <Link
+                key={store.id}
+                href={"/stores/" + store.username}
+                className="store-directory-showcase-card"
+                style={{ "--store-accent": accentForStore(store.username), "--showcase-index": index } as React.CSSProperties}
+              >
+                <div className="store-directory-showcase-card-top">
+                  <div className={"store-directory-showcase-avatar" + (activeVerified ? " is-verified" : "")}>
+                    {store.profileImageUrl ? <img src={store.profileImageUrl} alt="" loading="lazy" /> : <span>{store.username.slice(0, 1).toUpperCase()}</span>}
+                  </div>
+                  <span className="store-directory-showcase-open"><ArrowUpRight size={14} /></span>
+                </div>
+                <div className="store-directory-showcase-image">
+                  {image ? <img src={image} alt="" loading="lazy" /> : <span><PackageOpen size={24} /></span>}
+                  <span className="store-directory-showcase-image-count">{posts.length} {posts.length === 1 ? "find" : "finds"}</span>
+                </div>
+                <div className="store-directory-showcase-card-bottom">
+                  <div className="store-directory-showcase-name">@{store.username}{activeVerified && <BadgeCheck size={13} fill="currentColor" />}</div>
+                  <div className="store-directory-showcase-badges">
+                    {promoted && <span className="is-promoted">Promoted</span>}
+                    {activePro && <span><Crown size={10} /> Pro</span>}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
+        <div className="store-directory-showcase-footer"><span><i /> FRESH SHOPS, EVERY ROTATION</span><span>Curated for discovery <ArrowUpRight size={13} /></span></div>
       </section>
 
       <CategoryFilterSection
