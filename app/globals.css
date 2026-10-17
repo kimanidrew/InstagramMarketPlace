@@ -5795,6 +5795,7 @@ html, body {
   pointer-events: none;
 }
 .store-directory-category-scroller::before { left: 0; background: linear-gradient(to right,#fff 0%,rgba(255,255,255,.88) 42%,rgba(255,255,255,0) 100%); }
+.store-directory-category-scroller.is-at-start::before { opacity: 0; visibility: hidden; }
 .store-directory-category-scroller::after { right: 0; background: linear-gradient(to left,#fff 0%,rgba(255,255,255,.88) 42%,rgba(255,255,255,0) 100%); }
 .store-directory-category {
   flex: 0 0 auto !important;
