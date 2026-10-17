@@ -6498,14 +6498,14 @@ html, body {
 }
 
 
-/* Contrast-aware typography for each store's own extracted accent. */
-.store-directory-showcase-card.store-directory-showcase-promo { color: var(--store-text, #171717) !important; }
-.store-directory-showcase-promo-label { color: var(--store-text, #171717) !important; border-color: color-mix(in srgb, var(--store-text, #171717) 20%, transparent) !important; }
+/* Contrast-aware, warm-toned typography for each store's own extracted accent. */
+.store-directory-showcase-card.store-directory-showcase-promo { color: var(--store-text, #3d3048) !important; }
+.store-directory-showcase-promo-label { color: var(--store-text, #3d3048) !important; border-color: color-mix(in srgb, var(--store-text, #3d3048) 22%, transparent) !important; }
 .store-directory-showcase-promo-title,
-.store-directory-showcase-promo-title span { color: var(--store-text, #171717) !important; text-shadow: none !important; }
-.store-directory-showcase-promo-copy > p { color: var(--store-muted, rgb(23 23 23 / 76%)) !important; }
-.store-directory-showcase-promo-meta > span { color: var(--store-text, #171717) !important; background: var(--store-chip-bg, rgb(255 255 255 / 42%)) !important; }
-.store-directory-showcase-promo-cta { color: var(--store-cta-text, #fff) !important; background: var(--store-cta-bg, #171717) !important; }
+.store-directory-showcase-promo-title span { color: var(--store-text, #3d3048) !important; text-shadow: none !important; }
+.store-directory-showcase-promo-copy > p { color: var(--store-muted, rgb(61 48 72 / 82%)) !important; }
+.store-directory-showcase-promo-meta > span { color: var(--store-text, #3d3048) !important; background: var(--store-chip-bg, rgb(255 249 239 / 68%)) !important; }
+.store-directory-showcase-promo-cta { color: var(--store-cta-text, #fff2df) !important; background: var(--store-cta-bg, #3d3048) !important; }
 .store-directory-showcase-promo-label svg,
 .store-directory-showcase-promo-title svg,
 .store-directory-showcase-promo-meta svg,
