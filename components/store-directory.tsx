@@ -43,8 +43,9 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     const element = scrollRef.current;
     if (!element) return;
     const maxScroll = Math.max(0, element.scrollWidth - element.clientWidth);
-    setAtStart(element.scrollLeft <= 2);
-    setAtEnd(maxScroll <= 2 || element.scrollLeft >= maxScroll - 2);
+    const left = Math.max(0, element.scrollLeft);
+    setAtStart(left <= 4);
+    setAtEnd(maxScroll <= 4 || left >= maxScroll - 4);
   }, []);
   const scrollCategories = (direction: "left" | "right") => {
     const element = scrollRef.current;
@@ -64,6 +65,8 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   useEffect(() => {
     const element = scrollRef.current;
     if (!element) return;
+    // Normalize the initial position so the left controls start hidden.
+    element.scrollLeft = 0;
     updateScrollEdges();
     const observer = new ResizeObserver(updateScrollEdges);
     observer.observe(element);
@@ -115,7 +118,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
               {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search">×</button>}
             </label>
           </div>
-          <div className={`store-directory-category-scroller${atStart ? " is-at-start" : ""}`}>
+          <div data-at-start={atStart} data-at-end={atEnd} className={`store-directory-category-scroller${atStart ? " is-at-start" : ""}`}>
             {!atStart && <span className="store-directory-category-fade store-directory-category-fade-left" aria-hidden="true" />}
             {!atEnd && <span className="store-directory-category-fade store-directory-category-fade-right" aria-hidden="true" />}
             {!atStart && <button type="button" onClick={() => scrollCategories("left")} aria-label="Scroll categories left" className="for-you-filter-scroll-button left-2"><ArrowLeft size={16} /></button>}
