@@ -6645,3 +6645,9 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
 }
+
+
+/* White background across the full-width sticky shop tabs section. */
+.shop-page .shop-tabs{
+  background:#fff!important;
+}
