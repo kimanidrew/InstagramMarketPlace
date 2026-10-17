@@ -6496,3 +6496,17 @@ html, body {
   .store-directory-skeleton-tile::after,
   .store-directory-skeleton-avatar::after { animation: none; }
 }
+
+
+/* Contrast-aware typography for each store's own extracted accent. */
+.store-directory-showcase-card.store-directory-showcase-promo { color: var(--store-text, #171717) !important; }
+.store-directory-showcase-promo-label { color: var(--store-text, #171717) !important; border-color: color-mix(in srgb, var(--store-text, #171717) 20%, transparent) !important; }
+.store-directory-showcase-promo-title,
+.store-directory-showcase-promo-title span { color: var(--store-text, #171717) !important; text-shadow: none !important; }
+.store-directory-showcase-promo-copy > p { color: var(--store-muted, rgb(23 23 23 / 76%)) !important; }
+.store-directory-showcase-promo-meta > span { color: var(--store-text, #171717) !important; background: var(--store-chip-bg, rgb(255 255 255 / 42%)) !important; }
+.store-directory-showcase-promo-cta { color: var(--store-cta-text, #fff) !important; background: var(--store-cta-bg, #171717) !important; }
+.store-directory-showcase-promo-label svg,
+.store-directory-showcase-promo-title svg,
+.store-directory-showcase-promo-meta svg,
+.store-directory-showcase-promo-cta svg { color: currentColor; }
