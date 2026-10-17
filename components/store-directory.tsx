@@ -216,7 +216,26 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     <div className="store-directory">
       <section ref={showcaseRef} className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
         <div className="store-directory-showcase-stage">
-          {showcaseStores[0] && <SpotlightStoreCard key={showcaseStores[0].store.id} entry={showcaseStores[0]} />}
+          {showcaseStores[0] ? (
+            <SpotlightStoreCard key={showcaseStores[0].store.id} entry={showcaseStores[0]} />
+          ) : stores.length > 0 ? (
+            <div className="store-directory-showcase-skeleton" role="status" aria-label="Loading featured shops">
+              <div className="store-directory-showcase-skeleton-copy">
+                <span className="store-directory-skeleton-line store-directory-skeleton-label" />
+                <span className="store-directory-skeleton-line store-directory-skeleton-title" />
+                <span className="store-directory-skeleton-line store-directory-skeleton-description" />
+                <span className="store-directory-skeleton-line store-directory-skeleton-description short" />
+                <span className="store-directory-skeleton-line store-directory-skeleton-meta" />
+                <span className="store-directory-skeleton-line store-directory-skeleton-cta" />
+              </div>
+              <div className="store-directory-showcase-skeleton-visual">
+                <span className="store-directory-skeleton-tile tile-one" />
+                <span className="store-directory-skeleton-tile tile-two" />
+                <span className="store-directory-skeleton-tile tile-three" />
+                <span className="store-directory-skeleton-avatar" />
+              </div>
+            </div>
+          ) : null}
         </div>
         <div className="store-directory-showcase-measure" aria-hidden="true">
           {stores.map((entry) => <SpotlightStoreCard key={entry.store.id} entry={entry} measure />)}
