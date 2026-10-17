@@ -44,8 +44,14 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     if (!element) return;
     const maxScroll = Math.max(0, element.scrollWidth - element.clientWidth);
     const left = Math.max(0, element.scrollLeft);
-    setAtStart(left <= 4);
-    setAtEnd(maxScroll <= 4 || left >= maxScroll - 4);
+    const firstItem = element.firstElementChild as HTMLElement | null;
+    const lastItem = element.lastElementChild as HTMLElement | null;
+    const viewport = element.getBoundingClientRect();
+    const firstItemIsAtStart = !firstItem || firstItem.getBoundingClientRect().left >= viewport.left - 4;
+    const lastItemIsAtEnd = !lastItem || lastItem.getBoundingClientRect().right <= viewport.right + 4;
+    // Determine the edges from the actual visible category items, not scrollLeft alone.
+    setAtStart(left <= 4 || firstItemIsAtStart);
+    setAtEnd(maxScroll <= 4 || left >= maxScroll - 4 || lastItemIsAtEnd);
   }, []);
   const scrollCategories = (direction: "left" | "right") => {
     const element = scrollRef.current;
