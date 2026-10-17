@@ -6553,3 +6553,14 @@ html, body {
 .store-directory-showcase-promo-title .store-directory-showcase-promo-username {
   color: var(--store-text, #3d3048) !important;
 }
+
+
+/* Keep the spotlight sticker light with dark, readable typography on every store theme. */
+.store-directory-showcase-promo-label {
+  color: #493653 !important;
+  background: #fff2df !important;
+  border-color: rgb(73 54 83 / 16%) !important;
+}
+.store-directory-showcase-promo-label svg {
+  color: #755c82 !important;
+}
