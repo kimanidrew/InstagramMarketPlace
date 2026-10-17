@@ -1,53 +1,26 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, SlidersHorizontal, ArrowUpRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { SlidersHorizontal, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { ProductMasonry } from "@/components/product-masonry";
+import { CategoryFilterRail } from "@/components/category-filter-rail";
 
 export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
   const [selectedTag, setSelectedTag] = useState("");
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(true);
   const [headerHidden, setHeaderHidden] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const updateScrollEdges = useCallback(() => {
-    const element = scrollRef.current;
-    if (!element) return;
-    const maxScroll = Math.max(0, element.scrollWidth - element.clientWidth);
-    setAtStart(element.scrollLeft <= 2);
-    setAtEnd(maxScroll <= 2 || element.scrollLeft >= maxScroll - 2);
-  }, []);
 
   useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) return;
-    updateScrollEdges();
-    const observer = new ResizeObserver(updateScrollEdges);
-    observer.observe(element);
-    window.addEventListener("resize", updateScrollEdges);
     const handleScroll = () => {
       const header = document.querySelector(".site-header");
       setHeaderHidden(!!header?.classList.contains("is-hidden"));
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateScrollEdges);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [updateScrollEdges, tags.length]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const scroll = (direction: "left" | "right") => {
-    const element = scrollRef.current;
-    if (!element) return;
-    element.scrollBy({
-      left: direction === "left" ? -Math.max(element.clientWidth * 0.72, 220) : Math.max(element.clientWidth * 0.72, 220),
-      behavior: "smooth",
-    });
-  };
+
 
   return (
     <div>
@@ -68,25 +41,12 @@ export function ForYouFilters({ tags = [] }: { tags?: string[] }) {
               <ArrowUpRight size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </div>
-          <div className="for-you-filter-scroller">
-            {!atStart && <button type="button" onClick={() => scroll("left")} aria-label="Scroll categories left" className="for-you-filter-scroll-button left-2">
-              <ArrowLeft size={16} />
-            </button>}
-            {!atEnd && <button type="button" onClick={() => scroll("right")} aria-label="Scroll categories right" className="for-you-filter-scroll-button right-2">
-              <ArrowRight size={16} />
-            </button>}
-            <div ref={scrollRef} onScroll={updateScrollEdges} className="for-you-filter-tags hide-scrollbar" role="group" aria-label="Product categories">
-              <button type="button" onClick={() => setSelectedTag("")} className={"for-you-filter-chip " + (!selectedTag ? "is-active" : "")}>All</button>
-              {tags.map((name) => {
-                const active = selectedTag === name.toLowerCase();
-                return (
-                  <button key={name} type="button" onClick={() => setSelectedTag(name.toLowerCase())} className={"for-you-filter-chip " + (active ? "is-active" : "")}>
-                    {name}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <CategoryFilterRail
+            ariaLabel="Product categories"
+            selectedValue={selectedTag}
+            onSelect={setSelectedTag}
+            items={[{ label: "All", value: "" }, ...tags.map((name) => ({ label: name, value: name.toLowerCase() }))]}
+          />
         </div>
       </div>
       <ProductMasonry personalized tag={selectedTag} />
