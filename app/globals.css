@@ -6283,3 +6283,23 @@ html, body {
     padding: 18px 14px !important;
   }
 }
+
+
+/* Restore rounded corners and internal spacing on the spotlight store card only. */
+.store-directory-showcase-card.store-directory-showcase-promo {
+  padding: clamp(20px, 2.5vw, 32px) !important;
+  border-radius: 24px !important;
+  overflow: hidden;
+}
+@media (max-width: 760px) {
+  .store-directory-showcase-card.store-directory-showcase-promo {
+    padding: 18px !important;
+    border-radius: 20px !important;
+  }
+}
+@media (max-width: 480px) {
+  .store-directory-showcase-card.store-directory-showcase-promo {
+    padding: 16px !important;
+    border-radius: 18px !important;
+  }
+}
