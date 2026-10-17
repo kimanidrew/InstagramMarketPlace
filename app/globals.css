@@ -6303,3 +6303,37 @@ html, body {
     border-radius: 18px !important;
   }
 }
+
+
+/* Keep the spotlight card's copy inset, while its visual panel reaches the card's inner edge. */
+.store-directory-showcase-card.store-directory-showcase-promo {
+  padding: 0 !important;
+}
+.store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy {
+  padding: clamp(20px, 2.5vw, 32px) !important;
+}
+.store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+  align-self: stretch !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: clamp(12px, 1.8vw, 22px) !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+}
+@media (max-width: 760px) {
+  .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy {
+    padding: 18px !important;
+  }
+  .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+    padding: 14px !important;
+  }
+}
+@media (max-width: 480px) {
+  .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy {
+    padding: 16px !important;
+  }
+  .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+    padding: 12px !important;
+  }
+}
