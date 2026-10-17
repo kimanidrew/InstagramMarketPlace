@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { BadgeCheck, Crown, ArrowUpRight, PackageOpen, Search, Sparkles } from "lucide-react";
 import { CategoryFilterSection } from "@/components/category-filter-section";
 
@@ -80,7 +80,8 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     if (!stores.length) return;
     let previouslySeen: string[] = [];
     try {
-      previouslySeen = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
+      const saved = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
+      previouslySeen = Array.isArray(saved) ? saved.filter((id): id is string => typeof id === "string") : [];
     } catch {
       previouslySeen = [];
     }
@@ -151,7 +152,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
                 key={store.id}
                 href={"/stores/" + store.username}
                 className="store-directory-showcase-card"
-                style={{ "--store-accent": accentForStore(store.username), "--showcase-index": index } as React.CSSProperties}
+                style={{ "--store-accent": accentForStore(store.username), "--showcase-index": index } as CSSProperties}
               >
                 <div className="store-directory-showcase-card-top">
                   <div className={"store-directory-showcase-avatar" + (activeVerified ? " is-verified" : "")}>
