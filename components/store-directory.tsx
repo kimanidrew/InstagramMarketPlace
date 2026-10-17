@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { BadgeCheck, Crown, Search, ArrowUpRight, PackageOpen, SlidersHorizontal } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BadgeCheck, Crown, Search, ArrowUpRight, PackageOpen, SlidersHorizontal, ArrowLeft, ArrowRight } from "lucide-react";
 
 type StorePost = {
   id: string;
@@ -35,6 +35,35 @@ type StoreEntry = {
 export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   const [category, setCategory] = useState("All stores");
   const [query, setQuery] = useState("");
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(true);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const updateScrollEdges = useCallback(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    const maxScroll = Math.max(0, element.scrollWidth - element.clientWidth);
+    setAtStart(element.scrollLeft <= 2);
+    setAtEnd(maxScroll <= 2 || element.scrollLeft >= maxScroll - 2);
+  }, []);
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    updateScrollEdges();
+    const observer = new ResizeObserver(updateScrollEdges);
+    observer.observe(element);
+    window.addEventListener("resize", updateScrollEdges);
+    const handleScroll = () => setHeaderHidden(!!document.querySelector(".site-header")?.classList.contains("is-hidden"));
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => { observer.disconnect(); window.removeEventListener("resize", updateScrollEdges); window.removeEventListener("scroll", handleScroll); };
+  }, [updateScrollEdges, categories.length]);
+  const scrollCategories = (direction: "left" | "right") => {
+    const element = scrollRef.current;
+    if (!element) return;
+    const amount = Math.max(element.clientWidth * 0.72, 220);
+    element.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
+  };
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
     stores.forEach(({ posts }) => posts.forEach((post) => {
@@ -73,25 +102,30 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
       </section>
 
       <section className="store-directory-tools" aria-label="Filter shops">
-        <div className="store-directory-tools-top">
-          <div>
-            <span className="store-directory-eyebrow">BROWSE BY CATEGORY</span>
-            <h2>Explore the shops</h2>
+        <div className="store-directory-filter-bar">
+          <div className="store-directory-tools-top">
+            <div>
+              <span className="store-directory-eyebrow">BROWSE BY CATEGORY</span>
+              <h2>Explore the shops</h2>
+            </div>
+            <label className="store-directory-search">
+              <Search size={17} />
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search shops or products" aria-label="Search shops or products" />
+              {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search">×</button>}
+            </label>
           </div>
-          <label className="store-directory-search">
-            <Search size={17} />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search shops or products" aria-label="Search shops or products" />
-            {query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search">×</button>}
-          </label>
-        </div>
-        <div className="store-directory-category-row">
-          <span className="store-directory-category-icon"><SlidersHorizontal size={15} /></span>
-          {categories.map((name) => (
-            <button type="button" key={name} onClick={() => setCategory(name)} className={"store-directory-category" + (category === name ? " is-active" : "")} aria-pressed={category === name}>
-              {name}
-              {name === "All stores" && <span>{stores.length}</span>}
-            </button>
-          ))}
+          <div className="store-directory-category-scroller">
+            {!atStart && <button type="button" onClick={() => scrollCategories("left")} aria-label="Scroll categories left" className="for-you-filter-scroll-button left-2"><ArrowLeft size={16} /></button>}
+            {!atEnd && <button type="button" onClick={() => scrollCategories("right")} aria-label="Scroll categories right" className="for-you-filter-scroll-button right-2"><ArrowRight size={16} /></button>}
+            <div ref={scrollRef} onScroll={updateScrollEdges} className="store-directory-category-row hide-scrollbar" role="group" aria-label="Shop categories">
+              {categories.map((name) => (
+                <button type="button" key={name} onClick={() => setCategory(name)} className={"store-directory-category" + (category === name ? " is-active" : "")} aria-pressed={category === name}>
+                  {name}
+                  {name === "All stores" && <span>{stores.length}</span>}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
