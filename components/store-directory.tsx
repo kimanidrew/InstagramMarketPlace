@@ -108,7 +108,8 @@ function SpotlightStoreCard({ entry, measure = false }: { entry: StoreEntry; mea
 export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
   const [category, setCategory] = useState("All stores");
   const [query, setQuery] = useState("");
-  const [showcaseStores, setShowcaseStores] = useState<StoreEntry[]>([]);\n  const showcaseRef = useRef<HTMLElement | null>(null);
+  const [showcaseStores, setShowcaseStores] = useState<StoreEntry[]>([]);
+  const showcaseRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (!stores.length) return;
     let previouslySeen: string[] = [];
