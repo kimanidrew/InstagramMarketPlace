@@ -5887,3 +5887,27 @@ html, body {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+
+/* Shared filter-section action uses the same neutral control styling as the Stores search field. */
+.store-directory-filter-action {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #fff;
+  color: #333;
+  font-size: 12px;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color .18s ease, background .18s ease;
+}
+.store-directory-filter-action:hover { border-color: #b8b8af; background: #f7f7f4; }
+@media (max-width: 640px) {
+  .store-directory-filter-action { width: fit-content; min-height: 38px; }
+}
