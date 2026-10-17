@@ -18,12 +18,13 @@ type CategoryFilterSectionProps = {
   searchLabel?: string;
   actionHref?: string;
   actionLabel?: string;
+  variant?: "default" | "for-you";
 };
 
 export function CategoryFilterSection({
   eyebrow, title, items, selectedValue, onSelect, ariaLabel,
   searchValue, onSearchChange, searchPlaceholder = "Search", searchLabel = "Search",
-  actionHref, actionLabel,
+  actionHref, actionLabel, variant = "default",
 }: CategoryFilterSectionProps) {
   const [headerHidden, setHeaderHidden] = useState(false);
 
@@ -35,7 +36,7 @@ export function CategoryFilterSection({
   }, []);
 
   return (
-    <section className={`store-directory-tools${headerHidden ? " is-header-hidden" : ""}`} aria-label={ariaLabel}>
+    <section className={`store-directory-tools${headerHidden ? " is-header-hidden" : ""}${variant === "for-you" ? " for-you-category-filter-section" : ""}`} aria-label={ariaLabel}>
       <div className="store-directory-filter-bar">
         <div className="store-directory-tools-top">
           <div>
