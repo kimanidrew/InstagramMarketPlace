@@ -239,6 +239,9 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     return matchingPosts && matchingText;
   }), [stores, category, query]);
 
+  const placeholderAccent = stores[0]?.store.profileAccentColor || (stores[0] ? accentForStore(stores[0].store.username) : "#e8d4ff");
+  const placeholderTheme = contrastTheme(placeholderAccent);
+
   return (
     <div className="store-directory">
       <section ref={showcaseRef} className="store-directory-hero store-directory-showcase" aria-label="Featured shops">
@@ -246,7 +249,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
           {showcaseStores[0] ? (
             <SpotlightStoreCard key={showcaseStores[0].store.id} entry={showcaseStores[0]} />
           ) : stores.length > 0 ? (
-            <div className="store-directory-showcase-skeleton" role="status" aria-label="Loading featured shops">
+            <div className="store-directory-showcase-skeleton" role="status" aria-label="Loading featured shops" style={{ "--store-accent": placeholderAccent, "--store-text": placeholderTheme.text, "--store-muted": placeholderTheme.muted, "--store-chip-bg": placeholderTheme.chip, "--store-cta-bg": placeholderTheme.ctaBg, "--store-cta-text": placeholderTheme.ctaText } as CSSProperties}>
               <div className="store-directory-showcase-skeleton-copy">
                 <span className="store-directory-skeleton-line store-directory-skeleton-label" />
                 <span className="store-directory-skeleton-line store-directory-skeleton-title" />
