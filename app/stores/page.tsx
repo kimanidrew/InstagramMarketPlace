@@ -1,5 +1,5 @@
 import { db } from "@/lib/prisma";
-import Link from "next/link";
+import { StoreDirectory } from "@/components/store-directory";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 import { user } from "@/lib/auth";
 
@@ -18,6 +18,13 @@ export default async function Stores() {
         select: {
           id: true,
           mediaUrl: true,
+          thumbnailUrl: true,
+          productTitle: true,
+          productSlug: true,
+          category: true,
+          subcategory: true,
+          mediaType: true,
+          listingType: true,
         },
       },
     },
@@ -40,50 +47,26 @@ export default async function Stores() {
     )
   ).filter(({ posts }) => posts.length > 0).sort((a, b) => Number(b.promoted) - Number(a.promoted) || Number(b.activeVerified) - Number(a.activeVerified) || Number(b.activePro) - Number(a.activePro) || b.personalAffinity - a.personalAffinity || a.store.username.localeCompare(b.store.username));
 
+  const directoryStores = availableStores.map(({ store, posts, promoted, activeVerified, activePro }) => ({
+    store: {
+      id: store.id,
+      username: store.username,
+      biography: store.biography,
+      profileImageUrl: store.profileImageUrl,
+      verifiedAt: store.verifiedAt,
+      verifiedUntil: store.verifiedUntil,
+      proUntil: store.proUntil,
+      paidPromotionActive: promoted,
+    },
+    posts,
+    promoted,
+    activeVerified,
+    activePro,
+  }));
+
   return (
-    <main className="shell py-16">
-      <p className="text-xs font-bold uppercase tracking-[.2em] text-[#888]">
-        Stores
-      </p>
-
-      <h1 className="mt-3 text-5xl font-black tracking-[-.06em]">
-        Find a shop by Instagram account.
-      </h1>
-
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {availableStores.map(({ store, posts, promoted, activeVerified, activePro }) => (
-          <Link
-            key={store.id}
-            href={"/stores/" + store.username}
-            className="card p-6"
-          >
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 overflow-hidden rounded-full bg-[#eee]">
-                {store.profileImageUrl && (
-                  <img
-                    src={store.profileImageUrl}
-                    className="h-full w-full object-cover"
-                    alt=""
-                  />
-                )}
-              </div>
-
-              <div>
-                <div className="flex flex-wrap items-center gap-2"><b>@{store.username}</b>{promoted && <span className="rounded-full bg-black px-2 py-1 text-[9px] font-black uppercase tracking-wider text-white">Promoted</span>}{activeVerified && <span className="rounded-full border border-black/10 px-2 py-1 text-[9px] font-bold">Verified</span>}{activePro && <span className="rounded-full bg-[#f1e9ff] px-2 py-1 text-[9px] font-bold">Pro Seller</span>}</div>
-                <p className="text-sm text-[#777]">
-                  {posts.length} products
-                </p>
-              </div>
-            </div>
-
-            {store.biography && (
-              <p className="mt-5 line-clamp-2 text-sm text-[#666]">
-                {store.biography}
-              </p>
-            )}
-          </Link>
-        ))}
-      </div>
+    <main className="shell store-directory-page">
+      <StoreDirectory stores={JSON.parse(JSON.stringify(directoryStores))} />
     </main>
   );
 }
