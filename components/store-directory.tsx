@@ -116,8 +116,6 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
                       return (
                         <Link href={href} key={post.id} className="store-directory-product" title={post.productTitle || "View listing"}>
                           {image ? <img src={image} alt={post.productTitle || "Shop listing"} loading="lazy" /> : <span className="store-directory-product-empty"><PackageOpen size={20} /></span>}
-                          <span className="store-directory-product-shade" />
-                          <span className="store-directory-product-title">{post.productTitle || post.category || "View listing"}</span>
                         </Link>
                       );
                     })}
