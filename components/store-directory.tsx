@@ -68,7 +68,6 @@ function chooseShowcase(items: StoreEntry[], previouslySeen: string[]) {
     const selectedIds = new Set(selected.map((item) => item.store.id));
     selected.push(...shuffleStores(randomized.filter((item) => !selectedIds.has(item.store.id))).slice(0, SHOWCASE_SIZE - selected.length));
   }
-  selected.forEach((item) => seen.add(item.store.id));
   return { selected, seen: [...seen] };
 }
 
@@ -86,30 +85,54 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
       previouslySeen = [];
     }
     const next = chooseShowcase(stores, previouslySeen);
+    const first = next.selected[0];
     setShowcaseStores(next.selected);
+    if (first) previouslySeen = [...previouslySeen.filter((id) => id !== first.store.id), first.store.id];
     try {
-      window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify(next.seen));
+      window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify(previouslySeen));
     } catch {
       // The showcase still works when session storage is unavailable.
     }
   }, [stores]);
 
   useEffect(() => {
-    if (stores.length <= SHOWCASE_SIZE) return;
+    if (stores.length < 2) return;
     const interval = window.setInterval(() => {
-      let previouslySeen: string[] = [];
-      try {
-        previouslySeen = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
-      } catch {
-        previouslySeen = [];
-      }
-      const next = chooseShowcase(stores, previouslySeen);
-      setShowcaseStores(next.selected);
-      try {
-        window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify(next.seen));
-      } catch {
-        // The carousel can continue without session storage.
-      }
+      setShowcaseStores((current) => {
+        if (current.length > 1) {
+          const nextQueue = current.slice(1);
+          const nextStore = nextQueue[0];
+          if (nextStore) {
+            try {
+              const saved = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
+              const seen = Array.isArray(saved) ? saved.filter((id): id is string => typeof id === "string") : [];
+              window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify([...seen.filter((id) => id !== nextStore.store.id), nextStore.store.id]));
+            } catch {
+              // Rotation still works without session storage.
+            }
+          }
+          return nextQueue;
+        }
+
+        let previouslySeen: string[] = [];
+        try {
+          const saved = JSON.parse(window.sessionStorage.getItem(SEEN_STORES_KEY) || "[]");
+          previouslySeen = Array.isArray(saved) ? saved.filter((id): id is string => typeof id === "string") : [];
+        } catch {
+          previouslySeen = [];
+        }
+        const next = chooseShowcase(stores, previouslySeen);
+        const first = next.selected[0];
+        if (first) {
+          previouslySeen = [...previouslySeen.filter((id) => id !== first.store.id), first.store.id];
+          try {
+            window.sessionStorage.setItem(SEEN_STORES_KEY, JSON.stringify(previouslySeen));
+          } catch {
+            // Rotation still works without session storage.
+          }
+        }
+        return next.selected;
+      });
     }, 5200);
     return () => window.clearInterval(interval);
   }, [stores]);
@@ -143,8 +166,9 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
           </div>
           <div className="store-directory-showcase-count"><b>{stores.length}</b><span>shops to discover</span></div>
         </div>
-        <div className="store-directory-showcase-stage" key={showcaseStores.map((item) => item.store.id).join("-")}>
-          {showcaseStores.map(({ store, posts, promoted, activeVerified, activePro }, index) => {
+        <div className="store-directory-showcase-stage">
+          {showcaseStores[0] && (() => {
+            const { store, posts, promoted, activeVerified, activePro } = showcaseStores[0];
             const firstPost = posts[0];
             const image = firstPost?.thumbnailUrl || firstPost?.mediaUrl;
             return (
@@ -152,7 +176,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
                 key={store.id}
                 href={"/stores/" + store.username}
                 className="store-directory-showcase-card"
-                style={{ "--store-accent": accentForStore(store.username), "--showcase-index": index } as CSSProperties}
+                style={{ "--store-accent": accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
               >
                 <div className="store-directory-showcase-card-top">
                   <div className={"store-directory-showcase-avatar" + (activeVerified ? " is-verified" : "")}>
@@ -173,7 +197,7 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
                 </div>
               </Link>
             );
-          })}
+          })()}
         </div>
         <div className="store-directory-showcase-footer"><span><i /> FRESH SHOPS, EVERY ROTATION</span><span>Curated for discovery <ArrowUpRight size={13} /></span></div>
       </section>
