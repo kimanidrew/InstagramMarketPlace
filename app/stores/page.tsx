@@ -53,6 +53,7 @@ export default async function Stores() {
       username: store.username,
       biography: store.biography,
       profileImageUrl: store.profileImageUrl,
+      profileAccentColor: store.profileAccentColor,
       verifiedAt: store.verifiedAt,
       verifiedUntil: store.verifiedUntil,
       proUntil: store.proUntil,
