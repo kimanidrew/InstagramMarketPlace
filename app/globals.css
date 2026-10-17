@@ -6247,3 +6247,14 @@ html, body {
   margin: 0 !important;
   border-radius: 0 !important;
 }
+
+
+/* Remove all outer spacing around the standalone Stores showcase section. */
+.store-directory,
+.store-directory-hero.store-directory-showcase,
+.store-directory-showcase-stage {
+  padding: 0 !important;
+}
+.store-directory-hero.store-directory-showcase {
+  margin: 0 !important;
+}
