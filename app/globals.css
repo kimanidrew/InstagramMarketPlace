@@ -6651,3 +6651,14 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 .shop-page .shop-tabs{
   background:#fff!important;
 }
+
+
+/* Keep the sticky shop tabs flush beneath the visible navbar. */
+.shop-page .shop-tabs{
+  top:64px!important;
+}
+@media(max-width:640px){
+  .shop-page .shop-tabs{
+    top:64px!important;
+  }
+}
