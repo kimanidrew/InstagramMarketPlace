@@ -49,6 +49,19 @@ function accentForStore(username: string) {
   for (let i = 0; i < username.length; i++) hash = (hash * 31 + username.charCodeAt(i)) | 0;
   return accents[Math.abs(hash) % accents.length];
 }
+function contrastTheme(accent: string) {
+  const match = /^#?([0-9a-f]{6})$/i.exec(accent.trim());
+  if (!match) return { text: "#171717", muted: "rgb(23 23 23 / 76%)", chip: "rgb(255 255 255 / 42%)", ctaBg: "#171717", ctaText: "#ffffff" };
+  const value = match[1];
+  const linear = [0, 2, 4].map((offset) => {
+    const channel = parseInt(value.slice(offset, offset + 2), 16) / 255;
+    return channel <= 0.04045 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
+  });
+  const luminance = linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+  if (luminance > 0.42) return { text: "#171717", muted: "rgb(23 23 23 / 76%)", chip: "rgb(255 255 255 / 42%)", ctaBg: "#171717", ctaText: "#ffffff" };
+  return { text: "#ffffff", muted: "rgb(255 255 255 / 86%)", chip: "rgb(0 0 0 / 22%)", ctaBg: "#ffffff", ctaText: "#171717" };
+}
+
 
 const SEEN_STORES_KEY = "sokolink-stores-showcase-seen-v1";
 const SHOWCASE_SIZE = 6;
@@ -80,7 +93,7 @@ function SpotlightStoreCard({ entry, measure = false }: { entry: StoreEntry; mea
       tabIndex={measure ? -1 : undefined}
       aria-hidden={measure ? true : undefined}
       className="store-directory-showcase-card store-directory-showcase-promo"
-      style={{ "--store-accent": store.profileAccentColor || accentForStore(store.username), "--showcase-index": 0 } as CSSProperties}
+      style={{ "--store-accent": store.profileAccentColor || accentForStore(store.username), "--store-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).text, "--store-muted": contrastTheme(store.profileAccentColor || accentForStore(store.username)).muted, "--store-chip-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).chip, "--store-cta-bg": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaBg, "--store-cta-text": contrastTheme(store.profileAccentColor || accentForStore(store.username)).ctaText, "--showcase-index": 0 } as CSSProperties}
     >
       <div className="store-directory-showcase-promo-copy">
         <div className="store-directory-showcase-promo-label"><Sparkles size={12} /> {promoted ? "Promoted shop" : "Shop spotlight"}</div>
