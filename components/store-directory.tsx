@@ -46,18 +46,6 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     setAtStart(element.scrollLeft <= 2);
     setAtEnd(maxScroll <= 2 || element.scrollLeft >= maxScroll - 2);
   }, []);
-  useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) return;
-    updateScrollEdges();
-    const observer = new ResizeObserver(updateScrollEdges);
-    observer.observe(element);
-    window.addEventListener("resize", updateScrollEdges);
-    const handleScroll = () => setHeaderHidden(!!document.querySelector(".site-header")?.classList.contains("is-hidden"));
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => { observer.disconnect(); window.removeEventListener("resize", updateScrollEdges); window.removeEventListener("scroll", handleScroll); };
-  }, [updateScrollEdges, categories.length]);
   const scrollCategories = (direction: "left" | "right") => {
     const element = scrollRef.current;
     if (!element) return;
@@ -72,6 +60,19 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
     }));
     return ["All stores", ...Array.from(counts.keys()).sort((a, b) => a.localeCompare(b))];
   }, [stores]);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    updateScrollEdges();
+    const observer = new ResizeObserver(updateScrollEdges);
+    observer.observe(element);
+    window.addEventListener("resize", updateScrollEdges);
+    const handleScroll = () => setHeaderHidden(!!document.querySelector(".site-header")?.classList.contains("is-hidden"));
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => { observer.disconnect(); window.removeEventListener("resize", updateScrollEdges); window.removeEventListener("scroll", handleScroll); };
+  }, [updateScrollEdges, categories.length]);
 
   const filtered = useMemo(() => stores.filter(({ store, posts }) => {
     const matchingPosts = category === "All stores" || posts.some((post) => post.category?.trim() === category);
