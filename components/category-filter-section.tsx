@@ -49,10 +49,16 @@ export function CategoryFilterSection({
               <input value={searchValue ?? ""} onChange={(event) => onSearchChange(event.target.value)} placeholder={searchPlaceholder} aria-label={searchLabel} />
               {searchValue && <button type="button" onClick={() => onSearchChange("")} aria-label="Clear search">×</button>}
             </label>
-          ) : actionHref && actionLabel ? (
-            <Link href={actionHref} className="store-directory-filter-action">
-              {actionLabel}<ArrowUpRight size={15} />
-            </Link>
+          ) : actionLabel ? (
+            actionHref ? (
+              <Link href={actionHref} className="store-directory-filter-action">
+                {actionLabel}<ArrowUpRight size={15} />
+              </Link>
+            ) : (
+              <span className={`store-directory-filter-action${variant === "for-you" ? " for-you-discovery-sticker" : ""}`}>
+                {actionLabel}
+              </span>
+            )
           ) : null}
         </div>
         <CategoryFilterRail ariaLabel={ariaLabel} selectedValue={selectedValue} onSelect={onSelect} items={items} />
