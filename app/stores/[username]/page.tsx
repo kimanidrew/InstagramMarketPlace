@@ -131,9 +131,7 @@ export default async function Store({
         </div>
 
         {posts.length > 0 ? (
-          <div className="store-product-grid">
-            <OptimizedProductGrid products={posts} />
-          </div>
+          <OptimizedProductGrid products={posts} />
         ) : (
           <div className="store-empty">
             <div className="store-empty-icon"><Instagram size={20} /></div>
