@@ -6681,3 +6681,26 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     margin-top: 0 !important;
   }
 }
+
+/* Stack the Shop spotlight vertically on mobile, showing its right-side visual first. */
+@media (max-width: 760px) {
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo,
+  .shop-promo-shared-store-measure > .store-directory-showcase-measure-card {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: 175px auto !important;
+    min-height: 0 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual,
+  .shop-promo-shared-store-measure > .store-directory-showcase-measure-card .store-directory-showcase-promo-visual {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 175px !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy,
+  .shop-promo-shared-store-measure > .store-directory-showcase-measure-card .store-directory-showcase-promo-copy {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 18px 16px !important;
+  }
+}
