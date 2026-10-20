@@ -6670,3 +6670,14 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   border:0!important;
   box-shadow:none!important;
 }
+
+/* On mobile, prevent route-level wrappers from leaving a blank gap below the navbar. */
+@media (max-width: 1023px) {
+  main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+}
