@@ -85,7 +85,7 @@ export function ProductCard({ p }: { p: any }) {
   const href = "/" + (isService ? "service" : "product") + "/" + p.productSlug;
 
   return (
-    <article ref={cardRef} className="group min-w-0" onClickCapture={event => { const target = event.target as HTMLElement; const link = target.closest("a"); if (link && link.getAttribute("href") === href && p.connection?.id) recordAnalytics({ connectionId: p.connection.id, postId: p.id, type: "CLICK" }); }}>
+    <article ref={cardRef} className="product-item-card group min-w-0" onClickCapture={event => { const target = event.target as HTMLElement; const link = target.closest("a"); if (link && link.getAttribute("href") === href && p.connection?.id) recordAnalytics({ connectionId: p.connection.id, postId: p.id, type: "CLICK" }); }}>
       <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] bg-[#f4f4f2] sm:rounded-[22px]">
         {isVideo && p.mediaUrl ? (
           <div className="h-full w-full">
