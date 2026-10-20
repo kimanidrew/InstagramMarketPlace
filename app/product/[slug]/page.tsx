@@ -121,7 +121,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
               {tags.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555] transition hover:border-black hover:bg-black hover:text-white">{tag.name}</Link>)}
+                  {tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{tag.name}</Link>)}
                 </div>
               )}
 
@@ -132,7 +132,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
-                {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full border border-black/[0.1] bg-white px-3 py-3 text-center text-xs font-bold transition hover:-translate-y-0.5 hover:border-black hover:bg-black hover:text-white sm:gap-2 sm:px-5 sm:py-3.5 sm:text-sm"><Instagram size={16} className="shrink-0" /> <span>View original post</span> <ArrowUpRight size={14} className="shrink-0" /></a>}
+                {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full border border-black bg-black px-3 py-3 text-center text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#222] hover:text-white sm:gap-2 sm:px-5 sm:py-3.5 sm:text-sm"><Instagram size={16} className="shrink-0" /> <span>View original post</span> <ArrowUpRight size={14} className="shrink-0" /></a>}
               </div>
 
               <div className="mt-6 border-t border-black/[0.07] pt-5">
