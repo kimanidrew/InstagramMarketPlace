@@ -42,17 +42,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   const isVideo = String(product.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = product.mediaUrl || product.thumbnailUrl;
   const carouselItems = Array.isArray(product.mediaItems) ? (product.mediaItems as Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>) : null;
-  const cleanCaption = product.caption
-    ? Array.from(
-        new Set(
-          product.caption
-            .replace(/#[\p{L}\p{N}_]+/gu, "")
-            .split("\n")
-            .map((line) => line.trim())
-            .filter(Boolean),
-        ),
-      ).join("\n")
-    : "";
+  const fullCaption = product.caption?.trim() || "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
   const average = product.reviews.length
     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
@@ -112,8 +102,8 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <span className="text-sm text-[#999]">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</span>
               </div>
 
-              {cleanCaption && (
-                <p className="mt-5 whitespace-pre-line text-[13px] font-semibold leading-6 text-[#555]">{cleanCaption}</p>
+              {fullCaption && (
+                <p className="mt-3 whitespace-pre-line break-words text-[12px] font-medium leading-5 text-[#666]">{fullCaption}</p>
               )}
 
               {tags.length > 0 && (
