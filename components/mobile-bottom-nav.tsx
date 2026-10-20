@@ -1,10 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Handbag, Search, Sparkles, Store, UserRound } from "lucide-react";
+import { ShoppingBag, Search, Sparkles, Store, UserRound } from "lucide-react";
 
 const items = [
-  { label: "Shop", href: "/shop", icon: Handbag },
+  { label: "Shop", href: "/shop", icon: ShoppingBag },
   { label: "Search", href: "/search", icon: Search },
   { label: "For You", href: "/for-you", icon: Sparkles },
   { label: "Stores", href: "/stores", icon: Store },
