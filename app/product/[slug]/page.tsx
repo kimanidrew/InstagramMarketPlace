@@ -2,7 +2,7 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Star, ShieldCheck, Package, ShoppingBag, ArrowRight, Heart, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Instagram, Star, ShieldCheck, Package, ShoppingBag, ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -10,6 +10,7 @@ import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { ReviewSection } from "@/components/review-section";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { ProductDetailStats } from "@/components/product-detail-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -92,7 +93,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <div className="inline-flex items-center gap-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-[#171717]" aria-label="Product statistics"><span className="inline-flex items-center gap-1.5 text-[11px] font-bold"><Heart size={13} className="fill-current" /> {totalLikes.toLocaleString()} <span className="font-medium text-[#777]">likes</span></span><span className="h-4 w-px bg-[#dededb]" /><span className="inline-flex items-center gap-1.5 text-[11px] font-bold"><MessageCircle size={13} /> {product.reviews.length.toLocaleString()} <span className="font-medium text-[#777]">reviews</span></span></div>
+                  <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
                   {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
                   {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
                 </div>
