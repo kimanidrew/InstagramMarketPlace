@@ -2,10 +2,9 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Sparkles, Star, ShieldCheck, Package, ShoppingBag, ArrowRight } from "lucide-react";
+import { ArrowUpRight, Instagram, Star, ShieldCheck, Package, ShoppingBag, ArrowRight, Heart, MessageCircle } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { LikeButton } from "@/components/like-button";
-import { TotalLikesStat } from "@/components/total-likes-stat";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
@@ -57,6 +56,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   const average = product.reviews.length
     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
     : 0;
+  const totalLikes = Number(product.instagramLikeCount || 0) + product.likes.length;
 
   const relatedProducts = await db().instagramPost.findMany({
     where: {
@@ -92,12 +92,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><Sparkles size={11} /> SokoLink find</span>
+                  <div className="inline-flex items-center gap-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-[#171717]" aria-label="Product statistics"><span className="inline-flex items-center gap-1.5 text-[11px] font-bold"><Heart size={13} className="fill-current" /> {totalLikes.toLocaleString()} <span className="font-medium text-[#777]">likes</span></span><span className="h-4 w-px bg-[#dededb]" /><span className="inline-flex items-center gap-1.5 text-[11px] font-bold"><MessageCircle size={13} /> {product.reviews.length.toLocaleString()} <span className="font-medium text-[#777]">reviews</span></span></div>
                   {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
                   {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
                 </div>
                 <div className="ml-auto flex shrink-0 items-center gap-2">
-                  <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+                  <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
                   <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact wishlisted={product.wishlistItems.length > 0} />
                 </div>
               </div>
@@ -125,11 +125,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                   {categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}
                 </div>
               )}
-
-              <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-7">
-                <TotalLikesStat id={product.id} initialCount={Number(product.instagramLikeCount || 0) + product.likes.length} />
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.reviews.length.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Reviews</p></div>
-              </div>
 
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
