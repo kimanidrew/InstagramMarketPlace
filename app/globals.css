@@ -7489,3 +7489,11 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     display: none !important;
   }
 }
+
+
+/* Hide category-rail scroll arrow buttons on mobile across all category filter sections. */
+@media (max-width: 767px) {
+  .store-directory-category-scroller .for-you-filter-scroll-button {
+    display: none !important;
+  }
+}
