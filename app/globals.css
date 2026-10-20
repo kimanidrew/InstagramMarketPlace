@@ -7275,3 +7275,32 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     display: none !important;
   }
 }
+
+
+/* Store directory cards use a two-column layout on mobile. */
+@media (max-width: 767px) {
+  .store-directory-page .store-directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .store-directory-page .store-directory-card {
+    min-width: 0;
+    padding: 10px !important;
+    border-radius: 14px !important;
+  }
+  .store-directory-page .store-directory-card-head {
+    gap: 8px;
+  }
+  .store-directory-page .store-directory-avatar {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+  }
+  .store-directory-page .store-directory-username {
+    overflow-wrap: anywhere;
+    font-size: 12px;
+  }
+  .store-directory-page .store-directory-products {
+    gap: 4px;
+  }
+}
