@@ -44,14 +44,14 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
               muted={muted}
               preload="metadata"
               aria-label={title + " video " + (index + 1)}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain object-center"
             />
             <button type="button" onClick={toggleMute} aria-label={muted ? "Unmute video" : "Mute video"} className="absolute bottom-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white shadow-lg backdrop-blur-md transition hover:scale-105 hover:bg-black/75">
               {muted ? <VolumeX size={17} /> : <Volume2 size={17} />}
             </button>
           </>
         ) : current.mediaUrl || current.thumbnailUrl ? (
-          <img src={current.mediaUrl || current.thumbnailUrl || ""} alt={title + " image " + (index + 1)} className="h-full w-full object-cover" />
+          <img src={current.mediaUrl || current.thumbnailUrl || ""} alt={title + " image " + (index + 1)} className="h-full w-full object-contain object-center" />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-[#999]">No media available</div>
         )}
