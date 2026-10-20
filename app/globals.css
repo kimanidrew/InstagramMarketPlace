@@ -6959,3 +6959,19 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     display: none;
   }
 }
+
+
+/* Mobile: make page-level bordered sections run edge-to-edge, like Meet the Makers. */
+@media (max-width: 760px) {
+  main section[class*="border"][class*="rounded"] {
+    width: calc(100% + 24px) !important;
+    max-width: none !important;
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+}
