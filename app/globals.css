@@ -7262,3 +7262,16 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     display: none !important;
   }
 }
+
+
+/* Mobile navbar: remove its divider at scroll top and keep search accessible only on desktop. */
+@media (max-width: 767px) {
+  .site-header.is-at-top {
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+  }
+  .site-header > div > div > button[aria-label="Open search"],
+  .site-header > div > div > button[aria-label="Close search"] {
+    display: none !important;
+  }
+}
