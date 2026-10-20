@@ -42,7 +42,17 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   const isVideo = String(product.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = product.mediaUrl || product.thumbnailUrl;
   const carouselItems = Array.isArray(product.mediaItems) ? (product.mediaItems as Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>) : null;
-  const cleanCaption = product.caption ? Array.from(new Set(product.caption.replace(/#[\p{L}\p{N}_]+/gu, "").split("\n").map((line) => line.trim()).filter(Boolean))).join("\n") : "";
+  const cleanCaption = product.caption
+    ? Array.from(
+        new Set(
+          product.caption
+            .replace(/#[\p{L}\p{N}_]+/gu, "")
+            .split("\n")
+            .map((line) => line.trim())
+            .filter(Boolean),
+        ),
+      ).join("\n")
+    : "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
   const average = product.reviews.length
     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
@@ -103,7 +113,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               </div>
 
               {cleanCaption && (
-                <p className="mt-6 whitespace-pre-line text-[15px] leading-7 text-[#666]">{cleanCaption}</p>
+                <p className="mt-5 whitespace-pre-line text-[13px] font-semibold leading-6 text-[#555]">{cleanCaption}</p>
               )}
 
               {tags.length > 0 && (
