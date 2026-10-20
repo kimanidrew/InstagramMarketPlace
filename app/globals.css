@@ -6859,8 +6859,8 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     width: 100% !important;
   }
   .shop-page .shop-tab-panel .product-recommendations-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
   }
   .shop-page .shop-tab-panel .product-recommendations-interlude {
     padding: 15px !important;
@@ -7277,7 +7277,7 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 }
 
 
-/* Store directory cards use a two-column layout on mobile. */
+/* Store directory cards use a single-column layout on mobile. */
 @media (max-width: 767px) {
   .store-directory-page .store-directory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
