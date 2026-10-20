@@ -7116,3 +7116,21 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     box-shadow: 0 4px 12px rgb(39 22 37 / 22%) !important;
   }
 }
+
+
+/* Mobile Shop Spotlight: add breathing room above the collage and enlarge the shop avatar. */
+@media (max-width: 760px) {
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+    padding: 12px 8px 16px !important;
+    box-sizing: border-box !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-avatar {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    min-height: 56px !important;
+    bottom: -2px !important;
+    border-width: 3px !important;
+    z-index: 6 !important;
+  }
+}
