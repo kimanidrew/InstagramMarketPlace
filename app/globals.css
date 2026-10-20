@@ -7021,3 +7021,46 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     border-width: 3px !important;
   }
 }
+
+
+/* Mobile Shop Spotlight: portrait listing previews with a cleaner, balanced collage. */
+@media (max-width: 760px) {
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+    height: 175px !important;
+    min-height: 175px !important;
+    isolation: isolate;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float {
+    width: 30% !important;
+    height: 80% !important;
+    aspect-ratio: 3 / 4 !important;
+    box-sizing: border-box !important;
+    border: 3px solid rgb(255 255 255 / 94%) !important;
+    border-radius: 10px !important;
+    object-fit: cover !important;
+    box-shadow: 0 7px 16px rgb(0 0 0 / 16%) !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-0 {
+    left: 5% !important;
+    right: auto !important;
+    top: 10% !important;
+    transform: rotate(-7deg) !important;
+    z-index: 1 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-1 {
+    left: 35% !important;
+    right: auto !important;
+    top: 5% !important;
+    width: 30% !important;
+    height: 86% !important;
+    transform: rotate(0deg) !important;
+    z-index: 3 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-2 {
+    left: auto !important;
+    right: 5% !important;
+    top: 10% !important;
+    transform: rotate(7deg) !important;
+    z-index: 2 !important;
+  }
+}
