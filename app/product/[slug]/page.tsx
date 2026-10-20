@@ -84,7 +84,13 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
         <div className="product-detail-breadcrumb mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><Package size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Product details <span className="ml-auto hidden sm:inline">Discover something good</span></div>
         <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
           <div className="product-gallery-sticky min-w-0">
-            <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
+            <div className="relative">
+              <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
+              <div className="absolute right-5 top-5 z-20 flex items-center gap-2">
+                <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} compact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+                <WishlistButton id={product.id} count={product.wishlistItems.length} compact wishlisted={product.wishlistItems.length > 0} />
+              </div>
+            </div>
           </div>
 
           <aside className="product-detail-aside min-w-0 lg:sticky lg:top-24">
@@ -129,8 +135,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               <div className="product-action-stack mt-6 flex flex-col gap-3 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
                 <div className="flex flex-wrap gap-3">
-                  <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
-                  <WishlistButton id={product.id} count={product.wishlistItems.length} wishlisted={product.wishlistItems.length > 0} />
                   {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-black/[0.1] bg-white px-5 py-3.5 text-sm font-bold transition hover:-translate-y-0.5 hover:border-black hover:bg-black hover:text-white"><Instagram size={16} /> View original post <ArrowUpRight size={14} /></a>}
                 </div>
               </div>
