@@ -7389,3 +7389,92 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     gap: 2px !important;
   }
 }
+
+
+/* Refined /stores spotlight card layout for small screens. */
+@media (max-width: 760px) {
+  .store-directory-page .store-directory-showcase {
+    width: 100%;
+    min-width: 0;
+  }
+  .store-directory-page .store-directory-showcase-card.store-directory-showcase-promo {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto 150px !important;
+    min-height: 0 !important;
+    border-radius: 20px !important;
+  }
+  .store-directory-page .store-directory-showcase-promo-copy {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    padding: 20px 18px 16px !important;
+    justify-content: flex-start;
+  }
+  .store-directory-page .store-directory-showcase-promo-label {
+    font-size: 9px;
+    letter-spacing: .08em;
+    padding: 6px 9px;
+  }
+  .store-directory-page .store-directory-showcase-promo-title {
+    gap: 6px;
+    margin-top: 13px;
+    font-size: clamp(24px, 7vw, 32px) !important;
+    line-height: 1.08;
+    letter-spacing: -.05em;
+  }
+  .store-directory-page .store-directory-showcase-promo-copy > p {
+    margin: 9px 0 0;
+    max-width: none;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .store-directory-page .store-directory-showcase-promo-meta {
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .store-directory-page .store-directory-showcase-promo-meta > span {
+    display: inline-flex !important;
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+  .store-directory-page .store-directory-showcase-promo-cta {
+    margin-top: 13px;
+    padding: 10px 13px;
+    font-size: 10px;
+  }
+  .store-directory-page .store-directory-showcase-promo-visual {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 150px !important;
+    height: 150px;
+    width: 100%;
+  }
+  .store-directory-page .store-directory-showcase-float {
+    width: 29%;
+    height: 76%;
+    border-width: 3px;
+    border-radius: 13px;
+  }
+  .store-directory-page .store-directory-showcase-float-0 {
+    left: 15%;
+    top: 13%;
+    transform: rotate(-8deg);
+  }
+  .store-directory-page .store-directory-showcase-float-1 {
+    left: 35%;
+    top: 7%;
+    transform: rotate(2deg);
+  }
+  .store-directory-page .store-directory-showcase-float-2 {
+    right: 15%;
+    top: 13%;
+    transform: rotate(8deg);
+  }
+  .store-directory-page .store-directory-showcase-promo-avatar {
+    width: 48px;
+    height: 48px;
+    left: 50%;
+    bottom: 5px;
+    border-width: 3px;
+  }
+}
