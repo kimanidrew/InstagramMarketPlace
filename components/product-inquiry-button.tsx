@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, Instagram, MessageCircle } from "lucide-react";
+import { ArrowUpRight, Check, Instagram, MessageCircle } from "lucide-react";
 import { useState } from "react";
 
 export function ProductInquiryButton({
@@ -44,12 +44,12 @@ Thank you! 😊`;
     <button
       type="button"
       onClick={inquire}
-      className="product-inquire-button mt-0 flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-black bg-black px-3 py-3.5 text-center text-xs font-bold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#222] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:gap-2 sm:px-4 sm:py-4"
-      title="Open Instagram and send the prepared inquiry"
+      className="product-inquire-button mt-0 flex min-w-0 flex-1 items-center justify-center gap-2 rounded-2xl border border-[#171717] bg-[#171717] px-3 py-3.5 text-center text-xs font-bold text-white shadow-[0_4px_12px_rgba(0,0,0,0.12)] transition duration-200 hover:-translate-y-0.5 hover:border-black hover:bg-black hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:px-4 sm:py-4"
+      title="Message the seller about this item"
     >
       {copied ? <Check size={14} /> : <MessageCircle size={14} />}
-      {copied ? "Message copied — paste in Instagram" : "Inquire on Instagram"}
-      <Instagram size={14} />
+      {copied ? "Message copied" : "Ask the seller"}
+      {copied ? <Check size={14} /> : <ArrowUpRight size={14} />}
     </button>
   );
 }
