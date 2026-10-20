@@ -359,14 +359,14 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
               </div>
               <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-7">
+            <div className="saved-for-later-list mt-6 flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-7 md:gap-4">
               {savedProducts.slice(0, 7).map((x: any) => {
                 const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                 const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
                 const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
                 const image = x.mediaUrl || x.thumbnailUrl;
                 return (
-                  <div key={x.id} className="group relative aspect-square overflow-hidden rounded-[22px] bg-[#eeeeeb]">
+                  <div key={x.id} className="saved-for-later-card group relative h-[112px] w-[112px] shrink-0 overflow-hidden rounded-[20px] bg-[#eeeeeb] sm:h-[136px] sm:w-[136px] md:aspect-square md:h-auto md:w-auto md:shrink">
                     <Link href={href} aria-label={x.productTitle || "Saved listing"} className="block h-full w-full">
                       {isVideo && x.mediaUrl ? <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
                     </Link>
