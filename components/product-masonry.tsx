@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BadgeCheck, Bookmark, Crown, ArrowRight, LoaderCircle, Store, Sparkles } from "lucide-react";
+import { BadgeCheck, Bookmark, Crown, ArrowRight, ChevronLeft, ChevronRight, LoaderCircle, Store, Sparkles } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -137,6 +137,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   const [error, setError] = useState(false);
   const pageRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const savedForLaterScrollRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -357,9 +358,15 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
                 <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
               </div>
-              <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
+              <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
+                <div className="hidden items-center gap-2 md:flex" aria-label="Scroll saved listings">
+                  <button type="button" onClick={() => savedForLaterScrollRef.current?.scrollBy({ left: -360, behavior: "smooth" })} aria-label="Scroll saved listings left" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border bg-black text-white transition-colors hover:border-[#333] hover:bg-[#333] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronLeft size={18} /></button>
+                  <button type="button" onClick={() => savedForLaterScrollRef.current?.scrollBy({ left: 360, behavior: "smooth" })} aria-label="Scroll saved listings right" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border bg-black text-white transition-colors hover:border-[#333] hover:bg-[#333] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronRight size={18} /></button>
+                </div>
+                <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
+              </div>
             </div>
-            <div className="saved-for-later-list mt-6 flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-7 md:gap-4">
+            <div ref={savedForLaterScrollRef} className="saved-for-later-list mt-6 -mx-6 flex gap-3 overflow-x-auto px-6 pb-2 scroll-smooth md:-mx-9 md:px-9">
               {savedProducts.slice(0, 7).map((x: any) => {
                 const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                 const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
