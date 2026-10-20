@@ -343,9 +343,9 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
               </div>
               <Link href="/shop" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">Explore shop <ArrowRight size={12} /></Link>
             </div>
-            <div className="product-recommendations-list grid grid-cols-2 gap-3 lg:grid-cols-4 sm:gap-4">
+            <div className="product-recommendations-list mt-1 flex gap-3 overflow-x-auto pb-2 sm:gap-4 md:grid md:grid-cols-2 lg:grid-cols-4">
               {item.products.map((recommended: any) => (
-                <div key={recommended.id} className="min-w-0"><ProductCard p={recommended} /></div>
+                <div key={recommended.id} className="product-recommendation-card min-w-[148px] w-[148px] shrink-0 sm:min-w-[190px] sm:w-[190px] md:min-w-0 md:w-auto md:shrink"><ProductCard p={recommended} /></div>
               ))}
             </div>
           </section>
