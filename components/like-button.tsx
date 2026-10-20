@@ -3,7 +3,7 @@
 import { Heart } from "lucide-react";
 import { useState } from "react";
 
-export function LikeButton({ id, count, compact = false, initialLiked = false }: { id: string; count: number; compact?: boolean; initialLiked?: boolean }) {
+export function LikeButton({ id, count, compact = false, largeCompact = false, initialLiked = false }: { id: string; count: number; compact?: boolean; largeCompact?: boolean; initialLiked?: boolean }) {
   const [liked, setLiked] = useState(initialLiked);
   const [n, setN] = useState(count);
   const [busy, setBusy] = useState(false);
@@ -47,11 +47,11 @@ export function LikeButton({ id, count, compact = false, initialLiked = false }:
       aria-pressed={liked}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
-        (compact ? "h-10 w-10 shadow-sm " : "px-5 py-3 text-sm font-semibold ") +
+        (compact ? (largeCompact ? "h-12 w-12 shadow-sm " : "h-10 w-10 shadow-sm ") : "px-5 py-3 text-sm font-semibold ") +
         (liked ? "bg-[#ff3b6b] text-white ring-2 ring-white/80 shadow-md shadow-[#ff3b6b]/30" : "bg-white/95 text-black ring-1 ring-black/5")
       }
     >
-      <Heart size={compact ? 17 : 16} fill={liked ? "currentColor" : "none"} strokeWidth={liked ? 2.5 : 2} />
+      <Heart size={compact ? (largeCompact ? 21 : 17) : 16} fill={liked ? "currentColor" : "none"} strokeWidth={liked ? 2.5 : 2} />
       {!compact && <span>{n.toLocaleString()} likes</span>}
     </button>
   );
