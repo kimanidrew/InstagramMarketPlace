@@ -23,6 +23,7 @@ type Listing = {
   mediaType: string;
   mediaUrl: string | null;
   thumbnailUrl: string | null;
+  mediaItems?: unknown;
   productSlug: string | null;
   category: string | null;
   subcategory: string | null;
@@ -117,6 +118,56 @@ function searchTerms(query: string) {
     .slice(0, 8);
 }
 
+type SearchIntent = { terms: string[]; listingType: "PRODUCT" | "SERVICE" | "ANY" };
+
+async function interpretSearch(query: string): Promise<SearchIntent> {
+  const fallbackType = /\\b(service|services|hire|book|plumber|electrician|cleaner|photographer|salon|repair|tutor|delivery)\\b/i.test(query)
+    ? "SERVICE"
+    : "ANY";
+  const fallback = { terms: searchTerms(query), listingType: fallbackType as SearchIntent["listingType"] };
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return fallback;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+        temperature: 0,
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: "Extract a shopping search from the user's message. Return JSON only: {\\"terms\\":[string],\\"listingType\\":\\"PRODUCT\\"|\\"SERVICE\\"|\\"ANY\\"}. Include useful item, category, service, brand, and location words that could occur in listing captions or categories. Remove greetings, filler, currency/budget numbers, and generic shopping words. Use SERVICE only when clearly looking for a service/provider, PRODUCT only for a physical product, otherwise ANY. Never invent details.",
+          },
+          { role: "user", content: query.slice(0, 1000) },
+        ],
+      }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) return fallback;
+    const data = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) return fallback;
+    const parsed = JSON.parse(content) as { terms?: unknown; listingType?: unknown };
+    const terms = Array.isArray(parsed.terms)
+      ? Array.from(new Set(parsed.terms.filter((term): term is string => typeof term === "string")
+          .map((term) => term.toLowerCase().trim())
+          .filter((term) => term.length > 1 && term.length <= 40 && /[\\p{L}]/u.test(term)))
+        ).slice(0, 8)
+      : [];
+    const listingType = parsed.listingType === "PRODUCT" || parsed.listingType === "SERVICE" || parsed.listingType === "ANY"
+      ? parsed.listingType
+      : "ANY";
+    return { terms: terms.length ? terms : fallback.terms, listingType };
+  } catch {
+    // Search remains available when the AI key is absent, rate-limited, or temporarily unavailable.
+    return fallback;
+  }
+}
+
 function listingScore(listing: Listing, terms: string[]) {
   const title = (listing.productTitle || "").toLowerCase();
   const category = `${listing.category || ""} ${listing.subcategory || ""}`.toLowerCase();
@@ -134,7 +185,8 @@ function listingScore(listing: Listing, terms: string[]) {
 }
 
 async function findListings(query: string): Promise<Listing[]> {
-  const terms = searchTerms(query);
+  const intent = await interpretSearch(query);
+  const terms = intent.terms;
   if (!terms.length) return [];
   const orConditions = terms.flatMap((term) => [
     { productTitle: { contains: term, mode: "insensitive" as const } },
@@ -145,7 +197,11 @@ async function findListings(query: string): Promise<Listing[]> {
     { tags: { some: { name: { contains: term, mode: "insensitive" as const } } } },
   ]);
   const raw = await db().instagramPost.findMany({
-    where: { isProduct: true, OR: orConditions },
+    where: {
+      isProduct: true,
+      ...(intent.listingType === "ANY" ? {} : { listingType: intent.listingType }),
+      OR: orConditions,
+    },
     include: { connection: { select: { username: true } }, tags: { select: { name: true } } },
     orderBy: [{ timestamp: "desc" }, { createdAt: "desc" }],
     take: 40,
@@ -166,14 +222,27 @@ function listingUrl(listing: Listing) {
 
 function imageForListing(listing: Listing) {
   const isVideo = String(listing.mediaType || "").toUpperCase() === "VIDEO";
-  const candidate = isVideo ? listing.thumbnailUrl : (listing.mediaUrl || listing.thumbnailUrl);
-  if (!candidate) return null;
-  try {
-    const parsed = new URL(candidate);
-    return parsed.protocol === "https:" ? parsed.toString() : null;
-  } catch {
-    return null;
+  const mediaItems = Array.isArray(listing.mediaItems)
+    ? listing.mediaItems as Array<{ mediaType?: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>
+    : [];
+  const candidates = [
+    isVideo ? listing.thumbnailUrl : listing.mediaUrl,
+    listing.thumbnailUrl,
+    ...mediaItems.flatMap((item) => {
+      const itemIsVideo = String(item.mediaType || "").toUpperCase() === "VIDEO";
+      return [itemIsVideo ? item.thumbnailUrl : item.mediaUrl, item.thumbnailUrl];
+    }),
+  ];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    try {
+      const parsed = new URL(candidate);
+      if (parsed.protocol === "https:") return parsed.toString();
+    } catch {
+      // Skip malformed or non-absolute media URLs and try the next image.
+    }
   }
+  return null;
 }
 
 function listingCaption(listing: Listing) {
