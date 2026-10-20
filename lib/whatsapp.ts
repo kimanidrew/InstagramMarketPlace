@@ -142,7 +142,7 @@ async function interpretSearch(query: string): Promise<SearchIntent> {
         messages: [
           {
             role: "system",
-            content: "Extract a shopping search from the user's message. Return JSON only: {\\"terms\\":[string],\\"listingType\\":\\"PRODUCT\\"|\\"SERVICE\\"|\\"ANY\\"}. Include useful item, category, service, brand, and location words that could occur in listing captions or categories. Remove greetings, filler, currency/budget numbers, and generic shopping words. Use SERVICE only when clearly looking for a service/provider, PRODUCT only for a physical product, otherwise ANY. Never invent details.",
+            content: "Extract a shopping search from the user message. Return a JSON object with a terms array of strings and listingType set to PRODUCT, SERVICE, or ANY. Include useful item, category, service, brand, and location words that could occur in listing captions or categories. Remove greetings, filler, currency or budget numbers, and generic shopping words. Use SERVICE only when clearly looking for a service/provider, PRODUCT only for a physical product, otherwise ANY. Never invent details.",
           },
           { role: "user", content: query.slice(0, 1000) },
         ],
