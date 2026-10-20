@@ -7304,3 +7304,30 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     gap: 4px;
   }
 }
+
+
+/* Compact product-card like and save controls on mobile without reducing their tap targets too far. */
+@media (max-width: 767px) {
+  .product-item-card > div:first-child > div:has(> button[aria-label="Like listing"]),
+  .product-item-card > div:first-child > div:has(> button[aria-label="Add to wishlist"]),
+  .product-item-card > div:first-child > div:has(> button[aria-label="Remove from wishlist"]) {
+    right: 6px !important;
+  }
+  .product-item-card button[aria-label="Like listing"],
+  .product-item-card button[aria-label="Unlike listing"],
+  .product-item-card button[aria-label="Add to wishlist"],
+  .product-item-card button[aria-label="Remove from wishlist"] {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+  }
+  .product-item-card button[aria-label="Like listing"] svg,
+  .product-item-card button[aria-label="Unlike listing"] svg,
+  .product-item-card button[aria-label="Add to wishlist"] svg,
+  .product-item-card button[aria-label="Remove from wishlist"] svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+}
