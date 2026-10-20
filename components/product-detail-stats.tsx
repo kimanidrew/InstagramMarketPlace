@@ -1,17 +1,19 @@
 "use client";
 
-import { Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export function ProductDetailStats({
   id,
   initialLikes,
   reviews,
+  rating,
   initiallyLiked,
 }: {
   id: string;
   initialLikes: number;
   reviews: number;
+  rating: number;
   initiallyLiked: boolean;
 }) {
   const [likes, setLikes] = useState(initialLikes);
@@ -47,14 +49,19 @@ export function ProductDetailStats({
   }, [id]);
 
   return (
-    <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-center text-[#171717]" aria-label="Product statistics">
-      <span className={"product-card-like-line " + (likeFlash ? "is-updated" : "")} aria-label={likes.toLocaleString() + " likes"}>
+    <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-full bg-[#f7f7f4] px-3 py-2 text-center text-[#171717]" aria-label="Product statistics">
+      <span className={"product-card-like-line inline-flex items-center justify-center gap-1.5 whitespace-nowrap " + (likeFlash ? "is-updated" : "")} aria-label={likes.toLocaleString() + " likes"}>
         <Heart size={14} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
         <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likes.toLocaleString()}</b>
         <span className="font-medium text-[#777]">likes</span>
       </span>
-      <span className="h-4 w-px bg-[#dededb]" />
-      <span className="inline-flex items-center justify-center gap-1.5 text-[11px] font-bold">
+      <span className="h-4 w-px bg-[#dededb]" aria-hidden="true" />
+      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-bold">
+        <Star size={13} className="text-[#d4a72c]" fill={reviews ? "currentColor" : "none"} />
+        {reviews ? rating.toFixed(1) : "New"} <span className="font-medium text-[#777]">rating</span>
+      </span>
+      <span className="h-4 w-px bg-[#dededb]" aria-hidden="true" />
+      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-bold">
         <MessageCircle size={13} />
         {reviews.toLocaleString()} <span className="font-medium text-[#777]">reviews</span>
       </span>
