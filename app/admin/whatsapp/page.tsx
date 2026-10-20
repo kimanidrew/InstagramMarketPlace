@@ -58,7 +58,6 @@ export default async function WhatsAppSetupPage() {
                 <p className="account-kicker dark">Webhook callback URL</p>
                 {webhookUrl ? <p className="break-all font-bold">{webhookUrl}</p> : <p className="font-bold text-red-600">Set NEXT_PUBLIC_SITE_URL to your production origin.</p>}
                 <p>Paste this URL into Meta for Developers → WhatsApp → Configuration. Set the verify token there to the exact value of WHATSAPP_VERIFY_TOKEN.</p>
-                {webhookUrl && <button type="button" onClick={undefined} className="sr-only" aria-hidden="true">Copy webhook URL</button>}
               </div>
             </article>
             <article className="admin-overview-note">
