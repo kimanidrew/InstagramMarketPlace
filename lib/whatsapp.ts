@@ -121,7 +121,7 @@ function searchTerms(query: string) {
 type SearchIntent = { terms: string[]; listingType: "PRODUCT" | "SERVICE" | "ANY" };
 
 async function interpretSearch(query: string): Promise<SearchIntent> {
-  const fallbackType = /\\b(service|services|hire|book|plumber|electrician|cleaner|photographer|salon|repair|tutor|delivery)\\b/i.test(query)
+  const fallbackType = /\b(service|services|hire|book|plumber|electrician|cleaner|photographer|salon|repair|tutor|delivery)\b/i.test(query)
     ? "SERVICE"
     : "ANY";
   const fallback = { terms: searchTerms(query), listingType: fallbackType as SearchIntent["listingType"] };
@@ -155,7 +155,7 @@ async function interpretSearch(query: string): Promise<SearchIntent> {
     const terms = Array.isArray(parsed.terms)
       ? Array.from(new Set(parsed.terms.filter((term): term is string => typeof term === "string")
           .map((term) => term.toLowerCase().trim())
-          .filter((term) => term.length > 1 && term.length <= 40 && /[\\p{L}]/u.test(term)))
+          .filter((term) => term.length > 1 && term.length <= 40 && /[\p{L}]/u.test(term)))
         ).slice(0, 8)
       : [];
     const listingType = parsed.listingType === "PRODUCT" || parsed.listingType === "SERVICE" || parsed.listingType === "ANY"
