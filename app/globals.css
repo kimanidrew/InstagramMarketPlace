@@ -7136,31 +7136,43 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 }
 
 
-/* Mobile heroes: true viewport-edge-to-edge, independent of page gutters. */
+/* Mobile heroes: force true edge-to-edge width and square corners despite page wrappers. */
 @media (max-width: 760px) {
   main section:has([data-page-hero]),
   main section:has(.shop-promo-carousel),
   main section:has(.for-you-hero),
   main section:has(.store-directory-showcase),
-  main > [data-page-hero],
-  main > .for-you-hero,
-  main > .shop-promo-carousel,
-  main > .store-directory-showcase {
+  main [data-page-hero],
+  main .for-you-hero,
+  main .shop-promo-carousel,
+  main .store-directory-showcase,
+  main .shop-promo-active,
+  main .store-directory-showcase-card.store-directory-showcase-promo {
     width: 100vw !important;
+    min-width: 100vw !important;
     max-width: 100vw !important;
     margin-left: calc(50% - 50vw) !important;
     margin-right: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     box-sizing: border-box !important;
   }
 
+  main section:has([data-page-hero]),
+  main section:has(.shop-promo-carousel),
+  main section:has(.for-you-hero),
+  main section:has(.store-directory-showcase) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
   main [data-page-hero],
   main .for-you-hero,
   main .shop-promo-carousel,
-  main .store-directory-showcase {
+  main .store-directory-showcase,
+  main .shop-promo-active,
+  main .store-directory-showcase-card.store-directory-showcase-promo,
+  main .store-directory-showcase-card.store-directory-showcase-promo > * {
     border-radius: 0 !important;
   }
 }
