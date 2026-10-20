@@ -7478,3 +7478,14 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     border-width: 3px;
   }
 }
+
+
+/* Hide the category section heading on mobile while keeping category filters available. */
+@media (max-width: 760px) {
+  .store-directory-page .store-directory-tools-top,
+  .store-directory-page .store-directory-tools-heading,
+  .store-directory-page .store-directory-tools .store-directory-eyebrow,
+  .store-directory-page .store-directory-tools h2 {
+    display: none !important;
+  }
+}
