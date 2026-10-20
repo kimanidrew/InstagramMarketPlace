@@ -7064,3 +7064,55 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     z-index: 2 !important;
   }
 }
+
+
+/* Refine the mobile Shop Spotlight collage to retain the layered desktop feel. */
+@media (max-width: 760px) {
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+    min-height: 175px !important;
+    height: 175px !important;
+    overflow: hidden !important;
+    isolation: isolate;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float {
+    width: 37% !important;
+    height: 72% !important;
+    aspect-ratio: 3 / 4 !important;
+    border: 3px solid rgb(255 255 255 / 94%) !important;
+    border-radius: 12px !important;
+    object-fit: cover !important;
+    box-shadow: 0 9px 20px rgb(39 22 37 / 22%) !important;
+    background: #fff !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-0 {
+    left: 2% !important;
+    right: auto !important;
+    top: 17% !important;
+    transform: rotate(-9deg) !important;
+    z-index: 1 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-1 {
+    left: 29% !important;
+    right: auto !important;
+    top: 5% !important;
+    width: 42% !important;
+    height: 82% !important;
+    transform: rotate(2deg) !important;
+    z-index: 3 !important;
+    box-shadow: 0 12px 24px rgb(39 22 37 / 24%) !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-2 {
+    left: auto !important;
+    right: 2% !important;
+    top: 17% !important;
+    transform: rotate(9deg) !important;
+    z-index: 2 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-avatar {
+    z-index: 5 !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    box-shadow: 0 4px 12px rgb(39 22 37 / 22%) !important;
+  }
+}
