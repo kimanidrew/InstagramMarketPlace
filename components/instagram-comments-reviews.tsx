@@ -10,7 +10,7 @@ type InstagramComment = {
   timestamp: string | null;
 };
 
-export function InstagramCommentsReviews({ postId }: { postId: string }) {
+export function InstagramCommentsReviews({ postId, permalink }: { postId: string; permalink?: string | null }) {
   const [comments, setComments] = useState<InstagramComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [unavailable, setUnavailable] = useState(false);
@@ -54,7 +54,7 @@ export function InstagramCommentsReviews({ postId }: { postId: string }) {
           </div>
         </div>
         <a
-          href="https://www.instagram.com/"
+          href={permalink || "https://www.instagram.com/"}
           target="_blank"
           rel="noreferrer"
           className="review-write-button"
