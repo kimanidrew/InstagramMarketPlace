@@ -397,3 +397,32 @@ model Notification {
   @@index([userId, readAt, createdAt])
   @@index([createdAt])
 }
+
+
+// Central SokoLink WhatsApp shopping assistant conversations.
+model WhatsAppConversation {
+  id            String            @id @default(cuid())
+  waId          String            @unique
+  profileName   String?
+  lastMessageAt DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  messages      WhatsAppMessage[]
+
+  @@index([lastMessageAt])
+}
+
+model WhatsAppMessage {
+  id             String             @id @default(cuid())
+  waMessageId    String             @unique
+  conversationId String
+  direction      String
+  type           String             @default("text")
+  body           String?
+  status         String             @default("RECEIVED")
+  createdAt      DateTime           @default(now())
+  conversation   WhatsAppConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([status, createdAt])
+}
