@@ -130,11 +130,9 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
               </div>
 
-              <div className="product-action-stack mt-6 flex flex-col gap-3 sm:mt-7">
+              <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
-                <div className="flex flex-wrap gap-3">
-                  {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-black/[0.1] bg-white px-5 py-3.5 text-sm font-bold transition hover:-translate-y-0.5 hover:border-black hover:bg-black hover:text-white"><Instagram size={16} /> View original post <ArrowUpRight size={14} /></a>}
-                </div>
+                {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full border border-black/[0.1] bg-white px-3 py-3 text-center text-xs font-bold transition hover:-translate-y-0.5 hover:border-black hover:bg-black hover:text-white sm:gap-2 sm:px-5 sm:py-3.5 sm:text-sm"><Instagram size={16} className="shrink-0" /> <span>View original post</span> <ArrowUpRight size={14} className="shrink-0" /></a>}
               </div>
 
               <div className="mt-6 border-t border-black/[0.07] pt-5">
