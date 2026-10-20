@@ -14,7 +14,7 @@ export default async function WhatsAppSetupPage() {
     redirect("/login");
   }
 
-  const origin = (process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "")).replace(/\\/$/, "");
+  const origin = (process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "")).replace(/\/$/, "");
   const webhookUrl = origin ? `${origin}/api/whatsapp/webhook` : "";
   const checks = [
     { label: "Cloud API access token", key: "WHATSAPP_ACCESS_TOKEN", required: true },
