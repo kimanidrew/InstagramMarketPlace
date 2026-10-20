@@ -7134,3 +7134,22 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     z-index: 6 !important;
   }
 }
+
+
+/* Mobile: hero sections should span the full viewport width across all pages. */
+@media (max-width: 760px) {
+  main section:has([data-page-hero]),
+  main section:has(.shop-promo-carousel),
+  main section:has(.for-you-hero),
+  main section:has(.store-directory-showcase),
+  main [data-page-hero],
+  main .for-you-hero,
+  main .shop-promo-carousel,
+  main .store-directory-showcase {
+    width: calc(100% + 24px) !important;
+    max-width: none !important;
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+    box-sizing: border-box !important;
+  }
+}
