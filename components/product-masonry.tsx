@@ -90,7 +90,7 @@ export function StoreInlineSection({ stores, batchIndex, variant = "discover" }:
           <h3 className="mt-2 max-w-2xl text-xl font-black leading-tight tracking-[-.045em] text-[#171717] sm:text-2xl">{heading.title}</h3>
           <p className="mt-1.5 max-w-xl text-xs leading-5 text-[#777] sm:text-sm">{heading.copy}</p>
         </div>
-        <Link href="/stores" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">All stores <ArrowRight size={12} /></Link>
+        <Link href="/stores" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="inline-flex shrink-0 items-center gap-1.5 rounded-full border !border-black !bg-black px-3 py-2 text-[10px] font-black !text-white transition-colors hover:!border-black hover:!bg-black hover:!text-white active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:px-4 sm:text-xs">All stores <ArrowRight size={12} /></Link>
       </div>
       <div className="product-store-interlude-list grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {batch.map((entry: any) => <StoreCard key={entry.store.id} entry={entry} />)}
@@ -342,7 +342,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
                 <h3 className="mt-2 max-w-2xl text-xl font-black leading-tight tracking-[-.045em] text-[#171717] sm:text-2xl">A few things you might love.</h3>
                 <p className="mt-1.5 max-w-xl text-xs leading-5 text-[#777] sm:text-sm">More finds worth a closer look, picked as you keep exploring.</p>
               </div>
-              <Link href="/shop" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-2 text-[10px] font-black text-[#222] transition hover:bg-black hover:text-white sm:px-4 sm:text-xs">Explore shop <ArrowRight size={12} /></Link>
+              <Link href="/shop" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="inline-flex shrink-0 items-center gap-1.5 rounded-full border !border-black !bg-black px-3 py-2 text-[10px] font-black !text-white transition-colors hover:!border-black hover:!bg-black hover:!text-white active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:px-4 sm:text-xs">Explore shop <ArrowRight size={12} /></Link>
             </div>
             <div className="product-recommendations-list mt-1 flex gap-3 overflow-x-auto pb-2 sm:gap-4 md:grid md:grid-cols-2 lg:grid-cols-4">
               {item.products.map((recommended: any) => (
