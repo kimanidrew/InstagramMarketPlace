@@ -6975,3 +6975,49 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     box-sizing: border-box !important;
   }
 }
+
+
+/* Shop spotlight: keep all three listing previews balanced and fully framed on mobile. */
+@media (max-width: 760px) {
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-visual {
+    position: relative !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    min-height: 175px !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float {
+    width: 38% !important;
+    height: 62% !important;
+    border: 3px solid rgb(255 255 255 / 92%) !important;
+    border-radius: 11px !important;
+    box-shadow: 0 8px 18px rgb(0 0 0 / 16%) !important;
+    object-fit: cover !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-0 {
+    left: 5% !important;
+    top: 20% !important;
+    right: auto !important;
+    transform: rotate(-7deg) !important;
+    z-index: 1 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-1 {
+    left: 31% !important;
+    top: 9% !important;
+    right: auto !important;
+    transform: rotate(3deg) !important;
+    z-index: 2 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-float-2 {
+    right: 5% !important;
+    left: auto !important;
+    top: 20% !important;
+    transform: rotate(7deg) !important;
+    z-index: 1 !important;
+  }
+  .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-avatar {
+    width: 42px !important;
+    height: 42px !important;
+    bottom: 2% !important;
+    border-width: 3px !important;
+  }
+}
