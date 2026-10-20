@@ -7021,29 +7021,3 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     border-width: 3px !important;
   }
 }
-
-
-/* Mobile-wide Picked for You and Saved for Later sections across the app. */
-@media (max-width: 760px) {
-  main :is(section, [role="region"], .section-card):is(
-    :has([class*="picked-for-you"]),
-    :has([class*="pickedForYou"]),
-    :has([id*="picked-for-you"]),
-    :has([class*="saved-for-later"]),
-    :has([class*="savedForLater"]),
-    :has([id*="saved-for-later"]),
-    :has([class*="wishlist"]),
-    :has([data-section="picked-for-you"]),
-    :has([data-section="saved-for-later"])
-  ) {
-    width: calc(100% + 32px) !important;
-    max-width: none !important;
-    margin-left: -16px !important;
-    margin-right: -16px !important;
-    border-left: 0 !important;
-    border-right: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    box-sizing: border-box !important;
-  }
-}
