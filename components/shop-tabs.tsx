@@ -329,7 +329,7 @@ export function ShopTabs({
                       </div>
                     </div>
                     {(recentItems.length > 0 || recentStores.length > 0) && (
-                      <div ref={recentHistoryScrollRef} className="mt-6 flex gap-3 overflow-x-auto pb-2 scroll-smooth">
+                      <div ref={recentHistoryScrollRef} className="mt-6 -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 scroll-smooth md:-mx-7 md:px-7">
                         {[
                           ...recentItems.slice(0, 7).map((item: any) => ({ kind: "product", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
                           ...recentStores.slice(0, 7).map((item: any) => ({ kind: "store", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
