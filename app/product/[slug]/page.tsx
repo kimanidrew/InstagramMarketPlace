@@ -53,6 +53,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
         .trim()
     : "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
+  const categoryLabels = [...new Set([product.category, product.subcategory, ...tags.map((tag) => tag.name)].filter((value): value is string => Boolean(value?.trim())))];
   const average = product.reviews.length
     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
     : 0;
@@ -119,9 +120,9 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
 
 
-              {tags.length > 0 && (
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{tag.name}</Link>)}
+              {categoryLabels.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2" aria-label="Product categories">
+                  {categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}
                 </div>
               )}
 
