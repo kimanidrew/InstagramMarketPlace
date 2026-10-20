@@ -6704,3 +6704,239 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     padding: 18px 16px !important;
   }
 }
+
+
+/* Shop page: mobile-first spacing, readable sections and consistent two-column discovery. */
+@media (max-width: 760px) {
+  .shop-page {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 12px 28px !important;
+    box-sizing: border-box !important;
+    overflow-x: clip;
+  }
+  .shop-page .shop-tabs-wrap {
+    width: 100%;
+    min-width: 0;
+    margin-top: 0 !important;
+  }
+  .shop-page .shop-promo-carousel {
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 14px !important;
+    border-radius: 18px !important;
+  }
+  .shop-page .shop-promo-active {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+  .shop-page .shop-promo-active > .shop-promo-slide,
+  .shop-page .shop-promo-active > .store-directory-showcase-card {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+  .shop-page .shop-promo-active > .shop-promo-slide {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(150px, 42vw) !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+  .shop-page .shop-promo-active > .shop-promo-slide > div:first-child {
+    padding: 18px !important;
+  }
+  .shop-page .shop-promo-active .shop-promo-slide h2 {
+    margin-top: 12px !important;
+    font-size: clamp(24px, 7vw, 34px) !important;
+    line-height: 1 !important;
+  }
+  .shop-page .shop-promo-active .shop-promo-slide p {
+    margin-top: 9px !important;
+    font-size: 12px !important;
+    line-height: 1.55 !important;
+  }
+  .shop-page .shop-promo-active .shop-promo-slide .shop-promo-product-visual,
+  .shop-page .shop-promo-active .shop-promo-slide .shop-promo-ad-art {
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: 230px;
+  }
+  .shop-page .shop-promo-controls {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    gap: 10px;
+  }
+  .shop-page .shop-tabs {
+    position: sticky !important;
+    z-index: 40;
+    top: 70px !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 !important;
+    width: calc(100% + 24px) !important;
+    max-width: none !important;
+    margin: 0 -12px 18px !important;
+    padding: 0 8px !important;
+    overflow: visible !important;
+    border-top: 1px solid #e8e8e8 !important;
+    border-bottom: 1px solid #e8e8e8 !important;
+    background: #fff !important;
+  }
+  .shop-page .shop-tab {
+    display: flex !important;
+    min-width: 0 !important;
+    min-height: 58px;
+    padding: 9px 4px 10px !important;
+    flex-direction: column;
+    justify-content: center !important;
+    gap: 3px !important;
+    text-align: center;
+  }
+  .shop-page .shop-tab-icon {
+    display: none !important;
+  }
+  .shop-page .shop-tab-copy {
+    display: flex !important;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .shop-page .shop-tab-copy b {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+  }
+  .shop-page .shop-tab-copy small {
+    display: block !important;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: .65;
+  }
+  .shop-page .shop-tab-indicator {
+    bottom: 0 !important;
+    height: 2px !important;
+  }
+  .shop-page .shop-tab-panel,
+  .shop-page .shop-tab-panel > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .shop-page .shop-tab-panel .space-y-12 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 28px !important;
+  }
+  .shop-page .shop-tab-panel section.rounded-\[30px\] {
+    border-radius: 18px !important;
+    padding: 16px !important;
+  }
+  .shop-page .shop-tab-panel h2 {
+    overflow-wrap: anywhere;
+    font-size: clamp(23px, 6.5vw, 30px) !important;
+    line-height: 1.06 !important;
+  }
+  .shop-page .shop-tab-panel .mt-6 {
+    margin-top: 14px !important;
+  }
+  .shop-page .shop-tab-panel .product-feed-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 10px !important;
+    row-gap: 18px !important;
+  }
+  .shop-page .shop-tab-panel .product-feed-item {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .shop-page .shop-tab-panel .product-feed-full-row,
+  .shop-page .shop-tab-panel .product-store-interlude-row {
+    grid-column: 1 / -1 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .shop-page .shop-tab-panel .product-recommendations-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .shop-page .shop-tab-panel .product-recommendations-interlude {
+    padding: 15px !important;
+    border-radius: 18px !important;
+  }
+  .shop-page .shop-tab-panel .product-recommendations-interlude h3 {
+    font-size: 19px !important;
+  }
+  .shop-page .shop-tab-panel .product-feed-full-row > div.grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .shop-page .shop-tab-panel .columns-2 {
+    column-gap: 10px !important;
+  }
+  .shop-page .shop-tab-panel .mb-7,
+  .shop-page .shop-tab-panel .sm\\:mb-9 {
+    margin-bottom: 16px !important;
+  }
+  .shop-page .shop-tab-panel .grid.grid-cols-2.gap-3 {
+    gap: 10px !important;
+  }
+  .shop-page .shop-tab-panel .rounded-\\[26px\\] {
+    border-radius: 18px !important;
+  }
+  .shop-page .shop-tab-panel .p-10 {
+    padding: 22px 14px !important;
+  }
+  .shop-page .shop-tab-panel .eyebrow {
+    font-size: 9px !important;
+    letter-spacing: .1em !important;
+  }
+  .shop-page .shop-tab-panel .product-card-like-line {
+    gap: 4px;
+    font-size: 10px;
+  }
+  .shop-page .shop-tab-panel .product-card-like-line svg {
+    width: 12px;
+    height: 12px;
+  }
+  .shop-page .shop-tab-panel .product-card-like-line b {
+    font-size: 10px;
+  }
+  .shop-page .shop-tab-panel article > div.pt-3 {
+    padding-top: 8px !important;
+  }
+  .shop-page .shop-tab-panel article .mt-2 {
+    margin-top: 6px !important;
+  }
+  .shop-page .shop-tab-panel article .mt-3 {
+    margin-top: 8px !important;
+  }
+  .shop-page .shop-tab-panel article .h-7.w-7 {
+    width: 25px !important;
+    height: 25px !important;
+  }
+}
+@media (max-width: 380px) {
+  .shop-page {
+    padding-right: 9px !important;
+    padding-left: 9px !important;
+  }
+  .shop-page .shop-tabs {
+    width: calc(100% + 18px) !important;
+    margin-right: -9px !important;
+    margin-left: -9px !important;
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+  }
+  .shop-page .shop-tab-copy b {
+    font-size: 11px !important;
+  }
+  .shop-page .shop-tab-copy small {
+    font-size: 8px !important;
+  }
+  .shop-page .shop-promo-active > .shop-promo-slide > div:first-child {
+    padding: 15px !important;
+  }
+}
