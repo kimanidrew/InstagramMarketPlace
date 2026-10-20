@@ -1140,8 +1140,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 .seller-numbered-tip b{background:var(--market-gradient)}
 .seller-done-note,.seller-status-box.success{background:#e4fbf3!important;color:#087f68!important}
 /* General buttons and inputs get coordinated accent colors */
-button.bg-black,a.bg-black,button[class*="bg-[#111]"],a[class*="bg-[#111]"]{background:var(--market-gradient)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 7px 20px rgba(112,85,232,.13)}
-button.bg-black:hover,a.bg-black:hover,button[class*="bg-[#111]"]:hover,a[class*="bg-[#111]"]:hover{filter:saturate(1.12);box-shadow:0 12px 26px rgba(112,85,232,.24)}
+
 button[class*="border-black"],a[class*="border-black"]{transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease}
 input:not([type="checkbox"]):not([type="radio"]),textarea,select{border-color:#e4dcf5}
 input:not([type="checkbox"]):not([type="radio"]):focus,textarea:focus,select:focus{border-color:#a58aff;box-shadow:0 0 0 4px rgba(112,85,232,.1)}
