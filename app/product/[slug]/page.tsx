@@ -51,27 +51,27 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
     <main className="product-detail-page min-h-screen bg-white">
       <AnalyticsTracker connectionId={product.connectionId} postId={product.id} type="VIEW" />
       <div className="shell py-5 sm:py-7 md:py-10">
-        <div className="mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><Package size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Product details</div>
+        <div className="product-detail-breadcrumb mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><Package size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Product details <span className="ml-auto hidden sm:inline">Discover something good</span></div>
         <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
           <div className="product-gallery-sticky min-w-0">
             <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
 
           <aside className="lg:sticky lg:top-24">
-            <section className="min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
+            <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><Sparkles size={11} /> SokoLink find</span>
                 {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
                 {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
               </div>
 
-              <Link href={"/stores/" + product.connection.username} className="mt-5 inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-2 text-xs font-bold text-[#444] transition hover:border-black hover:text-black"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black text-[10px] font-black text-white">{product.connection.username.slice(0, 1).toUpperCase()}</span><span className="truncate">@{product.connection.username}</span>{product.connection.verifiedAt && <ShieldCheck size={14} className="shrink-0 text-[#8a6a16]" />}</Link>
+              <div className="product-seller-wrap mt-5"><span className="product-seller-label">SOLD BY</span><Link href={"/stores/" + product.connection.username} className="product-seller-link inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-2 text-xs font-bold text-[#444] transition hover:border-black hover:text-black"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black text-[10px] font-black text-white">{product.connection.username.slice(0, 1).toUpperCase()}</span><span className="truncate">@{product.connection.username}</span>{product.connection.verifiedAt && <ShieldCheck size={14} className="shrink-0 text-[#8a6a16]" />}</Link></div>
 
               {product.boostUntil && new Date(product.boostUntil) > new Date() && (
                 <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>
               )}
 
-              <h1 className="mt-5 break-words text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[#171717]">{product.productTitle}</h1>
+              <h1 className="product-detail-title mt-5 break-words text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[#171717]">{product.productTitle}</h1>
 
               <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <div className="flex gap-0.5 text-[#d4a72c]">
