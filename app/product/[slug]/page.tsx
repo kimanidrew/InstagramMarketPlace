@@ -10,7 +10,6 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { ReviewSection } from "@/components/review-section";
-import { InstagramCommentsReviews } from "@/components/instagram-comments-reviews";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 export const dynamic = "force-dynamic";
@@ -129,7 +128,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
               <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-7">
                 <TotalLikesStat id={product.id} initialCount={Number(product.instagramLikeCount || 0) + product.likes.length} />
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
+                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.reviews.length.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Reviews</p></div>
               </div>
 
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
@@ -146,7 +145,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
         <div className="product-detail-lower-content">
           <ReviewSection type="product" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
-          <InstagramCommentsReviews postId={product.id} permalink={product.permalink} />
           {relatedProducts.length > 0 && (
             <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
               <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
