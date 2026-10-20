@@ -133,7 +133,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
-                {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-full border border-black bg-black px-3 py-3 text-center text-xs font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#222] hover:text-white sm:gap-2 sm:px-5 sm:py-3.5 sm:text-sm"><Instagram size={16} className="shrink-0" /> <span>View original post</span> <ArrowUpRight size={14} className="shrink-0" /></a>}
+                {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-black hover:bg-[#f7f7f4] hover:text-black hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:gap-2 sm:px-5 sm:py-4 sm:text-sm"><Instagram size={16} className="shrink-0" /> <span>View original post</span> <ArrowUpRight size={14} className="shrink-0" /></a>}
               </div>
 
               <div className="mt-6 border-t border-black/[0.07] pt-5">
