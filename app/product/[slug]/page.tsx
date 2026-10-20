@@ -108,7 +108,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>
               )}
 
-              <h1 className="product-detail-title mt-5 break-words text-[20px] font-black leading-[1.3] tracking-[-.055em] text-[#171717]">{fullCaption || product.productTitle}</h1>
+              <h1 className="product-detail-title mt-5 break-words text-[20px] font-black leading-[1.6] tracking-[-.055em] text-black">{fullCaption || product.productTitle}</h1>
 
               <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <div className="flex gap-0.5 text-[#d4a72c]">
