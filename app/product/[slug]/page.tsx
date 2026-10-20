@@ -107,7 +107,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>
               )}
 
-              <h1 className="product-detail-title mt-5 break-words text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[#171717]">{product.productTitle}</h1>
+              <h1 className="product-detail-title mt-5 break-words text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[#171717]">{fullCaption || product.productTitle}</h1>
 
               <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <div className="flex gap-0.5 text-[#d4a72c]">
@@ -117,9 +117,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <span className="text-sm text-[#999]">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</span>
               </div>
 
-              {fullCaption && (
-                <p className="mt-3 whitespace-pre-line break-words text-[12px] font-medium leading-5 text-[#666]">{fullCaption}</p>
-              )}
+
 
               {tags.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
