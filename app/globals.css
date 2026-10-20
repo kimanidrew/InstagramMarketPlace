@@ -7254,3 +7254,11 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     font-size: 7px !important;
   }
 }
+
+
+/* Search page: hide the discovery intro on mobile while keeping search controls visible. */
+@media (max-width: 760px) {
+  .search-page .search-page-heading {
+    display: none !important;
+  }
+}
