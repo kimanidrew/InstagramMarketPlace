@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Instagram, MessageCircle } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 
 export function ProductInquiryButton({
   username,
@@ -24,7 +24,7 @@ Thank you! 😊`;
   function inquire() {
     const handle = username.replace(/^@/, "");
     const url = `https://ig.me/m/${encodeURIComponent(handle)}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.location.assign(url);
   }
 
   return (
