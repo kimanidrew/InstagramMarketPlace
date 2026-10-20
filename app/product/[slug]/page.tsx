@@ -92,13 +92,13 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
           <aside className="product-detail-aside min-w-0 lg:sticky lg:top-24">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} rating={average} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
                   {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
                   {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
                 </div>
-                <div className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-2">
+                <div className="flex shrink-0 flex-wrap items-center justify-center gap-2">
                   <WriteReviewButton />
                   <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
                   <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact wishlisted={product.wishlistItems.length > 0} />
