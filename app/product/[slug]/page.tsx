@@ -2,7 +2,8 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Sparkles, Star, ShieldCheck, Package } from "lucide-react";
+import { ArrowUpRight, Instagram, Sparkles, Star, ShieldCheck, Package, ShoppingBag, ArrowRight } from "lucide-react";
+import { ProductCard } from "@/components/product-card";
 import { LikeButton } from "@/components/like-button";
 import { TotalLikesStat } from "@/components/total-likes-stat";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -41,11 +42,31 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
   const isVideo = String(product.mediaType || "").toUpperCase() === "VIDEO";
   const mediaUrl = product.mediaUrl || product.thumbnailUrl;
   const carouselItems = Array.isArray(product.mediaItems) ? (product.mediaItems as Array<{ mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null }>) : null;
-  const cleanCaption = product.caption ? product.caption.replace(/#[\\p{L}\\p{N}_]+/gu, "").trim() : "";
+  const cleanCaption = product.caption ? Array.from(new Set(product.caption.replace(/#[\p{L}\p{N}_]+/gu, "").split("\\n").map((line) => line.trim()).filter(Boolean))).join("\\n") : "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
   const average = product.reviews.length
     ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
     : 0;
+
+  const relatedProducts = await db().instagramPost.findMany({
+    where: {
+      isProduct: true,
+      listingType: "PRODUCT",
+      productSlug: { not: slug },
+      OR: [
+        ...(product.category ? [{ category: product.category }] : []),
+        ...(product.subcategory ? [{ subcategory: product.subcategory }] : []),
+        ...(product.tags.length ? [{ tags: { some: { name: { in: product.tags.map((tag) => tag.name) } } }] : []),
+      ],
+    },
+    include: {
+      connection: true,
+      tags: true,
+      likes: true,
+    },
+    orderBy: [{ instagramLikeCount: "desc" }, { createdAt: "desc" }],
+    take: 8,
+  });
 
   return (
     <main className="product-detail-page min-h-screen bg-white">
@@ -57,15 +78,15 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
             <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
 
-          <aside className="lg:sticky lg:top-24">
-            <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
+          <aside className="product-detail-aside min-w-0 lg:sticky lg:top-24">
+            <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><Sparkles size={11} /> SokoLink find</span>
                 {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
                 {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
               </div>
 
-              <div className="product-seller-wrap mt-5"><span className="product-seller-label">SOLD BY</span><Link href={"/stores/" + product.connection.username} className="product-seller-link inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-2 text-xs font-bold text-[#444] transition hover:border-black hover:text-black"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black text-[10px] font-black text-white">{product.connection.username.slice(0, 1).toUpperCase()}</span><span className="truncate">@{product.connection.username}</span>{product.connection.verifiedAt && <ShieldCheck size={14} className="shrink-0 text-[#8a6a16]" />}</Link></div>
+              <div className="product-seller-wrap mt-5"><span className="product-seller-label">SOLD BY</span><Link href={"/stores/" + product.connection.username} className="product-seller-link inline-flex max-w-full items-center gap-3 rounded-2xl border border-[#e9e9e9] bg-white px-3 py-3 text-sm font-bold text-[#222] transition hover:border-black"><span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ee] ring-1 ring-black/5">{product.connection.profileImageUrl ? <img src={product.connection.profileImageUrl} alt={"@" + product.connection.username} className="h-full w-full object-cover" /> : <span className="text-sm font-black text-[#777]">{product.connection.username.slice(0, 1).toUpperCase()}</span>}</span><span className="flex min-w-0 flex-1 flex-col gap-1"><span className="truncate">@{product.connection.username}</span><span className="text-[11px] font-medium text-[#888]">Visit shop profile</span></span>{product.connection.verifiedAt && <ShieldCheck size={17} className="shrink-0 text-[#8a6a16]" />}{product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#f4f4f2] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wide text-[#555]">Pro</span>}<ArrowRight size={16} className="shrink-0 text-[#777]" /></Link></div>
 
               {product.boostUntil && new Date(product.boostUntil) > new Date() && (
                 <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>
@@ -96,7 +117,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{product.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
               </div>
 
-              <div className="mt-6 flex flex-col gap-3 sm:mt-7">
+              <div className="product-action-stack mt-6 flex flex-col gap-3 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
                 <div className="flex flex-wrap gap-3">
                   <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
@@ -112,7 +133,24 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
           </aside>
         </div>
 
-        <ReviewSection type="product" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Product reviews" />
+        <div className="product-detail-lower-content">
+          <ReviewSection type="product" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Product reviews" />
+          {relatedProducts.length > 0 && (
+            <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
+              <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
+                <div>
+                  <p className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888]"><ShoppingBag size={13} /> Keep exploring</p>
+                  <h2 id="related-products-heading" className="text-2xl font-black tracking-[-.05em] text-[#171717] sm:text-3xl">You might also like</h2>
+                  <p className="mt-2 text-sm text-[#777]">More finds from SokoLink shops, picked for their similarity.</p>
+                </div>
+                <Link href="/shop" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#e8e8e8] px-4 py-2.5 text-xs font-bold transition hover:border-black hover:bg-black hover:text-white">Explore shop <ArrowRight size={14} /></Link>
+              </div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
+                {relatedProducts.map((item) => <ProductCard key={item.id} p={{...item, totalLikes: Number(item.instagramLikeCount || 0) + item.likes.length}} />)}
+              </div>
+            </section>
+          )}
+        </div>
       </div>
     </main>
   );
