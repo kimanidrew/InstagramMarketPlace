@@ -10,6 +10,7 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { ReviewSection } from "@/components/review-section";
+import { InstagramCommentsReviews } from "@/components/instagram-comments-reviews";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 export const dynamic = "force-dynamic";
@@ -144,7 +145,8 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
         </div>
 
         <div className="product-detail-lower-content">
-          <ReviewSection type="product" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Product reviews" />
+          <ReviewSection type="product" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
+          <InstagramCommentsReviews postId={product.id} />
           {relatedProducts.length > 0 && (
             <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
               <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
