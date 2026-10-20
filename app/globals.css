@@ -6940,3 +6940,22 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     padding: 15px !important;
   }
 }
+
+
+/* Let the recent-history carousel bleed through the history card's side padding. */
+@media (max-width: 760px) {
+  .shop-page .shop-tab-panel section > .mt-6.flex.gap-3.overflow-x-auto {
+    box-sizing: border-box;
+    width: calc(100% + 32px);
+    max-width: none;
+    margin-left: -16px !important;
+    padding: 0 16px 8px !important;
+    scroll-padding-inline: 16px;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .shop-page .shop-tab-panel section > .mt-6.flex.gap-3.overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+}
