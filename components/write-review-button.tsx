@@ -12,10 +12,13 @@ export function WriteReviewButton() {
     <button
       type="button"
       onClick={openReviewComposer}
-      className="group inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl border border-[#dededb] bg-white px-4 py-2.5 text-[11px] font-extrabold tracking-[-.01em] text-[#171717] shadow-sm transition duration-200 hover:border-black hover:bg-[#f7f7f4] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 active:translate-y-0"
-      aria-label="Write a product review"
+      className="group inline-flex min-h-11 w-full items-center justify-center gap-2.5 rounded-xl border border-[#dededb] bg-white px-4 py-3 text-sm font-semibold tracking-[-.01em] text-[#171717] transition-colors duration-200 hover:border-[#bdbdb8] hover:bg-[#fafaf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 active:bg-[#f4f4f1]"
+      aria-label="Leave a review"
     >
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f2f2ef] transition group-hover:bg-[#e8e8e5]"><Pencil size={12} /></span> <span>Write a review</span>
+      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-[#e8e8e5] bg-[#f8f8f6] transition-colors group-hover:border-[#d8d8d3] group-hover:bg-white">
+        <Pencil size={13} strokeWidth={1.8} />
+      </span>
+      <span>Leave a review</span>
     </button>
   );
 }
