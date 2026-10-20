@@ -1,7 +1,7 @@
 "use client";
 
 import { BadgeCheck, CornerDownRight, MessageCircle, Pencil, Send, Star, Store as StoreIcon, Trash2, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type ReviewReply = {
   id: string;
@@ -64,6 +64,12 @@ export function ReviewSection({
     [reviews],
   );
   const isStoreOwner = !!currentUserId && !!storeOwnerUserId && currentUserId === storeOwnerUserId;
+
+  useEffect(() => {
+    const openComposer = () => startReview(editing || undefined);
+    window.addEventListener("open-review-composer", openComposer);
+    return () => window.removeEventListener("open-review-composer", openComposer);
+  }, [editing, currentUserId]);
 
   function startReview(review?: Review) {
     if (!currentUserId) {
