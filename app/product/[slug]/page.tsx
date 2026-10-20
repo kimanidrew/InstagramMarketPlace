@@ -84,21 +84,21 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
         <div className="product-detail-breadcrumb mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><Package size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Product details <span className="ml-auto hidden sm:inline">Discover something good</span></div>
         <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
           <div className="product-gallery-sticky min-w-0">
-            <div className="relative">
-              <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
-              <div className="absolute right-5 top-5 z-20 flex items-center gap-2">
-                <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} compact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
-                <WishlistButton id={product.id} count={product.wishlistItems.length} compact wishlisted={product.wishlistItems.length > 0} />
-              </div>
-            </div>
+            <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
 
           <aside className="product-detail-aside min-w-0 lg:sticky lg:top-24">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><Sparkles size={11} /> SokoLink find</span>
-                {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
-                {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><Sparkles size={11} /> SokoLink find</span>
+                  {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
+                  {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
+                </div>
+                <div className="ml-auto flex shrink-0 items-center gap-2">
+                  <LikeButton id={product.id} count={product.instagramLikeCount + product.likes.length} compact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+                  <WishlistButton id={product.id} count={product.wishlistItems.length} compact wishlisted={product.wishlistItems.length > 0} />
+                </div>
               </div>
 
               <div className="product-seller-wrap mt-5"><span className="product-seller-label">SOLD BY</span><Link href={"/stores/" + product.connection.username} className="product-seller-link inline-flex max-w-full items-center gap-3 rounded-2xl border border-[#e9e9e9] bg-white px-3 py-3 text-sm font-bold text-[#222] transition hover:border-black"><span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ee] ring-1 ring-black/5">{product.connection.profileImageUrl ? <img src={product.connection.profileImageUrl} alt={"@" + product.connection.username} className="h-full w-full object-cover" /> : <span className="text-sm font-black text-[#777]">{product.connection.username.slice(0, 1).toUpperCase()}</span>}</span><span className="flex min-w-0 flex-1 flex-col gap-1"><span className="truncate">@{product.connection.username}</span><span className="text-[11px] font-medium text-[#888]">Visit shop profile</span></span>{product.connection.verifiedAt && <ShieldCheck size={17} className="shrink-0 text-[#8a6a16]" />}{product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#f4f4f2] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wide text-[#555]">Pro</span>}<ArrowRight size={16} className="shrink-0 text-[#777]" /></Link></div>
