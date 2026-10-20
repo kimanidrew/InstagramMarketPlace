@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, TrendingUp, X } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, Trash2, TrendingUp, X } from "lucide-react";
 import { ProductMasonry, StoreCard, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
@@ -325,7 +325,7 @@ export function ShopTabs({
                           <button type="button" onClick={() => recentHistoryScrollRef.current?.scrollBy({ left: -360, behavior: "smooth" })} aria-label="Scroll history left" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border !border-black !bg-black text-white transition-colors hover:!border-black hover:!bg-black active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronLeft size={18} /></button>
                           <button type="button" onClick={() => recentHistoryScrollRef.current?.scrollBy({ left: 360, behavior: "smooth" })} aria-label="Scroll history right" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border !border-black !bg-black text-white transition-colors hover:!border-black hover:!bg-black active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronRight size={18} /></button>
                         </div>
-                        <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="inline-flex shrink-0 items-center justify-center rounded-full border border-black/10 px-4 py-2 text-[12px] font-black leading-5 text-[#666] transition hover:border-black hover:text-black disabled:opacity-50">{clearingHistory ? "Clearing…" : "Clear history"}</button>
+                        <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} aria-label={clearingHistory ? "Clearing history" : "Clear history"} title={clearingHistory ? "Clearing history" : "Clear history"} className="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full border border-black/10 text-[#666] transition hover:border-black hover:text-black disabled:cursor-wait disabled:opacity-70 sm:h-auto sm:w-auto sm:px-4 sm:py-2"><Trash2 size={17} aria-hidden="true" className={clearingHistory ? "animate-bounce text-black" : "transition-transform duration-200 hover:rotate-[-8deg]"} /><span className="hidden text-[12px] font-black leading-5 sm:inline">{clearingHistory ? "Clearing…" : "Clear history"}</span></button>
                       </div>
                     </div>
                     {(recentItems.length > 0 || recentStores.length > 0) && (
