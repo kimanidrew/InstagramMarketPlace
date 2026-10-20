@@ -146,7 +146,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
         <div className="product-detail-lower-content">
           <ReviewSection type="product" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
-          <InstagramCommentsReviews postId={product.id} />
+          <InstagramCommentsReviews postId={product.id} permalink={product.permalink} />
           {relatedProducts.length > 0 && (
             <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
               <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
