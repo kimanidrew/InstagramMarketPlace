@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Instagram, Store, ArrowLeft, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Instagram, MessageCircle, ArrowLeft, ShieldCheck } from "lucide-react";
 
 const items = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/instagram", label: "Instagram connections", icon: Instagram, exact: false },
+  { href: "/admin/whatsapp", label: "WhatsApp setup", icon: MessageCircle, exact: false },
 ];
 
 export default function AdminWorkspaceNav() {
