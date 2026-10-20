@@ -2,7 +2,7 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, Instagram, Sparkles, Star, BriefcaseBusiness } from "lucide-react";
+import { ArrowUpRight, Instagram, Sparkles, Star, BriefcaseBusiness, ShieldCheck } from "lucide-react";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
@@ -51,12 +51,9 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
   return (
     <main className="product-detail-page min-h-screen bg-white">
       <AnalyticsTracker connectionId={service.connectionId} postId={service.id} type="VIEW" />
-      <div className="shell py-6 md:py-10">
-        <Link href="/products" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#666] hover:text-black">
-          <ArrowLeft size={15} /> Back to marketplace
-        </Link>
-
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(390px,.92fr)] lg:items-start">
+      <div className="shell py-5 sm:py-7 md:py-10">
+        <div className="mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><BriefcaseBusiness size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Service details</div>
+        <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
           <div className="product-gallery-sticky min-w-0">
             <div className="product-gallery-panel rounded-[30px] border border-black/[0.07] bg-[#f5f5f1] p-3 shadow-[0_20px_70px_rgba(0,0,0,0.06)] sm:p-5">
               <div className="product-gallery-frame">
@@ -70,20 +67,18 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
           </div>
 
           <aside className="lg:sticky lg:top-24">
-            <section className="rounded-[30px] border border-black/[0.07] bg-white p-6 shadow-[0_20px_70px_rgba(0,0,0,0.07)] sm:p-8">
+            <section className="min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><BriefcaseBusiness size={11} /> Service</span>
                 <span className="rounded-full bg-[#f5f5f2] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#555]">{service.category} · {service.subcategory}</span>
                 {service.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
               </div>
 
-              <Link href={"/stores/" + service.connection.username} className="mt-5 inline-flex rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-1.5 text-xs font-bold text-[#555]">
-                @{service.connection.username}
-              </Link>
+              <Link href={"/stores/" + service.connection.username} className="mt-5 inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-2 text-xs font-bold text-[#444] transition hover:border-black hover:text-black"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black text-[10px] font-black text-white">{service.connection.username.slice(0, 1).toUpperCase()}</span><span className="truncate">@{service.connection.username}</span>{service.connection.verifiedAt && <ShieldCheck size={14} className="shrink-0 text-[#8a6a16]" />}</Link>
 
-              <h1 className="mt-5 text-4xl font-black leading-[.95] tracking-[-.055em] sm:text-5xl">{service.productTitle || "Instagram service"}</h1>
+              <h1 className="mt-5 break-words text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[#171717]">{service.productTitle || "Instagram service"}</h1>
 
-              <div className="mt-5 flex items-center gap-3">
+              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <div className="flex gap-0.5 text-[#d4a72c]">
                   {[1,2,3,4,5].map((star) => <Star key={star} size={17} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
                 </div>
@@ -97,13 +92,13 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
 
               {tags.length > 0 && <div className="mt-6 flex flex-wrap gap-2">{tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555]">{tag.name}</Link>)}</div>}
 
-              <div className="mt-7 grid grid-cols-3 gap-2">
+              <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-7">
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.instagramLikeCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">IG likes</p></div>
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
                 <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.wishlistItems.length}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Wishlist</p></div>
               </div>
 
-              <div className="mt-7 flex flex-col gap-3">
+              <div className="mt-6 flex flex-col gap-3 sm:mt-7">
                 <ProductInquiryButton username={service.connection.username} productTitle={service.productTitle || "this service"} postUrl={service.permalink || ""} />
                 <div className="flex flex-wrap gap-3">
                   <LikeButton id={service.id} count={service.likes.length} initialLiked={service.likes.some((like) => like.userId === currentUser?.id)} />
