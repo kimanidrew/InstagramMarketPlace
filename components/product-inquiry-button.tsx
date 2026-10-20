@@ -25,19 +25,21 @@ Instagram post: ${postUrl}
 Thank you! 😊`;
 
   async function inquire() {
+    // Open Instagram directly from the click before awaiting clipboard access,
+    // so browser popup blockers do not prevent the shop DM from opening.
+    window.open(
+      "https://ig.me/m/" + encodeURIComponent(username.replace(/^@/, "")),
+      "_blank",
+      "noopener,noreferrer",
+    );
+
     try {
       await navigator.clipboard.writeText(message);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2500);
     } catch {
-      // Opening Instagram is still useful if clipboard access is unavailable.
+      // Clipboard access may be unavailable; the Instagram DM still opens.
     }
-
-    window.open(
-      "https://ig.me/m/" + encodeURIComponent(username),
-      "_blank",
-      "noopener,noreferrer",
-    );
   }
 
   return (
