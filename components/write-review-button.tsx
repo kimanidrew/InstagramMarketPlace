@@ -12,10 +12,10 @@ export function WriteReviewButton() {
     <button
       type="button"
       onClick={openReviewComposer}
-      className="inline-flex items-center gap-1.5 rounded-full border border-[#e5e5e5] bg-white px-3 py-2 text-[11px] font-bold text-[#171717] transition hover:border-black hover:bg-[#f7f7f4]"
+      className="group inline-flex min-h-9 items-center justify-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-[11px] font-extrabold tracking-[-.01em] text-white shadow-[0_3px_0_rgba(0,0,0,0.12)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#292929] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 active:translate-y-0"
       aria-label="Write a product review"
     >
-      <Pencil size={13} /> Write a review
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15 transition group-hover:bg-white/25"><Pencil size={12} /></span> <span>Write a review</span>
     </button>
   );
 }
