@@ -33,7 +33,10 @@ type Listing = {
 };
 
 const graphVersion = () => (process.env.WHATSAPP_GRAPH_API_VERSION || "v24.0").replace(/^v?/, "v");
-const siteUrl = () => (process.env.NEXT_PUBLIC_SITE_URL || "https://instagram-market-place.vercel.app").replace(/\/$/, "");
+const siteUrl = () => {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://instagram-market-place.vercel.app";
+  return configuredUrl.endsWith("/") ? configuredUrl.slice(0, -1) : configuredUrl;
+};
 
 export function verifyWhatsAppSignature(rawBody: string, signature: string | null) {
   const appSecret = process.env.WHATSAPP_APP_SECRET;
