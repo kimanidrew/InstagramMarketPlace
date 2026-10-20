@@ -226,6 +226,7 @@ export function ShopTabs({
   const [recentStores, setRecentStores] = useState<any[]>([]);
   const [clearingHistory, setClearingHistory] = useState(false);
   const [removingHistoryKeys, setRemovingHistoryKeys] = useState<string[]>([]);
+  const recentHistoryScrollRef = React.useRef<HTMLDivElement>(null);
   useEffect(() => {
     let cancelled = false;
     const visitorId = analyticsVisitorId();
@@ -319,10 +320,16 @@ export function ShopTabs({
                         <h2 className="mt-2 text-2xl font-black tracking-[-.04em] md:text-3xl">Pick Up Where You Left Off</h2>
                         <p className="mt-2 text-sm text-[#777]">Revisit products, services and stores you recently checked out.</p>
                       </div>
-                      <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="inline-flex shrink-0 items-center justify-center self-start rounded-full border border-black/10 px-4 py-2 text-[12px] font-black leading-5 text-[#666] transition hover:border-black hover:text-black disabled:opacity-50 sm:self-auto">{clearingHistory ? "Clearing…" : "Clear history"}</button>
+                      <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
+                        <div className="hidden items-center gap-2 md:flex" aria-label="Scroll shopping history">
+                          <button type="button" onClick={() => recentHistoryScrollRef.current?.scrollBy({ left: -360, behavior: "smooth" })} aria-label="Scroll history left" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#333] transition hover:border-black hover:bg-black hover:text-white"><ChevronLeft size={18} /></button>
+                          <button type="button" onClick={() => recentHistoryScrollRef.current?.scrollBy({ left: 360, behavior: "smooth" })} aria-label="Scroll history right" className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-[#333] transition hover:border-black hover:bg-black hover:text-white"><ChevronRight size={18} /></button>
+                        </div>
+                        <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} className="inline-flex shrink-0 items-center justify-center rounded-full border border-black/10 px-4 py-2 text-[12px] font-black leading-5 text-[#666] transition hover:border-black hover:text-black disabled:opacity-50">{clearingHistory ? "Clearing…" : "Clear history"}</button>
+                      </div>
                     </div>
                     {(recentItems.length > 0 || recentStores.length > 0) && (
-                      <div className="mt-6 flex gap-3 overflow-x-auto pb-2">
+                      <div ref={recentHistoryScrollRef} className="mt-6 flex gap-3 overflow-x-auto pb-2 scroll-smooth">
                         {[
                           ...recentItems.slice(0, 7).map((item: any) => ({ kind: "product", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
                           ...recentStores.slice(0, 7).map((item: any) => ({ kind: "store", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
