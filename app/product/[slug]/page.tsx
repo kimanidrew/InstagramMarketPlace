@@ -56,7 +56,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
       OR: [
         ...(product.category ? [{ category: product.category }] : []),
         ...(product.subcategory ? [{ subcategory: product.subcategory }] : []),
-        ...(product.tags.length ? [{ tags: { some: { name: { in: product.tags.map((tag) => tag.name) } } }] : []),
+        ...(product.tags.length ? [{ tags: { some: { name: { in: product.tags.map((tag) => tag.name) } } } }] : []),
       ],
     },
     include: {
