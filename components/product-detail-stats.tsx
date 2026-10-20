@@ -1,0 +1,63 @@
+"use client";
+
+import { Heart, MessageCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
+export function ProductDetailStats({
+  id,
+  initialLikes,
+  reviews,
+  initiallyLiked,
+}: {
+  id: string;
+  initialLikes: number;
+  reviews: number;
+  initiallyLiked: boolean;
+}) {
+  const [likes, setLikes] = useState(initialLikes);
+  const [isLiked, setIsLiked] = useState(initiallyLiked);
+  const [likeFlash, setLikeFlash] = useState(false);
+  const countRef = useRef(initialLikes);
+
+  useEffect(() => {
+    countRef.current = initialLikes;
+    setLikes(initialLikes);
+  }, [id, initialLikes]);
+
+  useEffect(() => {
+    setIsLiked(initiallyLiked);
+  }, [id, initiallyLiked]);
+
+  useEffect(() => {
+    const onLike = (event: Event) => {
+      const detail = (event as CustomEvent<{ id: string; count: number; liked?: boolean }>).detail;
+      if (detail?.id !== id) return;
+      if (typeof detail.liked === "boolean") setIsLiked(detail.liked);
+      const changed = detail.count !== countRef.current;
+      countRef.current = detail.count;
+      setLikes(detail.count);
+      if (changed) {
+        setLikeFlash(true);
+        window.setTimeout(() => setLikeFlash(false), 450);
+      }
+    };
+
+    window.addEventListener("listing-like-updated", onLike);
+    return () => window.removeEventListener("listing-like-updated", onLike);
+  }, [id]);
+
+  return (
+    <div className="inline-flex flex-wrap items-center gap-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-[#171717]" aria-label="Product statistics">
+      <span className={"product-card-like-line " + (likeFlash ? "is-updated" : "")} aria-label={likes.toLocaleString() + " likes"}>
+        <Heart size={14} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
+        <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likes.toLocaleString()}</b>
+        <span className="font-medium text-[#777]">likes</span>
+      </span>
+      <span className="h-4 w-px bg-[#dededb]" />
+      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold">
+        <MessageCircle size={13} />
+        {reviews.toLocaleString()} <span className="font-medium text-[#777]">reviews</span>
+      </span>
+    </div>
+  );
+}
