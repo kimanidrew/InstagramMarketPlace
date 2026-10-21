@@ -1,6 +1,7 @@
 "use client";
 
-import { BadgeCheck, CornerDownRight, MessageCircle, Pencil, Send, Star, Store as StoreIcon, Trash2, X } from "lucide-react";
+import { BadgeCheck, ChevronRight, CornerDownRight, MessageCircle, Pencil, Send, Star, Store as StoreIcon, Trash2, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 type ReviewReply = {
@@ -37,6 +38,8 @@ export function ReviewSection({
   storeProfileImageUrl,
   presentation = "modal",
   hideWriteButton = false,
+  previewLimit = 2,
+  reviewUrl,
 }: {
   type: "store" | "product";
   targetId: string;
@@ -46,8 +49,10 @@ export function ReviewSection({
   storeUsername?: string;
   storeOwnerUserId?: string | null;
   storeProfileImageUrl?: string | null;
-  presentation?: "modal" | "page";
+  presentation?: "modal" | "page" | "preview";
   hideWriteButton?: boolean;
+  previewLimit?: number;
+  reviewUrl?: string;
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [rating, setRating] = useState(5);
@@ -64,6 +69,7 @@ export function ReviewSection({
   const [replyBusy, setReplyBusy] = useState<string | null>(null);
   const [replyError, setReplyError] = useState<Record<string, string>>({});
 
+  const visibleReviews = presentation === "preview" ? reviews.slice(0, previewLimit) : reviews;
   const average = useMemo(
     () => (reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0),
     [reviews],
@@ -251,7 +257,7 @@ export function ReviewSection({
       <div className="review-thread-list">
         {reviews.length === 0 ? (
           <div className="review-empty-state"><span><MessageCircle size={22} /></span><h3>Start the conversation</h3><p>Be the first to share a thoughtful review. Your feedback helps shoppers and the shop owner.</p></div>
-        ) : reviews.map((review) => (
+        ) : visibleReviews.map((review) => (
           <article key={review.id} className="review-thread">
             <div className="review-thread-main">
               <div className="review-avatar">{(review.user?.name || "S").trim().charAt(0).toUpperCase()}</div>
