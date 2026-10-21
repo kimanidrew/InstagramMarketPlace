@@ -35,6 +35,7 @@ export function ReviewSection({
   storeUsername,
   storeOwnerUserId,
   storeProfileImageUrl,
+  presentation = "modal",
 }: {
   type: "store" | "product";
   targetId: string;
@@ -44,6 +45,7 @@ export function ReviewSection({
   storeUsername?: string;
   storeOwnerUserId?: string | null;
   storeProfileImageUrl?: string | null;
+  presentation?: "modal" | "page";
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [rating, setRating] = useState(5);
@@ -52,7 +54,7 @@ export function ReviewSection({
     initialReviews.find((review) => review.userId === currentUserId) || null,
   );
   const [open, setOpen] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(presentation === "page");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
@@ -68,15 +70,16 @@ export function ReviewSection({
 
   useEffect(() => {
     const openComposer = () => {
+      if (presentation === "page") return;
       if (type === "product") setPanelOpen(true);
       else startReview(editing || undefined);
     };
     window.addEventListener("open-review-composer", openComposer);
     return () => window.removeEventListener("open-review-composer", openComposer);
-  }, [editing, currentUserId, type]);
+  }, [editing, currentUserId, type, presentation]);
 
   useEffect(() => {
-    if (!panelOpen) return;
+    if (!panelOpen || presentation === "page") return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -87,7 +90,7 @@ export function ReviewSection({
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
     };
-  }, [panelOpen]);
+  }, [panelOpen, presentation]);
 
   function startReview(review?: Review) {
     if (!currentUserId) {
@@ -202,11 +205,11 @@ export function ReviewSection({
     }
   }
 
-  if (type === "product" && !panelOpen) return null;
+  if (type === "product" && presentation === "modal" && !panelOpen) return null;
 
   return (
-    <section className={"review-community" + (type === "product" ? " review-product-panel review-panel-open" : "")}>
-      {type === "product" && <button type="button" className="review-panel-backdrop" aria-label="Close product reviews" onClick={() => setPanelOpen(false)} />}
+    <section className={"review-community" + (type === "product" && presentation === "modal" ? " review-product-panel review-panel-open" : "") + (type === "product" && presentation === "page" ? " review-product-page" : "")}>
+      {type === "product" && presentation === "modal" && <button type="button" className="review-panel-backdrop" aria-label="Close product reviews" onClick={() => setPanelOpen(false)} />}
       <div className="review-panel-content">
       <header className="review-community-head">
         <div className="review-community-heading">
@@ -219,7 +222,7 @@ export function ReviewSection({
             <span>{reviews.length} {reviews.length === 1 ? "review" : "reviews"}</span>
           </div>
         </div>
-        {type === "product" && <button type="button" className="review-panel-close" aria-label="Close product reviews" onClick={() => setPanelOpen(false)}><X size={19} /></button>}
+        {type === "product" && presentation === "modal" && <button type="button" className="review-panel-close" aria-label="Close product reviews" onClick={() => setPanelOpen(false)}><X size={19} /></button>}
         {!isStoreOwner && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
           <Pencil size={15} /> {editing ? "Edit your review" : "Write a review"}
         </button>}
