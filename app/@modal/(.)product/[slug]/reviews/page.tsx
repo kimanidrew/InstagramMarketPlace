@@ -32,7 +32,7 @@ export default async function ProductReviewsModal({ params }: { params: Promise<
     <main className="review-product-page" role="dialog" aria-modal="true" aria-label="Product reviews">
       <Link href={"/product/" + slug} className="review-product-backdrop" aria-label="Close product reviews" />
       <section className="review-product-dialog">
-        <ReviewModalClose href={"/product/" + slug} />
+        <ReviewModalClose href={"/product/" + slug} backFirst />
         <div className="review-product-dialog-inner">
           <div className="review-modal-heading">
             <span className="review-modal-heading-icon"><MessageCircle size={21} /></span>
