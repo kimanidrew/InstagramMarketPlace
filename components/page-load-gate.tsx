@@ -62,6 +62,11 @@ export function PageLoadGate() {
 
       targetPath.current = destination.pathname;
       finishing.current = false;
+      // Review overlays are lightweight and should never trigger the full-page loader.
+      if (destination.pathname.endsWith("/reviews")) {
+        setVisible(false);
+        return;
+      }
       setVisible(true);
     };
 
@@ -85,7 +90,7 @@ export function PageLoadGate() {
     };
   }, [pathname, visible, finishWhenReady]);
 
-  if (!visible) return null;
+  if (!visible || pathname.endsWith("/reviews")) return null;
 
   return (
     <div
