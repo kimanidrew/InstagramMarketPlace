@@ -322,6 +322,11 @@ export function ReviewSection({
           </article>
         ))}
       </div>
+      {presentation === "preview" && reviewUrl && reviews.length > previewLimit && (
+        <div className="review-preview-more-wrap">
+          <Link href={reviewUrl} className="review-preview-more">Load more reviews <span>({reviews.length - previewLimit} more)</span><ChevronRight size={16} aria-hidden="true" /></Link>
+        </div>
+      )}
       </div>
     </section>
   );
