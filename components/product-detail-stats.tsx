@@ -9,12 +9,14 @@ export function ProductDetailStats({
   reviews,
   rating,
   initiallyLiked,
+  reviewUrl,
 }: {
   id: string;
   initialLikes: number;
   reviews: number;
   rating: number;
   initiallyLiked: boolean;
+  reviewUrl: string;
 }) {
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(initiallyLiked);
@@ -63,7 +65,7 @@ export function ProductDetailStats({
       <span className="h-4 w-px shrink-0 bg-[#dededb]" aria-hidden="true" />
       <button
         type="button"
-        onClick={() => window.dispatchEvent(new Event("open-review-composer"))}
+        onClick={() => { window.location.href = reviewUrl; }}
         className="product-detail-reviews-stat inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none"
         aria-label={"Open " + reviews + (reviews === 1 ? " product review" : " product reviews")}
       >
