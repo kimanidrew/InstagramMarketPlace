@@ -7971,15 +7971,15 @@ a[class*="bg-neutral-900"] svg {
 }
 
 
-/* Dedicated product reviews URL: centered desktop modal and mobile bottom sheet. */
+/* Product reviews intercepted route: left drawer over the still-visible product page. */
 .review-product-page {
   position: fixed !important;
   inset: 0 !important;
   z-index: 2147483001 !important;
   display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 28px !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  padding: 0 !important;
   color: #171717 !important;
   background: transparent !important;
 }
@@ -7994,17 +7994,20 @@ a[class*="bg-neutral-900"] svg {
 .review-product-dialog {
   position: relative;
   z-index: 1;
-  width: min(760px, 100%);
-  max-height: min(86dvh, 900px);
+  width: min(590px, 92vw);
+  height: 100dvh;
+  max-height: 100dvh;
   overflow: hidden;
   border: 1px solid #e8e8e8;
-  border-radius: 24px;
+  border: 0;
+  border-radius: 0 22px 22px 0;
   background: #fff;
-  box-shadow: 0 24px 90px rgb(0 0 0 / 24%);
-  animation: review-modal-enter .2s ease-out both;
+  box-shadow: 18px 0 70px rgb(0 0 0 / 18%);
+  animation: review-drawer-enter .22s ease-out both;
 }
 .review-product-dialog-inner {
-  max-height: min(86dvh, 900px);
+  height: 100%;
+  max-height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 30px clamp(24px, 4vw, 42px) 36px;
@@ -8036,9 +8039,9 @@ a[class*="bg-neutral-900"] svg {
   box-shadow: none;
   animation: none;
 }
-@keyframes review-modal-enter {
-  from { transform: translateY(10px) scale(.99); opacity: .7; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+@keyframes review-drawer-enter {
+  from { transform: translateX(-18px); opacity: .8; }
+  to { transform: translateX(0); opacity: 1; }
 }
 @media (max-width: 767px) {
   .review-product-page {
@@ -8048,6 +8051,7 @@ a[class*="bg-neutral-900"] svg {
   }
   .review-product-dialog {
     width: 100%;
+    height: auto;
     max-height: 90dvh;
     border: 0;
     border-radius: 24px 24px 0 0;
