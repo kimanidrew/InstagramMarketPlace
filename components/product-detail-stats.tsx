@@ -61,10 +61,15 @@ export function ProductDetailStats({
         {reviews ? rating.toFixed(1) : "New"} <span className="font-medium leading-none text-[#777]">rating</span>
       </span>
       <span className="h-4 w-px shrink-0 bg-[#dededb]" aria-hidden="true" />
-      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none">
+      <button
+        type="button"
+        onClick={() => window.dispatchEvent(new Event("open-review-composer"))}
+        className="product-detail-reviews-stat inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none"
+        aria-label={"Open " + reviews + (reviews === 1 ? " product review" : " product reviews")}
+      >
         <MessageCircle size={16} className="shrink-0" />
         {reviews.toLocaleString()} <span className="font-medium leading-none text-[#777]">reviews</span>
-      </span>
+      </button>
     </div>
   );
 }
