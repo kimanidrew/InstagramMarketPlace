@@ -101,7 +101,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                   </div>
                   <div className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-2">
                     <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
-                    <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact wishlisted={product.wishlistItems.length > 0} />
+                    <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} />
                   </div>
                 </div>
                 <div className="w-full">
