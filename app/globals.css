@@ -9001,3 +9001,66 @@ body:has(.review-product-page) {
   min-height: 40px;
   border-radius: 12px;
 }
+
+
+/* Keep the single product review contained in the right-side details column. */
+.product-detail-review-preview,
+.product-detail-review-preview .review-community,
+.product-detail-review-preview .review-panel-content,
+.product-detail-review-preview .review-preview,
+.product-detail-review-preview .review-thread-list,
+.product-detail-review-preview .review-thread {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-shadow: none !important;
+}
+.product-detail-review-preview .review-thread {
+  padding: 12px !important;
+  border: 1px solid #e8e8e5 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.product-detail-review-preview .review-thread-main {
+  min-width: 0 !important;
+  gap: 9px !important;
+}
+.product-detail-review-preview .review-avatar {
+  flex: 0 0 30px !important;
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 11px !important;
+}
+.product-detail-review-preview .review-thread-content,
+.product-detail-review-preview .review-thread-author {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+.product-detail-review-preview .review-thread-author {
+  gap: 6px !important;
+}
+.product-detail-review-preview .review-thread-author strong {
+  overflow-wrap: anywhere !important;
+  font-size: 11px !important;
+}
+.product-detail-review-preview .review-thread-author time {
+  font-size: 9px !important;
+}
+.product-detail-review-preview .review-thread-body {
+  margin-top: 7px !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+.product-detail-review-preview .review-replies {
+  margin-left: 4px !important;
+  padding-left: 8px !important;
+}
+.product-detail-review-preview .review-preview-more-wrap {
+  width: 100% !important;
+}
+.product-detail-review-preview .review-preview-more {
+  box-shadow: none !important;
+}
