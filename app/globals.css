@@ -6878,7 +6878,7 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     column-gap: 10px !important;
   }
   .shop-page .shop-tab-panel .mb-7,
-  .shop-page .shop-tab-panel .sm\\:mb-9 {
+  .shop-page .shop-tab-panel .sm\:mb-9 {
     margin-bottom: 16px !important;
   }
   .shop-page .shop-tab-panel .grid.grid-cols-2.gap-3 {
