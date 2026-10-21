@@ -7757,3 +7757,42 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   display: block !important;
   align-self: center !important;
 }
+
+
+/* Final alignment override: keep all product stats on one centered baseline. */
+.product-detail-page .product-info-card .product-detail-stats {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats > span:not(.h-4),
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  gap: 6px !important;
+  min-height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+.product-detail-page .product-info-card .product-detail-stats > span.h-4 {
+  align-self: center !important;
+  height: 16px !important;
+  min-height: 16px !important;
+  margin: 0 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats > span:not(.h-4) > span,
+.product-detail-page .product-info-card .product-detail-stats .interaction-stat-value,
+.product-detail-page .product-info-card .product-detail-stats svg {
+  align-self: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
