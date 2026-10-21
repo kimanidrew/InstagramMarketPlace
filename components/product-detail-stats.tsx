@@ -49,7 +49,7 @@ export function ProductDetailStats({
   }, [id]);
 
   return (
-    <div className="inline-flex flex-nowrap items-center justify-center gap-x-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-center text-[#171717]" aria-label="Product statistics">
+    <div className="product-detail-stats inline-flex flex-nowrap items-center justify-center gap-x-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-center text-[#171717]" aria-label="Product statistics">
       <span className={"product-card-like-line inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none " + (likeFlash ? "is-updated" : "")} aria-label={likes.toLocaleString() + " likes"}>
         <Heart size={16} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon shrink-0 " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
         <b className={"interaction-stat-value leading-none " + (likeFlash ? "is-count-updated" : "")}>{likes.toLocaleString()}</b>
