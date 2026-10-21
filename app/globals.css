@@ -7796,3 +7796,83 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   line-height: 1 !important;
   vertical-align: middle !important;
 }
+
+
+/* App-wide audit: make anchor elements styled as buttons readable and consistent.
+   These rules intentionally target button-like anchors, not ordinary text links. */
+a[class*="rounded"][class*="px-"][class*="py-"],
+a[class*="button"],
+a[class*="cta"],
+a[class*="btn"] {
+  font-family: inherit !important;
+  text-decoration: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* Dark button surfaces always use high-contrast light typography. */
+a[class*="bg-black"],
+a[class*="bg-[#000]"],
+a[class*="bg-[#111]"],
+a[class*="bg-[#171717]"],
+a[class*="bg-[#1"],
+a[class*="bg-gray-900"],
+a[class*="bg-neutral-900"],
+a[class*="bg-zinc-900"],
+a[class*="bg-slate-900"],
+a[class*="bg-stone-900"],
+a.account-primary-button,
+a.account-connect-cta,
+a.account-manage-button,
+a.admin-top-button,
+a.admin-meta-button,
+a.store-review-button,
+a.store-directory-empty-button {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* Light button surfaces always use dark, legible typography. */
+a[class*="bg-white"]:not([class*="bg-white/"]):not([class*="bg-white["]),
+a[class*="bg-[#f"]:not([class*="bg-white/"]),
+a[class*="bg-[#e"]:not([class*="bg-white/"]),
+a[class*="bg-[#faf"]:not([class*="bg-white/"]),
+a[class*="bg-[#f7"]:not([class*="bg-white/"]),
+a[class*="bg-[#f8"]:not([class*="bg-white/"]),
+a[class*="bg-[#f5"]:not([class*="bg-white/"]),
+a[class*="bg-[#f4"]:not([class*="bg-white/"]),
+a[class*="bg-[#ece"]:not([class*="bg-white/"]),
+a[class*="bg-[#e9"]:not([class*="bg-white/"]),
+a.account-outline-button,
+a.account-grow-link,
+a.account-review-link,
+a.product-view-button,
+a.product-seller-link,
+a.store-instagram-button,
+a.store-directory-card-foot,
+a.store-directory-card-foot a {
+  color: #171717 !important;
+  -webkit-text-fill-color: #171717 !important;
+}
+
+/* Neutral outlined/transparent action links inherit a dark foreground on light app surfaces. */
+a[class*="rounded"][class*="border"][class*="px-"][class*="py-"]:not([class*="bg-black"]):not([class*="bg-[#000]"]):not([class*="bg-[#111]"]):not([class*="bg-[#171717]"]):not([class*="bg-white/"]):not([class*="text-white"]) {
+  font-family: inherit !important;
+}
+
+/* Keep dark hero/category pills light when their background is a translucent white overlay. */
+.category-hero a[class*="bg-white/"],
+.category-hero a[class*="text-white"],
+.category-page a[class*="bg-white/"],
+.product-detail-page a[class*="text-white"] {
+  -webkit-text-fill-color: currentColor;
+}
+
+/* Make nested text and icons follow the resolved button foreground unless intentionally muted. */
+a[class*="bg-black"] svg,
+a[class*="bg-[#000]"] svg,
+a[class*="bg-[#111]"] svg,
+a[class*="bg-[#171717]"] svg,
+a[class*="bg-gray-900"] svg,
+a[class*="bg-neutral-900"] svg {
+  color: currentColor !important;
+}
