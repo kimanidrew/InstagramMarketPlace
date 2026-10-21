@@ -84,7 +84,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
     <main className="product-detail-page min-h-screen bg-white">
       <AnalyticsTracker connectionId={product.connectionId} postId={product.id} type="VIEW" />
       <div className="shell py-5 sm:py-7 md:py-10">
-        <div className="product-detail-breadcrumb mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><Package size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Product details <span className="ml-auto hidden sm:inline">Discover something good</span></div>
         <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
           <div className="product-gallery-sticky min-w-0">
             <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
