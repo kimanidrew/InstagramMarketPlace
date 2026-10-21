@@ -7969,3 +7969,25 @@ a[class*="bg-neutral-900"] svg {
 @media (prefers-reduced-motion: reduce) {
   .review-panel-content { animation: none !important; }
 }
+
+
+/* Dedicated product reviews URL: full page rather than an overlay. */
+.review-product-page {
+  width: 100%;
+  min-height: 70vh;
+  color: #171717;
+  background: #fff;
+}
+.review-product-page .review-panel-content {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  animation: none;
+}
+.review-product-page .review-community-head { padding: 8px 0 24px; }
+.review-product-page .review-thread-list { padding-bottom: 40px; }
