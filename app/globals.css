@@ -7681,3 +7681,26 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   font-size: 14px !important;
   font-weight: 500 !important;
 }
+
+
+/* Force consistent typography across all three product-detail statistics. */
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line,
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line b.interaction-stat-value,
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line span,
+.product-detail-page .product-info-card .product-detail-stats > span:not(.product-card-like-line) {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line,
+.product-detail-page .product-info-card .product-detail-stats > span:not(.product-card-like-line) {
+  font-weight: 700 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line b.interaction-stat-value {
+  font-weight: 700 !important;
+  color: inherit !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line > span {
+  font-weight: 500 !important;
+  color: #777 !important;
+}
