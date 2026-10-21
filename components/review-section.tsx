@@ -60,7 +60,7 @@ export function ReviewSection({
   const [editing, setEditing] = useState<Review | null>(
     initialReviews.find((review) => review.userId === currentUserId) || null,
   );
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(presentation === "page");
   const [panelOpen, setPanelOpen] = useState(presentation === "page");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
