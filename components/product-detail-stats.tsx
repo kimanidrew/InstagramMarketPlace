@@ -2,6 +2,7 @@
 
 import { Heart, MessageCircle, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function ProductDetailStats({
   id,
@@ -18,6 +19,7 @@ export function ProductDetailStats({
   initiallyLiked: boolean;
   reviewUrl: string;
 }) {
+  const router = useRouter();
   const [likes, setLikes] = useState(initialLikes);
   const [isLiked, setIsLiked] = useState(initiallyLiked);
   const [likeFlash, setLikeFlash] = useState(false);
@@ -65,7 +67,7 @@ export function ProductDetailStats({
       <span className="h-4 w-px shrink-0 bg-[#dededb]" aria-hidden="true" />
       <button
         type="button"
-        onClick={() => { window.location.href = reviewUrl; }}
+        onClick={() => router.push(reviewUrl)}
         className="product-detail-reviews-stat inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none"
         aria-label={"Open " + reviews + (reviews === 1 ? " product review" : " product reviews")}
       >
