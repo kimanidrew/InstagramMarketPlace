@@ -9314,3 +9314,43 @@ body:has(.review-product-page) {
   .review-standalone-page .review-thread-author time,
   .review-product-panel .review-thread-author time { margin-left: 0 !important; }
 }
+
+
+/* Keep review modal scrolling inside the panel, never on the page behind it. */
+.review-product-panel .review-panel-content {
+  box-sizing: border-box !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-gutter: stable !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #b9b9b4 #f4f4f1 !important;
+}
+.review-product-panel .review-panel-content::-webkit-scrollbar {
+  width: 8px !important;
+}
+.review-product-panel .review-panel-content::-webkit-scrollbar-track {
+  background: #f4f4f1 !important;
+  border-radius: 999px !important;
+}
+.review-product-panel .review-panel-content::-webkit-scrollbar-thumb {
+  background: #b9b9b4 !important;
+  border: 2px solid #f4f4f1 !important;
+  border-radius: 999px !important;
+}
+.review-product-panel .review-panel-content::-webkit-scrollbar-thumb:hover {
+  background: #85857f !important;
+}
+@media (max-width: 767px) {
+  .review-product-panel .review-panel-content {
+    height: auto !important;
+    max-height: 88dvh !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    scrollbar-gutter: stable !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
+  }
+}
