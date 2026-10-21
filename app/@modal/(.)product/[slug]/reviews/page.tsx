@@ -42,7 +42,7 @@ export default async function ProductReviewsModal({ params }: { params: Promise<
               <p className="review-modal-product">{product.productTitle?.trim() || "Product"} · @{connection.username}</p>
             </div>
           </div>
-          <ReviewSection type="product" presentation="page" targetId={product.id} reviews={reviews} currentUserId={currentUser?.id} title="Shopper reviews" storeUsername={connection.username} storeOwnerUserId={connection.connectedByUserId} storeProfileImageUrl={connection.profileImageUrl} />
+          <ReviewSection type="product" presentation="page" targetId={product.id} reviews={reviews} currentUserId={currentUser?.id} title="Shopper reviews" storeUsername={connection.username} storeOwnerUserId={connection.connectedByUserId} storeProfileImageUrl={connection.profileImageUrl} hideWriteButton />
         </div>
       </section>
     </main>
