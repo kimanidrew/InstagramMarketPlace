@@ -9066,37 +9066,55 @@ body:has(.review-product-page) {
 }
 
 
-/* Full-width, borderless review preview in product details. */
-.product-detail-review-preview,
-.product-detail-review-preview .review-community,
-.product-detail-review-preview .review-panel-content,
-.product-detail-review-preview .review-thread,
-.product-detail-review-preview .review-preview-more {
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+/* Compact, full-width review preview with a subtle divider and outlined action. */
+.product-detail-review-preview {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  border-top: 1px solid #ededeb !important;
+  padding-top: 14px !important;
 }
-.product-detail-review-preview,
 .product-detail-review-preview .review-community,
 .product-detail-review-preview .review-panel-content,
+.product-detail-review-preview .review-preview,
 .product-detail-review-preview .review-thread-list,
+.product-detail-review-preview .review-preview-more-wrap {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
 .product-detail-review-preview .review-thread {
   width: 100% !important;
   max-width: 100% !important;
+  padding: 10px 11px !important;
+  border: 1px solid #e8e8e5 !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  box-shadow: none !important;
 }
-.product-detail-review-preview .review-thread {
-  padding: 12px 0 !important;
-  background: transparent !important;
+.product-detail-review-preview .review-preview-more-wrap {
+  padding-top: 9px !important;
 }
 .product-detail-review-preview .review-preview-more {
-  justify-content: flex-start !important;
-  padding: 0 !important;
-  background: transparent !important;
+  display: flex !important;
+  box-sizing: border-box !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  min-height: 36px !important;
+  padding: 8px 12px !important;
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  box-shadow: none !important;
 }
 .product-detail-review-preview .review-preview-more:hover {
+  border-color: #cfcfcf !important;
+  background: #fafafa !important;
   color: #171717 !important;
-  background: transparent !important;
 }
 .product-detail-review-preview .review-preview-more:hover span {
-  color: #777 !important;
+  color: #555 !important;
 }
