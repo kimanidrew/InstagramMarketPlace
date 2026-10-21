@@ -134,6 +134,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               {categoryLabels.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2" aria-label="Product categories">
                   {categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}
+                </div>
               )}
 
               <div className="product-detail-review-preview mt-5 border-t border-[#ededeb] pt-5">
