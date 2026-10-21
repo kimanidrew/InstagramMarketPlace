@@ -36,6 +36,7 @@ export function ReviewSection({
   storeOwnerUserId,
   storeProfileImageUrl,
   presentation = "modal",
+  hideWriteButton = false,
 }: {
   type: "store" | "product";
   targetId: string;
@@ -46,6 +47,7 @@ export function ReviewSection({
   storeOwnerUserId?: string | null;
   storeProfileImageUrl?: string | null;
   presentation?: "modal" | "page";
+  hideWriteButton?: boolean;
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [rating, setRating] = useState(5);
@@ -223,7 +225,7 @@ export function ReviewSection({
           </div>
         </div>
         {type === "product" && presentation === "modal" && <button type="button" className="review-panel-close" aria-label="Close product reviews" onClick={() => setPanelOpen(false)}><X size={19} /></button>}
-        {!isStoreOwner && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
+        {!isStoreOwner && !hideWriteButton && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
           <Pencil size={15} /> {editing ? "Edit your review" : "Write a review"}
         </button>}
       </header>
