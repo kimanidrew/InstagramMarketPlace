@@ -9144,3 +9144,173 @@ body:has(.review-product-page) {
 .product-detail-aside .product-detail-review-preview .review-preview-more {
   display: flex !important;
 }
+
+
+/* Review UI polish: cleaner hierarchy, softer surfaces, and clearer actions. */
+.review-product-page .review-community-head,
+.review-standalone-page .review-community-head,
+.review-product-panel .review-community-head {
+  align-items: flex-start !important; gap: 18px !important;
+  padding: 8px 0 22px !important; border-bottom: 1px solid #ecebe8 !important;
+}
+.review-product-page .review-community-eyebrow,
+.review-standalone-page .review-community-eyebrow,
+.review-product-panel .review-community-eyebrow {
+  gap: 8px !important; margin-bottom: 11px !important;
+  color: #77705f !important; letter-spacing: .12em !important;
+}
+.review-product-page .review-community-heading h2,
+.review-standalone-page .review-community-heading h2,
+.review-product-panel .review-community-heading h2 {
+  font-size: clamp(23px, 3vw, 29px) !important;
+  line-height: 1.15 !important; letter-spacing: -.055em !important;
+}
+.review-product-page .review-community-heading > p,
+.review-standalone-page .review-community-heading > p,
+.review-product-panel .review-community-heading > p {
+  max-width: 440px !important; color: #777772 !important;
+  font-size: 13px !important; line-height: 1.65 !important;
+}
+.review-product-page .review-community-rating,
+.review-standalone-page .review-community-rating,
+.review-product-panel .review-community-rating {
+  gap: 8px !important; margin-top: 15px !important; padding: 8px 12px !important;
+  border-color: #eee4c9 !important; background: #fffaf0 !important;
+}
+.review-product-page .review-write-button,
+.review-standalone-page .review-write-button,
+.review-product-panel .review-write-button {
+  display: inline-flex !important; align-items: center !important; justify-content: center !important;
+  gap: 8px !important; min-height: 42px !important; padding: 0 15px !important;
+  border: 1px solid #deded8 !important; border-radius: 999px !important;
+  background: #fff !important; color: #242424 !important; white-space: nowrap !important;
+}
+.review-product-page .review-write-button:hover,
+.review-standalone-page .review-write-button:hover,
+.review-product-panel .review-write-button:hover {
+  border-color: #222 !important; background: #222 !important; color: #fff !important;
+}
+.review-product-page .review-thread-list,
+.review-standalone-page .review-thread-list,
+.review-product-panel .review-thread-list {
+  gap: 14px !important; padding: 22px 0 30px !important;
+}
+.review-product-page .review-thread,
+.review-standalone-page .review-thread,
+.review-product-panel .review-thread {
+  padding: 19px !important; border: 1px solid #eae9e5 !important;
+  border-radius: 17px !important;
+  background: linear-gradient(145deg, #fff 0%, #fdfdfb 100%) !important;
+  box-shadow: 0 5px 18px rgb(24 24 20 / 3%) !important;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease !important;
+}
+.review-product-page .review-thread:hover,
+.review-standalone-page .review-thread:hover,
+.review-product-panel .review-thread:hover {
+  border-color: #dcdad3 !important; box-shadow: 0 8px 22px rgb(24 24 20 / 5%) !important;
+}
+.review-product-page .review-avatar,
+.review-standalone-page .review-avatar,
+.review-product-panel .review-avatar {
+  flex-basis: 42px !important; width: 42px !important; height: 42px !important;
+  border: 1px solid #e8e5dc !important; background: #f4f1e9 !important;
+  color: #504b3f !important; font-size: 14px !important;
+}
+.review-product-page .review-thread-author strong,
+.review-standalone-page .review-thread-author strong,
+.review-product-panel .review-thread-author strong {
+  font-size: 13px !important; letter-spacing: -.015em !important;
+}
+.review-product-page .review-thread-author time,
+.review-standalone-page .review-thread-author time,
+.review-product-panel .review-thread-author time {
+  margin-left: auto !important; color: #92918b !important; font-size: 11px !important;
+}
+.review-product-page .review-thread-body,
+.review-standalone-page .review-thread-body,
+.review-product-panel .review-thread-body {
+  margin-top: 10px !important; color: #42423e !important;
+  font-size: 13px !important; line-height: 1.75 !important;
+}
+.review-product-page .review-own-actions,
+.review-standalone-page .review-own-actions,
+.review-product-panel .review-own-actions,
+.review-product-page .review-reply-actions,
+.review-standalone-page .review-reply-actions,
+.review-product-panel .review-reply-actions {
+  gap: 15px !important; margin-top: 14px !important;
+}
+.review-product-page .review-own-actions button,
+.review-standalone-page .review-own-actions button,
+.review-product-panel .review-own-actions button,
+.review-product-page .review-reply-actions button,
+.review-standalone-page .review-reply-actions button,
+.review-product-panel .review-reply-actions button {
+  min-height: 28px !important; padding: 4px 0 !important; color: #6f6e67 !important;
+}
+.review-product-page .review-replies,
+.review-standalone-page .review-replies,
+.review-product-panel .review-replies {
+  margin-top: 17px !important; border-left-color: #e9e5d9 !important;
+}
+.review-product-page .review-reply,
+.review-standalone-page .review-reply,
+.review-product-panel .review-reply {
+  border: 1px solid #eeece5 !important; border-radius: 13px !important; background: #f9f8f4 !important;
+}
+.review-product-page .review-compose,
+.review-standalone-page .review-compose,
+.review-product-panel .review-compose {
+  border-color: #e9e5da !important; border-radius: 17px !important; background: #faf9f5 !important;
+}
+.review-product-page .review-compose-top h3,
+.review-standalone-page .review-compose-top h3,
+.review-product-panel .review-compose-top h3 {
+  color: #242420 !important; letter-spacing: -.025em !important;
+}
+.review-product-page .review-rating-picker button,
+.review-standalone-page .review-rating-picker button,
+.review-product-panel .review-rating-picker button {
+  transition: transform .15s ease, color .15s ease !important;
+}
+.review-product-page .review-rating-picker button:hover,
+.review-standalone-page .review-rating-picker button:hover,
+.review-product-panel .review-rating-picker button:hover {
+  transform: translateY(-2px) scale(1.04) !important;
+}
+.review-product-page .review-compose-footer button,
+.review-standalone-page .review-compose-footer button,
+.review-product-panel .review-compose-footer button {
+  min-height: 40px !important; padding: 0 16px !important;
+  border: 1px solid #222 !important; border-radius: 999px !important;
+  background: #222 !important; font-weight: 750 !important;
+}
+.review-product-page .review-empty-state,
+.review-standalone-page .review-empty-state,
+.review-product-panel .review-empty-state {
+  padding: 42px 24px !important; border: 1px dashed #dedbd1 !important;
+  border-radius: 20px !important;
+  background: radial-gradient(circle at top, #fffdf7 0%, #fbfaf6 70%) !important;
+}
+.review-product-page .review-empty-state > span,
+.review-standalone-page .review-empty-state > span,
+.review-product-panel .review-empty-state > span {
+  border-radius: 50% !important; background: #f0ede4 !important; color: #575246 !important;
+}
+.review-product-page .review-preview-more,
+.review-standalone-page .review-preview-more,
+.review-product-panel .review-preview-more { border-radius: 999px !important; }
+@media (max-width: 767px) {
+  .review-product-page .review-community-head,
+  .review-standalone-page .review-community-head,
+  .review-product-panel .review-community-head { flex-wrap: wrap !important; padding-bottom: 18px !important; }
+  .review-product-page .review-write-button,
+  .review-standalone-page .review-write-button,
+  .review-product-panel .review-write-button { min-height: 39px !important; }
+  .review-product-page .review-thread,
+  .review-standalone-page .review-thread,
+  .review-product-panel .review-thread { padding: 15px !important; border-radius: 15px !important; }
+  .review-product-page .review-thread-author time,
+  .review-standalone-page .review-thread-author time,
+  .review-product-panel .review-thread-author time { margin-left: 0 !important; }
+}
