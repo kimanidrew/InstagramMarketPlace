@@ -134,8 +134,11 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               {categoryLabels.length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2" aria-label="Product categories">
                   {categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}
-                </div>
               )}
+
+              <div className="product-detail-review-preview mt-5 border-t border-[#ededeb] pt-5">
+                <ReviewSection type="product" presentation="preview" previewLimit={1} reviewUrl={"/product/" + slug + "/reviews"} targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
+              </div>
 
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
@@ -150,7 +153,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
         </div>
 
         <div className="product-detail-lower-content">
-          <div id="product-reviews" className="scroll-mt-24"><ReviewSection type="product" presentation="preview" previewLimit={2} reviewUrl={"/product/" + slug + "/reviews"} targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" /></div>
           {relatedProducts.length > 0 && (
             <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
               <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
