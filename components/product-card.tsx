@@ -131,7 +131,7 @@ export function ProductCard({ p }: { p: any }) {
           <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
           <span>likes</span>
         </div>
-        <p className="line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
+        <p className="product-item-caption line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
           {p.productTitle}
         </p>
 
