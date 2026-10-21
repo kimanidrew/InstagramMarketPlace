@@ -7608,3 +7608,53 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   .product-detail-page .product-recommendations { padding-top: 24px; }
   .product-detail-page .product-recommendations .grid { gap: 24px 12px !important; }
 }
+
+
+/* Product detail: clearer retail hierarchy and cleaner responsive spacing. */
+.product-detail-page .product-detail-title {
+  font-size: clamp(1.45rem, 2.1vw, 2rem) !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.04em !important;
+  font-weight: 800 !important;
+}
+.product-detail-page .product-info-card {
+  box-shadow: 0 10px 34px rgba(0,0,0,.035) !important;
+}
+.product-detail-page .product-info-card > div:first-child {
+  gap: 14px !important;
+}
+.product-detail-page .product-info-card .product-seller-wrap {
+  margin-top: 22px !important;
+}
+.product-detail-page .product-info-card .product-seller-link {
+  width: 100%;
+  min-height: 64px;
+}
+.product-detail-page .product-info-card .product-action-stack {
+  margin-top: 24px !important;
+  gap: 10px !important;
+}
+.product-detail-page .product-info-card .product-action-stack > * {
+  min-height: 48px;
+}
+.product-detail-page .product-info-card .product-action-stack a {
+  box-shadow: none !important;
+}
+.product-detail-page .product-detail-lower-content {
+  margin-top: 52px;
+}
+@media (max-width: 640px) {
+  .product-detail-page .product-detail-title {
+    font-size: 1.45rem !important;
+    line-height: 1.25 !important;
+  }
+  .product-detail-page .product-detail-lower-content {
+    margin-top: 32px;
+  }
+  .product-detail-page .product-info-card .product-action-stack {
+    gap: 8px !important;
+  }
+  .product-detail-page .product-info-card .product-action-stack > * {
+    min-width: 0;
+  }
+}
