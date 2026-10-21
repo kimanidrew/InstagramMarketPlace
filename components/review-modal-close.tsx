@@ -10,11 +10,11 @@ export function ReviewModalClose({ href }: { href: string }) {
     <button
       type="button"
       className="review-product-close"
-      aria-label="Close reviews modal"
-      title="Close modal"
+      aria-label="Close reviews drawer"
+      title="Close drawer"
       onClick={() => router.push(href)}
     >
-      <span>Close</span>
+      <span>Close drawer</span>
       <X size={17} strokeWidth={2.2} aria-hidden="true" />
     </button>
   );
