@@ -7704,3 +7704,41 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
   font-weight: 500 !important;
   color: #777 !important;
 }
+
+
+/* Force product detail stat text colors and align every stat row consistently. */
+.product-detail-page .product-info-card .product-detail-stats {
+  align-items: center !important;
+  justify-content: center !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line,
+.product-detail-page .product-info-card .product-detail-stats > span:not(.product-card-like-line) {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  color: #171717 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line,
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line b.interaction-stat-value,
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line span,
+.product-detail-page .product-info-card .product-detail-stats > span:not(.product-card-like-line),
+.product-detail-page .product-info-card .product-detail-stats > span:not(.product-card-like-line) span {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line b.interaction-stat-value {
+  color: #171717 !important;
+  font-weight: 700 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line > span,
+.product-detail-page .product-info-card .product-detail-stats > span:not(.product-card-like-line) span {
+  color: #777777 !important;
+  font-weight: 500 !important;
+}
+.product-detail-page .product-info-card .product-detail-stats .product-card-like-line svg {
+  align-self: center !important;
+  flex: 0 0 auto !important;
+}
