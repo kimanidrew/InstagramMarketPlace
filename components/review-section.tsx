@@ -52,6 +52,7 @@ export function ReviewSection({
     initialReviews.find((review) => review.userId === currentUserId) || null,
   );
   const [open, setOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
@@ -66,10 +67,27 @@ export function ReviewSection({
   const isStoreOwner = !!currentUserId && !!storeOwnerUserId && currentUserId === storeOwnerUserId;
 
   useEffect(() => {
-    const openComposer = () => startReview(editing || undefined);
+    const openComposer = () => {
+      if (type === "product") setPanelOpen(true);
+      else startReview(editing || undefined);
+    };
     window.addEventListener("open-review-composer", openComposer);
     return () => window.removeEventListener("open-review-composer", openComposer);
-  }, [editing, currentUserId]);
+  }, [editing, currentUserId, type]);
+
+  useEffect(() => {
+    if (!panelOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setPanelOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [panelOpen]);
 
   function startReview(review?: Review) {
     if (!currentUserId) {
@@ -184,8 +202,12 @@ export function ReviewSection({
     }
   }
 
+  if (type === "product" && !panelOpen) return null;
+
   return (
-    <section className="review-community">
+    <section className={"review-community" + (type === "product" ? " review-product-panel review-panel-open" : "")}>
+      {type === "product" && <button type="button" className="review-panel-backdrop" aria-label="Close product reviews" onClick={() => setPanelOpen(false)} />}
+      <div className="review-panel-content">
       <header className="review-community-head">
         <div className="review-community-heading">
           <span className="review-community-eyebrow"><MessageCircle size={13} /> COMMUNITY CONVERSATION</span>
@@ -197,6 +219,7 @@ export function ReviewSection({
             <span>{reviews.length} {reviews.length === 1 ? "review" : "reviews"}</span>
           </div>
         </div>
+        {type === "product" && <button type="button" className="review-panel-close" aria-label="Close product reviews" onClick={() => setPanelOpen(false)}><X size={19} /></button>}
         {!isStoreOwner && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
           <Pencil size={15} /> {editing ? "Edit your review" : "Write a review"}
         </button>}
@@ -287,6 +310,7 @@ export function ReviewSection({
             )}
           </article>
         ))}
+      </div>
       </div>
     </section>
   );
