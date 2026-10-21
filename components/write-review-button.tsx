@@ -1,10 +1,13 @@
 "use client";
 
 import { Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function WriteReviewButton({ reviewUrl }: { reviewUrl: string }) {
+  const router = useRouter();
+
   function openReviewComposer() {
-    window.location.href = reviewUrl;
+    router.push(reviewUrl);
   }
 
   return (
