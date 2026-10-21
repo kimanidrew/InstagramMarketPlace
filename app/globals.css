@@ -8467,3 +8467,321 @@ a[class*="bg-neutral-900"] svg {
     padding: 0 9px !important;
   }
 }
+
+
+/* Review experience redesign: consistent card hierarchy for both drawer and standalone route. */
+.review-product-page .review-product-dialog-inner,
+.review-standalone-page .review-product-dialog-inner {
+  color: #202020 !important;
+  font-family: inherit;
+}
+.review-product-page .review-modal-heading,
+.review-standalone-page .review-modal-heading {
+  gap: 15px !important;
+  padding-bottom: 22px !important;
+  border-bottom: 1px solid #eee !important;
+}
+.review-product-page .review-modal-heading-icon,
+.review-standalone-page .review-modal-heading-icon {
+  display: inline-flex !important;
+  flex: 0 0 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 16px !important;
+  background: #f5f1ff !important;
+  color: #8053d6 !important;
+}
+.review-product-page .review-modal-kicker,
+.review-standalone-page .review-modal-kicker {
+  color: #8b69cb !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+.review-product-page .review-modal-product,
+.review-standalone-page .review-modal-product {
+  margin-top: 7px !important;
+  color: #777 !important;
+  font-size: 12px !important;
+}
+.review-product-page .review-community-head,
+.review-standalone-page .review-community-head {
+  padding: 22px 0 !important;
+  border-bottom: 1px solid #eee !important;
+}
+.review-product-page .review-community-eyebrow,
+.review-standalone-page .review-community-eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  margin-bottom: 10px !important;
+  color: #8b69cb !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .13em !important;
+}
+.review-product-page .review-community-heading h2,
+.review-standalone-page .review-community-heading h2 {
+  color: #202020 !important;
+  font-size: 25px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.045em !important;
+}
+.review-product-page .review-community-heading > p,
+.review-standalone-page .review-community-heading > p {
+  margin-top: 7px !important;
+  color: #777 !important;
+  font-size: 12px !important;
+  line-height: 1.65 !important;
+}
+.review-product-page .review-community-rating,
+.review-standalone-page .review-community-rating {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  margin-top: 13px !important;
+  padding: 8px 11px !important;
+  border: 1px solid #f0e8d6 !important;
+  border-radius: 999px !important;
+  background: #fffbf2 !important;
+}
+.review-product-page .review-community-rating strong,
+.review-standalone-page .review-community-rating strong {
+  color: #202020 !important;
+  font-size: 13px !important;
+  font-weight: 850 !important;
+}
+.review-product-page .review-community-rating > span:last-child,
+.review-standalone-page .review-community-rating > span:last-child {
+  color: #777 !important;
+  font-size: 11px !important;
+}
+.review-product-page .review-community-stars,
+.review-standalone-page .review-community-stars,
+.review-product-page .review-thread-stars,
+.review-standalone-page .review-thread-stars {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  color: #d99b22 !important;
+}
+.review-product-page .review-write-button,
+.review-standalone-page .review-write-button {
+  align-self: start !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  border: 1px solid #deded8 !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  color: #222 !important;
+  font-size: 11px !important;
+  font-weight: 750 !important;
+  transition: background .15s ease, border-color .15s ease, color .15s ease !important;
+}
+.review-product-page .review-write-button:hover,
+.review-standalone-page .review-write-button:hover {
+  border-color: #202020 !important;
+  background: #202020 !important;
+  color: #fff !important;
+}
+.review-product-page .review-thread-list,
+.review-standalone-page .review-thread-list {
+  display: grid !important;
+  gap: 13px !important;
+  padding: 20px 0 30px !important;
+}
+.review-product-page .review-thread,
+.review-standalone-page .review-thread {
+  padding: 18px !important;
+  border: 1px solid #e9e9e5 !important;
+  border-radius: 18px !important;
+  background: #fff !important;
+  box-shadow: 0 3px 12px rgb(20 20 20 / 3%) !important;
+}
+.review-product-page .review-thread-main,
+.review-standalone-page .review-thread-main {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+.review-product-page .review-avatar,
+.review-standalone-page .review-avatar {
+  display: flex !important;
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid #e8e4f0 !important;
+  border-radius: 50% !important;
+  background: #f4f1fa !important;
+  color: #6e5a92 !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+.review-product-page .review-thread-content,
+.review-standalone-page .review-thread-content { min-width: 0 !important; flex: 1 !important; }
+.review-product-page .review-thread-author,
+.review-standalone-page .review-thread-author {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+.review-product-page .review-thread-author strong,
+.review-standalone-page .review-thread-author strong {
+  color: #242424 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+.review-product-page .review-thread-author time,
+.review-standalone-page .review-thread-author time {
+  color: #929292 !important;
+  font-size: 10px !important;
+}
+.review-product-page .review-thread-stars,
+.review-standalone-page .review-thread-stars { margin-top: 7px !important; }
+.review-product-page .review-thread-body,
+.review-standalone-page .review-thread-body {
+  margin-top: 9px !important;
+  color: #454545 !important;
+  font-size: 13px !important;
+  line-height: 1.7 !important;
+  overflow-wrap: anywhere !important;
+}
+.review-product-page .review-own-actions,
+.review-standalone-page .review-own-actions,
+.review-product-page .review-reply-actions,
+.review-standalone-page .review-reply-actions {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  margin-top: 13px !important;
+}
+.review-product-page .review-own-actions button,
+.review-standalone-page .review-own-actions button,
+.review-product-page .review-reply-actions button,
+.review-standalone-page .review-reply-actions button {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  color: #777 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+.review-product-page .review-own-actions button:hover,
+.review-standalone-page .review-own-actions button:hover,
+.review-product-page .review-reply-actions button:hover,
+.review-standalone-page .review-reply-actions button:hover { color: #202020 !important; }
+.review-product-page .review-own-actions button:last-child,
+.review-standalone-page .review-own-actions button:last-child { color: #c43e3e !important; }
+.review-product-page .review-replies,
+.review-standalone-page .review-replies {
+  display: grid !important;
+  gap: 10px !important;
+  margin: 16px 0 0 16px !important;
+  padding-left: 14px !important;
+  border-left: 2px solid #eee9f7 !important;
+}
+.review-product-page .review-reply,
+.review-standalone-page .review-reply {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 9px !important;
+  padding: 11px !important;
+  border-radius: 12px !important;
+  background: #f8f7fb !important;
+}
+.review-product-page .review-reply-content p,
+.review-standalone-page .review-reply-content p {
+  margin-top: 5px !important;
+  color: #555 !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  overflow-wrap: anywhere !important;
+}
+.review-product-page .review-shop-reply-label,
+.review-standalone-page .review-shop-reply-label {
+  display: inline-block !important;
+  margin-top: 5px !important;
+  color: #7952b7 !important;
+  font-size: 9px !important;
+  font-weight: 850 !important;
+  letter-spacing: .08em !important;
+}
+.review-product-page .review-empty-state,
+.review-standalone-page .review-empty-state {
+  padding: 38px 22px !important;
+  border: 1px dashed #dedbd5 !important;
+  border-radius: 18px !important;
+  background: #fcfbf8 !important;
+  text-align: center !important;
+}
+.review-product-page .review-empty-state > span,
+.review-standalone-page .review-empty-state > span {
+  display: inline-flex !important;
+  width: 46px !important;
+  height: 46px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 15px !important;
+  background: #f1ecfa !important;
+  color: #8053d6 !important;
+}
+.review-product-page .review-empty-state h3,
+.review-standalone-page .review-empty-state h3 {
+  margin-top: 13px !important;
+  color: #222 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+.review-product-page .review-empty-state p,
+.review-standalone-page .review-empty-state p {
+  max-width: 340px !important;
+  margin: 7px auto 0 !important;
+  color: #777 !important;
+  font-size: 12px !important;
+  line-height: 1.7 !important;
+}
+.review-product-page .review-compose,
+.review-standalone-page .review-compose {
+  margin-top: 18px !important;
+  padding: 18px !important;
+  border: 1px solid #e6e0f0 !important;
+  border-radius: 18px !important;
+  background: #fbf9ff !important;
+}
+.review-product-page .review-compose textarea,
+.review-standalone-page .review-compose textarea {
+  width: 100% !important;
+  border: 1px solid #e3e1e8 !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  padding: 12px !important;
+  outline: none !important;
+}
+.review-product-page .review-compose textarea:focus,
+.review-standalone-page .review-compose textarea:focus {
+  border-color: #a58ad3 !important;
+  box-shadow: 0 0 0 3px rgb(128 83 214 / 10%) !important;
+}
+.review-product-page .review-compose-footer button,
+.review-standalone-page .review-compose-footer button {
+  border-radius: 11px !important;
+  background: #202020 !important;
+  color: #fff !important;
+}
+@media (max-width: 767px) {
+  .review-product-page .review-community-heading h2,
+  .review-standalone-page .review-community-heading h2 { font-size: 22px !important; }
+  .review-product-page .review-community-head,
+  .review-standalone-page .review-community-head { gap: 13px !important; }
+  .review-product-page .review-thread,
+  .review-standalone-page .review-thread { padding: 14px !important; }
+  .review-product-page .review-thread-main,
+  .review-standalone-page .review-thread-main { gap: 10px !important; }
+}
