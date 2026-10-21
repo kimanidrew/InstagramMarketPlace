@@ -231,7 +231,7 @@ export function ReviewSection({
           </div>
         </div>
         {type === "product" && presentation === "modal" && <button type="button" className="review-panel-close" aria-label="Close product reviews" onClick={() => setPanelOpen(false)}><X size={19} /></button>}
-        {!isStoreOwner && !hideWriteButton && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
+        {!isStoreOwner && !hideWriteButton && presentation !== "preview" && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
           <Pencil size={15} /> {editing ? "Edit your review" : "Write a review"}
         </button>}
       </header>
