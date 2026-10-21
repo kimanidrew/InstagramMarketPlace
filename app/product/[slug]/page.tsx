@@ -122,7 +122,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <Link href={"/product/" + slug + "/reviews"} className="text-sm text-[#777] underline-offset-4 hover:underline">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</Link>
               </div>
 
-                            {fullCaption && fullCaption !== product.productTitle?.trim() && (
+                            {fullCaption && (
                 <div className="mt-5 border-t border-[#ededeb] pt-4">
                   <h2 className="mb-2 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">About this product</h2>
                   <p className="whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>
