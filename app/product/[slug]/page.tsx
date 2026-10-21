@@ -119,7 +119,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                   {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={16} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
                 </div>
                 <span className="text-sm font-bold text-[#333]">{product.reviews.length ? average.toFixed(1) : "New"}</span>
-                <a href="#product-reviews" className="text-sm text-[#777] underline-offset-4 hover:underline">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</a>
+                <Link href={"/product/" + slug + "/reviews"} className="text-sm text-[#777] underline-offset-4 hover:underline">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</Link>
               </div>
 
                             {fullCaption && fullCaption !== product.productTitle?.trim() && (
