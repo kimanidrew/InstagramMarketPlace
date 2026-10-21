@@ -9118,3 +9118,29 @@ body:has(.review-product-page) {
 .product-detail-review-preview .review-preview-more:hover span {
   color: #555 !important;
 }
+
+
+/* Force the product review section to span the entire available right-column width. */
+.product-detail-aside .product-info-card > .product-detail-review-preview {
+  display: block !important;
+  align-self: stretch !important;
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.product-detail-aside .product-detail-review-preview > .review-community,
+.product-detail-aside .product-detail-review-preview .review-panel-content,
+.product-detail-aside .product-detail-review-preview .review-preview,
+.product-detail-aside .product-detail-review-preview .review-thread-list,
+.product-detail-aside .product-detail-review-preview .review-preview-more-wrap,
+.product-detail-aside .product-detail-review-preview .review-preview-more {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.product-detail-aside .product-detail-review-preview .review-preview-more {
+  display: flex !important;
+}
