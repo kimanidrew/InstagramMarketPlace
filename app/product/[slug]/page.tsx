@@ -138,7 +138,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               )}
 
               {product.reviews.length > 0 && (
-                <div className="product-detail-review-preview mt-5 border-t border-[#ededeb] pt-5">
+                <div className="product-detail-review-preview mt-5 w-full min-w-0 pt-5">
                   <ReviewSection type="product" presentation="preview" previewLimit={1} reviewUrl={"/product/" + slug + "/reviews"} targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
                 </div>
               )}
