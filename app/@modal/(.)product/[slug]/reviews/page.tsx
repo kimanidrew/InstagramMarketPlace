@@ -36,7 +36,7 @@ export default async function ProductReviewsModal({ params }: { params: Promise<
         <div className="review-product-dialog-inner">
           <div className="review-modal-heading">
             <span className="review-modal-heading-icon"><MessageCircle size={21} /></span>
-            <div className="min-w-0">
+            <div className="review-modal-heading-copy">
               <p className="review-modal-kicker">Product discussion</p>
               <h1>Reviews</h1>
               <p className="review-modal-product">{product.productTitle?.trim() || "Product"} · @{connection.username}</p>
