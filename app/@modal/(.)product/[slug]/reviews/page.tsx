@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { ReviewModalClose } from "@/components/review-modal-close";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
@@ -31,14 +32,14 @@ export default async function ProductReviewsModal({ params }: { params: Promise<
     <main className="review-product-page" role="dialog" aria-modal="true" aria-label="Product reviews">
       <Link href={"/product/" + slug} className="review-product-backdrop" aria-label="Close product reviews" />
       <section className="review-product-dialog">
-        <Link href={"/product/" + slug} className="review-product-close" aria-label="Close product reviews"><X size={20} /></Link>
+        <ReviewModalClose href={"/product/" + slug} />
         <div className="review-product-dialog-inner">
-          <div className="mb-6 flex items-center gap-3 border-b border-[#ededed] pb-6">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f4f4f1]"><MessageCircle size={21} /></span>
+          <div className="review-modal-heading">
+            <span className="review-modal-heading-icon"><MessageCircle size={21} /></span>
             <div className="min-w-0">
-              <p className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#888]">Product discussion</p>
-              <h1 className="mt-1 text-2xl font-black tracking-[-.04em] text-black sm:text-3xl">Reviews</h1>
-              <p className="mt-1 truncate text-sm text-[#777]">{product.productTitle?.trim() || "Product"} · @{connection.username}</p>
+              <p className="review-modal-kicker">Product discussion</p>
+              <h1>Reviews</h1>
+              <p className="review-modal-product">{product.productTitle?.trim() || "Product"} · @{connection.username}</p>
             </div>
           </div>
           <ReviewSection type="product" presentation="page" targetId={product.id} reviews={reviews} currentUserId={currentUser?.id} title="Shopper reviews" storeUsername={connection.username} storeOwnerUserId={connection.connectedByUserId} storeProfileImageUrl={connection.profileImageUrl} />
