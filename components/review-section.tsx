@@ -219,7 +219,7 @@ export function ReviewSection({
     <section className={"review-community" + (type === "product" && presentation === "modal" ? " review-product-panel review-panel-open" : "") + (type === "product" && presentation === "page" ? " review-product-page" : "")}>
       {type === "product" && presentation === "modal" && <button type="button" className="review-panel-backdrop" aria-label="Close product reviews" onClick={() => setPanelOpen(false)} />}
       <div className="review-panel-content">
-      <header className="review-community-head">
+      {presentation !== "preview" && <header className="review-community-head">
         <div className="review-community-heading">
           <span className="review-community-eyebrow"><MessageCircle size={13} /> COMMUNITY CONVERSATION</span>
           <h2>{title}</h2>
@@ -231,10 +231,10 @@ export function ReviewSection({
           </div>
         </div>
         {type === "product" && presentation === "modal" && <button type="button" className="review-panel-close" aria-label="Close product reviews" onClick={() => setPanelOpen(false)}><X size={19} /></button>}
-        {!isStoreOwner && !hideWriteButton && presentation !== "preview" && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
+        {!isStoreOwner && !hideWriteButton && <button type="button" onClick={() => startReview(editing || undefined)} className="review-write-button">
           <Pencil size={15} /> {editing ? "Edit your review" : "Write a review"}
         </button>}
-      </header>
+      </header>}
 
       {open && (
         <div className="review-compose">
