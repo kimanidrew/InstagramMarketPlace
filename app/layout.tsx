@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "Discover products, connect with stores, and shop socially with " + brandName + ".",
 };
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
   const u = await user();
 
   return (
@@ -29,6 +29,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <GlobalFeedbackProvider>
           <SiteHeader user={u} />
           {children}
+          {modal}
 
         <footer className="mt-24 border-t border-black/5 bg-[#fafaf8]">
           <div className="shell grid gap-10 py-14 md:grid-cols-4">
