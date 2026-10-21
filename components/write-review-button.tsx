@@ -2,9 +2,9 @@
 
 import { Pencil } from "lucide-react";
 
-export function WriteReviewButton() {
+export function WriteReviewButton({ reviewUrl }: { reviewUrl: string }) {
   function openReviewComposer() {
-    window.dispatchEvent(new Event("open-review-composer"));
+    window.location.href = reviewUrl;
   }
 
   return (
