@@ -8859,3 +8859,103 @@ body:has(.review-product-page) {
     padding-bottom: calc(32px + env(safe-area-inset-bottom)) !important;
   }
 }
+
+
+/* Product-page review preview and drawer-opening action. */
+.review-preview {
+  width: 100%;
+  margin-top: 28px;
+  padding: 0 !important;
+  color: #202020;
+}
+.review-preview .review-community-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid #ededeb;
+}
+.review-preview .review-community-heading h2 {
+  margin: 0;
+  color: #171717;
+  font-size: clamp(21px, 2.4vw, 27px);
+  font-weight: 850;
+  letter-spacing: -.045em;
+}
+.review-preview .review-community-heading > p { display: none; }
+.review-preview .review-community-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #777;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+.review-preview .review-community-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.review-preview .review-community-stars,
+.review-preview .review-thread-stars { display: inline-flex; gap: 2px; color: #d4a72c; }
+.review-preview .review-community-rating strong { color: #171717; font-size: 13px; }
+.review-preview .review-community-rating > span:last-child { color: #777; font-size: 11px; }
+.review-preview .review-thread-list {
+  display: grid;
+  gap: 12px;
+  padding: 16px 0 0;
+}
+.review-preview .review-thread {
+  padding: 16px;
+  border: 1px solid #e9e9e5;
+  border-radius: 16px;
+  background: #fff;
+}
+.review-preview .review-thread-main { display: flex; align-items: flex-start; gap: 11px; }
+.review-preview .review-thread-content { min-width: 0; flex: 1; }
+.review-preview .review-thread-author { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.review-preview .review-thread-author strong { color: #222; font-size: 12px; font-weight: 800; }
+.review-preview .review-thread-author time { color: #929292; font-size: 10px; }
+.review-preview .review-thread-body { margin-top: 8px; color: #4c4c4c; font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+.review-preview .review-replies { display: grid; gap: 9px; margin: 14px 0 0 14px; padding-left: 12px; border-left: 2px solid #eee; }
+.review-preview .review-reply { display: flex; align-items: flex-start; gap: 8px; padding: 10px; border-radius: 12px; background: #f8f8f6; }
+.review-preview .review-reply-content p { margin-top: 5px; color: #555; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.review-preview .review-own-actions,
+.review-preview .review-reply-actions,
+.review-preview .review-reply-compose { display: none !important; }
+.review-preview .review-empty-state { padding: 22px 16px; border: 1px dashed #deded8; border-radius: 16px; text-align: center; }
+.review-preview .review-empty-state h3 { margin-top: 10px; font-size: 15px; font-weight: 800; }
+.review-preview .review-empty-state p { margin: 6px auto 0; max-width: 320px; color: #777; font-size: 12px; line-height: 1.6; }
+.review-preview-more-wrap { display: flex; justify-content: center; padding-top: 16px; }
+.review-preview-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 17px;
+  border: 1px solid #dededb;
+  border-radius: 13px;
+  background: #fff;
+  color: #171717;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.review-preview-more span { color: #777; font-size: 11px; font-weight: 650; }
+.review-preview-more:hover { border-color: #171717; background: #171717; color: #fff; }
+.review-preview-more:hover span { color: #ddd; }
+@media (max-width: 767px) {
+  .review-preview { margin-top: 22px; }
+  .review-preview .review-thread { padding: 13px; }
+  .review-preview .review-thread-body { font-size: 12px; }
+  .review-preview-more { width: 100%; }
+}
