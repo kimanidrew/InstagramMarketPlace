@@ -137,9 +137,11 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 </div>
               )}
 
-              <div className="product-detail-review-preview mt-5 border-t border-[#ededeb] pt-5">
-                <ReviewSection type="product" presentation="preview" previewLimit={1} reviewUrl={"/product/" + slug + "/reviews"} targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
-              </div>
+              {product.reviews.length > 0 && (
+                <div className="product-detail-review-preview mt-5 border-t border-[#ededeb] pt-5">
+                  <ReviewSection type="product" presentation="preview" previewLimit={1} reviewUrl={"/product/" + slug + "/reviews"} targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
+                </div>
+              )}
 
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
                 <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
