@@ -94,7 +94,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ededeb] pb-4">
                   <div className="min-w-0 flex-1">
-                    <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} rating={average} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+                    <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} rating={average} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} reviewUrl={"/product/" + slug + "/reviews"} />
                   </div>
                   <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
                     <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
@@ -102,7 +102,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                   </div>
                 </div>
                 <div className="w-full">
-                  <WriteReviewButton />
+                  <WriteReviewButton reviewUrl={"/product/" + slug + "/reviews"} />
                 </div>
               </div>
 
