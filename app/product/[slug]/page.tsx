@@ -93,13 +93,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
           <aside className="product-detail-aside min-w-0 lg:sticky lg:top-24">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-col gap-3">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex min-w-0 flex-wrap items-center justify-start gap-2">
-                    <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} rating={average} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
-                    {product.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
-                    {product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#efe7ff] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#5b21b6]">Pro Seller</span>}
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ededeb] pb-4">
+                  <div className="flex min-w-0 flex-col gap-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-[.16em] text-[#999]">SokoLink find</span>
+                    <span className="text-xs font-semibold text-[#555]">Product details</span>
                   </div>
-                  <div className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-2">
+                  <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
                     <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
                     <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} />
                   </div>
@@ -115,15 +114,26 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>
               )}
 
-              <h1 className="product-detail-title mt-5 break-words text-[20px] font-black leading-[1.6] tracking-[-.055em] text-black">{fullCaption || product.productTitle}</h1>
+              <h1 className="product-detail-title mt-5 break-words text-[20px] font-black leading-[1.6] tracking-[-.055em] text-black">{product.productTitle?.trim() || fullCaption || "Product"}</h1>
 
-              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                <div className="flex gap-0.5 text-[#d4a72c]">
-                  {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={17} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <div className="flex gap-0.5 text-[#d4a72c]" aria-label={average ? `Rated ${average.toFixed(1)} out of 5` : "No ratings yet"}>
+                  {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={16} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
                 </div>
-                <span className="text-sm font-bold text-[#555]">{product.reviews.length ? average.toFixed(1) : "New"}</span>
-                <span className="text-sm text-[#999]">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</span>
+                <span className="text-sm font-bold text-[#333]">{product.reviews.length ? average.toFixed(1) : "New"}</span>
+                <a href="#product-reviews" className="text-sm text-[#777] underline-offset-4 hover:underline">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</a>
               </div>
+
+              <div className="mt-4">
+                <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} rating={average} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+              </div>
+
+              {fullCaption && fullCaption !== product.productTitle?.trim() && (
+                <div className="mt-5 border-t border-[#ededeb] pt-4">
+                  <h2 className="mb-2 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">About this product</h2>
+                  <p className="whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>
+                </div>
+              )}
 
 
 
