@@ -9064,3 +9064,39 @@ body:has(.review-product-page) {
 .product-detail-review-preview .review-preview-more {
   box-shadow: none !important;
 }
+
+
+/* Full-width, borderless review preview in product details. */
+.product-detail-review-preview,
+.product-detail-review-preview .review-community,
+.product-detail-review-preview .review-panel-content,
+.product-detail-review-preview .review-thread,
+.product-detail-review-preview .review-preview-more {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.product-detail-review-preview,
+.product-detail-review-preview .review-community,
+.product-detail-review-preview .review-panel-content,
+.product-detail-review-preview .review-thread-list,
+.product-detail-review-preview .review-thread {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.product-detail-review-preview .review-thread {
+  padding: 12px 0 !important;
+  background: transparent !important;
+}
+.product-detail-review-preview .review-preview-more {
+  justify-content: flex-start !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+.product-detail-review-preview .review-preview-more:hover {
+  color: #171717 !important;
+  background: transparent !important;
+}
+.product-detail-review-preview .review-preview-more:hover span {
+  color: #777 !important;
+}
