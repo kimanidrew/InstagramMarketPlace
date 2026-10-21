@@ -50,19 +50,19 @@ export function ProductDetailStats({
 
   return (
     <div className="inline-flex flex-nowrap items-center justify-center gap-x-3 rounded-full bg-[#f7f7f4] px-3 py-2 text-center text-[#171717]" aria-label="Product statistics">
-      <span className={"product-card-like-line inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-xs font-bold leading-none " + (likeFlash ? "is-updated" : "")} aria-label={likes.toLocaleString() + " likes"}>
-        <Heart size={15} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon shrink-0 " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
+      <span className={"product-card-like-line inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none " + (likeFlash ? "is-updated" : "")} aria-label={likes.toLocaleString() + " likes"}>
+        <Heart size={16} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon shrink-0 " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
         <b className={"interaction-stat-value leading-none " + (likeFlash ? "is-count-updated" : "")}>{likes.toLocaleString()}</b>
         <span className="font-medium leading-none text-[#777]">likes</span>
       </span>
       <span className="h-4 w-px shrink-0 bg-[#dededb]" aria-hidden="true" />
-      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-xs font-bold leading-none">
-        <Star size={14} className="shrink-0 text-[#d4a72c]" fill={reviews ? "currentColor" : "none"} />
+      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none">
+        <Star size={16} className="shrink-0 text-[#d4a72c]" fill={reviews ? "currentColor" : "none"} />
         {reviews ? rating.toFixed(1) : "New"} <span className="font-medium leading-none text-[#777]">rating</span>
       </span>
       <span className="h-4 w-px shrink-0 bg-[#dededb]" aria-hidden="true" />
-      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-xs font-bold leading-none">
-        <MessageCircle size={14} className="shrink-0" />
+      <span className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-bold leading-none">
+        <MessageCircle size={16} className="shrink-0" />
         {reviews.toLocaleString()} <span className="font-medium leading-none text-[#777]">reviews</span>
       </span>
     </div>
