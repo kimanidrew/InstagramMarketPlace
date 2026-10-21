@@ -30,7 +30,7 @@ export default async function ProductReviewsPage({ params }: { params: Promise<{
   if (!connection) notFound();
 
   return (
-    <main className="review-product-page" role="dialog" aria-modal="true" aria-label="Product reviews">
+    <main className="review-standalone-page" aria-label="Product reviews">
       <Link href={"/product/" + slug} className="review-product-backdrop" aria-label="Close product reviews" />
       <section className="review-product-dialog">
         <Link href={"/product/" + slug} className="review-product-close" aria-label="Close product reviews"><X size={20} /></Link>
