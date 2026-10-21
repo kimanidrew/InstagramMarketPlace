@@ -8785,3 +8785,17 @@ a[class*="bg-neutral-900"] svg {
   .review-product-page .review-thread-main,
   .review-standalone-page .review-thread-main { gap: 10px !important; }
 }
+
+
+/* Give the review modal comfortable, consistent inner spacing. */
+.review-product-page .review-product-dialog-inner {
+  padding: 32px 32px 40px !important;
+}
+.review-product-page .review-modal-heading {
+  margin-bottom: 24px !important;
+}
+@media (max-width: 767px) {
+  .review-product-page .review-product-dialog-inner {
+    padding: 26px 20px calc(28px + env(safe-area-inset-bottom)) !important;
+  }
+}
