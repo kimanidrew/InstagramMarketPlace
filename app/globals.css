@@ -8959,3 +8959,45 @@ body:has(.review-product-page) {
   .review-preview .review-thread-body { font-size: 12px; }
   .review-preview-more { width: 100%; }
 }
+
+
+/* Compact single-review preview lives in the product details column below categories. */
+.product-detail-review-preview {
+  width: 100%;
+  min-width: 0;
+}
+.product-detail-review-preview .review-preview {
+  margin-top: 0 !important;
+}
+.product-detail-review-preview .review-preview .review-community-head {
+  align-items: center;
+  padding-bottom: 12px;
+}
+.product-detail-review-preview .review-preview .review-community-heading h2 {
+  font-size: 17px;
+  letter-spacing: -.035em;
+}
+.product-detail-review-preview .review-preview .review-community-rating {
+  margin-top: 7px;
+}
+.product-detail-review-preview .review-preview .review-thread-list {
+  padding-top: 12px;
+}
+.product-detail-review-preview .review-preview .review-thread {
+  border-radius: 14px;
+  padding: 13px;
+  box-shadow: none;
+}
+.product-detail-review-preview .review-preview .review-thread-body {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.product-detail-review-preview .review-preview-more-wrap {
+  justify-content: flex-start;
+  padding-top: 11px;
+}
+.product-detail-review-preview .review-preview-more {
+  width: 100%;
+  min-height: 40px;
+  border-radius: 12px;
+}
