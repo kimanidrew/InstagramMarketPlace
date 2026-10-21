@@ -8819,3 +8819,43 @@ a[class*="bg-neutral-900"] svg {
     padding: 18px !important;
   }
 }
+
+
+/* Keep page scrolling locked while the intercepted product-review drawer is open.
+   The drawer's own content area remains the only vertical scroll container. */
+html:has(.review-product-page),
+body:has(.review-product-page) {
+  height: 100% !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+.review-product-page {
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+.review-product-page .review-product-dialog {
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+.review-product-page .review-product-dialog-inner {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+@media (max-width: 767px) {
+  .review-product-page .review-product-dialog {
+    height: min(88dvh, 900px) !important;
+    max-height: 88dvh !important;
+    align-self: flex-end !important;
+    border-radius: 24px 24px 0 0 !important;
+  }
+  .review-product-page .review-product-dialog-inner {
+    padding-bottom: calc(32px + env(safe-area-inset-bottom)) !important;
+  }
+}
