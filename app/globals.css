@@ -7658,3 +7658,9 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
     min-width: 0;
   }
 }
+
+
+/* Keep product category chips readable against their light backgrounds. */
+.product-detail-page .product-info-card a[aria-label]:not([aria-label=""]) { color: #171717; }
+.product-detail-page .product-info-card a.rounded-full.border { color: #171717 !important; background-color: #f2f2ee !important; border-color: #deded8 !important; }
+.product-detail-page .product-info-card a.rounded-full.border:hover { color: #fff !important; background-color: #171717 !important; border-color: #171717 !important; }
