@@ -13,7 +13,7 @@ export default async function ProductReviewsPage({ params }: { params: Promise<{
   const product = await db().instagramPost.findUnique({
     where: { productSlug: slug },
     include: {
-      connection: { select: { username: true, userId: true, profileImageUrl: true } },
+      connection: { select: { username: true, connectedByUserId: true, profileImageUrl: true } },
       reviews: {
         include: { user: { select: { id: true, name: true } } },
         orderBy: { createdAt: "desc" },
@@ -38,7 +38,7 @@ export default async function ProductReviewsPage({ params }: { params: Promise<{
               <p className="mt-1 truncate text-sm text-[#777]">{product.productTitle?.trim() || "Product"} · @{product.connection.username}</p>
             </div>
           </div>
-          <ReviewSection type="product" presentation="page" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" storeUsername={product.connection.username} storeOwnerUserId={product.connection.userId} storeProfileImageUrl={product.connection.profileImageUrl} />
+          <ReviewSection type="product" presentation="page" targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" storeUsername={product.connection.username} storeOwnerUserId={product.connection.connectedByUserId} storeProfileImageUrl={product.connection.profileImageUrl} />
         </div>
       </div>
     </main>
