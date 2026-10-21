@@ -3,7 +3,7 @@
 import { Bookmark } from "lucide-react";
 import { useState } from "react";
 
-export function WishlistButton({ id, wishlisted = false, count, compact = false, largeCompact = false }: { id: string; wishlisted?: boolean; count?: number; compact?: boolean; largeCompact?: boolean }) {
+export function WishlistButton({ id, wishlisted = false, count, compact = false, largeCompact = false, productDetailStyle = false }: { id: string; wishlisted?: boolean; count?: number; compact?: boolean; largeCompact?: boolean; productDetailStyle?: boolean }) {
   const [saved, setSaved] = useState(wishlisted);
   const [n, setN] = useState(count ?? 0);
   const [busy, setBusy] = useState(false);
@@ -36,6 +36,10 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
     }
   }
 
+  const productDetailColors = productDetailStyle
+    ? (saved ? "!bg-white !text-black ring-1 ring-black/10" : "!bg-white !text-black ring-1 ring-black/10 hover:!bg-[#f7f7f7] active:!bg-[#f0f0f0]")
+    : (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-2 ring-white/90 shadow-md shadow-black/10" : "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 ring-1 ring-white/25 backdrop-blur-sm");
+
   return (
     <button
       type="button"
@@ -46,8 +50,8 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
       aria-pressed={saved}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
-        (compact ? (largeCompact ? "h-12 w-12 shadow-sm " : "h-10 w-10 shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
-        (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-2 ring-white/90 shadow-md shadow-black/10" : "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 ring-1 ring-white/25 backdrop-blur-sm")
+        (compact ? (largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
+        productDetailColors
       }
     >
       <Bookmark size={compact ? (largeCompact ? 21 : 17) : 16} fill={saved ? "currentColor" : "none"} strokeWidth={saved ? 2.5 : 2} />
