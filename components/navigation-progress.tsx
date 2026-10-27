@@ -51,11 +51,11 @@ export function NavigationProgress() {
 
     const handlePopState = () => start();
 
-    document.addEventListener("click", handleClick, true);
+    document.addEventListener("click", handleClick);
     window.addEventListener("popstate", handlePopState);
 
     return () => {
-      document.removeEventListener("click", handleClick, true);
+      document.removeEventListener("click", handleClick);
       window.removeEventListener("popstate", handlePopState);
       clearTimers();
     };
