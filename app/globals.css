@@ -9688,3 +9688,17 @@ body:has(.review-product-page) {
   border-color: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* Keep the site header free of a bottom divider and shadow in every state. */
+.site-header,
+.site-header:hover,
+.site-header:focus,
+.site-header:focus-within,
+.site-header.is-hidden,
+.site-header.is-at-top,
+.site-header.search-overlay-open {
+  border-bottom: 0 !important;
+  border-bottom-color: transparent !important;
+  box-shadow: none !important;
+}
