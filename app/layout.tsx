@@ -7,7 +7,6 @@ import { SiteHeader } from "@/components/site-header";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { BrandWordmark } from "@/components/brand-wordmark";
 import { GlobalFeedbackProvider } from "@/components/global-feedback-provider";
-import { PageLoadGate } from "@/components/page-load-gate";
 import { NavigationProgress } from "@/components/navigation-progress";
 
 const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
@@ -26,7 +25,6 @@ export default async function Layout({ children, modal }: { children: React.Reac
     <html lang="en">
       <head><link rel="stylesheet" href={brandFontUrl} /></head>
       <body className="pb-24 lg:pb-0">
-        <PageLoadGate />
         <NavigationProgress />
         <GlobalFeedbackProvider>
           <SiteHeader user={u} />
