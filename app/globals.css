@@ -9585,7 +9585,7 @@ body:has(.review-product-page) {
 }
 
 
-/* Keep the expanded search panel and search field visually steady on focus. */
+/* Keep the expanded search panel borderless while restoring the search box outline. */
 .header-search-panel.is-open,
 .header-search-panel.is-open:focus,
 .header-search-panel.is-open:focus-within,
@@ -9600,15 +9600,23 @@ body:has(.review-product-page) {
   outline: none !important;
   box-shadow: none !important;
 }
-.header-search-panel.is-open .header-search-form:focus-within,
-.header-search-panel.is-open.has-suggestions .header-search-form:focus-within {
-  border-color: transparent !important;
+.header-search-panel.is-open .header-search-form,
+.header-search-panel.is-open.has-suggestions .header-search-form {
+  border: 1px solid #393939 !important;
+  border-bottom: 1px solid #393939 !important;
   outline: none !important;
   box-shadow: none !important;
 }
-.header-search-panel.is-open .header-search-form,
-.header-search-panel.is-open.has-suggestions .header-search-form {
-  border-bottom: 0 !important;
+.header-search-panel.is-open .header-search-form:focus-within,
+.header-search-panel.is-open.has-suggestions .header-search-form:focus-within {
+  border-color: #393939 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove the top divider from category list views beneath search. */
+:is([class*="categories-list-view"], [class*="category-list-view"], [class*="categories-list"]) {
+  border-top: 0 !important;
 }
 
 
