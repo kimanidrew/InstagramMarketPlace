@@ -9782,3 +9782,24 @@ nav.mobile-bottom-nav {
 .for-you-filter-scroll-button {
   pointer-events: auto !important;
 }
+
+/* The For You filter is rendered with store-directory-* classes, not the
+   legacy for-you-filter-* wrappers. Keep its sticky surface from swallowing
+   clicks outside the actual category controls. */
+.for-you-category-filter-section .store-directory-tools {
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+.for-you-category-filter-section .store-directory-filter-bar,
+.for-you-category-filter-section .store-directory-tools-top,
+.for-you-category-filter-section .store-directory-category-scroller,
+.for-you-category-filter-section .store-directory-category-row,
+.for-you-category-filter-section .store-directory-category-scroller::before,
+.for-you-category-filter-section .store-directory-category-scroller::after {
+  pointer-events: none !important;
+}
+.for-you-category-filter-section .store-directory-category,
+.for-you-category-filter-section .for-you-filter-scroll-button {
+  pointer-events: auto !important;
+}
+
