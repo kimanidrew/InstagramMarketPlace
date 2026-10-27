@@ -63,6 +63,8 @@ export function NavigationProgress() {
     previousPath.current = pathname;
 
     if (!visible) return;
+    if (fallbackTimer.current !== null) window.clearTimeout(fallbackTimer.current);
+    fallbackTimer.current = null;
     setProgress(100);
     if (finishTimer.current !== null) window.clearTimeout(finishTimer.current);
     finishTimer.current = window.setTimeout(() => {
