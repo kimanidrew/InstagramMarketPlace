@@ -9583,3 +9583,30 @@ body:has(.review-product-page) {
 @media (prefers-reduced-motion: reduce) {
   .sokolink-footer-discover, .sokolink-footer-link-group a { transition: none; }
 }
+
+
+/* Keep the expanded search panel and search field visually steady on focus. */
+.header-search-panel.is-open,
+.header-search-panel.is-open:focus,
+.header-search-panel.is-open:focus-within,
+.header-search-panel.is-open:focus-visible,
+.header-search-panel.is-open.has-suggestions,
+.header-search-panel.is-open.has-suggestions:focus,
+.header-search-panel.is-open.has-suggestions:focus-within,
+.header-search-panel.is-open.has-suggestions:focus-visible {
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.header-search-panel.is-open .header-search-form:focus-within,
+.header-search-panel.is-open.has-suggestions .header-search-form:focus-within {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.header-search-panel.is-open .header-search-form,
+.header-search-panel.is-open.has-suggestions .header-search-form {
+  border-bottom: 0 !important;
+}
