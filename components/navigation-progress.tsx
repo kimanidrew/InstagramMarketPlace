@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export function NavigationProgress() {
   const pathname = usePathname() || "/";
-  const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const previousPath = useRef(pathname);
@@ -52,15 +51,15 @@ export function NavigationProgress() {
 
     const handlePopState = () => start();
 
-    document.addEventListener("click", handleClick, true);
+    document.addEventListener("click", handleClick);
     window.addEventListener("popstate", handlePopState);
 
     return () => {
-      document.removeEventListener("click", handleClick, true);
+      document.removeEventListener("click", handleClick);
       window.removeEventListener("popstate", handlePopState);
       clearTimers();
     };
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     if (previousPath.current === pathname) return;
