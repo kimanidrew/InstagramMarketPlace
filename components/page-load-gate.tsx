@@ -14,7 +14,6 @@ function waitForImage(image: HTMLImageElement) {
 export function PageLoadGate() {
   const pathname = usePathname() || "/";
   const [visible, setVisible] = useState(true);
-  const targetPath = useRef(pathname);
   const finishing = useRef(false);
 
   const finishWhenReady = useCallback(async () => {
@@ -24,15 +23,13 @@ export function PageLoadGate() {
     try {
       if ("fonts" in document) await document.fonts.ready;
 
-      // Wait for the page's banner/hero to be present and its non-lazy images to settle.
+      // Wait for the initial page's hero imagery before dismissing the loader.
       const main = document.querySelector("main");
       const hero = main?.querySelector(
         '[data-page-hero], .store-directory-showcase, .store-directory-showcase-stage, .shop-promo-carousel, .for-you-hero, main > section:first-of-type, main > section:first-child'
       );
       if (hero) {
         const images = Array.from(hero.querySelectorAll("img"));
-        // Banner imagery is critical to the first impression, so promote lazy hero images
-        // while the overlay is visible and wait for either load or error.
         images.forEach((image) => {
           if (image.loading === "lazy") image.loading = "eager";
         });
@@ -46,40 +43,15 @@ export function PageLoadGate() {
     }
   }, []);
 
+  // Run once when the app shell first mounts. Internal route changes do not
+  // re-open the full-page loader; Next.js handles those transitions normally.
   useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      const anchor = target.closest("a[href]");
-      if (!(anchor instanceof HTMLAnchorElement)) return;
-      if (anchor.target && anchor.target !== "_self") return;
-      if (anchor.hasAttribute("download")) return;
+    if (!visible || pathname.endsWith("/reviews")) {
+      if (pathname.endsWith("/reviews")) setVisible(false);
+      return;
+    }
 
-      const destination = new URL(anchor.href, window.location.href);
-      if (destination.origin !== window.location.origin) return;
-      if (destination.pathname === window.location.pathname && destination.search === window.location.search) return;
-
-      targetPath.current = destination.pathname;
-      finishing.current = false;
-      // Review overlays are lightweight and should never trigger the full-page loader.
-      if (destination.pathname.endsWith("/reviews")) {
-        setVisible(false);
-        return;
-      }
-      setVisible(true);
-    };
-
-    document.addEventListener("click", handleClick, true);
-    return () => document.removeEventListener("click", handleClick, true);
-  }, []);
-
-  useEffect(() => {
-    targetPath.current = pathname;
-    if (!visible) return;
     let cancelled = false;
-
-    // Let Next.js commit the destination page before checking its fonts and hero assets.
     const frame = window.requestAnimationFrame(() => {
       if (!cancelled) void finishWhenReady();
     });
@@ -88,7 +60,9 @@ export function PageLoadGate() {
       cancelled = true;
       window.cancelAnimationFrame(frame);
     };
-  }, [pathname, visible, finishWhenReady]);
+    // Deliberately run only on the first mount, not on pathname changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!visible || pathname.endsWith("/reviews")) return null;
 
