@@ -1,3 +1,5 @@
-import {signUp}from"@/lib/auth";import{redirect}from"next/navigation";import Link from"next/link";
-async function act(f:FormData){"use server";try{await signUp(String(f.get("name")),String(f.get("email")),String(f.get("password")));redirect("/account")}catch(e){redirect("/signup?error="+encodeURIComponent(e instanceof Error?e.message:"Sign up failed"))}}
-export default async function Signup({searchParams}:{searchParams:Promise<{error?:string}>}){const q=await searchParams;return <main className="shell flex min-h-[650px] items-center justify-center"><div className="w-full max-w-md"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#888]">Join</p><h1 className="mt-3 text-4xl font-black">Create account</h1>{q.error&&<p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600">{q.error}</p>}<form action={act} className="mt-8 space-y-4"><input name="name" required placeholder="Name" className="w-full rounded-2xl border px-4 py-3"/><input name="email" type="email" required placeholder="Email" className="w-full rounded-2xl border px-4 py-3"/><input name="password" type="password" required placeholder="Password (8+)" className="w-full rounded-2xl border px-4 py-3"/><button className="w-full rounded-full bg-black px-5 py-3 font-semibold text-white">Create account</button></form><p className="mt-5 text-sm text-[#777]">Already registered? <Link href="/login" className="font-semibold text-black">Sign in</Link></p></div></main>}
+import { AuthForm } from "@/components/auth-form";
+
+export default function SignupPage() {
+  return <AuthForm mode="signup" />;
+}
