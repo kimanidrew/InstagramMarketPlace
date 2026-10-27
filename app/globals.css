@@ -9610,3 +9610,13 @@ body:has(.review-product-page) {
 .header-search-panel.is-open.has-suggestions .header-search-form {
   border-bottom: 0 !important;
 }
+
+
+/* Auth form fields: suppress every focus border and ring. */
+.auth-fields .auth-field input:focus,
+.auth-fields .auth-field input:focus-visible,
+.auth-fields .auth-field input:focus-within {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
