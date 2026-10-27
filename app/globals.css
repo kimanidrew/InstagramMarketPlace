@@ -9602,8 +9602,8 @@ body:has(.review-product-page) {
 }
 .header-search-panel.is-open .header-search-form,
 .header-search-panel.is-open.has-suggestions .header-search-form {
-  border: 1px solid #393939 !important;
-  border-bottom: 1px solid #393939 !important;
+  border: 1px solid #ecece8 !important;
+  border-bottom: 1px solid #ecece8 !important;
   outline: none !important;
   box-shadow: none !important;
 }
