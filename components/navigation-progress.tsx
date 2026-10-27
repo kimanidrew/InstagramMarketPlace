@@ -45,11 +45,9 @@ export function NavigationProgress() {
       if (destination.origin !== window.location.origin) return;
       if (destination.pathname === window.location.pathname && destination.search === window.location.search) return;
 
-      // Keep same-origin navigation inside the App Router so the progress line
-      // can finish without falling back to a full-document reload.
-      event.preventDefault();
+      // Observe navigation, but never take ownership of it. Next <Link> must
+      // handle its own router transition; plain anchors must retain native navigation.
       start();
-      router.push(destination.pathname + destination.search + destination.hash);
     };
 
     const handlePopState = () => start();
