@@ -9756,3 +9756,29 @@ body:has(.review-product-page) {
 @media (prefers-reduced-motion: reduce) {
   .navigation-progress-bar { animation: none; transition: none; }
 }
+
+/* Final navigation hit-testing fix: keep the site navigation above the sticky
+   For You filter rail and prevent that rail's full-width wrapper from blocking links. */
+.site-header {
+  z-index: 10000 !important;
+}
+.mobile-bottom-nav,
+nav.mobile-bottom-nav {
+  z-index: 10001 !important;
+}
+.for-you-filter-sticky {
+  z-index: 5 !important;
+  pointer-events: none !important;
+}
+.for-you-filter-bar,
+.for-you-filter-heading,
+.for-you-filter-scroller,
+.for-you-filter-tags,
+.for-you-filter-scroller::before,
+.for-you-filter-scroller::after {
+  pointer-events: none !important;
+}
+.for-you-filter-chip,
+.for-you-filter-scroll-button {
+  pointer-events: auto !important;
+}
