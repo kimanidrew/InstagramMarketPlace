@@ -9620,3 +9620,22 @@ body:has(.review-product-page) {
   outline: none !important;
   box-shadow: none !important;
 }
+
+
+/* Apply the no-focus-border treatment to every auth form control, not only .auth-fields inputs. */
+.auth-page input:focus,
+.auth-page input:focus-visible,
+.auth-page input:focus-within,
+.auth-page textarea:focus,
+.auth-page textarea:focus-visible,
+.auth-page select:focus,
+.auth-page select:focus-visible {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.auth-page .auth-field:focus-within,
+.auth-page .auth-password-wrap:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
