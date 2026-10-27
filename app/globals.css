@@ -9673,3 +9673,18 @@ body:has(.review-product-page) {
 .header-search-form:focus-within {
   background: #fff !important;
 }
+
+
+/* Prevent the header's bottom divider/ring from turning blue while search is focused. */
+.site-header:has(.header-search-form:focus-within),
+.site-header.search-overlay-open:has(.header-search-form:focus-within) {
+  border-bottom: 0 !important;
+  border-bottom-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.site-header:has(.header-search-form:focus-within)::before,
+.site-header:has(.header-search-form:focus-within)::after {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
