@@ -9658,3 +9658,9 @@ body:has(.review-product-page) {
   outline: none !important;
   box-shadow: none !important;
 }
+
+
+/* Remove the top border above the header trending tags. */
+.header-trending-tags {
+  border-top: 0 !important;
+}
