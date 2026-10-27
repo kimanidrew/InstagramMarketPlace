@@ -9609,7 +9609,18 @@ body:has(.review-product-page) {
 }
 .header-search-panel.is-open .header-search-form:focus-within,
 .header-search-panel.is-open.has-suggestions .header-search-form:focus-within {
-  border-color: #777 !important;
+  border-color: #ecece8 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep the focused search outline and header bottom divider the same light gray. */
+.site-header {
+  border-bottom-color: #ecece8 !important;
+}
+.site-header .header-search-panel.is-open .header-search-form:focus-within,
+.site-header .header-search-panel.is-open.has-suggestions .header-search-form:focus-within {
+  border-color: #ecece8 !important;
   outline: none !important;
   box-shadow: none !important;
 }
