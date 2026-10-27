@@ -9428,7 +9428,7 @@ body:has(.review-product-page) {
 .auth-field { display:flex; flex-direction:column; gap:8px; color:#333; font-size:12px; font-weight:750; }
 .auth-field input { box-sizing:border-box; width:100%; min-width:0; height:51px; border:1px solid #e3e3df; border-radius:14px; outline:none; background:#fff; padding:0 15px; color:#171717; font-size:13px; font-weight:500; transition:border-color .18s, box-shadow .18s; }
 .auth-field input::placeholder { color:#a1a19b; }
-.auth-field input:focus { border-color:#777f65; box-shadow:0 0 0 3px rgb(119 127 101 / 12%); }
+.auth-field input:focus { border-color:transparent; box-shadow:none; }
 .auth-password-wrap { position:relative; display:block; }
 .auth-password-wrap input { padding-right:51px; }
 .auth-password-toggle { position:absolute; top:50%; right:8px; display:grid; width:36px; height:36px; transform:translateY(-50%); place-items:center; border:0; border-radius:10px; background:transparent; color:#777; cursor:pointer; }
