@@ -31,7 +31,7 @@ export default async function Layout({ children, modal }: { children: React.Reac
           {children}
           {modal}
 
-          <footer className="sokolink-footer mt-20">
+          <footer className="sokolink-footer">
             <div className="shell">
               <div className="sokolink-footer-main">
                 <div className="sokolink-footer-brand-column">
