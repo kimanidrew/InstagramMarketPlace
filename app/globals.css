@@ -9664,3 +9664,12 @@ body:has(.review-product-page) {
 .header-trending-tags {
   border-top: 0 !important;
 }
+
+
+/* Search field uses the light gray surface until focused. */
+.header-search-form {
+  background: #ecece8 !important;
+}
+.header-search-form:focus-within {
+  background: #fff !important;
+}
