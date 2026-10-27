@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound, Compass, Heart, CircleHelp, ShoppingBag, BriefcaseBusiness } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
@@ -161,7 +162,7 @@ export function SiteHeader({ user }: { user: any }) {
   return (
     <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "") + (atTop ? " is-at-top" : "")}>
       <div className="shell flex h-[74px] items-center gap-4">
-        <a href="/" className="brand shrink-0">
+        <Link href="/" className="brand shrink-0">
           <BrandWordmark />
         </a>
 
@@ -175,27 +176,27 @@ export function SiteHeader({ user }: { user: any }) {
           ].map(([href, label]) => {
             const active = pathname === href || (href !== "/shop" && pathname.startsWith(href + "/"));
             return (
-              <a key={href} href={href} className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>{label}</a>
+              <Link key={href} href={href} className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>{label}</Link>
             );
           })}
           {user && (() => {
             const active = pathname === "/account/analytics" || pathname.startsWith("/account/analytics/");
-            return <a href="/account/analytics" className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>Grow your own shop</a>;
+            return <Link href="/account/analytics" className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>Grow your own shop</Link>;
           })()}
         </nav>
 
         <div className="ml-auto flex items-center gap-1">
-          <a href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
+          <Link href={user ? "/wishlist" : "/login"} className="icon-btn hidden sm:flex" aria-label="Wishlist" title="Wishlist">
             <Bookmark size={19} />
-          </a>
+          </Link>
           {user && <NotificationBell userId={user.id} />}
-          <a href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
+          <Link href={user ? "/account" : "/login"} className="icon-btn" aria-label="Account">
             <UserRound size={19} />
-          </a>
+          </Link>
           {user?.role === "ADMIN" && (
-            <a href="/admin" className="icon-btn hidden md:flex" aria-label="Admin">
+            <Link href="/admin" className="icon-btn hidden md:flex" aria-label="Admin">
               <Store size={19} />
-            </a>
+            </Link>
           )}
 
           <button type="button" onClick={() => setSearchOpen((open) => !open)} className={"icon-btn " + (searchOpen ? "active" : "")} aria-label={searchOpen ? "Close search" : "Open search"} aria-expanded={searchOpen} aria-controls="header-search-panel" title="Search">
