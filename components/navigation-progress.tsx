@@ -34,7 +34,7 @@ export function NavigationProgress() {
     };
 
     const handleClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       const target = event.target;
       if (!(target instanceof Element)) return;
       const anchor = target.closest("a[href]") as HTMLAnchorElement | null;
@@ -51,11 +51,11 @@ export function NavigationProgress() {
 
     const handlePopState = () => start();
 
-    document.addEventListener("click", handleClick);
+    document.addEventListener("click", handleClick, true);
     window.addEventListener("popstate", handlePopState);
 
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener("click", handleClick, true);
       window.removeEventListener("popstate", handlePopState);
       clearTimers();
     };
