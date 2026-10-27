@@ -9712,3 +9712,12 @@ body:has(.review-product-page) {
   border-bottom-color: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* Remove the shell divider while the header search panel is expanded. */
+.site-header:has(.header-search-panel.is-open) > .shell,
+.site-header:has(.header-search-panel.is-open.has-suggestions) > .shell {
+  border-bottom: 0 !important;
+  border-bottom-width: 0 !important;
+  box-shadow: none !important;
+}
