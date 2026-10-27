@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function NavigationProgress() {
   const pathname = usePathname() || "/";
+  const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const previousPath = useRef(pathname);
@@ -42,8 +43,13 @@ export function NavigationProgress() {
 
       const destination = new URL(anchor.href, window.location.href);
       if (destination.origin !== window.location.origin) return;
-      if (destination.pathname === window.location.pathname) return;
+      if (destination.pathname === window.location.pathname && destination.search === window.location.search) return;
+
+      // Keep same-origin navigation inside the App Router so the progress line
+      // can finish without falling back to a full-document reload.
+      event.preventDefault();
       start();
+      router.push(destination.pathname + destination.search + destination.hash);
     };
 
     const handlePopState = () => start();
@@ -56,7 +62,7 @@ export function NavigationProgress() {
       window.removeEventListener("popstate", handlePopState);
       clearTimers();
     };
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (previousPath.current === pathname) return;
