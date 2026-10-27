@@ -31,36 +31,46 @@ export default async function Layout({ children, modal }: { children: React.Reac
           {children}
           {modal}
 
-        <footer className="mt-24 border-t border-black/5 bg-[#fafaf8]">
-          <div className="shell grid gap-10 py-14 md:grid-cols-4">
-            <div className="md:col-span-2">
-              <Link href="/" className="footer-brand-link"><BrandWordmark /></Link>
-              <p className="mt-4 max-w-md text-sm leading-7 text-[#777]">
-                A curated shopping experience built from real Instagram stores. Discover products, explore shops and jump straight to the original post.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[.18em]">Shop</p>
-              <div className="mt-4 space-y-3 text-sm text-[#666]">
-                <Link className="block" href="/products">All products</Link>
-                <Link className="block" href="/stores">Stores</Link>
-                <Link className="block" href="/categories">Categories</Link>
-                <Link className="block" href="/wishlist">Wishlist</Link>
+          <footer className="sokolink-footer mt-20">
+            <div className="shell">
+              <div className="sokolink-footer-main">
+                <div className="sokolink-footer-brand-column">
+                  <Link href="/" className="footer-brand-link" aria-label={brandName + " home"}>
+                    <BrandWordmark />
+                  </Link>
+                  <span className="sokolink-footer-tagline">GOOD FINDS. REAL STORES.</span>
+                  <p className="sokolink-footer-description">
+                    Discover products from real Instagram stores, find your next favourite, and connect directly with the people behind every shop.
+                  </p>
+                  <Link href="/shop" className="sokolink-footer-discover">
+                    Explore the marketplace <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+
+                <div className="sokolink-footer-links">
+                  <div className="sokolink-footer-link-group">
+                    <p className="sokolink-footer-heading">Explore</p>
+                    <Link href="/shop">Discover shops</Link>
+                    <Link href="/products">All products</Link>
+                    <Link href="/stores">Stores</Link>
+                    <Link href="/categories">Categories</Link>
+                  </div>
+                  <div className="sokolink-footer-link-group">
+                    <p className="sokolink-footer-heading">Your SokoLink</p>
+                    <Link href="/wishlist">Saved favourites</Link>
+                    <Link href="/how-it-works">How it works</Link>
+                    <Link href="/signup">Create an account</Link>
+                    <Link href="/account">My account</Link>
+                  </div>
+                </div>
+              </div>
+
+              <div className="sokolink-footer-bottom">
+                <p>{brandName} © {new Date().getFullYear()} <span className="sokolink-footer-dot">·</span> Social shopping, connected.</p>
+                <p className="sokolink-footer-note"><span aria-hidden="true">✦</span> Discover something worth sharing.</p>
               </div>
             </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[.18em]">About</p>
-              <div className="mt-4 space-y-3 text-sm text-[#666]">
-                <Link className="block" href="/how-it-works">How it works</Link>
-                <Link className="block" href="/signup">Create account</Link>
-                <Link className="block" href="/account">My account</Link>
-              </div>
-            </div>
-          </div>
-          <div className="shell border-t border-black/5 py-5 text-xs text-[#999]">
-            {brandName} © 2026 · Social shopping, connected
-          </div>
-        </footer>
+          </footer>
           <MobileBottomNav user={u} />
         </GlobalFeedbackProvider>
       </body>
