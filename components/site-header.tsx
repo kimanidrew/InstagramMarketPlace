@@ -164,7 +164,7 @@ export function SiteHeader({ user }: { user: any }) {
       <div className="shell flex h-[74px] items-center gap-4">
         <Link href="/" className="brand shrink-0">
           <BrandWordmark />
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
           {[
