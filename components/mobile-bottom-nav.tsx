@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { ShoppingBag, Search, Sparkles, Store, UserRound } from "lucide-react";
 
 const items = [
@@ -27,7 +28,7 @@ export function MobileBottomNav({ user }: { user: any }) {
             : pathname === href || pathname.startsWith(href + "/");
 
           return (
-            <a
+            <Link
               key={label}
               href={destination}
               aria-label={label}
@@ -38,7 +39,7 @@ export function MobileBottomNav({ user }: { user: any }) {
                 <Icon size={20} strokeWidth={active ? 2.4 : 1.9} />
               </span>
               <span className="mobile-bottom-nav-label">{label}</span>
-            </a>
+            </Link>
           );
         })}
       </div>
