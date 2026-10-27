@@ -9609,7 +9609,7 @@ body:has(.review-product-page) {
 }
 .header-search-panel.is-open .header-search-form:focus-within,
 .header-search-panel.is-open.has-suggestions .header-search-form:focus-within {
-  border-color: #393939 !important;
+  border-color: #777 !important;
   outline: none !important;
   box-shadow: none !important;
 }
