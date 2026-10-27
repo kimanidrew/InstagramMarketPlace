@@ -1,3 +1,5 @@
-import {signIn} from "@/lib/auth";import{redirect}from"next/navigation";import Link from"next/link";
-async function act(f:FormData){"use server";const u=await signIn(String(f.get("email")),String(f.get("password")));if(!u)redirect("/login?error=1");redirect(u.role==="ADMIN"?"/admin":"/account")}
-export default async function Login({searchParams}:{searchParams:Promise<{error?:string}>}){const q=await searchParams;return <main className="shell flex min-h-[650px] items-center justify-center"><div className="w-full max-w-md"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#888]">Account</p><h1 className="mt-3 text-4xl font-black">Sign in</h1>{q.error&&<p className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-600">Invalid credentials.</p>}<form action={act} className="mt-8 space-y-4"><input name="email" type="email" required placeholder="Email" className="w-full rounded-2xl border px-4 py-3"/><input name="password" type="password" required placeholder="Password" className="w-full rounded-2xl border px-4 py-3"/><button className="w-full rounded-full bg-black px-5 py-3 font-semibold text-white">Sign in</button></form><p className="mt-5 text-sm text-[#777]">No account? <Link href="/signup" className="font-semibold text-black">Create one</Link></p></div></main>}
+import { AuthForm } from "@/components/auth-form";
+
+export default function LoginPage() {
+  return <AuthForm mode="login" />;
+}
