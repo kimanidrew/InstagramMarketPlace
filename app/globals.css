@@ -9570,7 +9570,7 @@ body:has(.review-product-page) {
 .sokolink-footer-note { display: inline-flex; align-items: center; gap: 7px; }
 .sokolink-footer-note span { color: #c4d5a7; }
 @media (max-width: 760px) {
-  .sokolink-footer { margin-top: 58px !important; }
+  .sokolink-footer { margin-top: 0 !important; }
   .sokolink-footer-main { grid-template-columns: 1fr; gap: 38px; padding: 42px 0 35px; }
   .sokolink-footer-links { max-width: 440px; gap: 20px; }
   .sokolink-footer-bottom { align-items: flex-start; flex-direction: column; justify-content: center; gap: 7px; padding: 17px 0; }
