@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   const prisma = db();
   const job = await prisma.aiPromotionJob.findFirst({
     where: { status: { in: ["QUEUED", "RUNNING"] }, nextRunAt: { lte: new Date() } },
-    include: { campaign: { include: { post: true } } },
+    include: { campaign: { include: { post: true, connection: { include: { posts: { where: { isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: { not: "VIDEO" }, mediaUrl: { not: null } }] }, select: { mediaType: true, mediaUrl: true, thumbnailUrl: true }, orderBy: { createdAt: "desc" }, take: 1 } } } } },
     orderBy: { createdAt: "asc" },
   });
   if (!job) return NextResponse.json({ processed: false, message: "No due AI promotion jobs." });
@@ -39,14 +39,14 @@ export async function POST(request: Request) {
       if (!response.ok) throw new Error(`Replicate status request failed (${response.status}).`);
       prediction = await response.json() as ReplicatePrediction;
     } else {
-      const image = job.campaign.post?.thumbnailUrl || job.campaign.post?.mediaUrl;
-      if (job.campaign.scope === "PRODUCT" && (!image || !/^https:\/\//i.test(image))) throw new Error("This product needs a publicly reachable HTTPS image URL before video generation.");
+      const image = job.campaign.post?.thumbnailUrl || (job.campaign.post?.mediaType !== "VIDEO" ? job.campaign.post?.mediaUrl : null) || job.campaign.connection.posts[0]?.thumbnailUrl || (job.campaign.connection.posts[0]?.mediaType !== "VIDEO" ? job.campaign.connection.posts[0]?.mediaUrl : null);
+      if (!image || !/^https:\/\//i.test(image)) throw new Error("This promotion needs at least one publicly reachable HTTPS product image. Add a thumbnail image to the product or shop first.");
       const input: Record<string, unknown> = {
-        prompt: job.campaign.prompt,
+        prompt: job.campaign.mode === "MOTION" ? `${job.campaign.prompt}. Use fluid cinematic camera movement and refined motion while keeping the product recognizable.` : job.campaign.prompt,
         duration: job.campaign.durationSeconds,
         aspect_ratio: aspectRatio[job.campaign.format] || "9:16",
       };
-      if (image && job.campaign.mode === "HYBRID") input.image = image;
+      if (image) input.image = image;
       const response = await fetch("https://api.replicate.com/v1/predictions", {
         method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
         body: JSON.stringify({ version, input }), cache: "no-store", signal: AbortSignal.timeout(25000),

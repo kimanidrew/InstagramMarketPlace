@@ -31,6 +31,11 @@ export function AiPromotionStudio({ connections }: { connections: Connection[] }
     finally { setLoading(false); }
   }, []);
   useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    if (!campaigns.some(c => ["QUEUED", "PLANNING", "GENERATING", "RENDERING"].includes(c.status))) return;
+    const timer = window.setInterval(() => { void load(); }, 12000);
+    return () => window.clearInterval(timer);
+  }, [campaigns, load]);
   useEffect(() => { if (!products.some(p => p.id === postId)) setPostId(products[0]?.id || ""); }, [connectionId, products, postId]);
   const selectedProduct = useMemo(() => products.find(p => p.id === postId), [products, postId]);
   async function generate(e: React.FormEvent) {
