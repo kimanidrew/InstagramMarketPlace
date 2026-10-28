@@ -1,7 +1,7 @@
 const DEFAULT_NAME = "SokoLink";
 const DEFAULT_START = "#00C2A8";
 const DEFAULT_END = "#7C3AED";
-const DEFAULT_FONT = "Montserrat";
+const DEFAULT_FONT = "Plus Jakarta Sans";
 
 function safeColor(value: string | undefined, fallback: string) {
   return value && /^#[0-9a-fA-F]{3,8}$/.test(value) ? value : fallback;
