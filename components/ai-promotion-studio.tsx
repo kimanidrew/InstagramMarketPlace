@@ -17,7 +17,7 @@ type Campaign = {
   progress: number; errorCode: string | null; createdAt: string; completedAt: string | null;
   connection: { username: string; name: string | null; profileImageUrl: string | null };
   post: { id?: string; productTitle: string | null; thumbnailUrl: string | null; mediaUrl: string | null } | null;
-  downloadUrl: string | null; hasOutput: boolean;
+  downloadUrl: string | null; thumbnailUrl?: string | null; hasOutput: boolean;
 };
 type Props = { connections: Connection[] };
 
@@ -224,7 +224,7 @@ export function AiPromotionStudio({ connections }: Props) {
           {loading ? <div className="ai-promo-loading"><LoaderCircle className="ai-promo-spin" size={20}/> Loading your campaigns…</div> : sortedCampaigns.length === 0 ? <div className="ai-promo-library-empty"><Clapperboard size={26}/><strong>Your first campaign starts here.</strong><span>Create a promotion above and its progress will appear here.</span></div> : <div className="ai-promo-campaign-grid">
             {sortedCampaigns.map((campaign) => {
               const active = ["QUEUED", "PLANNING", "GENERATING", "RENDERING"].includes(campaign.status);
-              const image = campaign.post?.thumbnailUrl || campaign.post?.mediaUrl || campaign.connection.profileImageUrl;
+              const image = campaign.thumbnailUrl || campaign.post?.thumbnailUrl || campaign.post?.mediaUrl || campaign.connection.profileImageUrl;
               return <article className="ai-promo-campaign-card" key={campaign.id}>
                 <div className="ai-promo-campaign-thumb">{campaign.status === "COMPLETED" && campaign.downloadUrl ? <video src={campaign.downloadUrl} controls playsInline preload="metadata" poster={image || undefined}/> : image ? <img src={image} alt="" /> : <div className="ai-promo-source-placeholder"><Film size={25}/></div>}{active && <span className="ai-promo-progress-tag"><LoaderCircle size={13} className="ai-promo-spin"/> In progress</span>}</div>
                 <div className="ai-promo-campaign-info"><div className="ai-promo-campaign-top"><span className={`ai-promo-status status-${campaign.status.toLowerCase()}`}>{statusLabels[campaign.status] || campaign.status}</span><span>{campaign.durationSeconds}s</span></div><h3>{campaign.post?.productTitle || (campaign.scope === "STORE" ? `@${campaign.connection.username} store campaign` : "Product promotion")}</h3><p>@{campaign.connection.username} · {campaign.mode.toLowerCase()} · {new Date(campaign.createdAt).toLocaleDateString()}</p>{active && <div className="ai-promo-progress"><span style={{ width: `${Math.max(5, Math.min(100, campaign.progress || 5))}%` }}/></div>}{campaign.status === "COMPLETED" && campaign.downloadUrl && <a className="ai-promo-download" href={campaign.downloadUrl}><ArrowDownToLine size={15}/> Download video</a>}{active && <button className="ai-promo-text-button" onClick={() => void cancel(campaign.id)}>Cancel promotion</button>}{["FAILED", "CANCELLED"].includes(campaign.status) && <button className="ai-promo-text-button" onClick={() => void retry(campaign.id)}><RefreshCw size={14}/> Try again</button>}{campaign.status === "FAILED" && <small className="ai-promo-error-code">Error: {campaign.errorCode || "RENDER_FAILED"}</small>}</div>
