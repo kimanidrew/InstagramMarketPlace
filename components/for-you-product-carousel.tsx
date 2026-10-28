@@ -101,7 +101,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
                   zIndex: 2 - Math.abs(offset),
-                  pointerEvents: visible ? "auto" : "none",
+                  pointerEvents: offset === 0 ? "auto" : "none",
                   transition: "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 900ms cubic-bezier(0.16, 1, 0.3, 1)",
                   willChange: "transform, opacity",
                 }}
