@@ -66,9 +66,9 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
     setBusy(true); setMessage(null);
     try {
       const idempotencyKey = requestKeyRef.current;
-      const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt, generateAudio, phoneNumber, idempotencyKey }) });
+      const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt, generateAudio, phoneNumber, idempotencyKey, expectedAmountKes: quote?.amountKes }) });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || "Could not start payment");
+      if (!r.ok) { if (d.quote) setQuote(d.quote as PriceQuote); throw new Error(d.error || "Could not start payment"); }
       setHistory((h) => [{ id: d.project.id, title: d.project.title, shop: shop?.username || "", product: scope === "PRODUCT" ? product?.title || null : null, scope, mode, duration: Number(duration), status: d.project.status, createdAt: new Date().toISOString(), videoReady: false, payment: d.payment ? { status: d.payment.status, amountKes: d.payment.amountKes, phoneNumber } : null }, ...h.filter((p) => p.id !== d.project.id)]);
       setPaymentPending(d.payment?.status === "PENDING" || d.payment?.status === "INITIATED");
       requestKeyRef.current = "";
