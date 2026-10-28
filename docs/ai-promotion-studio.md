@@ -1,31 +1,44 @@
 # SokoLink AI Promotion Studio
 
-The seller-facing Studio is at `/account/promotion-studio`. When a seller clicks **Create promotional video**, the API creates the project and submits an image-to-video job to fal.ai's Kling Video v3 Pro queue immediately. The page refreshes the job status every six seconds and displays a preview/download link when the provider reports completion.
+The seller-facing Studio is at `/account/promotion-studio`. Video creation is **pay before generation**: the API calculates a KSh quote, sends an M-Pesa STK Push, and submits the video job only after the server receives a matching successful Daraja callback. The callback must match a known checkout request, exact expected amount, expected phone number, and a receipt number. Duplicate callbacks cannot mark the same payment paid twice or claim the project twice.
 
 ## Required setup
 
-1. In fal.ai, create an API key and enable access/credits for **Kling Video v3 Pro image-to-video**.
-2. In Vercel → Project → Settings → Environment Variables, add `FAL_KEY` with that secret for Production (and Preview if needed). Never expose it as a `NEXT_PUBLIC_*` variable.
-3. Ensure the AI Promotion Studio Prisma migration is applied to the same Neon database used by Vercel, then run `npx prisma generate` locally and deploy.
-4. Deploy and test `/account/promotion-studio` with a connected Instagram Business shop and a product image URL that is publicly accessible over HTTPS.
+1. In fal.ai, create an API key and enable credits/access for **Kling Video v3 Pro image-to-video**.
+2. In Vercel → Project → Settings → Environment Variables, add `FAL_KEY` (server-side only).
+3. Create a Safaricom Daraja app at https://developer.safaricom.co.ke/ and enable **Lipa Na M-Pesa Online / STK Push**. Configure the consumer key/secret, shortcode, passkey, and transaction type for the selected sandbox/production environment.
+4. Set these Vercel environment variables for the same environment: `MPESA_ENVIRONMENT` (`sandbox` initially), `MPESA_CONSUMER_KEY`, `MPESA_CONSUMER_SECRET`, `MPESA_SHORTCODE`, `MPESA_PASSKEY`, `MPESA_TRANSACTION_TYPE` (usually `CustomerPayBillOnline` for a PayBill shortcode), and `MPESA_CALLBACK_URL`. The callback must be a publicly reachable HTTPS URL ending in `/api/payments/mpesa/callback`. Do not use localhost or expose credentials with `NEXT_PUBLIC_`.
+5. Apply the Prisma migration to the same Neon database used by Vercel and regenerate the Prisma client: `npx prisma migrate deploy`, `npx prisma generate`. Do not reset Neon.
+6. Deploy, then test with Safaricom sandbox credentials and a supported test MSISDN before switching `MPESA_ENVIRONMENT=production`. Production requires valid live Daraja credentials and a configured business shortcode/passkey.
+7. Visit `/admin/ai-promotion-pricing` as an admin to configure the USD/KSh exchange rate, profit margin, operating fee, minimum price, optional per-duration/audio fixed price overrides, and payment enable/disable switch.
 
-## Provider, timing and cost
+## Pricing
 
-- Generation starts as soon as the user submits; completion is asynchronous and may take seconds to a few minutes depending on provider queue/load.
-- Audio is optional via the **Generate video with audio** checkbox. When checked, the provider generates native audio; when unchecked, the video is silent. At the currently listed rates, a 15-second generation is estimated at **US$2.52 with audio** (US$0.168/second) or **US$1.68 without audio** (US$0.112/second). Check fal.ai pricing before launch; rates and model availability can change. Failed/duplicate attempts may still incur provider charges.
-- Kling image-to-video infers aspect ratio from the source image. The UI's vertical 9:16 setting is not a guarantee that every square source image will render vertically.
-- The current integration uses Kling v3 Pro for every creative mode selection. The Hybrid/Motion labels do not yet route to a separate free renderer.
-- The resulting MP4 URL is stored as the video asset's storage key and shown to the signed-in project owner. This first integration does **not** copy the MP4 into SokoLink-owned object storage; configure durable private object storage and a signed playback/download endpoint before promising long-term retention.
-- This creates a video asset only. It does not charge SokoLink for paid placement or activate a promotion campaign.
+- Provider rates default to `FAL_KLING_V3_PRO_SILENT_USD_PER_SECOND=0.112` and `FAL_KLING_V3_PRO_AUDIO_USD_PER_SECOND=0.168`; keep them updated against current fal.ai pricing.
+- Automatic price = provider cost in KSh × (1 + margin %) + operating fee, rounded up to the next KSh 10, with the configured minimum applied. Admin-set price overrides take precedence for each duration/audio combination.
+- The quote is calculated on the server and saved as a price snapshot with the payment before the STK request. The browser cannot choose the amount.
+- The Studio displays provider-cost estimates and the exact KSh amount submitted to M-Pesa. No video job is submitted before a valid payment callback.
+
+## Failure, duplicate requests and refunds
+
+- Project/payment idempotency keys and unique checkout/receipt identifiers protect against ordinary repeat submissions and duplicate callbacks.
+- If payment is declined, the project is marked failed and no video is generated.
+- If payment succeeds but video submission/provider generation fails, the payment is marked `REFUND_PENDING` for admin review. This is intentional: this implementation does not automatically disburse refunds. Issue the refund through your approved M-Pesa business process, then record its transaction/reference using the admin-only refund reconciliation endpoint.
+- A failed project whose provider request may already have been accepted is **not** automatically resubmitted, to avoid charging the provider twice. Investigate provider status before any retry or refund.
+- Callback matching reduces spoofing risk, but production launch should include Daraja transaction-status reconciliation and monitoring for callbacks that are delayed or never arrive.
+
+## Provider and retention notes
+
+- Generation is asynchronous and may take seconds to minutes. The page polls the project list while open.
+- Kling's image-to-video aspect ratio is inferred from the source image; the UI's vertical 9:16 setting cannot guarantee every input image renders vertically.
+- The selected AI/Hybrid/Motion creative modes currently use Kling v3 Pro; they do not route to separate renderers.
+- The generated MP4 is currently stored as the fal.ai-hosted URL, not copied into SokoLink-owned object storage. Configure durable private storage and signed playback/download before promising long-term retention.
+- This feature charges for the AI video only; it does not activate a paid placement campaign.
 
 ## Troubleshooting
 
-- `Video generation is not configured`: set `FAL_KEY` in Vercel and redeploy.
-- Provider authentication, quota or billing error: check the fal.ai API key, model access, account balance and usage limits.
-- Product image cannot be fetched: verify the Instagram image URL is public, HTTPS and still valid.
-- A project remains `PROCESSING`: refresh the page and inspect the provider queue/request in fal.ai. The page checks provider status while open.
-- If the Neon table error `AiPromotionProject does not exist` appears, deploy the existing Prisma migration to the same database configured in Vercel; do not reset the database.
-
-## Defaults
-
-Product scope, Hybrid mode, 15 seconds, vertical 9:16 UI, and the premium promotion prompt. Project creation is authenticated and tied to the connected shop owner.
+- `M-Pesa payments are not configured yet`: set all required `MPESA_*` values in Vercel and redeploy.
+- Daraja authentication or STK errors: check environment, credentials, shortcode/passkey, transaction type, account status, and callback URL.
+- Payment remains pending: check Daraja callback delivery and the matching checkout request. Do not manually mark a payment paid.
+- `AiPromotionProject does not exist`: apply migrations to the same Neon database configured in Vercel; never reset the database.
+- Video provider quota/authentication errors: check `FAL_KEY`, model access, and fal.ai credits.
