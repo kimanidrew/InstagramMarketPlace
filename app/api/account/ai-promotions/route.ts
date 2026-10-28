@@ -121,8 +121,8 @@ export async function POST(request: Request) {
       });
     } catch { wallet = await prisma.aiPromotionCreditWallet.findUnique({ where: { userId: current.id } }); }
   }
-  const reserveCinematic = mode !== "MOTION" && providerReady && (wallet?.availableCredits || 0) > 0;
-  if (mode === "CINEMATIC" && providerReady && !reserveCinematic) {
+  const reserveCinematic = scope === "PRODUCT" && mode !== "MOTION" && providerReady && (wallet?.availableCredits || 0) > 0;
+  if (scope === "PRODUCT" && mode === "CINEMATIC" && providerReady && !reserveCinematic) {
     return NextResponse.json({ error: "You do not have cinematic credits available. Choose Hybrid for motion fallback or add credits." }, { status: 402 });
   }
 
