@@ -11,7 +11,7 @@ import {
   isPromotionScope,
   validatePrompt,
 } from "@/lib/ai-promotions/contracts";
-import { cinematicProviderEnabled, maxActiveCampaigns } from "@/lib/ai-promotions/policy";
+import { cinematicProviderEnabled, maxActiveCampaigns, maxDailyCampaigns } from "@/lib/ai-promotions/policy";
 
 export const dynamic = "force-dynamic";
 
@@ -102,6 +102,12 @@ export async function POST(request: Request) {
   const activeCount = await prisma.aiPromotionCampaign.count({
     where: { userId: current.id, status: { in: ["QUEUED", "PLANNING", "GENERATING", "RENDERING"] } },
   });
+  const dayStart = new Date();
+  dayStart.setHours(0, 0, 0, 0);
+  const dailyCount = await prisma.aiPromotionCampaign.count({ where: { userId: current.id, createdAt: { gte: dayStart } } });
+  if (dailyCount >= maxDailyCampaigns()) {
+    return NextResponse.json({ error: "You have reached today's promotion creation limit. Please try again tomorrow." }, { status: 429 });
+  }
   if (activeCount >= maxActiveCampaigns()) {
     return NextResponse.json({ error: "You have reached the active promotion limit. Wait for a campaign to finish before creating another." }, { status: 429 });
   }
