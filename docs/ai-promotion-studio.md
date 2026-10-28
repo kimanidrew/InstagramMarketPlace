@@ -1,12 +1,31 @@
 # SokoLink AI Promotion Studio
-Implemented foundation: authenticated seller UI at `/account/promotion-studio`; authenticated project list/create/detail APIs; separate Prisma project/job/asset records; cron-protected renderer dispatcher with retries; and SQL migration.
 
-## Manual setup required for rendered video
-1. Review/apply `prisma/migrations/20261028220000_ai_promotion_studio/migration.sql` to Neon, then run `npx prisma generate`. Check migration history before `npx prisma migrate deploy`.
-2. Deploy a trusted renderer and configure Vercel env vars `SOKOLINK_PROMOTION_RENDERER_URL` and `SOKOLINK_PROMOTION_RENDERER_SECRET`. It must return completed assets, e.g. `{ "provider": "renderer", "assets": [{ "type": "VIDEO", "storageKey": "private/object/key.mp4", "contentType": "video/mp4", "width": 1080, "height": 1920, "durationMs": 15000 }] }`. Do not return arbitrary public URLs as storage keys.
-3. Configure Vercel Cron to POST `/api/ai-promotions/worker` with `Authorization: Bearer <CRON_SECRET>`.
-4. Configure private object storage and a signed-download route before serving assets. The app stores metadata, not media bytes.
-5. The current worker supports synchronous completed-renderer responses only; asynchronous provider job polling/callbacks are not implemented.
-6. Run `npm run build` and integration tests against the configured Neon DB and renderer. This editing session cannot run Vercel, the database migration, or a real render.
+The seller-facing Studio is at `/account/promotion-studio`. When a seller clicks **Create promotional video**, the API creates the project and submits an image-to-video job to fal.ai's Kling Video v3 Pro queue immediately. The page refreshes the job status every six seconds and displays a preview/download link when the provider reports completion.
 
-Default creative settings: product scope, hybrid mode, 15 seconds, vertical 9:16 at 1080×1920, premium promotion prompt. Project creation never charges money or activates paid placement.
+## Required setup
+
+1. In fal.ai, create an API key and enable access/credits for **Kling Video v3 Pro image-to-video**.
+2. In Vercel → Project → Settings → Environment Variables, add `FAL_KEY` with that secret for Production (and Preview if needed). Never expose it as a `NEXT_PUBLIC_*` variable.
+3. Ensure the AI Promotion Studio Prisma migration is applied to the same Neon database used by Vercel, then run `npx prisma generate` locally and deploy.
+4. Deploy and test `/account/promotion-studio` with a connected Instagram Business shop and a product image URL that is publicly accessible over HTTPS.
+
+## Provider, timing and cost
+
+- Generation starts as soon as the user submits; completion is asynchronous and may take seconds to a few minutes depending on provider queue/load.
+- The default 15-second Kling v3 Pro video with audio disabled is estimated at about **US$1.68 per generation** at the currently listed rate of US$0.112/second. Check fal.ai pricing before launch; rates and model availability can change. Failed/duplicate attempts may still incur provider charges.
+- Kling image-to-video infers aspect ratio from the source image. The UI's vertical 9:16 setting is not a guarantee that every square source image will render vertically.
+- The current integration uses Kling v3 Pro for every creative mode selection. The Hybrid/Motion labels do not yet route to a separate free renderer.
+- The resulting MP4 URL is stored as the video asset's storage key and shown to the signed-in project owner. This first integration does **not** copy the MP4 into SokoLink-owned object storage; configure durable private object storage and a signed playback/download endpoint before promising long-term retention.
+- This creates a video asset only. It does not charge SokoLink for paid placement or activate a promotion campaign.
+
+## Troubleshooting
+
+- `Video generation is not configured`: set `FAL_KEY` in Vercel and redeploy.
+- Provider authentication, quota or billing error: check the fal.ai API key, model access, account balance and usage limits.
+- Product image cannot be fetched: verify the Instagram image URL is public, HTTPS and still valid.
+- A project remains `PROCESSING`: refresh the page and inspect the provider queue/request in fal.ai. The page checks provider status while open.
+- If the Neon table error `AiPromotionProject does not exist` appears, deploy the existing Prisma migration to the same database configured in Vercel; do not reset the database.
+
+## Defaults
+
+Product scope, Hybrid mode, 15 seconds, vertical 9:16 UI, and the premium promotion prompt. Project creation is authenticated and tied to the connected shop owner.
