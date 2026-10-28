@@ -148,12 +148,18 @@ export async function POST(request: Request) {
     })),
   };
   const durationSeconds = duration as number;
+  const sceneDurations = durationSeconds === 10 ? [2, 3, 3, 2] : durationSeconds === 15 ? [3, 4, 4, 4] : [6, 8, 8, 8];
   const sceneDefinitions = [
-    { position: 0, startSeconds: 0, durationSeconds: 3, title: "The hook", prompt: "Introduce the product with a premium visual hook." },
-    { position: 1, startSeconds: 3, durationSeconds: 4, title: "Product details", prompt: "Highlight the real product and verified listing details." },
-    { position: 2, startSeconds: 7, durationSeconds: 4, title: "Lifestyle moment", prompt: "Create an aspirational, truthful lifestyle moment without inventing product features." },
-    { position: 3, startSeconds: 11, durationSeconds: 4, title: "Call to action", prompt: "Close with the exact shop identity and a clear call to action." },
-  ].map((scene) => ({ ...scene, startSeconds: Math.min(scene.startSeconds, durationSeconds - 1), durationSeconds: Math.min(scene.durationSeconds, Math.max(1, durationSeconds - scene.startSeconds)) }));
+    { title: "The hook", prompt: "Introduce the product with a premium visual hook." },
+    { title: "Product details", prompt: "Highlight the real product and verified listing details." },
+    { title: "Lifestyle moment", prompt: "Create an aspirational, truthful lifestyle moment without inventing product features." },
+    { title: "Call to action", prompt: "Close with the exact shop identity and a clear call to action." },
+  ].map((scene, index) => ({
+    ...scene,
+    position: index,
+    startSeconds: sceneDurations.slice(0, index).reduce((sum, value) => sum + value, 0),
+    durationSeconds: sceneDurations[index],
+  }));
 
   try {
     const campaign = await prisma.$transaction(async (tx) => {
@@ -184,7 +190,7 @@ export async function POST(request: Request) {
         data: sceneDefinitions.map((scene) => ({
           campaignId: created.id, jobId: job.id, position: scene.position,
           startSeconds: scene.startSeconds, durationSeconds: scene.durationSeconds,
-          title: scene.title, prompt: `${prompt}\n\nScene direction: ${scene.prompt}`,
+          title: scene.title, prompt: prompt + "\n\nScene direction: " + scene.prompt,
           strategy: mode, status: "PENDING",
         })),
       });
