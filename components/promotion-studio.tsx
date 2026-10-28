@@ -42,7 +42,7 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
         const response = await fetch("/api/ai-promotions", { cache: "no-store" });
         if (!response.ok) return;
         const data = await response.json();
-        if (alive && Array.isArray(data.projects)) { setHistory(data.projects); if (data.projects[0]?.payment?.status && data.projects[0].payment.status !== "PENDING" && data.projects[0].payment.status !== "INITIATED") setPaymentPending(false); }
+        if (alive && Array.isArray(data.projects)) { setHistory(data.projects); setPaymentPending(data.projects[0]?.payment?.status === "PENDING" || data.projects[0]?.payment?.status === "INITIATED"); }
       } catch { /* Keep the last known state while temporarily offline. */ }
     };
     void refresh();
