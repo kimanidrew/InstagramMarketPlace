@@ -160,7 +160,7 @@ async function processJob(jobId: string) {
     const outputPath = path.join(directory, "final.mp4");
     let renderSource = sourcePath;
     let renderSourceIsVideo = sourceIsVideo;
-    const canUseCinematic = campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds !== 30;
+    const canUseCinematic = campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds <= 30;
 
     if (canUseCinematic && !(await reserveProviderBudget(campaign.id, job.id, campaign.durationSeconds))) {
       await completeMotionFallback(campaign.id, job.id, "The cinematic daily budget limit was reached; motion rendering was used.");
@@ -304,7 +304,7 @@ async function handleFailure(jobId: string, error: unknown) {
     await prisma.aiPromotionCampaign.update({ where: { id: job.campaignId }, data: { status: "QUEUED", errorCode: code, errorMessage: "Your promotion is temporarily delayed and will retry automatically." } });
     return;
   }
-  await prisma.aiPromotionProviderUsage.updateMany({ where: { operationKey: "runway:" + job.id, status: "ESTIMATED" }, data: { status: "FAILED" } });
+  await prisma.aiPromotionProviderUsage.updateMany({ where: { operationKey: "runway:" + job.id, status: "ESTIMATED", providerRequestId: null }, data: { status: "FAILED" } });
   await prisma.$transaction([
     prisma.aiPromotionJob.update({ where: { id: job.id }, data: { status: "FAILED", stage: "failed", leaseExpiresAt: null, errorCode: code, errorMessage: message.slice(0, 1000) } }),
     prisma.aiPromotionCampaign.update({ where: { id: job.campaignId }, data: { status: "FAILED", errorCode: code, errorMessage: "We couldn't finish this promotion. You can retry it from your campaign history." } }),
