@@ -270,7 +270,23 @@ export function StoreDirectory({ stores }: { stores: StoreEntry[] }) {
                 <span className="store-directory-skeleton-avatar" />
               </div>
             </div>
-          ) : null}
+          ) : (
+            <div className="store-directory-showcase-empty" aria-label="No featured shops yet">
+              <div className="store-directory-showcase-empty-copy">
+                <span className="store-directory-showcase-empty-label"><Sparkles size={12} /> SHOP SPOTLIGHT</span>
+                <h2>Good things are on the way.</h2>
+                <p>New shops and finds will appear here as sellers join SokoLink.</p>
+                <span className="store-directory-showcase-empty-note"><PackageOpen size={15} /> Your next favorite shop could be here soon.</span>
+              </div>
+              <div className="store-directory-showcase-empty-visual" aria-hidden="true">
+                <span className="store-directory-empty-orbit orbit-one" />
+                <span className="store-directory-empty-orbit orbit-two" />
+                <span className="store-directory-empty-tile tile-one"><PackageOpen size={27} /></span>
+                <span className="store-directory-empty-tile tile-two"><Sparkles size={21} /></span>
+                <span className="store-directory-empty-tile tile-three"><PackageOpen size={22} /></span>
+              </div>
+            </div>
+          )}
         </div>
         <div className="store-directory-showcase-measure" aria-hidden="true">
           {stores.map((entry) => <SpotlightStoreCard key={entry.store.id} entry={entry} measure />)}
