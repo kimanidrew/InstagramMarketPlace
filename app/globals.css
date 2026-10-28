@@ -9820,3 +9820,112 @@ nav.mobile-bottom-nav {
   background: #fff !important;
   color: #000 !important;
 }
+
+
+/* Static empty-state banner for the stores spotlight when no shops are available. */
+.store-directory-showcase-empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  width: 100%;
+  min-height: 310px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 28px;
+  background: #f7f2ff;
+  color: #292039;
+  box-sizing: border-box;
+}
+.store-directory-showcase-empty-copy {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  padding: clamp(22px, 4vw, 42px);
+}
+.store-directory-showcase-empty-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgb(41 32 57 / 12%);
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: rgb(255 255 255 / 72%);
+  color: #66527e;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.store-directory-showcase-empty-copy h2 {
+  max-width: 440px;
+  margin: 20px 0 0;
+  font-size: clamp(29px, 4.4vw, 52px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+.store-directory-showcase-empty-copy p {
+  max-width: 410px;
+  margin: 14px 0 0;
+  color: #665d73;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.store-directory-showcase-empty-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+  color: #66527e;
+  font-size: 11px;
+  font-weight: 800;
+}
+.store-directory-showcase-empty-visual {
+  position: relative;
+  min-width: 0;
+  min-height: 310px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #eee5ff, #f9e8f1 60%, #e5f5f0);
+}
+.store-directory-empty-orbit {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  border: 1px solid rgb(105 80 137 / 20%);
+  border-radius: 50%;
+}
+.store-directory-empty-orbit.orbit-one { width: 82%; top: 8%; left: 9%; }
+.store-directory-empty-orbit.orbit-two { width: 58%; top: 20%; left: 21%; border-style: dashed; }
+.store-directory-empty-tile {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 90px;
+  height: 108px;
+  border: 1px solid rgb(255 255 255 / 90%);
+  border-radius: 20px;
+  background: rgb(255 255 255 / 76%);
+  color: #76618e;
+  box-shadow: 0 18px 45px rgb(73 49 96 / 10%);
+}
+.store-directory-empty-tile.tile-one { left: 13%; top: 25%; transform: rotate(-12deg); }
+.store-directory-empty-tile.tile-two { right: 13%; top: 18%; width: 76px; height: 88px; transform: rotate(10deg); color: #a36b9b; }
+.store-directory-empty-tile.tile-three { left: 39%; bottom: 9%; width: 96px; height: 112px; transform: rotate(4deg); color: #568f83; }
+@media (max-width: 760px) {
+  .store-directory-showcase-empty { grid-template-columns: minmax(0, 1fr) minmax(115px, .72fr); min-height: 250px; border-radius: 22px; }
+  .store-directory-showcase-empty-copy { padding: 20px 16px; }
+  .store-directory-showcase-empty-copy h2 { font-size: clamp(25px, 6vw, 35px); }
+  .store-directory-showcase-empty-copy p { font-size: 11px; line-height: 1.5; }
+  .store-directory-showcase-empty-visual { min-height: 250px; }
+  .store-directory-empty-tile { width: 58px; height: 72px; border-radius: 13px; }
+  .store-directory-empty-tile.tile-two { width: 48px; height: 60px; }
+  .store-directory-empty-tile.tile-three { width: 62px; height: 76px; }
+}
+@media (max-width: 420px) {
+  .store-directory-showcase-empty { grid-template-columns: minmax(0, 1fr) 105px; }
+  .store-directory-showcase-empty-copy { padding: 16px 12px; }
+  .store-directory-showcase-empty-label { font-size: 8px; padding: 6px 8px; }
+  .store-directory-showcase-empty-copy h2 { font-size: 23px; }
+  .store-directory-showcase-empty-note { font-size: 10px; line-height: 1.4; }
+}
