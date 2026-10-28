@@ -21,10 +21,10 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
   }
   await prisma.$transaction(async (tx) => {
     await tx.aiPromotionCampaign.update({ where: { id }, data: { status: "QUEUED", progress: 0, errorCode: null, errorMessage: null, outputKey: null, thumbnailKey: null, completedAt: null } });
-    await tx.aiPromotionScene.updateMany({ where: { campaignId: id }, data: { status: "PENDING", outputAssetKey: null, provider: null, providerTaskId: null, errorCode: null } });
-    await tx.aiPromotionJob.create({
+    const job = await tx.aiPromotionJob.create({
       data: { campaignId: id, status: "QUEUED", stage: "planning", idempotencyKey: `retry:${id}:${randomUUID()}`, maxAttempts: 4 },
     });
+    await tx.aiPromotionScene.updateMany({ where: { campaignId: id }, data: { jobId: job.id, status: "PENDING", outputAssetKey: null, provider: null, providerTaskId: null, errorCode: null } });
   });
   return NextResponse.json({ ok: true, status: "QUEUED" }, { status: 202 });
 }
