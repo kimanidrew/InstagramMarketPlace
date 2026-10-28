@@ -17,6 +17,7 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
   const [scope, setScope] = useState<"PRODUCT" | "STORE">("PRODUCT");
   const [mode, setMode] = useState<"HYBRID" | "AI" | "MOTION">("HYBRID");
   const [duration, setDuration] = useState("15");
+  const [generateAudio, setGenerateAudio] = useState(false);
   const [shopId, setShopId] = useState(shops[0]?.id || "");
   const [postId, setPostId] = useState(shops[0]?.products[0]?.id || "");
   const [prompt, setPrompt] = useState(DEFAULT_PROMPT);
@@ -45,7 +46,7 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
   async function submit() {
     setBusy(true); setMessage(null);
     try {
-      const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt }) });
+      const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt, generateAudio }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Could not save project");
       setHistory((h) => [{ id: d.project.id, title: d.project.title, shop: shop?.username || "", product: scope === "PRODUCT" ? product?.title || null : null, scope, mode, duration: Number(duration), status: d.project.status, createdAt: new Date().toISOString(), videoReady: false }, ...h]);
@@ -96,6 +97,16 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
           <div className="mb-5 grid grid-cols-3 gap-2">{([{ value: "HYBRID", title: "Hybrid", sub: "Recommended" }, { value: "AI", title: "AI creative", sub: "AI-led" }, { value: "MOTION", title: "Motion", sub: "Image animation" }] as const).map((item) => <button type="button" key={item.value} onClick={() => setMode(item.value)} className={"rounded-xl border px-2 py-3 text-left transition " + (mode === item.value ? "border-neutral-950 bg-neutral-100" : "border-neutral-200 hover:border-neutral-400")}><span className="block text-xs font-semibold sm:text-sm">{item.title}</span><span className="mt-1 block text-[10px] text-neutral-500 sm:text-xs">{item.sub}</span></button>)}</div>
 
           <div className="mb-5 grid grid-cols-2 gap-3"><div><label className={labelClass}>Duration</label><select value={duration} onChange={(e) => setDuration(e.target.value)} className={inputClass}>{["10", "15"].map((n) => <option key={n} value={n}>{n} seconds</option>)}</select></div><div><label className={labelClass}>Video format</label><div className="flex h-[46px] items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-50 px-3.5 text-sm"><span className="h-4 w-3 rounded-sm border-2 border-neutral-700"/><span>Vertical · 9:16</span></div></div></div>
+          <div className="mb-5 rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
+            <label htmlFor="promotion-audio" className="flex cursor-pointer items-start gap-3">
+              <input id="promotion-audio" type="checkbox" checked={generateAudio} onChange={(e) => setGenerateAudio(e.target.checked)} className="mt-1 h-5 w-5 shrink-0 rounded border-neutral-300 accent-neutral-950" />
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-2 text-sm font-semibold text-neutral-900">Generate video with audio <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-700">Optional</span></span>
+                <span className="mt-1 block text-xs leading-5 text-neutral-500">Add AI-generated sound and audio to your promotional video. Leave unchecked for a silent video.</span>
+                <span className="mt-2 block text-xs font-medium text-neutral-700">Estimated provider cost for ${duration}s: US${(Number(duration) * (generateAudio ? 0.168 : 0.112)).toFixed(2)} ${generateAudio ? "with audio" : "without audio"}.</span>
+              </span>
+            </label>
+          </div>
           <label className={labelClass}>Creative direction</label><textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} maxLength={1200} rows={4} className={inputClass + " resize-y leading-6"} placeholder="Describe the mood, key selling points, and call to action..."/><p className="mt-1.5 text-right text-xs text-neutral-400">{prompt.length}/1200</p>
           {message && <p role="status" className={"mt-4 flex items-start gap-2 rounded-xl p-3 text-sm " + (message.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700")}>{message.ok ? <CheckCircle2 size={17} className="mt-0.5 shrink-0"/> : <AlertCircle size={17} className="mt-0.5 shrink-0"/>}<span>{message.text}</span></p>}
           <button disabled={busy || !shopId || (scope === "PRODUCT" && !postId) || prompt.trim().length < 12} onClick={submit} className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-neutral-950 p-3.5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40">{busy ? <LoaderCircle size={17} className="animate-spin"/> : <Sparkles size={17}/>} {busy ? "Starting video generation…" : "Create promotional video"}</button>
