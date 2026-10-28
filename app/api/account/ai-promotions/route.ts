@@ -105,6 +105,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "You have reached the active promotion limit. Wait for a campaign to finish before creating another." }, { status: 429 });
   }
 
+  const providerReady = cinematicProviderEnabled();
+  let wallet = await prisma.aiPromotionCreditWallet.findUnique({ where: { userId: current.id } });
+  if (!wallet) {
+    const starterCredits = Math.max(0, Math.min(20, Number(process.env.AI_PROMOTION_STARTER_CREDITS || 2) || 0));
+    try {
+      wallet = await prisma.$transaction(async (tx) => {
+        const created = await tx.aiPromotionCreditWallet.create({ data: { userId: current.id, availableCredits: starterCredits, lifetimeGranted: starterCredits } });
+        if (starterCredits > 0) await tx.aiPromotionCreditLedger.create({
+          data: { userId: current.id, walletId: created.id, entryType: "GRANT", amount: starterCredits,
+            idempotencyKey: "starter-grant:" + current.id, description: "Initial AI Promotion Studio credits" },
+        });
+        return created;
+      });
+    } catch { wallet = await prisma.aiPromotionCreditWallet.findUnique({ where: { userId: current.id } }); }
+  }
+  const reserveCinematic = mode !== "MOTION" && providerReady && (wallet?.availableCredits || 0) > 0;
+  if (mode === "CINEMATIC" && providerReady && !reserveCinematic) {
+    return NextResponse.json({ error: "You do not have cinematic credits available. Choose Hybrid for motion fallback or add credits." }, { status: 402 });
+  }
+
   const requestKey = request.headers.get("idempotency-key")?.trim().slice(0, 180) || randomUUID();
   const existingJob = await prisma.aiPromotionJob.findUnique({
     where: { idempotencyKey: requestKey },
@@ -147,6 +167,18 @@ export async function POST(request: Request) {
       const job = await tx.aiPromotionJob.create({
         data: { campaignId: created.id, status: "QUEUED", stage: "planning", idempotencyKey: requestKey, maxAttempts: 4 },
       });
+      if (reserveCinematic && wallet) {
+        const reserved = await tx.aiPromotionCreditWallet.updateMany({
+          where: { id: wallet.id, availableCredits: { gt: 0 } },
+          data: { availableCredits: { decrement: 1 }, reservedCredits: { increment: 1 } },
+        });
+        if (reserved.count !== 1) throw new Error("AI_PROMOTION_CREDITS_RACE");
+        await tx.aiPromotionCreditLedger.create({
+          data: { userId: current.id, walletId: wallet.id, entryType: "RESERVE", amount: 1,
+            campaignId: created.id, idempotencyKey: "reserve:" + created.id,
+            description: "Reserved one cinematic generation credit" },
+        });
+      }
       await tx.aiPromotionScene.createMany({
         data: sceneDefinitions.map((scene) => ({
           campaignId: created.id, jobId: job.id, position: scene.position,
