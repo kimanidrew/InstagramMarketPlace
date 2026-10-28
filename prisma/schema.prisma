@@ -59,6 +59,7 @@ model User {
   recentlyViewedProducts RecentlyViewedProduct[]
   promotionCampaigns   PromotionCampaign[]
   notifications       Notification[]
+  aiPromotionCampaigns AiPromotionCampaign[]
 }
 
 model StoreRequest {
@@ -97,6 +98,7 @@ model InstagramConnection {
   proUntil          DateTime?
   analyticsEvents   AnalyticsEvent[]
   promotionCampaigns PromotionCampaign[]
+  aiPromotionCampaigns AiPromotionCampaign[]
 
   @@index([connectedByUserId])
   @@unique([connectedByUserId, igUserId])
@@ -132,6 +134,7 @@ model InstagramPost {
   promotionCampaigns    PromotionCampaign[]
   wishlistItems          WishlistItem[]
   recentlyViewedBy       RecentlyViewedProduct[]
+  aiPromotionCampaigns   AiPromotionCampaign[]
 
   @@index([connectionId, isProduct])
 }
@@ -425,4 +428,53 @@ model WhatsAppMessage {
 
   @@index([conversationId, createdAt])
   @@index([status, createdAt])
+}
+
+
+// AI-generated promotional videos are separate from paid marketplace promotion campaigns.
+model AiPromotionCampaign {
+  id              String   @id @default(cuid())
+  userId          String
+  connectionId    String
+  postId           String?
+  title            String
+  scope            String   @default("PRODUCT")
+  mode             String   @default("HYBRID")
+  prompt            String
+  durationSeconds  Int      @default(15)
+  format            String   @default("VERTICAL")
+  aspectRatio       String   @default("9:16")
+  status            String   @default("DRAFT")
+  provider          String   @default("REPLICATE")
+  providerOutputUrl String?
+  finalVideoUrl     String?
+  errorMessage      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  completedAt       DateTime?
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection        InstagramConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  post              InstagramPost?      @relation(fields: [postId], references: [id], onDelete: SetNull)
+  job               AiPromotionJob?
+
+  @@index([userId, createdAt])
+  @@index([connectionId, status])
+  @@index([status, createdAt])
+}
+
+model AiPromotionJob {
+  id                  String   @id @default(cuid())
+  campaignId          String   @unique
+  status              String   @default("QUEUED")
+  providerPredictionId String?  @unique
+  attemptCount        Int      @default(0)
+  nextRunAt           DateTime @default(now())
+  startedAt           DateTime?
+  finishedAt          DateTime?
+  lastError           String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  campaign            AiPromotionCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextRunAt])
 }
