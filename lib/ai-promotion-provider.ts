@@ -40,13 +40,11 @@ export async function submitPromotionVideo(input: {
   const data = await falFetch("", {
     method: "POST",
     body: JSON.stringify({
-      input: {
-        start_image_url: input.imageUrl,
-        prompt: creativePrompt.slice(0, 2400),
-        duration: String(Math.min(15, Math.max(3, input.durationSeconds))),
-        generate_audio: false,
-        negative_prompt: "blurry, distorted product, warped packaging, extra objects, illegible text, watermark, low quality",
-      },
+      start_image_url: input.imageUrl,
+      prompt: creativePrompt.slice(0, 2400),
+      duration: String(Math.min(15, Math.max(3, input.durationSeconds))),
+      generate_audio: false,
+      negative_prompt: "blurry, distorted product, warped packaging, extra objects, illegible text, watermark, low quality",
     }),
   });
   const requestId = typeof data.request_id === "string" ? data.request_id : typeof data.requestId === "string" ? data.requestId : null;
