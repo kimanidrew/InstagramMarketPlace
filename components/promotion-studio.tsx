@@ -5,7 +5,8 @@ import { AlertCircle, CheckCircle2, Clapperboard, LoaderCircle, Play, Sparkles, 
 
 type Product = { id: string; title: string; image: string | null };
 type Shop = { id: string; username: string; profileImageUrl: string | null; products: Product[] };
-type Project = { id: string; title: string; shop: string; product: string | null; scope: string; mode: string; duration: number; status: string; createdAt: string; videoReady: boolean; videoUrl?: string | null; errorMessage?: string | null };
+type Project = { id: string; title: string; shop: string; product: string | null; scope: string; mode: string; duration: number; status: string; createdAt: string; videoReady: boolean; videoUrl?: string | null; errorMessage?: string | null; payment?: { status: string; amountKes: number; phoneNumber?: string; receiptNumber?: string | null; message?: string | null } | null };
+type PriceQuote = { amountKes: number; providerCostUsd: number; providerCostKes: number; marginPercent: number; fixedFeeKes: number; overridden: boolean };
 const DEFAULT_PROMPT = "Create a stylish, premium promotion that highlights the product clearly and ends with a strong call to action.";
 
 function Avatar({ src, label, size = "md" }: { src: string | null | undefined; label: string; size?: "sm" | "md" | "lg" }) {
@@ -18,6 +19,10 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
   const [mode, setMode] = useState<"HYBRID" | "AI" | "MOTION">("HYBRID");
   const [duration, setDuration] = useState("15");
   const [generateAudio, setGenerateAudio] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [quote, setQuote] = useState<PriceQuote | null>(null);
+  const [quoteError, setQuoteError] = useState("");
+  const [paymentPending, setPaymentPending] = useState(false);
   const [shopId, setShopId] = useState(shops[0]?.id || "");
   const [postId, setPostId] = useState(shops[0]?.products[0]?.id || "");
   const [prompt, setPrompt] = useState(DEFAULT_PROMPT);
@@ -35,7 +40,7 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
         const response = await fetch("/api/ai-promotions", { cache: "no-store" });
         if (!response.ok) return;
         const data = await response.json();
-        if (alive && Array.isArray(data.projects)) setHistory(data.projects);
+        if (alive && Array.isArray(data.projects)) { setHistory(data.projects); if (data.projects[0]?.payment?.status && data.projects[0].payment.status !== "PENDING" && data.projects[0].payment.status !== "INITIATED") setPaymentPending(false); }
       } catch { /* Keep the last known state while temporarily offline. */ }
     };
     void refresh();
@@ -43,14 +48,26 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
     return () => { alive = false; window.clearInterval(timer); };
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    fetch(`/api/ai-promotions?quote=1&durationSeconds=${duration}&generateAudio=${generateAudio}`, { cache: "no-store" })
+      .then(async (r) => { const d = await r.json(); if (!r.ok) throw new Error(d.error || "Pricing unavailable"); return d.quote as PriceQuote; })
+      .then((q) => { if (alive) { setQuote(q); setQuoteError(""); } })
+      .catch((e) => { if (alive) { setQuote(null); setQuoteError(e instanceof Error ? e.message : "Pricing unavailable"); } });
+    return () => { alive = false; };
+  }, [duration, generateAudio]);
+
   async function submit() {
+    if (busy || paymentPending) return;
     setBusy(true); setMessage(null);
     try {
-      const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt, generateAudio }) });
+      const idempotencyKey = crypto.randomUUID();
+      const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt, generateAudio, phoneNumber, idempotencyKey }) });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || "Could not save project");
-      setHistory((h) => [{ id: d.project.id, title: d.project.title, shop: shop?.username || "", product: scope === "PRODUCT" ? product?.title || null : null, scope, mode, duration: Number(duration), status: d.project.status, createdAt: new Date().toISOString(), videoReady: false }, ...h]);
-      setMessage({ ok: true, text: "Your video generation has started. This page will update automatically when the video is ready." });
+      if (!r.ok) throw new Error(d.error || "Could not start payment");
+      setHistory((h) => [{ id: d.project.id, title: d.project.title, shop: shop?.username || "", product: scope === "PRODUCT" ? product?.title || null : null, scope, mode, duration: Number(duration), status: d.project.status, createdAt: new Date().toISOString(), videoReady: false, payment: d.payment ? { status: d.payment.status, amountKes: d.payment.amountKes, phoneNumber } : null }, ...h.filter((p) => p.id !== d.project.id)]);
+      setPaymentPending(d.payment?.status === "PENDING" || d.payment?.status === "INITIATED");
+      setMessage({ ok: true, text: d.message || d.payment?.customerMessage || "Approve the M-Pesa prompt on your phone. Generation starts only after payment confirmation." });
     } catch (e) { setMessage({ ok: false, text: e instanceof Error ? e.message : "Request failed" }); }
     finally { setBusy(false); }
   }
@@ -107,10 +124,15 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
               </span>
             </label>
           </div>
+          <div className="mb-5 rounded-2xl border border-neutral-200 bg-white p-4">
+            <div className="flex items-start justify-between gap-4"><div><p className="text-sm font-semibold text-neutral-900">Your generation price</p><p className="mt-1 text-xs text-neutral-500">Provider cost plus SokoLink margin and operating fee.</p></div><p className="text-2xl font-bold tabular-nums">{quote ? `KSh ${quote.amountKes.toLocaleString("en-KE")}` : "—"}</p></div>
+            {quote ? <div className="mt-3 space-y-1 border-t border-neutral-100 pt-3 text-xs text-neutral-500"><div className="flex justify-between"><span>Estimated provider cost</span><span>US${quote.providerCostUsd.toFixed(2)} · KSh {quote.providerCostKes.toLocaleString("en-KE")}</span></div><div className="flex justify-between"><span>Cost-plus margin</span><span>{quote.marginPercent}%</span></div><div className="flex justify-between"><span>Operating fee</span><span>KSh {quote.fixedFeeKes.toLocaleString("en-KE")}</span></div>{quote.overridden && <p className="pt-1 font-medium text-neutral-700">Admin-set selling price applies.</p>}</div> : <p className="mt-2 text-xs text-amber-700">{quoteError || "Calculating current price…"}</p>}
+          </div>
+          <label className={labelClass}>M-Pesa phone number</label><input type="tel" inputMode="tel" autoComplete="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="0712 345 678" className={inputClass + " mb-5"} />
           <label className={labelClass}>Creative direction</label><textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} maxLength={1200} rows={4} className={inputClass + " resize-y leading-6"} placeholder="Describe the mood, key selling points, and call to action..."/><p className="mt-1.5 text-right text-xs text-neutral-400">{prompt.length}/1200</p>
           {message && <p role="status" className={"mt-4 flex items-start gap-2 rounded-xl p-3 text-sm " + (message.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700")}>{message.ok ? <CheckCircle2 size={17} className="mt-0.5 shrink-0"/> : <AlertCircle size={17} className="mt-0.5 shrink-0"/>}<span>{message.text}</span></p>}
-          <button disabled={busy || !shopId || (scope === "PRODUCT" && !postId) || prompt.trim().length < 12} onClick={submit} className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-neutral-950 p-3.5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40">{busy ? <LoaderCircle size={17} className="animate-spin"/> : <Sparkles size={17}/>} {busy ? "Starting video generation…" : "Create promotional video"}</button>
-          <p className="mt-3 text-center text-xs leading-5 text-neutral-500">Generation starts as soon as you click. AI video usage may incur provider charges; no SokoLink paid placement is activated.</p>
+          <button disabled={busy || paymentPending || !quote || !phoneNumber.trim() || !shopId || (scope === "PRODUCT" && !postId) || prompt.trim().length < 12} onClick={submit} className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-neutral-950 p-3.5 text-sm font-semibold text-white transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40">{busy ? <LoaderCircle size={17} className="animate-spin"/> : <Sparkles size={17}/>} {busy ? "Sending M-Pesa prompt…" : paymentPending ? "Awaiting M-Pesa payment…" : quote ? `Pay KSh ${quote.amountKes.toLocaleString("en-KE")} & generate` : "Price unavailable"}</button>
+          <p className="mt-3 text-center text-xs leading-5 text-neutral-500">Video generation starts only after SokoLink verifies successful M-Pesa payment. Paid generation failures are flagged for refund review.</p>
         </>}
       </section>
 
@@ -133,7 +155,7 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
     </div>
 
     <section className="rounded-[26px] border border-neutral-200 bg-white p-5 shadow-sm sm:p-7"><div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><h2 className="text-lg font-semibold">Recent projects</h2><p className="mt-1 text-sm text-neutral-500">Your generated videos and live rendering status.</p></div><span className="rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-neutral-600">{history.length} {history.length === 1 ? "project" : "projects"}</span></div>
-      {!history.length ? <div className="rounded-2xl border border-dashed border-neutral-200 p-8 text-center"><Clapperboard className="mx-auto mb-2 text-neutral-400" size={24}/><p className="text-sm text-neutral-500">Your saved projects will appear here.</p></div> : <div className="divide-y divide-neutral-100">{history.map((p) => { const projectShop = shops.find((s) => s.username === p.shop); const projectProduct = projectShop?.products.find((x) => x.title === p.product); return <article key={p.id} className="flex items-center gap-3 py-4 sm:gap-4"><div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-neutral-100">{p.scope === "PRODUCT" && projectProduct?.image ? <img src={projectProduct.image} alt="" className="h-full w-full object-cover"/> : <div className="flex h-full items-center justify-center"><Avatar src={projectShop?.profileImageUrl} label={p.shop} size="sm"/></div>}</div><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{p.title}</p><p className="mt-1 line-clamp-2 text-xs text-neutral-500">@{p.shop} · {p.scope === "STORE" ? "Whole shop" : p.product || "Product"} · {p.duration}s · {new Date(p.createdAt).toLocaleDateString()}</p></div><div className="flex shrink-0 flex-col items-end gap-2"><span className={"rounded-full px-3 py-1.5 text-[10px] font-semibold " + (p.status === "READY" ? "bg-emerald-50 text-emerald-700" : p.status === "FAILED" ? "bg-red-50 text-red-700" : "bg-neutral-100 text-neutral-700")}>{p.status === "PROCESSING" ? "GENERATING" : p.status.replaceAll("_", " ")}</span>{p.videoUrl && <a href={p.videoUrl} target="_blank" rel="noreferrer" className="text-xs font-semibold text-neutral-900 underline underline-offset-4">Preview / download</a>}{p.status === "FAILED" && p.errorMessage && <span title={p.errorMessage} className="max-w-40 text-right text-[10px] text-red-600">Generation failed</span>}</div></article>; })}</div>}
+      {!history.length ? <div className="rounded-2xl border border-dashed border-neutral-200 p-8 text-center"><Clapperboard className="mx-auto mb-2 text-neutral-400" size={24}/><p className="text-sm text-neutral-500">Your saved projects will appear here.</p></div> : <div className="divide-y divide-neutral-100">{history.map((p) => { const projectShop = shops.find((s) => s.username === p.shop); const projectProduct = projectShop?.products.find((x) => x.title === p.product); return <article key={p.id} className="flex items-center gap-3 py-4 sm:gap-4"><div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-neutral-100">{p.scope === "PRODUCT" && projectProduct?.image ? <img src={projectProduct.image} alt="" className="h-full w-full object-cover"/> : <div className="flex h-full items-center justify-center"><Avatar src={projectShop?.profileImageUrl} label={p.shop} size="sm"/></div>}</div><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{p.title}</p><p className="mt-1 line-clamp-2 text-xs text-neutral-500">@{p.shop} · {p.scope === "STORE" ? "Whole shop" : p.product || "Product"} · {p.duration}s · {new Date(p.createdAt).toLocaleDateString()}{p.payment ? ` · KSh ${p.payment.amountKes} · payment ${p.payment.status.toLowerCase().replaceAll("_", " ")}` : ""}</p></div><div className="flex shrink-0 flex-col items-end gap-2"><span className={"rounded-full px-3 py-1.5 text-[10px] font-semibold " + (p.status === "READY" ? "bg-emerald-50 text-emerald-700" : p.status === "FAILED" ? "bg-red-50 text-red-700" : "bg-neutral-100 text-neutral-700")}>{p.status === "PROCESSING" ? "GENERATING" : p.status.replaceAll("_", " ")}</span>{p.videoUrl && <a href={p.videoUrl} target="_blank" rel="noreferrer" className="text-xs font-semibold text-neutral-900 underline underline-offset-4">Preview / download</a>}{p.payment?.status === "REFUND_PENDING" && <span className="max-w-40 text-right text-[10px] font-medium text-amber-700">Refund review pending</span>}{p.status === "FAILED" && p.errorMessage && <span title={p.errorMessage} className="max-w-40 text-right text-[10px] text-red-600">Generation failed</span>}</div></article>; })}</div>}
     </section>
   </div>;
 }
