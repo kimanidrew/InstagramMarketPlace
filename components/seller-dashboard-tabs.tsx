@@ -34,7 +34,8 @@ export function SellerDashboardTabs({ analyticsConnections, growthConnections, i
 
   return <section className="seller-dashboard-tabs">
     <div className="seller-dashboard-tab-list" role="tablist" aria-label="Shop dashboard sections">
-      <Link href="/account/promotion-studio" className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium hover:border-neutral-400"><Clapperboard size={16}/> AI Promotion Studio</Link>\n      <Link href="/account/analytics?tab=analytics" role="tab" id="shop-analytics-tab" aria-selected={activeTab === "analytics"} aria-controls="shop-analytics-panel" className={activeTab === "analytics" ? "active" : ""}>
+      <Link href="/account/promotion-studio" className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium hover:border-neutral-400"><Clapperboard size={16}/> AI Promotion Studio</Link>
+      <Link href="/account/analytics?tab=analytics" role="tab" id="shop-analytics-tab" aria-selected={activeTab === "analytics"} aria-controls="shop-analytics-panel" className={activeTab === "analytics" ? "active" : ""}>
         <Activity size={16}/> Analytics
       </Link>
       <Link href="/account/analytics?tab=store-growth" role="tab" id="shop-growth-tab" aria-selected={activeTab === "growth"} aria-controls="shop-growth-panel" className={activeTab === "growth" ? "active" : ""}>
