@@ -57,7 +57,7 @@ export function createR2SignedUrl(key: string, method: "GET" | "PUT" = "GET", ex
 
 export async function uploadR2Object(key: string, body: Buffer, contentType: string) {
   const signed = createR2SignedUrl(key, "PUT", 900, contentType);
-  const response = await fetch(signed.url, { method: "PUT", headers: { ...signed.headers, "content-length": String(body.byteLength) }, body: body as unknown as BodyInit });
+  const response = await fetch(signed.url, { method: "PUT", headers: { ...signed.headers, "content-length": String(body.byteLength) }, body: body as unknown as BodyInit, signal: AbortSignal.timeout(60_000) });
   if (!response.ok) throw new Error(`Object storage upload failed with status ${response.status}`);
 }
 
