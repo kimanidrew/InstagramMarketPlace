@@ -81,6 +81,7 @@ export async function POST(request: Request) {
   let quote;
   try { quote = await quoteAiPromotionPrice(durationSeconds, generateAudio); }
   catch (e) { return NextResponse.json({ error: e instanceof Error ? e.message : "Could not calculate price." }, { status: 400 }); }
+  if (!Number.isInteger(b.expectedAmountKes) || Number(b.expectedAmountKes) !== quote.amountKes) return NextResponse.json({ error: "The price changed since the preview. Review the updated amount before paying.", quote }, { status: 409 });
   const title = (scope === "STORE" ? "Shop promotion" : product?.productTitle || "Product promotion") + " · @" + shop.username;
   let project;
   try {
@@ -96,7 +97,7 @@ export async function POST(request: Request) {
   try {
     const stk = await initiateMpesaStk({ phoneNumber, amountKes: quote.amountKes, accountReference: project.id, description: "SokoLink AI video" });
     await p.aiPromotionPayment.update({ where: { id: payment.id }, data: { status: "PENDING", merchantRequestId: stk.merchantRequestId, checkoutRequestId: stk.checkoutRequestId } });
-    return NextResponse.json({ project, payment: { id: payment.id, status: "PENDING", amountKes: quote.amountKes, currency: "KES", customerMessage: stk.customerMessage }, message: "Approve the M-Pesa prompt on your phone. Video generation starts only after payment is confirmed." }, { status: 202 });
+    return NextResponse.json({ project, payment: { id: payment.id, status: "PENDING", amountKes: quote.amountKes, currency: "KES", customerMessage: stk.customerMessage }, message: `M-Pesa prompt sent for KSh ${quote.amountKes.toLocaleString("en-KE")}. Approve it on your phone; video generation starts only after payment is confirmed.` }, { status: 202 });
   } catch (e) {
     const message = e instanceof Error ? e.message.slice(0, 350) : "Could not initiate M-Pesa payment.";
     await p.aiPromotionPayment.update({ where: { id: payment.id }, data: { status: "FAILED", resultDescription: message } });
