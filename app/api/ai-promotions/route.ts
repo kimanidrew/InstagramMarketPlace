@@ -54,9 +54,9 @@ export async function POST(request: Request) {
   const p = db();
   const c = await p.instagramConnection.findFirst({ where: { id: connectionId, connectedByUserId: current.id }, select: { id: true, username: true, profileImageUrl: true } });
   if (!c) return NextResponse.json({ error: "That shop is not connected to your account." }, { status: 404 });
-  let selectedProduct: { id: string; productTitle: string | null; mediaUrl: string | null; thumbnailUrl: string | null; caption: string | null } | null = null;
+  let selectedProduct: { id: string; productTitle: string | null; mediaUrl: string | null; thumbnailUrl: string | null; caption: string | null; mediaType: string } | null = null;
   if (scope === "PRODUCT") {
-    selectedProduct = await p.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, caption: true } });
+    selectedProduct = await p.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, caption: true, mediaType: true } });
     if (!selectedProduct) return NextResponse.json({ error: "Selected product is not an eligible listing with media." }, { status: 404 });
   }
   const old = await p.aiPromotionProject.findUnique({ where: { userId_idempotencyKey: { userId: current.id, idempotencyKey } }, select: { id: true, title: true, status: true, createdAt: true } });
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
   const title = (scope === "STORE" ? "Shop promotion" : selectedProduct?.productTitle || "Product promotion") + " · @" + c.username;
   const project = await p.aiPromotionProject.create({ data: { userId: current.id, connectionId, postId: scope === "PRODUCT" ? postId : null, title, scope, mode, durationSeconds, prompt, status: "PROCESSING", idempotencyKey, provider: "fal.ai/kling-video-v3-pro", jobs: { create: { status: "PROCESSING", maxAttempts: 3, attempts: 1, workerId: "fal-submit" } } }, select: { id: true, title: true, status: true, createdAt: true } });
   try {
-    const imageUrl = scope === "PRODUCT" ? selectedProduct?.thumbnailUrl || selectedProduct?.mediaUrl : c.profileImageUrl || selectedProduct?.thumbnailUrl || selectedProduct?.mediaUrl;
+    let imageUrl = scope === "PRODUCT" ? selectedProduct?.thumbnailUrl || (selectedProduct?.mediaType === "IMAGE" ? selectedProduct.mediaUrl : null) : c.profileImageUrl;\n    if (scope === "STORE" && !imageUrl) {\n      const featured = await p.instagramPost.findFirst({ where: { connectionId, isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: "IMAGE", mediaUrl: { not: null } }] }, orderBy: { timestamp: "desc" }, select: { thumbnailUrl: true, mediaUrl: true, mediaType: true } });\n      imageUrl = featured?.thumbnailUrl || (featured?.mediaType === "IMAGE" ? featured.mediaUrl : null);\n    }
     if (!imageUrl) throw new Error("This shop needs a public profile image, or choose a product with a public image.");
     const submitted = await submitPromotionVideo({ imageUrl, prompt, durationSeconds, title, shopUsername: c.username, productTitle: selectedProduct?.productTitle });
     await p.aiPromotionProject.update({ where: { id: project.id }, data: { provider: submitted.provider, providerJobId: submitted.requestId } });
