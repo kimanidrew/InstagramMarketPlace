@@ -27,6 +27,21 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
   const products = shop?.products || [];
   const product = useMemo(() => products.find((p) => p.id === postId), [products, postId]);
 
+  useEffect(() => {
+    let alive = true;
+    const refresh = async () => {
+      try {
+        const response = await fetch("/api/ai-promotions", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (alive && Array.isArray(data.projects)) setHistory(data.projects);
+      } catch { /* Keep the last known state while temporarily offline. */ }
+    };
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 6000);
+    return () => { alive = false; window.clearInterval(timer); };
+  }, []);
+
   async function submit() {
     setBusy(true); setMessage(null);
     try {
