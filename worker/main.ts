@@ -249,14 +249,45 @@ async function processJob(jobId: string) {
     }
     const key = safeAssetKey(campaign.id, `promotion-${campaign.width}x${campaign.height}-${Date.now()}.mp4`);
     await uploadR2Object(key, output, "video/mp4");
-    await prisma.$transaction(async (tx) => {
+    let thumbnailKey: string | null = null;
+    let thumbnailBytes: Buffer | null = null;
+    try {
+      const thumbnailPath = path.join(directory, "thumbnail.jpg");
+      await execFileAsync(process.env.AI_PROMOTION_FFMPEG_PATH || "ffmpeg", [
+        "-y", "-ss", String(Math.min(2, Math.max(0, campaign.durationSeconds - 1))), "-i", outputPath,
+        "-frames:v", "1", "-vf", "scale=480:-2", "-q:v", "3", thumbnailPath,
+      ], { timeout: 30_000, maxBuffer: 1024 * 1024 });
+      thumbnailBytes = await readFile(thumbnailPath);
+      if (thumbnailBytes.byteLength > 0) {
+        thumbnailKey = safeAssetKey(campaign.id, "thumbnail-" + Date.now() + ".jpg");
+        await uploadR2Object(thumbnailKey, thumbnailBytes, "image/jpeg");
+      }
+    } catch (error) {
+      console.warn("AI promotion thumbnail generation failed", { campaignId: campaign.id, error: error instanceof Error ? error.message : "unknown" });
+    }
+    const completed = await prisma.$transaction(async (tx) => {
+      const updated = await tx.aiPromotionCampaign.updateMany({
+        where: { id: campaign.id, status: { not: "CANCELLED" } },
+        data: { status: "COMPLETED", progress: 100, outputKey: key, thumbnailKey, completedAt: new Date(), errorCode: null, errorMessage: null },
+      });
+      if (updated.count !== 1) {
+        await tx.aiPromotionJob.update({ where: { id: job.id }, data: { status: "CANCELLED", stage: "cancelled", leaseExpiresAt: null } });
+        return false;
+      }
       await tx.aiPromotionAsset.create({
         data: { campaignId: campaign.id, type: "RENDERED_VIDEO", objectKey: key, mimeType: "video/mp4", sizeBytes: BigInt(output.byteLength), width: campaign.width, height: campaign.height, durationSeconds: campaign.durationSeconds, metadata: { mode: campaign.mode, renderedWithCinematic: usedCinematic } },
       });
-      await tx.aiPromotionCampaign.update({ where: { id: campaign.id }, data: { status: "COMPLETED", progress: 100, outputKey: key, completedAt: new Date(), errorCode: null, errorMessage: null } });
+      if (thumbnailKey && thumbnailBytes) await tx.aiPromotionAsset.create({
+        data: { campaignId: campaign.id, type: "THUMBNAIL", objectKey: thumbnailKey, mimeType: "image/jpeg", sizeBytes: BigInt(thumbnailBytes.byteLength), width: 480, metadata: { generatedBy: "ffmpeg" } },
+      });
       await tx.aiPromotionScene.updateMany({ where: { campaignId: campaign.id }, data: { status: "READY", errorCode: null } });
       await tx.aiPromotionJob.update({ where: { id: job.id }, data: { status: "SUCCEEDED", stage: "completed", leaseExpiresAt: null, errorCode: null, errorMessage: null } });
+      return true;
     });
+    if (!completed) {
+      await settleReservedCredit(campaign.id, "RELEASE");
+      return;
+    }
     await settleReservedCredit(campaign.id, usedCinematic ? "CHARGE" : "RELEASE");
   } finally {
     await rm(directory, { recursive: true, force: true }).catch(() => {});
