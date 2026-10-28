@@ -76,7 +76,7 @@ async function renderVideo(input: {
   ];
   if (!input.sourceIsVideo) baseFilters.splice(2, 0, `zoompan=z='min(zoom+0.0008,1.12)':d=${input.durationSeconds * 30}:s=${input.width}x${input.height}:fps=30`);
   const args = input.sourceIsVideo
-    ? ["-y", "-i", input.sourcePath, "-vf", baseFilters.join(","), "-t", String(input.durationSeconds), "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p", "-movflags", "+faststart", input.outputPath]
+    ? ["-y", "-stream_loop", "-1", "-i", input.sourcePath, "-vf", baseFilters.join(","), "-t", String(input.durationSeconds), "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p", "-movflags", "+faststart", input.outputPath]
     : ["-y", "-loop", "1", "-framerate", "30", "-i", input.sourcePath, "-vf", baseFilters.join(","), "-t", String(input.durationSeconds), "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p", "-movflags", "+faststart", input.outputPath];
   await execFileAsync(process.env.AI_PROMOTION_FFMPEG_PATH || "ffmpeg", args, { timeout: Math.max(180_000, input.durationSeconds * 30_000), maxBuffer: 8 * 1024 * 1024 });
 }
@@ -212,7 +212,7 @@ async function processJob(jobId: string) {
     const outputPath = path.join(directory, "final.mp4");
     let renderSource = sourcePath;
     let renderSourceIsVideo = sourceIsVideo;
-    const canUseCinematic = campaign.scope === "PRODUCT" && campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds <= 30;
+    const canUseCinematic = campaign.scope === "PRODUCT" && campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds <= 30 && !sourceIsVideo;
 
     if (canUseCinematic && !(await reserveProviderBudget(campaign.id, job.id, campaign.durationSeconds))) {
       await completeMotionFallback(campaign.id, job.id, "The cinematic daily budget limit was reached; motion rendering was used.");
