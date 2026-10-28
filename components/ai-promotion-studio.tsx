@@ -200,7 +200,7 @@ export function AiPromotionStudio({ connections }: Props) {
                   {selectedProduct.image ? <img src={selectedProduct.image} alt="" /> : <div className="ai-promo-source-placeholder"><Film size={22}/></div>}
                   <div><span>SELECTED SOURCE</span><strong>{selectedProduct.title}</strong><small>Actual listing media will be used in the render.</small></div>
                 </div>}
-                {scope === "STORE" && <div className="ai-promo-store-note"><Store size={19}/><span>Your campaign will use the selected store identity and its eligible product imagery.</span></div>}
+                {scope === "STORE" && <div className="ai-promo-store-note"><Store size={19}/><span>Your campaign will use a multi-product motion montage with the selected store identity. Cinematic generation is currently reserved for individual product campaigns.</span></div>}
 
                 <label className="ai-promo-label">Creative direction
                   <textarea value={prompt} onChange={(event) => setPrompt(event.target.value)} maxLength={1600} rows={4} required />
