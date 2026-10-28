@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertCircle, CheckCircle2, Clapperboard, LoaderCircle, Play, Sparkles, Store, WandSparkles } from "lucide-react";
 
 type Product = { id: string; title: string; image: string | null };
@@ -23,6 +23,8 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
   const [quote, setQuote] = useState<PriceQuote | null>(null);
   const [quoteError, setQuoteError] = useState("");
   const [paymentPending, setPaymentPending] = useState(false);
+  const submittingRef = useRef(false);
+  const requestKeyRef = useRef("");
   const [shopId, setShopId] = useState(shops[0]?.id || "");
   const [postId, setPostId] = useState(shops[0]?.products[0]?.id || "");
   const [prompt, setPrompt] = useState(DEFAULT_PROMPT);
@@ -58,18 +60,21 @@ export function PromotionStudio({ shops, history: initial }: { shops: Shop[]; hi
   }, [duration, generateAudio]);
 
   async function submit() {
-    if (busy || paymentPending) return;
+    if (submittingRef.current || paymentPending) return;
+    submittingRef.current = true;
+    if (!requestKeyRef.current) requestKeyRef.current = crypto.randomUUID();
     setBusy(true); setMessage(null);
     try {
-      const idempotencyKey = crypto.randomUUID();
+      const idempotencyKey = requestKeyRef.current;
       const r = await fetch("/api/ai-promotions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scope, mode, durationSeconds: Number(duration), connectionId: shopId, postId: scope === "PRODUCT" ? postId : null, prompt, generateAudio, phoneNumber, idempotencyKey }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "Could not start payment");
       setHistory((h) => [{ id: d.project.id, title: d.project.title, shop: shop?.username || "", product: scope === "PRODUCT" ? product?.title || null : null, scope, mode, duration: Number(duration), status: d.project.status, createdAt: new Date().toISOString(), videoReady: false, payment: d.payment ? { status: d.payment.status, amountKes: d.payment.amountKes, phoneNumber } : null }, ...h.filter((p) => p.id !== d.project.id)]);
       setPaymentPending(d.payment?.status === "PENDING" || d.payment?.status === "INITIATED");
+      requestKeyRef.current = "";
       setMessage({ ok: true, text: d.message || d.payment?.customerMessage || "Approve the M-Pesa prompt on your phone. Generation starts only after payment confirmation." });
     } catch (e) { setMessage({ ok: false, text: e instanceof Error ? e.message : "Request failed" }); }
-    finally { setBusy(false); }
+    finally { submittingRef.current = false; setBusy(false); }
   }
 
   const inputClass = "w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-3 text-sm outline-none transition focus:border-neutral-500 focus:ring-2 focus:ring-neutral-100";
