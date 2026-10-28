@@ -11,7 +11,7 @@ import {
   isPromotionScope,
   validatePrompt,
 } from "@/lib/ai-promotions/contracts";
-import { maxActiveCampaigns } from "@/lib/ai-promotions/policy";
+import { cinematicProviderEnabled, maxActiveCampaigns } from "@/lib/ai-promotions/policy";
 
 export const dynamic = "force-dynamic";
 
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
   const providerReady = cinematicProviderEnabled();
   let wallet = await prisma.aiPromotionCreditWallet.findUnique({ where: { userId: current.id } });
   if (!wallet) {
-    const starterCredits = Math.max(0, Math.min(20, Number(process.env.AI_PROMOTION_STARTER_CREDITS || 2) || 0));
+    const starterCredits = Math.max(0, Math.min(20, Number(process.env.AI_PROMOTION_STARTER_CREDITS || 1) || 0));
     try {
       wallet = await prisma.$transaction(async (tx) => {
         const created = await tx.aiPromotionCreditWallet.create({ data: { userId: current.id, availableCredits: starterCredits, lifetimeGranted: starterCredits } });
