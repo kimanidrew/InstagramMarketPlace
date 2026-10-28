@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     select: {
       id: true, scope: true, mode: true, status: true, durationSeconds: true,
       width: true, height: true, prompt: true, progress: true, errorCode: true,
-      createdAt: true, updatedAt: true, completedAt: true, outputKey: true,
+      createdAt: true, updatedAt: true, completedAt: true, outputKey: true, thumbnailKey: true,
       connection: { select: { username: true, name: true, profileImageUrl: true } },
       post: { select: { id: true, productTitle: true, thumbnailUrl: true, mediaUrl: true } },
     },
@@ -40,6 +40,7 @@ export async function GET(request: Request) {
   const items = campaigns.slice(0, limit).map(({ outputKey, ...campaign }) => ({
     ...campaign,
     hasOutput: Boolean(outputKey),
+    thumbnailUrl: campaign.thumbnailKey ? "/api/account/ai-promotions/" + campaign.id + "/thumbnail" : null,
     downloadUrl: campaign.status === "COMPLETED" && outputKey ? `/api/account/ai-promotions/${campaign.id}/download` : null,
   }));
   return NextResponse.json({ campaigns: items, nextCursor: hasMore ? campaigns[limit - 1]?.id : null });
