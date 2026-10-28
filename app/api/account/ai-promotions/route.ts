@@ -167,7 +167,7 @@ export async function POST(request: Request) {
         data: {
           userId: current.id, connectionId: connection.id, postId: selectedPost?.id ?? null,
           scope, mode, status: "QUEUED", durationSeconds, width: dimensions.width,
-          height: dimensions.height, frameRate: 30, prompt, sourceSnapshot: snapshot,
+          height: dimensions.height, frameRate: 30, prompt, sourceSnapshot: snapshot, storyboard: sceneDefinitions,
           progress: 0,
         },
       });
