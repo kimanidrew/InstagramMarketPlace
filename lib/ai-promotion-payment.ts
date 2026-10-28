@@ -12,6 +12,7 @@ export async function processMpesaCallback(payload: any) {
   const p = db();
   const payment = await p.aiPromotionPayment.findUnique({ where: { checkoutRequestId } });
   if (!payment) return { accepted: false, reason: "Unknown checkout request ID." };
+  if (payment.merchantRequestId && callback.MerchantRequestID && String(callback.MerchantRequestID) !== payment.merchantRequestId) return { accepted: false, reason: "Merchant request ID mismatch." };
   if (payment.status === "PAID" || payment.status === "REFUND_PENDING" || payment.status === "REFUNDED") return { accepted: true, duplicate: true };
   const resultCode = String(callback.ResultCode ?? "");
   const resultDescription = String(callback.ResultDesc || "M-Pesa payment did not complete.").slice(0, 350);
@@ -51,7 +52,6 @@ export async function processMpesaCallback(payload: any) {
   });
   if (!claimed.count) return { accepted: true, paid: true, duplicate: true };
 
-  let jobId: string | null = null;
   try {
     let imageUrl = project.scope === "PRODUCT" ? project.post?.thumbnailUrl || (project.post?.mediaType === "IMAGE" ? project.post.mediaUrl : null) : project.connection.profileImageUrl;
     if (project.scope === "STORE" && !imageUrl) {
