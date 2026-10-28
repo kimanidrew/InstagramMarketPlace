@@ -59,6 +59,7 @@ model User {
   recentlyViewedProducts RecentlyViewedProduct[]
   promotionCampaigns   PromotionCampaign[]
   aiPromotionProjects  AiPromotionProject[]
+  aiPromotionPayments  AiPromotionPayment[]
   notifications       Notification[]
 }
 
@@ -448,6 +449,7 @@ enum AiPromotionStatus {
   READY
   FAILED
   ARCHIVED
+  PENDING_PAYMENT
 }
 enum AiPromotionJobStatus {
   QUEUED
@@ -476,6 +478,7 @@ model AiPromotionProject {
   width           Int                 @default(1080)
   height          Int                 @default(1920)
   prompt          String
+  generateAudio   Boolean             @default(false)
   status          AiPromotionStatus   @default(DRAFT)
   idempotencyKey  String?
   provider        String?
@@ -490,6 +493,7 @@ model AiPromotionProject {
   post            InstagramPost?      @relation(fields: [postId], references: [id], onDelete: SetNull)
   jobs            AiPromotionJob[]
   assets          AiPromotionAsset[]
+  payments        AiPromotionPayment[]
 
   @@unique([userId, idempotencyKey])
   @@index([userId, createdAt])
@@ -530,4 +534,59 @@ model AiPromotionAsset {
   project     AiPromotionProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId, type])
+}
+
+
+enum AiPromotionPaymentStatus {
+  INITIATED
+  PENDING
+  PAID
+  FAILED
+  REFUND_PENDING
+  REFUNDED
+}
+
+model AiPromotionPricingConfig {
+  id                 String   @id @default("default")
+  usdKesRate         Float    @default(130)
+  marginPercent      Float    @default(35)
+  fixedFeeKes        Int      @default(20)
+  minPriceKes        Int      @default(250)
+  override10SilentKes Int?
+  override10AudioKes Int?
+  override15SilentKes Int?
+  override15AudioKes Int?
+  enabled            Boolean  @default(true)
+  updatedAt          DateTime @updatedAt
+  updatedBy          String?
+}
+
+model AiPromotionPayment {
+  id                 String                  @id @default(cuid())
+  userId             String
+  projectId          String
+  idempotencyKey     String?
+  providerCostUsd    Float
+  amountKes          Int
+  currency           String                  @default("KES")
+  phoneNumber        String
+  status             AiPromotionPaymentStatus @default(INITIATED)
+  priceSnapshot      Json
+  merchantRequestId  String?
+  checkoutRequestId  String?                 @unique
+  receiptNumber      String?                 @unique
+  resultCode         String?
+  resultDescription  String?
+  refundReference    String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  paidAt             DateTime?
+  refundedAt         DateTime?
+  user               User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project            AiPromotionProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, idempotencyKey])
+  @@index([userId, createdAt])
+  @@index([projectId, status])
+  @@index([status, createdAt])
 }
