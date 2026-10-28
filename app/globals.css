@@ -4690,7 +4690,7 @@ html, body {
   bottom:4px;
   height:2px;
   border-radius:999px;
-  background:linear-gradient(90deg,#ff5576 0%,#7657e8 100%);
+  background:#000;
   transform:scaleX(0);
   transform-origin:center;
   opacity:0;
