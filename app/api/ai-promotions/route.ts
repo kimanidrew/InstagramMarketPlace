@@ -49,7 +49,7 @@ export async function POST(request: Request) {
   const postId = typeof b.postId === "string" && b.postId ? b.postId : null;
   const prompt = typeof b.prompt === "string" ? b.prompt.trim() : "";
   const idempotencyKey = typeof b.idempotencyKey === "string" && b.idempotencyKey.length <= 120 ? b.idempotencyKey : randomUUID();
-  if (!connectionId || !scope || !mode || ![10, 15, 20, 30].includes(durationSeconds) || prompt.length < 12 || prompt.length > 1200) return NextResponse.json({ error: "Choose a shop, valid scope/mode/duration, and a 12–1,200 character prompt." }, { status: 400 });
+  if (!connectionId || !scope || !mode || ![10, 15].includes(durationSeconds) || prompt.length < 12 || prompt.length > 1200) return NextResponse.json({ error: "Choose a shop, valid scope/mode/duration, and a 12–1,200 character prompt." }, { status: 400 });
   if (scope === "PRODUCT" && !postId) return NextResponse.json({ error: "Choose a product." }, { status: 400 });
   const p = db();
   const c = await p.instagramConnection.findFirst({ where: { id: connectionId, connectedByUserId: current.id }, select: { id: true, username: true, profileImageUrl: true } });
