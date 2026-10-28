@@ -23,6 +23,7 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
     campaign: {
       ...campaign,
       outputKey: undefined,
+      assets: campaign.assets.map((asset) => ({ ...asset, sizeBytes: asset.sizeBytes === null ? null : asset.sizeBytes.toString() })),
       downloadUrl: campaign.status === "COMPLETED" && campaign.outputKey ? `/api/account/ai-promotions/${campaign.id}/download` : null,
     },
   });
