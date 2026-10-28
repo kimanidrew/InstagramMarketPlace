@@ -145,7 +145,7 @@ export default async function Admin({
             <h1>Marketplace management</h1>
             <p>Manage seller onboarding, review requests, and handle store growth from one organized workspace.</p>
           </div>
-          <Link href="/admin/instagram" className="admin-top-button">Instagram connections</Link>
+          <div className="flex flex-wrap gap-2"><Link href="/admin/ai-promotion-pricing" className="admin-top-button">AI video pricing</Link><Link href="/admin/instagram" className="admin-top-button">Instagram connections</Link></div>
         </header>
 
         <div className="admin-stats">
