@@ -9803,3 +9803,10 @@ nav.mobile-bottom-nav {
   pointer-events: auto !important;
 }
 
+/* Refined primary navbar labels */
+.site-header nav .nav-link{
+  text-transform:uppercase!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:.055em!important;
+}
