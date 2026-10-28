@@ -12,7 +12,7 @@ The seller-facing Studio is at `/account/promotion-studio`. When a seller clicks
 ## Provider, timing and cost
 
 - Generation starts as soon as the user submits; completion is asynchronous and may take seconds to a few minutes depending on provider queue/load.
-- The default 15-second Kling v3 Pro video with audio disabled is estimated at about **US$1.68 per generation** at the currently listed rate of US$0.112/second. Check fal.ai pricing before launch; rates and model availability can change. Failed/duplicate attempts may still incur provider charges.
+- Audio is optional via the **Generate video with audio** checkbox. When checked, the provider generates native audio; when unchecked, the video is silent. At the currently listed rates, a 15-second generation is estimated at **US$2.52 with audio** (US$0.168/second) or **US$1.68 without audio** (US$0.112/second). Check fal.ai pricing before launch; rates and model availability can change. Failed/duplicate attempts may still incur provider charges.
 - Kling image-to-video infers aspect ratio from the source image. The UI's vertical 9:16 setting is not a guarantee that every square source image will render vertically.
 - The current integration uses Kling v3 Pro for every creative mode selection. The Hybrid/Motion labels do not yet route to a separate free renderer.
 - The resulting MP4 URL is stored as the video asset's storage key and shown to the signed-in project owner. This first integration does **not** copy the MP4 into SokoLink-owned object storage; configure durable private object storage and a signed playback/download endpoint before promising long-term retention.
