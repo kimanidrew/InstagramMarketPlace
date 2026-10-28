@@ -1,4 +1,3 @@
-import "server-only";
 import type { PromotionMode } from "./contracts";
 
 export function cinematicProviderEnabled() {
