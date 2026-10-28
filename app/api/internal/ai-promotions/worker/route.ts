@@ -90,3 +90,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ processed: true, status: "FAILED", campaignId: job.campaignId, error: message }, { status: 200 });
   }
 }
+
+// Vercel Cron invokes routes with GET; external schedulers may use POST.
+export async function GET(request: Request) {
+  return POST(new Request(request.url, { method: "POST", headers: request.headers }));
+}

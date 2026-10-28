@@ -24,13 +24,13 @@ Run `npx prisma migrate deploy` after the migration has been committed, then `np
 
 ## Worker schedule
 
-The worker is an authenticated HTTP endpoint at `POST /api/internal/ai-promotions/worker`. Schedule it every minute from a trusted external scheduler, sending:
+The worker is an authenticated HTTP endpoint at `POST /api/internal/ai-promotions/worker`. Schedule it from a trusted external scheduler (ideally every minute while jobs are queued), sending:
 
 ```http
 Authorization: Bearer <AI_PROMOTION_WORKER_SECRET>
 ```
 
-It processes one due job per request. Repeated invocations start a prediction and poll its state. The worker secret must be kept private. Do not call this endpoint from browser code. A Vercel Cron can be used if the project's plan and cron limits permit it; otherwise use a trusted scheduler/worker service.
+It processes one due job per request. Repeated invocations start a prediction and poll its state. The worker secret must be kept private. Do not call this endpoint from browser code. Vercel Cron schedules are plan-limited and this repository has previously targeted the Hobby plan, so do not assume per-minute cron is available. Use a trusted scheduler or a separately deployed worker service for reliable polling. The endpoint supports GET (for cron services) and POST.
 
 ## Storage and production hardening
 
