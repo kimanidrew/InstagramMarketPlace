@@ -107,6 +107,54 @@ async function completeMotionFallback(campaignId: string, jobId: string, message
   await prisma.aiPromotionJob.update({ where: { id: jobId }, data: { stage: "rendering", provider: null, providerTaskId: null } });
 }
 
+async function renderStoreSlideshow(input: {
+  campaign: { id: string; durationSeconds: number; width: number; height: number };
+  snapshot: CampaignSnapshot;
+  firstProduct: SnapshotProduct;
+  firstSourcePath: string;
+  firstSourceIsVideo: boolean;
+  directory: string;
+  outputPath: string;
+}) {
+  const products = input.snapshot.products.filter((product) => product.imageUrl).slice(0, 4);
+  if (!products.length) throw new PermanentJobError("No eligible store product images were found.", "NO_SOURCE_IMAGE");
+  const scenes = await prisma.aiPromotionScene.findMany({
+    where: { campaignId: input.campaign.id },
+    orderBy: { position: "asc" },
+    select: { durationSeconds: true },
+  });
+  const sources = new Map<string, { path: string; isVideo: boolean }>();
+  sources.set(input.firstProduct.id, { path: input.firstSourcePath, isVideo: input.firstSourceIsVideo });
+  const segmentPaths: string[] = [];
+  for (let index = 0; index < scenes.length; index += 1) {
+    const product = products[index % products.length];
+    let source = sources.get(product.id);
+    if (!source) {
+      const media = await downloadSource(product.imageUrl!);
+      const extension = media.mime === "image/png" ? "png" : media.mime === "image/webp" ? "webp" : media.mime === "video/mp4" ? "mp4" : "jpg";
+      const sourcePath = path.join(input.directory, "store-source-" + index + "." + extension);
+      await writeFile(sourcePath, media.buffer);
+      source = { path: sourcePath, isVideo: media.mime.startsWith("video/") };
+      sources.set(product.id, source);
+    }
+    const segmentPath = path.join(input.directory, "store-segment-" + index + ".mp4");
+    await renderVideo({
+      directory: input.directory, sourcePath: source.path, outputPath: segmentPath,
+      title: product.title || "Discover our collection",
+      username: input.snapshot.connection.username,
+      width: input.campaign.width, height: input.campaign.height,
+      durationSeconds: scenes[index].durationSeconds, sourceIsVideo: source.isVideo,
+    });
+    segmentPaths.push(segmentPath);
+  }
+  const concatPath = path.join(input.directory, "segments.txt");
+  await writeFile(concatPath, segmentPaths.map((segment) => "file '" + segment.replace(/'/g, "") + "'").join("\n") + "\n", "utf8");
+  await execFileAsync(process.env.AI_PROMOTION_FFMPEG_PATH || "ffmpeg", [
+    "-y", "-f", "concat", "-safe", "0", "-i", concatPath,
+    "-c", "copy", "-movflags", "+faststart", input.outputPath,
+  ], { timeout: Math.max(180_000, input.campaign.durationSeconds * 30_000), maxBuffer: 8 * 1024 * 1024 });
+}
+
 async function reserveProviderBudget(campaignId: string, jobId: string, durationSeconds: number) {
   const operationKey = "runway:" + jobId;
   const existing = await prisma.aiPromotionProviderUsage.findUnique({ where: { operationKey } });
@@ -164,7 +212,7 @@ async function processJob(jobId: string) {
     const outputPath = path.join(directory, "final.mp4");
     let renderSource = sourcePath;
     let renderSourceIsVideo = sourceIsVideo;
-    const canUseCinematic = campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds <= 30;
+    const canUseCinematic = campaign.scope === "PRODUCT" && campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds <= 30;
 
     if (canUseCinematic && !(await reserveProviderBudget(campaign.id, job.id, campaign.durationSeconds))) {
       await completeMotionFallback(campaign.id, job.id, "The cinematic daily budget limit was reached; motion rendering was used.");
@@ -230,11 +278,18 @@ async function processJob(jobId: string) {
     }
     await prisma.aiPromotionCampaign.update({ where: { id: campaign.id }, data: { status: "RENDERING", progress: 70 } });
     await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { stage: "rendering", leaseExpiresAt: new Date(Date.now() + 20 * 60_000) } });
-    await renderVideo({
-      directory, sourcePath: renderSource, outputPath, title: product.title || "Discover something special",
-      username: snapshot?.connection?.username || campaign.connectionId, width: campaign.width,
-      height: campaign.height, durationSeconds: campaign.durationSeconds, sourceIsVideo: renderSourceIsVideo,
-    });
+    if (campaign.scope === "STORE" && !usedCinematic) {
+      await renderStoreSlideshow({
+        campaign, snapshot: snapshot!, firstProduct: product, firstSourcePath: sourcePath,
+        firstSourceIsVideo: sourceIsVideo, directory, outputPath,
+      });
+    } else {
+      await renderVideo({
+        directory, sourcePath: renderSource, outputPath, title: product.title || "Discover something special",
+        username: snapshot?.connection?.username || campaign.connectionId, width: campaign.width,
+        height: campaign.height, durationSeconds: campaign.durationSeconds, sourceIsVideo: renderSourceIsVideo,
+      });
+    }
     const probe = await execFileAsync(process.env.AI_PROMOTION_FFPROBE_PATH || "ffprobe", [
       "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height,codec_name",
       "-show_entries", "format=duration", "-of", "json", outputPath,
