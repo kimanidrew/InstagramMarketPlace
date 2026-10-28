@@ -3,7 +3,7 @@ import type { PromotionMode } from "./contracts";
 
 export function cinematicProviderEnabled() {
   return process.env.AI_PROMOTION_CINEMATIC_ENABLED === "true" &&
-    Boolean(process.env.AI_VIDEO_PROVIDER_URL && process.env.AI_VIDEO_PROVIDER_API_KEY);
+    Boolean(process.env.RUNWAYML_API_SECRET);
 }
 
 export function motionOnlyFallback(mode: PromotionMode) {
