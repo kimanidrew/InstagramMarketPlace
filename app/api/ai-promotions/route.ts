@@ -64,7 +64,11 @@ export async function POST(request: Request) {
   const title = (scope === "STORE" ? "Shop promotion" : selectedProduct?.productTitle || "Product promotion") + " · @" + c.username;
   const project = await p.aiPromotionProject.create({ data: { userId: current.id, connectionId, postId: scope === "PRODUCT" ? postId : null, title, scope, mode, durationSeconds, prompt, status: "PROCESSING", idempotencyKey, provider: "fal.ai/kling-video-v3-pro", jobs: { create: { status: "PROCESSING", maxAttempts: 3, attempts: 1, workerId: "fal-submit" } } }, select: { id: true, title: true, status: true, createdAt: true } });
   try {
-    let imageUrl = scope === "PRODUCT" ? selectedProduct?.thumbnailUrl || (selectedProduct?.mediaType === "IMAGE" ? selectedProduct.mediaUrl : null) : c.profileImageUrl;\n    if (scope === "STORE" && !imageUrl) {\n      const featured = await p.instagramPost.findFirst({ where: { connectionId, isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: "IMAGE", mediaUrl: { not: null } }] }, orderBy: { timestamp: "desc" }, select: { thumbnailUrl: true, mediaUrl: true, mediaType: true } });\n      imageUrl = featured?.thumbnailUrl || (featured?.mediaType === "IMAGE" ? featured.mediaUrl : null);\n    }
+    let imageUrl = scope === "PRODUCT" ? selectedProduct?.thumbnailUrl || (selectedProduct?.mediaType === "IMAGE" ? selectedProduct.mediaUrl : null) : c.profileImageUrl;
+    if (scope === "STORE" && !imageUrl) {
+      const featured = await p.instagramPost.findFirst({ where: { connectionId, isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: "IMAGE", mediaUrl: { not: null } }] }, orderBy: { timestamp: "desc" }, select: { thumbnailUrl: true, mediaUrl: true, mediaType: true } });
+      imageUrl = featured?.thumbnailUrl || (featured?.mediaType === "IMAGE" ? featured.mediaUrl : null);
+    }
     if (!imageUrl) throw new Error("This shop needs a public profile image, or choose a product with a public image.");
     const submitted = await submitPromotionVideo({ imageUrl, prompt, durationSeconds, title, shopUsername: c.username, productTitle: selectedProduct?.productTitle });
     await p.aiPromotionProject.update({ where: { id: project.id }, data: { provider: submitted.provider, providerJobId: submitted.requestId } });
