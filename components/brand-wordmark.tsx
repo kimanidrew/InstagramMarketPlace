@@ -15,7 +15,7 @@ export function BrandWordmark() {
   return (
     <span
       className="brand-wordmark"
-      style={{ backgroundImage: `linear-gradient(105deg, ${start}, ${end})`, fontFamily: `"${font}", sans-serif`, fontStyle: "italic", fontWeight: 800 }}
+      style={{ backgroundImage: `linear-gradient(105deg, ${start}, ${end})`, fontFamily: `"${font}", sans-serif`, fontStyle: "normal", fontWeight: 900 }}
     >
       {name}
     </span>
