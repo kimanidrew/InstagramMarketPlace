@@ -432,11 +432,36 @@ model WhatsAppMessage {
 
 
 // AI Promotion Studio creative projects are separate from paid placement campaigns.
-enum AiPromotionMode {\n  AI\n  MOTION\n  HYBRID\n}
-enum AiPromotionScope {\n  PRODUCT\n  STORE\n}
-enum AiPromotionStatus {\n  DRAFT\n  QUEUED\n  PROCESSING\n  READY\n  FAILED\n  ARCHIVED\n}
-enum AiPromotionJobStatus {\n  QUEUED\n  PROCESSING\n  SUCCEEDED\n  FAILED\n}
-enum AiPromotionAssetType {\n  SOURCE_IMAGE\n  GENERATED_IMAGE\n  VIDEO\n  POSTER\n  SCRIPT\n}
+enum AiPromotionMode {
+  AI
+  MOTION
+  HYBRID
+}
+enum AiPromotionScope {
+  PRODUCT
+  STORE
+}
+enum AiPromotionStatus {
+  DRAFT
+  QUEUED
+  PROCESSING
+  READY
+  FAILED
+  ARCHIVED
+}
+enum AiPromotionJobStatus {
+  QUEUED
+  PROCESSING
+  SUCCEEDED
+  FAILED
+}
+enum AiPromotionAssetType {
+  SOURCE_IMAGE
+  GENERATED_IMAGE
+  VIDEO
+  POSTER
+  SCRIPT
+}
 
 model AiPromotionProject {
   id              String              @id @default(cuid())
