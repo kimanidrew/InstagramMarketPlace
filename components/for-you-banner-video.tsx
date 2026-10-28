@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const BACKGROUND_VIDEO =
-  "https://videos.pexels.com/video-files/3195394/3195394-hd_1920_1080_25fps.mp4";
+  "https://videos.pexels.com/video-files/8306450/8306450-hd_1920_1080_25fps.mp4";
 
 export function ForYouBannerVideo() {
   const sectionRef = useRef<HTMLDivElement>(null);
