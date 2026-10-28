@@ -1,12 +1,20 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 type Config = {
   usdKesRate: number; marginPercent: number; fixedFeeKes: number; minPriceKes: number;
   override10SilentKes: number | null; override10AudioKes: number | null;
   override15SilentKes: number | null; override15AudioKes: number | null; enabled: boolean;
 };
-type Refund = { id: string; amountKes: number; phoneNumber: string; title: string; email: string; reason: string | null; createdAt: string };
+type Refund = {
+  id: string;
+  amountKes: number;
+  phoneNumber: string;
+  title: string;
+  email: string;
+  reason: string | null;
+  createdAt: string;
+};
 const defaults: Config = { usdKesRate: 130, marginPercent: 35, fixedFeeKes: 20, minPriceKes: 250, override10SilentKes: null, override10AudioKes: null, override15SilentKes: null, override15AudioKes: null, enabled: true };
 const fields: {key: keyof Config; label: string; hint: string; nullable?: boolean}[] = [
   {key:"usdKesRate",label:"USD → KSh exchange rate",hint:"Used to convert estimated fal.ai provider cost."},
@@ -28,7 +36,7 @@ export function AdminAiPromotionPricing() {
   useEffect(()=>{fetch("/api/admin/ai-promotion-pricing",{cache:"no-store"}).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(d.error||"Could not load pricing");setConfig({...defaults,...d.config});setPendingRefunds(d.pendingRefunds||[]);}).catch(e=>setNotice(e instanceof Error?e.message:"Could not load pricing")).finally(()=>setBusy(false));},[]);
   function change(key:keyof Config,value:string){setConfig(c=>({...c,[key]:value.trim()===""&&String(key).startsWith("override")?null:Number(value)}));}
   async function recordRefund(id:string){const refundReference=(refundRefs[id]||"").trim();if(!refundReference){setNotice("Enter the M-Pesa refund transaction reference first.");return;}try{const r=await fetch(`/api/admin/ai-promotion-payments/${id}/refund`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({refundReference})});const d=await r.json();if(!r.ok)throw new Error(d.error||"Could not record refund");setPendingRefunds(items=>items.filter(item=>item.id!==id));setNotice("Refund reconciliation recorded.");}catch(e){setNotice(e instanceof Error?e.message:"Could not record refund");}}
-  async function save(e:React.FormEvent){e.preventDefault();setSaving(true);setNotice("");try{const r=await fetch("/api/admin/ai-promotion-pricing",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(config)});const d=await r.json();if(!r.ok)throw new Error(d.error||"Could not save");setConfig({...defaults,...d.config});setNotice("Pricing settings saved.");}catch(e){setNotice(e instanceof Error?e.message:"Could not save settings");}finally{setSaving(false);}}
+  async function save(e:FormEvent<HTMLFormElement>){e.preventDefault();setSaving(true);setNotice("");try{const r=await fetch("/api/admin/ai-promotion-pricing",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(config)});const d=await r.json();if(!r.ok)throw new Error(d.error||"Could not save");setConfig({...defaults,...d.config});setNotice("Pricing settings saved.");}catch(e){setNotice(e instanceof Error?e.message:"Could not save settings");}finally{setSaving(false);}}
   return <main className="mx-auto max-w-3xl px-4 py-8"><a href="/admin" className="text-sm text-neutral-500 underline">← Admin dashboard</a><h1 className="mt-4 text-3xl font-semibold">AI Promotion Pricing</h1><p className="mt-2 text-sm leading-6 text-neutral-600">Configure the selling price used before M-Pesa checkout. Automatic pricing is provider cost × exchange rate, plus margin and operating fee, rounded up to the nearest KSh 10. A fixed override takes precedence for that duration/audio combination.</p>
   {busy?<p className="mt-8 text-sm text-neutral-500">Loading pricing…</p>:<form onSubmit={save} className="mt-6 space-y-5 rounded-2xl border border-neutral-200 bg-white p-5 sm:p-7">
     <label className="flex items-center justify-between gap-4 rounded-xl bg-neutral-50 p-4"><span><span className="block text-sm font-semibold">Accept new AI promotion payments</span><span className="mt-1 block text-xs text-neutral-500">Turn off to pause checkout while existing projects remain accessible.</span></span><input type="checkbox" checked={config.enabled} onChange={e=>setConfig(c=>({...c,enabled:e.target.checked}))} className="h-5 w-5 accent-black"/></label>
