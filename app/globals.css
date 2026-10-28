@@ -9807,6 +9807,6 @@ nav.mobile-bottom-nav {
 .site-header nav .nav-link{
   text-transform:uppercase!important;
   font-size:10px!important;
-  font-weight:500!important;
-  letter-spacing:.055em!important;
+  font-weight:600!important;
+  letter-spacing:.075em!important;
 }
