@@ -95,14 +95,13 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
               <article
                 data-recommendation-card
                 key={p.id}
-                className="absolute top-[90%] block w-[48%] max-w-[290px] -translate-y-1/2 sm:w-[47%] md:w-[48%] lg:w-[46%]"
+                className="absolute left-1/2 top-1/2 block w-[48%] max-w-[290px] sm:w-[47%] md:w-[48%] lg:w-[46%]"
                 style={{
-                  left: `calc(50% + ${x}%)`,
-                  transform: `translate(-50%, -50%) translateY(${y}px) rotate(${rotate}deg) scale(${scale})`,
+                  transform: `translate3d(calc(-50% + ${x * 3.2}px), calc(-50% + ${y}px), 0) rotate(${rotate}deg) scale(${scale})`,
                   opacity: visible ? (offset === 0 ? 1 : 0.72) : 0,
-                  zIndex: 2 - Math.abs(offset),
+                  zIndex: 10 - Math.abs(offset),
                   pointerEvents: offset === 0 ? "auto" : "none",
-                  transition: "transform 1200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 900ms cubic-bezier(0.16, 1, 0.3, 1)",
+                  transition: "transform 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 520ms ease",
                   willChange: "transform, opacity",
                 }}
               >
@@ -110,7 +109,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                   {isStore ? (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-[radial-gradient(circle_at_50%_15%,rgba(255,255,255,.95),transparent_38%),linear-gradient(145deg,#eeeaff,#fcecf7_55%,#e8e4ff)] px-5 text-center">
                       <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white shadow-[0_12px_30px_rgba(68,49,145,.18)] sm:h-28 sm:w-28">
-                        {image ? <img src={image} alt={p.username || "Store"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover" /> : <span className="text-3xl font-black text-[#6551c8]">{(p.name || p.username || "S").slice(0, 1).toUpperCase()}</span>}
+                        {image ? <img src={image} alt="" onError={(event) => event.currentTarget.remove()} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover" /> : <span className="text-3xl font-black text-[#6551c8]">{(p.name || p.username || "S").slice(0, 1).toUpperCase()}</span>}
                       </div>
                       <span className="mt-4 inline-flex items-center gap-1 rounded-full border border-white/80 bg-white/75 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[.14em] text-[#6551c8]"><Sparkles size={11} /> Discover store</span>
                       <p className="mt-2 line-clamp-1 max-w-full text-lg font-black tracking-tight text-[#201a3c] sm:text-xl">{p.name || "SokoLink Store"}</p>
@@ -118,7 +117,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
                       <p className="mt-2 text-[10px] font-medium text-[#716a8c]">{p._count?.posts || 0} listings</p>
                     </div>
                   ) : <>
-                    {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
+                    {image ? <img src={image} alt="" onError={(event) => event.currentTarget.remove()} loading={Math.abs(offset) > 1 ? "lazy" : "eager"} decoding="async" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#100d20]/95 via-[#100d20]/65 to-transparent px-4 pb-5 pt-20 text-white sm:px-5 sm:pb-6 sm:pt-24">
                       <p className="mb-2 inline-flex max-w-full items-center rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.13em] text-white/90 backdrop-blur-md sm:text-[10px]">{p.tags?.find(t => t.name.toLowerCase() !== "instamart")?.name || "Discover"}</p>
                       <p className="line-clamp-2 text-[15px] font-black leading-[1.2] tracking-[-.035em] drop-shadow-sm sm:text-xl md:text-[22px]">{p.productTitle || "Explore this find"}</p>
@@ -147,7 +146,7 @@ export function ForYouProductCarousel({ products, personalized, compact = false 
               <article data-recommendation-card key={p.id} className="w-[68%] min-w-[68%] snap-start sm:w-[36%] sm:min-w-[36%] md:w-[24%] md:min-w-[24%]">
                 <Link href={href} className="group block rounded-[20px] outline-none transition-transform duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-[#7564ff] focus-visible:ring-offset-2 sm:rounded-[24px]">
                   <div className="relative block aspect-[4/5] overflow-hidden rounded-[20px] bg-white sm:rounded-[24px]">
-                    {image ? <img src={image} alt={p.productTitle || "Recommended listing"} loading={index > 3 ? "lazy" : "eager"} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
+                    {image ? <img src={image} alt="" onError={(event) => event.currentTarget.remove()} loading={index > 3 ? "lazy" : "eager"} decoding="async" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" /> : <div className="flex h-full items-center justify-center text-xs text-[#999]">Discover this find</div>}
                     <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1.5 text-[9px] font-black text-[#222] backdrop-blur"><Sparkles size={11} /> {personalized ? "For you" : "Popular find"}</span>
                     <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/65 px-2 py-1.5 text-[10px] font-bold text-white backdrop-blur"><Heart size={12} /> {(p.instagramLikeCount || 0).toLocaleString()}</span>
                   </div>
