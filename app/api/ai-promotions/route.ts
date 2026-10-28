@@ -55,6 +55,17 @@ export async function POST(request: Request) {
   try { phoneNumber = normalizeMpesaPhone(typeof b.phoneNumber === "string" ? b.phoneNumber : ""); }
   catch (e) { return NextResponse.json({ error: e instanceof Error ? e.message : "Enter a valid M-Pesa phone number." }, { status: 400 }); }
   const p = db();
+  const pendingPayment = await p.aiPromotionPayment.findFirst({
+    where: { userId: current.id, status: { in: ["INITIATED", "PENDING"] } },
+    orderBy: { createdAt: "desc" },
+    include: { project: { select: { id: true, title: true, status: true } } },
+  });
+  if (pendingPayment) return NextResponse.json({
+    project: pendingPayment.project,
+    payment: { status: pendingPayment.status, amountKes: pendingPayment.amountKes },
+    reused: true,
+    message: "You already have an M-Pesa payment awaiting confirmation. Approve or cancel that prompt before starting another video.",
+  }, { status: 200 });
   const existing = await p.aiPromotionProject.findUnique({ where: { userId_idempotencyKey: { userId: current.id, idempotencyKey } }, include: { payments: { orderBy: { createdAt: "desc" }, take: 1 } } });
   if (existing) return NextResponse.json({ project: { id: existing.id, title: existing.title, status: existing.status }, payment: existing.payments[0] ? { status: existing.payments[0].status, amountKes: existing.payments[0].amountKes } : null, reused: true });
   const shop = await p.instagramConnection.findFirst({ where: { id: connectionId, connectedByUserId: current.id }, select: { id: true, username: true, profileImageUrl: true } });
