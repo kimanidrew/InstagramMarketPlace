@@ -58,6 +58,7 @@ model User {
   wishlistItems        WishlistItem[]
   recentlyViewedProducts RecentlyViewedProduct[]
   promotionCampaigns   PromotionCampaign[]
+  aiPromotionProjects  AiPromotionProject[]
   notifications       Notification[]
 }
 
@@ -97,6 +98,7 @@ model InstagramConnection {
   proUntil          DateTime?
   analyticsEvents   AnalyticsEvent[]
   promotionCampaigns PromotionCampaign[]
+  aiPromotionProjects AiPromotionProject[]
 
   @@index([connectedByUserId])
   @@unique([connectedByUserId, igUserId])
@@ -130,6 +132,7 @@ model InstagramPost {
   growthRequests        GrowthRequest[]
   analyticsEvents       AnalyticsEvent[]
   promotionCampaigns    PromotionCampaign[]
+  aiPromotionProjects   AiPromotionProject[]
   wishlistItems          WishlistItem[]
   recentlyViewedBy       RecentlyViewedProduct[]
 
@@ -425,4 +428,106 @@ model WhatsAppMessage {
 
   @@index([conversationId, createdAt])
   @@index([status, createdAt])
+}
+
+
+// AI Promotion Studio creative projects are separate from paid placement campaigns.
+enum AiPromotionMode {
+  AI
+  MOTION
+  HYBRID
+}
+enum AiPromotionScope {
+  PRODUCT
+  STORE
+}
+enum AiPromotionStatus {
+  DRAFT
+  QUEUED
+  PROCESSING
+  READY
+  FAILED
+  ARCHIVED
+}
+enum AiPromotionJobStatus {
+  QUEUED
+  PROCESSING
+  SUCCEEDED
+  FAILED
+}
+enum AiPromotionAssetType {
+  SOURCE_IMAGE
+  GENERATED_IMAGE
+  VIDEO
+  POSTER
+  SCRIPT
+}
+
+model AiPromotionProject {
+  id              String              @id @default(cuid())
+  userId          String
+  connectionId    String
+  postId          String?
+  title           String
+  scope           AiPromotionScope    @default(PRODUCT)
+  mode            AiPromotionMode     @default(HYBRID)
+  durationSeconds Int                 @default(15)
+  aspectRatio     String              @default("9:16")
+  width           Int                 @default(1080)
+  height          Int                 @default(1920)
+  prompt          String
+  status          AiPromotionStatus   @default(DRAFT)
+  idempotencyKey  String?
+  provider        String?
+  providerJobId   String?
+  errorCode       String?
+  errorMessage    String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  completedAt     DateTime?
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection      InstagramConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  post            InstagramPost?      @relation(fields: [postId], references: [id], onDelete: SetNull)
+  jobs            AiPromotionJob[]
+  assets          AiPromotionAsset[]
+
+  @@unique([userId, idempotencyKey])
+  @@index([userId, createdAt])
+  @@index([connectionId, status])
+  @@index([status, createdAt])
+}
+
+model AiPromotionJob {
+  id          String               @id @default(cuid())
+  projectId   String
+  status      AiPromotionJobStatus @default(QUEUED)
+  attempts    Int                  @default(0)
+  maxAttempts Int                  @default(3)
+  availableAt DateTime             @default(now())
+  lockedAt    DateTime?
+  workerId    String?
+  lastError   String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  project     AiPromotionProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([status, availableAt])
+  @@index([projectId, createdAt])
+}
+
+model AiPromotionAsset {
+  id          String               @id @default(cuid())
+  projectId   String
+  type        AiPromotionAssetType
+  storageKey  String
+  contentType String
+  width       Int?
+  height      Int?
+  durationMs  Int?
+  byteSize    BigInt?
+  metadata    Json?
+  createdAt   DateTime             @default(now())
+  project     AiPromotionProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, type])
 }
