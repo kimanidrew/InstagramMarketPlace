@@ -5,7 +5,11 @@ import { db } from "@/lib/prisma";
 export const runtime = "nodejs";
 export async function GET() {
   try { await admin(); } catch { return NextResponse.json({ error: "Admin access required." }, { status: 403 }); }
-  const [config, pendingRefunds] = await Promise.all([\n    getAiPromotionPricingConfig(),\n    db().aiPromotionPayment.findMany({ where: { status: "REFUND_PENDING" }, orderBy: { updatedAt: "asc" }, take: 100, include: { project: { select: { title: true } }, user: { select: { email: true } } } }),\n  ]);\n  return NextResponse.json({ config, pendingRefunds: pendingRefunds.map(p => ({ id: p.id, amountKes: p.amountKes, phoneNumber: p.phoneNumber, title: p.project.title, email: p.user.email, reason: p.resultDescription, createdAt: p.updatedAt })) });
+  const [config, pendingRefunds] = await Promise.all([
+    getAiPromotionPricingConfig(),
+    db().aiPromotionPayment.findMany({ where: { status: "REFUND_PENDING" }, orderBy: { updatedAt: "asc" }, take: 100, include: { project: { select: { title: true } }, user: { select: { email: true } } } }),
+  ]);
+  return NextResponse.json({ config, pendingRefunds: pendingRefunds.map(p => ({ id: p.id, amountKes: p.amountKes, phoneNumber: p.phoneNumber, title: p.project.title, email: p.user.email, reason: p.resultDescription, createdAt: p.updatedAt })) });
 }
 export async function PUT(request: Request) {
   let actor; try { actor = await admin(); } catch { return NextResponse.json({ error: "Admin access required." }, { status: 403 }); }
