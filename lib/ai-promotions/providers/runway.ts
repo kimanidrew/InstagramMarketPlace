@@ -1,4 +1,3 @@
-import "server-only";
 
 const RUNWAY_BASE_URL = "https://api.dev.runwayml.com/v1";
 const RUNWAY_VERSION = "2024-11-06";
