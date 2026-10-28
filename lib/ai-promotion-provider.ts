@@ -28,6 +28,7 @@ export async function submitPromotionVideo(input: {
   title: string;
   shopUsername: string;
   productTitle?: string | null;
+  generateAudio: boolean;
 }) {
   const url = new URL(input.imageUrl);
   if (url.protocol !== "https:") throw new Error("The selected shop or product image must be an HTTPS URL.");
@@ -43,7 +44,7 @@ export async function submitPromotionVideo(input: {
       start_image_url: input.imageUrl,
       prompt: creativePrompt.slice(0, 2400),
       duration: String(Math.min(15, Math.max(3, input.durationSeconds))),
-      generate_audio: false,
+      generate_audio: input.generateAudio,
       negative_prompt: "blurry, distorted product, warped packaging, extra objects, illegible text, watermark, low quality",
     }),
   });
