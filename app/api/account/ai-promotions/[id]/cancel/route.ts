@@ -12,8 +12,14 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
   if (!["DRAFT", "QUEUED", "PLANNING", "GENERATING", "RENDERING"].includes(campaign.status)) {
     return NextResponse.json({ error: "This promotion can no longer be cancelled." }, { status: 409 });
   }
+  let cancelled = false;
   await prisma.$transaction(async (tx) => {
-    await tx.aiPromotionCampaign.update({ where: { id }, data: { status: "CANCELLED", errorCode: null, errorMessage: null } });
+    const changed = await tx.aiPromotionCampaign.updateMany({
+      where: { id, userId: current.id, status: { in: ["DRAFT", "QUEUED", "PLANNING", "GENERATING", "RENDERING"] } },
+      data: { status: "CANCELLED", errorCode: null, errorMessage: null },
+    });
+    if (changed.count !== 1) return;
+    cancelled = true;
     await tx.aiPromotionJob.updateMany({ where: { campaignId: id, status: { in: ["QUEUED", "RUNNING", "RETRY_WAIT"] } }, data: { status: "CANCELLED", errorCode: "CANCELLED_BY_SELLER", leaseExpiresAt: null } });
     const reservationKey = "reserve:" + id;
     const releaseKey = "release:" + id;
@@ -32,5 +38,6 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
       }
     }
   });
+  if (!cancelled) return NextResponse.json({ error: "This promotion can no longer be cancelled." }, { status: 409 });
   return NextResponse.json({ ok: true, status: "CANCELLED" });
 }
