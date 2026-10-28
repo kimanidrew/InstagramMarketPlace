@@ -10,6 +10,7 @@ export function NavigationProgress() {
   const previousPath = useRef(pathname);
   const fallbackTimer = useRef<number | null>(null);
   const finishTimer = useRef<number | null>(null);
+  const navigationFallbackTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const clearTimers = () => {
@@ -17,6 +18,8 @@ export function NavigationProgress() {
       if (finishTimer.current !== null) window.clearTimeout(finishTimer.current);
       fallbackTimer.current = null;
       finishTimer.current = null;
+      if (navigationFallbackTimer.current !== null) window.clearTimeout(navigationFallbackTimer.current);
+      navigationFallbackTimer.current = null;
     };
 
     const start = () => {
@@ -44,9 +47,16 @@ export function NavigationProgress() {
       if (destination.origin !== window.location.origin) return;
       if (destination.pathname === window.location.pathname && destination.search === window.location.search) return;
 
-      // Observe navigation, but never take ownership of it. Next <Link> must
-      // handle its own router transition; plain anchors must retain native navigation.
+      // Observe navigation first. If a client-side transition started from /for-you
+      // stalls, fall back to a normal browser navigation to the same destination.
+      const sourcePath = window.location.pathname + window.location.search;
       start();
+      if (window.location.pathname === "/for-you") {
+        navigationFallbackTimer.current = window.setTimeout(() => {
+          const currentPath = window.location.pathname + window.location.search;
+          if (currentPath === sourcePath) window.location.assign(destination.href);
+        }, 1200);
+      }
     };
 
     const handlePopState = () => start();
@@ -64,6 +74,8 @@ export function NavigationProgress() {
   useEffect(() => {
     if (previousPath.current === pathname) return;
     previousPath.current = pathname;
+    if (navigationFallbackTimer.current !== null) window.clearTimeout(navigationFallbackTimer.current);
+    navigationFallbackTimer.current = null;
 
     if (!visible) return;
     if (fallbackTimer.current !== null) window.clearTimeout(fallbackTimer.current);
