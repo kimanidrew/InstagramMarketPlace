@@ -1,0 +1,36 @@
+name: AI Promotion Studio checks
+
+on:
+  push:
+    branches: [feature/ai-promotion-studio]
+  pull_request:
+    branches: [main]
+    paths:
+      - "app/account/ai-promotions/**"
+      - "app/api/account/ai-promotions/**"
+      - "components/ai-promotion-studio*"
+      - "lib/ai-promotions/**"
+      - "worker/**"
+      - "prisma/schema.prisma"
+      - "prisma/migrations/**"
+      - "tests/ai-promotions/**"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://sokolink:sokolink@localhost:5432/sokolink?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx prisma validate
+      - run: npx prisma generate
+      - run: npm run test:ai-promotions
+      - run: npx tsc --noEmit
+      - run: npm run build

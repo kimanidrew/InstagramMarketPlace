@@ -1,7 +1,8 @@
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { ChartNoAxesCombined } from "lucide-react";
+import { ChartNoAxesCombined, Clapperboard, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { SellerDashboardTabs } from "@/components/seller-dashboard-tabs";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,10 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <div><span className="seller-analytics-kicker"><ChartNoAxesCombined size={14}/> YOUR SELLER SPACE</span><h1>Grow your<br/><span>own shop.</span></h1><p>Understand your shop’s performance and take action from one place. Track marketplace activity, boost products, request verification, and explore Pro Seller tools.</p></div>
         <div className="seller-analytics-hero-art"><ChartNoAxesCombined size={35}/><span>Real activity.<br/><b>Smarter growth.</b></span></div>
       </section>
+      <div className="my-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#e7e2ee] bg-[#faf7ff] p-4 sm:p-5">
+        <div><span className="text-[10px] font-extrabold tracking-[.14em] text-[#8057b1]">NEW CREATIVE TOOL</span><h2 className="mt-1 text-base font-extrabold text-[#201b28]">Turn your products into promotional videos</h2><p className="mt-1 text-xs leading-5 text-[#716a7a]">Create a 15-second vertical ad for a product or your whole store.</p></div>
+        <Link href="/account/ai-promotions" className="inline-flex items-center gap-2 rounded-xl bg-[#17151b] px-4 py-3 text-xs font-bold text-white no-underline">Open AI Promotion Studio <Clapperboard size={15}/><ArrowRight size={14}/></Link>
+      </div>
       <SellerDashboardTabs analyticsConnections={analyticsConnections} growthConnections={growthConnections} initialShopId={initialShopId} initialPostId={initialPostId} initialTab={query.tab}/>
       <p className="seller-analytics-disclaimer">Analytics on this page measure activity recorded on Instagram Market. Instagram’s own reach and impressions are separate and are not included unless supported Instagram Insights data is connected.</p>
     </div>
