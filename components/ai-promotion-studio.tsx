@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import {
   ArrowDownToLine, ArrowLeft, ArrowRight, BadgeCheck, CheckCircle2, Clapperboard,
@@ -78,7 +78,7 @@ export function AiPromotionStudio({ connections }: Props) {
     setPostId(next?.products[0]?.id || "");
   };
 
-  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setNotice("");
