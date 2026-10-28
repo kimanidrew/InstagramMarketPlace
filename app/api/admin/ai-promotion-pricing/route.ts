@@ -21,8 +21,8 @@ export async function PUT(request: Request) {
   };
   try {
     const data = {
-      usdKesRate: num("usdKesRate", 50, 300), marginPercent: num("marginPercent", 0, 500),
-      fixedFeeKes: num("fixedFeeKes", 0, 10000, true), minPriceKes: num("minPriceKes", 1, 1000000, true),
+      usdKesRate: num("usdKesRate", 50, 300) as number, marginPercent: num("marginPercent", 0, 500) as number,
+      fixedFeeKes: num("fixedFeeKes", 0, 10000, true) as number, minPriceKes: num("minPriceKes", 1, 1000000, true) as number,
       override10SilentKes: num("override10SilentKes", 1, 1000000, true), override10AudioKes: num("override10AudioKes", 1, 1000000, true),
       override15SilentKes: num("override15SilentKes", 1, 1000000, true), override15AudioKes: num("override15AudioKes", 1, 1000000, true),
       enabled: b.enabled === true, updatedBy: actor.id,
