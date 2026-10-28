@@ -9810,3 +9810,13 @@ nav.mobile-bottom-nav {
   font-weight:600!important;
   letter-spacing:.075em!important;
 }
+
+
+/* Keep primary navbar links white on hover, focus, and active states. */
+.site-header nav .nav-link:hover,
+.site-header nav .nav-link:focus,
+.site-header nav .nav-link:focus-visible,
+.site-header nav .nav-link:active {
+  background: #fff !important;
+  color: #000 !important;
+}
