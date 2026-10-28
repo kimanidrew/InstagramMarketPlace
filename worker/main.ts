@@ -185,6 +185,12 @@ async function processJob(jobId: string) {
       await completeMotionFallback(campaign.id, job.id, campaign.mode === "MOTION" ? undefined : "Cinematic generation is not configured or this duration uses motion fallback.");
     }
 
+    const beforeRender = await prisma.aiPromotionCampaign.findUnique({ where: { id: campaign.id }, select: { status: true } });
+    if (beforeRender?.status === "CANCELLED") {
+      await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { status: "CANCELLED", leaseExpiresAt: null } });
+      await settleReservedCredit(campaign.id, "RELEASE");
+      return;
+    }
     await prisma.aiPromotionCampaign.update({ where: { id: campaign.id }, data: { status: "RENDERING", progress: 70 } });
     await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { stage: "rendering" } });
     await renderVideo({
@@ -192,8 +198,26 @@ async function processJob(jobId: string) {
       username: snapshot?.connection?.username || campaign.connectionId, width: campaign.width,
       height: campaign.height, durationSeconds: campaign.durationSeconds, sourceIsVideo: renderSourceIsVideo,
     });
+    const probe = await execFileAsync(process.env.AI_PROMOTION_FFPROBE_PATH || "ffprobe", [
+      "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height,codec_name",
+      "-show_entries", "format=duration", "-of", "json", outputPath,
+    ], { timeout: 20_000, maxBuffer: 1024 * 1024 });
+    let probeData: { streams?: Array<{ width?: number; height?: number; codec_name?: string }>; format?: { duration?: string } };
+    try { probeData = JSON.parse(probe.stdout) as typeof probeData; } catch { throw new PermanentJobError("The rendered video metadata could not be read.", "INVALID_RENDER_METADATA"); }
+    const videoStream = probeData.streams?.[0];
+    const actualDuration = Number(probeData.format?.duration || 0);
+    if (!videoStream || videoStream.width !== campaign.width || videoStream.height !== campaign.height ||
+        videoStream.codec_name !== "h264" || Math.abs(actualDuration - campaign.durationSeconds) > 1.5) {
+      throw new PermanentJobError("The rendered video does not match its declared output specifications.", "OUTPUT_SPEC_MISMATCH");
+    }
     const output = await readFile(outputPath);
     if (output.byteLength < 1000 || output.byteLength > MAX_VIDEO_BYTES) throw new PermanentJobError("The rendered video failed output-size validation.", "INVALID_RENDER_OUTPUT");
+    const beforeUpload = await prisma.aiPromotionCampaign.findUnique({ where: { id: campaign.id }, select: { status: true } });
+    if (beforeUpload?.status === "CANCELLED") {
+      await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { status: "CANCELLED", leaseExpiresAt: null } });
+      await settleReservedCredit(campaign.id, "RELEASE");
+      return;
+    }
     const key = safeAssetKey(campaign.id, `promotion-${campaign.width}x${campaign.height}-${Date.now()}.mp4`);
     await uploadR2Object(key, output, "video/mp4");
     await prisma.$transaction(async (tx) => {
