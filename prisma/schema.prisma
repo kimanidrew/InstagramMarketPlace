@@ -58,6 +58,9 @@ model User {
   wishlistItems        WishlistItem[]
   recentlyViewedProducts RecentlyViewedProduct[]
   promotionCampaigns   PromotionCampaign[]
+  aiPromotionCampaigns AiPromotionCampaign[]
+  aiPromotionCreditWallet AiPromotionCreditWallet?
+  aiPromotionCreditLedger AiPromotionCreditLedger[]
   notifications       Notification[]
 }
 
@@ -97,6 +100,7 @@ model InstagramConnection {
   proUntil          DateTime?
   analyticsEvents   AnalyticsEvent[]
   promotionCampaigns PromotionCampaign[]
+  aiPromotionCampaigns AiPromotionCampaign[]
 
   @@index([connectedByUserId])
   @@unique([connectedByUserId, igUserId])
@@ -130,6 +134,7 @@ model InstagramPost {
   growthRequests        GrowthRequest[]
   analyticsEvents       AnalyticsEvent[]
   promotionCampaigns    PromotionCampaign[]
+  aiPromotionCampaigns AiPromotionCampaign[]
   wishlistItems          WishlistItem[]
   recentlyViewedBy       RecentlyViewedProduct[]
 
@@ -240,6 +245,63 @@ enum AnalyticsEventType {
 enum PromotionTargetType {
   PRODUCT
   STORE
+}
+
+enum AiPromotionScope {
+  PRODUCT
+  STORE
+}
+
+enum AiPromotionMode {
+  MOTION
+  HYBRID
+  CINEMATIC
+}
+
+enum AiPromotionStatus {
+  DRAFT
+  QUEUED
+  PLANNING
+  GENERATING
+  RENDERING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AiPromotionJobStatus {
+  QUEUED
+  RUNNING
+  RETRY_WAIT
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+enum AiPromotionSceneStatus {
+  PENDING
+  GENERATING
+  READY
+  FAILED
+  SKIPPED
+}
+
+enum AiPromotionAssetType {
+  SOURCE_IMAGE
+  GENERATED_CLIP
+  RENDERED_VIDEO
+  THUMBNAIL
+  AUDIO
+  INTERMEDIATE
+}
+
+enum AiPromotionCreditEntryType {
+  GRANT
+  RESERVE
+  CHARGE
+  RELEASE
+  REFUND
+  ADJUSTMENT
 }
 
 enum OfferingCategory {
@@ -425,4 +487,177 @@ model WhatsAppMessage {
 
   @@index([conversationId, createdAt])
   @@index([status, createdAt])
+}
+
+
+// AI Promotion Studio campaigns are separate from marketplace reach/payment campaigns.
+model AiPromotionCampaign {
+  id              String             @id @default(cuid())
+  userId          String
+  connectionId    String
+  postId          String?
+  scope           AiPromotionScope
+  mode            AiPromotionMode    @default(HYBRID)
+  status          AiPromotionStatus  @default(DRAFT)
+  durationSeconds Int                @default(15)
+  width           Int                @default(1080)
+  height          Int                @default(1920)
+  frameRate       Int                @default(30)
+  prompt          String             @db.Text
+  sourceSnapshot  Json?
+  storyboard      Json?
+  outputKey       String?
+  thumbnailKey    String?
+  errorCode       String?
+  errorMessage    String?            @db.Text
+  progress        Int                @default(0)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  completedAt     DateTime?
+
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection      InstagramConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  post            InstagramPost?     @relation(fields: [postId], references: [id], onDelete: SetNull)
+  jobs            AiPromotionJob[]
+  scenes          AiPromotionScene[]
+  assets          AiPromotionAsset[]
+  usage            AiPromotionProviderUsage[]
+
+  @@index([userId, createdAt])
+  @@index([connectionId, status, createdAt])
+  @@index([status, updatedAt])
+}
+
+model AiPromotionJob {
+  id              String               @id @default(cuid())
+  campaignId      String
+  status          AiPromotionJobStatus  @default(QUEUED)
+  stage           String               @default("planning")
+  attempts        Int                  @default(0)
+  maxAttempts     Int                  @default(4)
+  idempotencyKey  String               @unique
+  leaseExpiresAt  DateTime?
+  nextAttemptAt   DateTime?
+  provider        String?
+  providerTaskId  String?
+  errorCode       String?
+  errorMessage    String?              @db.Text
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  campaign        AiPromotionCampaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  scenes          AiPromotionScene[]
+  usage           AiPromotionProviderUsage[]
+
+  @@index([status, nextAttemptAt])
+  @@index([leaseExpiresAt])
+  @@index([campaignId, createdAt])
+  @@index([provider, providerTaskId])
+}
+
+model AiPromotionScene {
+  id              String                 @id @default(cuid())
+  campaignId      String
+  jobId           String?
+  position        Int
+  startSeconds    Int
+  durationSeconds Int
+  title           String
+  prompt          String                 @db.Text
+  strategy        AiPromotionMode        @default(MOTION)
+  status          AiPromotionSceneStatus @default(PENDING)
+  sourceAssetKeys String[]               @default([])
+  outputAssetKey  String?
+  provider        String?
+  providerTaskId  String?
+  errorCode       String?
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  campaign        AiPromotionCampaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  job             AiPromotionJob?        @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  assets          AiPromotionAsset[]
+
+  @@unique([campaignId, position])
+  @@index([campaignId, status, position])
+  @@index([provider, providerTaskId])
+}
+
+model AiPromotionAsset {
+  id              String                 @id @default(cuid())
+  campaignId      String
+  sceneId         String?
+  type            AiPromotionAssetType
+  objectKey       String
+  mimeType        String
+  sizeBytes       BigInt?
+  width           Int?
+  height          Int?
+  durationSeconds Float?
+  metadata        Json?
+  createdAt       DateTime               @default(now())
+
+  campaign        AiPromotionCampaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  scene           AiPromotionScene?      @relation(fields: [sceneId], references: [id], onDelete: SetNull)
+
+  @@unique([campaignId, objectKey])
+  @@index([campaignId, type, createdAt])
+}
+
+model AiPromotionCreditWallet {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  availableCredits  Int      @default(0)
+  reservedCredits   Int      @default(0)
+  lifetimeGranted   Int      @default(0)
+  lifetimeConsumed  Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ledger            AiPromotionCreditLedger[]
+}
+
+model AiPromotionCreditLedger {
+  id              String                    @id @default(cuid())
+  userId          String
+  walletId        String
+  campaignId      String?
+  entryType       AiPromotionCreditEntryType
+  amount          Int
+  idempotencyKey  String                    @unique
+  description     String?
+  metadata        Json?
+  createdAt       DateTime                  @default(now())
+
+  user            User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet          AiPromotionCreditWallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([walletId, createdAt])
+  @@index([campaignId, createdAt])
+}
+
+model AiPromotionProviderUsage {
+  id                String               @id @default(cuid())
+  campaignId        String
+  jobId             String?
+  provider          String
+  model             String?
+  operationKey      String               @unique
+  inputSeconds      Int                  @default(0)
+  outputSeconds     Int                  @default(0)
+  estimatedCostUsd  Decimal              @default(0) @db.Decimal(12, 6)
+  actualCostUsd     Decimal?             @db.Decimal(12, 6)
+  status            String               @default("ESTIMATED")
+  providerRequestId String?
+  metadata          Json?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  campaign          AiPromotionCampaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  job               AiPromotionJob?      @relation(fields: [jobId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId, createdAt])
+  @@index([provider, status, createdAt])
 }
