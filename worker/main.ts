@@ -351,7 +351,14 @@ async function processJob(jobId: string) {
       await settleReservedCredit(campaign.id, "RELEASE");
       return;
     }
-    await settleReservedCredit(campaign.id, usedCinematic ? "CHARGE" : "RELEASE");
+    try {
+      await settleReservedCredit(campaign.id, usedCinematic ? "CHARGE" : "RELEASE");
+    } catch (error) {
+      console.error("AI promotion completed but credit settlement needs reconciliation", {
+        campaignId: campaign.id,
+        error: error instanceof Error ? error.message : "unknown",
+      });
+    }
   } finally {
     await rm(directory, { recursive: true, force: true }).catch(() => {});
   }
