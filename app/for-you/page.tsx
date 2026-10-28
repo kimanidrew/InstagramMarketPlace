@@ -151,7 +151,7 @@ export default async function ForYouPage() {
 
   return (
     <main className="min-h-screen w-full">
-      <section className="relative z-0 isolate grid min-h-0 w-full overflow-hidden border-b border-white/10 bg-black px-4 pb-0 pt-1 sm:px-6 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-1 md:px-8 md:pl-[52px] md:py-1 lg:px-10 lg:pl-[60px]">
+      <section className="relative z-0 isolate grid min-h-0 w-full overflow-hidden border-b border-white/10 bg-[rgba(0,0,0,0.4)] px-4 pb-0 pt-1 sm:px-6 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-1 md:px-8 md:pl-[52px] md:py-1 lg:px-10 lg:pl-[60px]">
         <ForYouBannerVideo />
         <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-28 h-64 w-64 rounded-full border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] blur-[1px] sm:h-80 sm:w-80" />
         <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-5 h-24 w-24 rounded-full bg-gradient-to-br from-white/10 to-white/[0.02] blur-2xl sm:h-36 sm:w-36" />
