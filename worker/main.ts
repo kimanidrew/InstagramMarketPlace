@@ -106,6 +106,32 @@ async function completeMotionFallback(campaignId: string, jobId: string, message
   await prisma.aiPromotionJob.update({ where: { id: jobId }, data: { stage: "rendering", provider: null, providerTaskId: null } });
 }
 
+async function reserveProviderBudget(campaignId: string, jobId: string, durationSeconds: number) {
+  const operationKey = "runway:" + jobId;
+  const existing = await prisma.aiPromotionProviderUsage.findUnique({ where: { operationKey } });
+  if (existing) return existing.status !== "FALLBACK" && existing.status !== "FAILED";
+  const model = process.env.RUNWAY_MODEL || "wan3";
+  const defaultRate = model === "wan3" ? 0.20 : 0.12;
+  const estimatedCost = Math.max(0, Number(process.env.AI_PROMOTION_CINEMATIC_ESTIMATED_COST_USD || (durationSeconds * defaultRate)));
+  const dailyCap = Math.max(0, Number(process.env.AI_PROMOTION_DAILY_PROVIDER_BUDGET_USD || 10));
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const usage = await prisma.aiPromotionProviderUsage.aggregate({
+    where: { createdAt: { gte: startOfDay }, status: { in: ["ESTIMATED", "COMPLETED"] } },
+    _sum: { estimatedCostUsd: true },
+  });
+  const committedSpend = Number(usage._sum.estimatedCostUsd || 0);
+  if (committedSpend + estimatedCost > dailyCap) return false;
+  await prisma.aiPromotionProviderUsage.create({
+    data: {
+      campaignId, jobId, provider: "runway", model, operationKey,
+      inputSeconds: durationSeconds, outputSeconds: durationSeconds,
+      estimatedCostUsd: estimatedCost, status: "ESTIMATED",
+    },
+  });
+  return true;
+}
+
 async function processJob(jobId: string) {
   const job = await prisma.aiPromotionJob.findUnique({ where: { id: jobId }, include: { campaign: true } });
   if (!job || job.status === "CANCELLED") return;
@@ -136,7 +162,9 @@ async function processJob(jobId: string) {
     let renderSourceIsVideo = sourceIsVideo;
     const canUseCinematic = campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds !== 30;
 
-    if (canUseCinematic) {
+    if (canUseCinematic && !(await reserveProviderBudget(campaign.id, job.id, campaign.durationSeconds))) {
+      await completeMotionFallback(campaign.id, job.id, "The cinematic daily budget limit was reached; motion rendering was used.");
+    } else if (canUseCinematic) {
       try {
         await prisma.aiPromotionCampaign.update({ where: { id: campaign.id }, data: { status: "GENERATING", progress: 20 } });
         await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { stage: "cinematic-generation", provider: "runway", providerTaskId } });
@@ -177,6 +205,7 @@ async function processJob(jobId: string) {
       } catch (error) {
         if (error instanceof RunwayTaskError && error.code === "PROVIDER_PENDING") throw error;
         console.warn("Cinematic generation failed; using motion fallback", { campaignId: campaign.id, code: error instanceof RunwayTaskError ? error.code : "PROVIDER_ERROR" });
+        await prisma.aiPromotionProviderUsage.updateMany({ where: { operationKey: "runway:" + job.id }, data: { status: providerTaskId ? "ESTIMATED" : "FALLBACK" } });
         usedCinematic = false;
         providerTaskId = null;
         await completeMotionFallback(campaign.id, job.id, "Cinematic generation was unavailable; motion rendering was used.");
@@ -192,7 +221,7 @@ async function processJob(jobId: string) {
       return;
     }
     await prisma.aiPromotionCampaign.update({ where: { id: campaign.id }, data: { status: "RENDERING", progress: 70 } });
-    await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { stage: "rendering" } });
+    await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { stage: "rendering", leaseExpiresAt: new Date(Date.now() + 20 * 60_000) } });
     await renderVideo({
       directory, sourcePath: renderSource, outputPath, title: product.title || "Discover something special",
       username: snapshot?.connection?.username || campaign.connectionId, width: campaign.width,
@@ -252,7 +281,7 @@ async function claimJob() {
   if (!candidate) return null;
   const claimed = await prisma.aiPromotionJob.updateMany({
     where: { id: candidate.id, status: { in: ["QUEUED", "RETRY_WAIT"] } },
-    data: { status: "RUNNING", attempts: { increment: 1 }, leaseExpiresAt: new Date(Date.now() + 2 * 60_000), errorCode: null, errorMessage: null },
+    data: { status: "RUNNING", attempts: { increment: 1 }, leaseExpiresAt: new Date(Date.now() + 20 * 60_000), errorCode: null, errorMessage: null },
   });
   return claimed.count === 1 ? candidate.id : null;
 }
@@ -275,6 +304,7 @@ async function handleFailure(jobId: string, error: unknown) {
     await prisma.aiPromotionCampaign.update({ where: { id: job.campaignId }, data: { status: "QUEUED", errorCode: code, errorMessage: "Your promotion is temporarily delayed and will retry automatically." } });
     return;
   }
+  await prisma.aiPromotionProviderUsage.updateMany({ where: { operationKey: "runway:" + job.id, status: "ESTIMATED" }, data: { status: "FAILED" } });
   await prisma.$transaction([
     prisma.aiPromotionJob.update({ where: { id: job.id }, data: { status: "FAILED", stage: "failed", leaseExpiresAt: null, errorCode: code, errorMessage: message.slice(0, 1000) } }),
     prisma.aiPromotionCampaign.update({ where: { id: job.campaignId }, data: { status: "FAILED", errorCode: code, errorMessage: "We couldn't finish this promotion. You can retry it from your campaign history." } }),
