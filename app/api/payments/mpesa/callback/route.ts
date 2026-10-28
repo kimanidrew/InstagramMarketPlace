@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const result = await processMpesaCallback(body);
     if (!result.accepted) {
-      console.error("M-Pesa callback rejected", result.reason);
+      console.error("M-Pesa callback rejected", "reason" in result ? result.reason : "Unknown callback rejection");
       return NextResponse.json({ ResultCode: 1, ResultDesc: "Callback could not be matched to a valid transaction." }, { status: 400 });
     }
     return NextResponse.json({ ResultCode: 0, ResultDesc: "Accepted" });
