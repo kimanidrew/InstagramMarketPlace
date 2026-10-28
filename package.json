@@ -8,7 +8,9 @@
     "start": "next start",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "worker:ai-promotions": "tsx worker/main.ts",
+    "test:ai-promotions": "tsx --test tests/ai-promotions/*.test.ts"
   },
   "dependencies": {
     "@prisma/adapter-neon": "6.19.3",
