@@ -3,6 +3,7 @@ import Link from "next/link";
 import { user } from "@/lib/auth";
 import { ForYouFilters } from "@/components/for-you-filters";
 import { ForYouProductCarousel } from "@/components/for-you-product-carousel";
+import { ForYouBannerVideo } from "@/components/for-you-banner-video";
 import { db } from "@/lib/prisma";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
@@ -151,6 +152,7 @@ export default async function ForYouPage() {
   return (
     <main className="min-h-screen w-full">
       <section className="relative z-0 isolate grid min-h-0 w-full overflow-hidden border-b border-white/10 bg-black px-4 pb-0 pt-1 sm:px-6 md:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)] md:items-center md:gap-1 md:px-8 md:pl-[52px] md:py-1 lg:px-10 lg:pl-[60px]">
+        <ForYouBannerVideo />
         <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-28 h-64 w-64 rounded-full border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] blur-[1px] sm:h-80 sm:w-80" />
         <div aria-hidden="true" className="pointer-events-none absolute right-[8%] top-5 h-24 w-24 rounded-full bg-gradient-to-br from-white/10 to-white/[0.02] blur-2xl sm:h-36 sm:w-36" />
         <div aria-hidden="true" className="pointer-events-none absolute bottom-[-5rem] right-[28%] h-56 w-56 rounded-full bg-white/[0.04] blur-3xl" />
