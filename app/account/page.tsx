@@ -2,7 +2,7 @@ import { user, logout } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store, Zap, ChartNoAxesCombined } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, Instagram, LogOut, Plus, Store, Zap, ChartNoAxesCombined, Sparkles } from "lucide-react";
 import GlobalFeedbackTrigger from "@/components/global-feedback-trigger";
 import { AccountLiveRefresh } from "@/components/account-live-refresh";
 import { AccountTerminateStoreForm } from "@/components/account-terminate-store-form";
@@ -59,7 +59,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
     </section>
 
     <section className="account-section">
-      <div className="account-section-heading"><div><span className="account-hub-eyebrow">YOUR BUSINESS</span><h2>Connected shops</h2><p>Choose a shop to view its public storefront, or visit Grow your own shop to track performance, promote products, and unlock seller tools.</p></div><div className="account-section-actions"><Link href="/account/analytics" className="account-outline-button"><ChartNoAxesCombined size={16}/> Grow your own shop</Link><Link href="/account/setup" className="account-outline-button"><Plus size={16}/> Add a shop</Link></div></div>
+      <div className="account-section-heading"><div><span className="account-hub-eyebrow">YOUR BUSINESS</span><h2>Connected shops</h2><p>Choose a shop to view its public storefront, or visit Grow your own shop to track performance, promote products, and unlock seller tools.</p></div><div className="account-section-actions"><Link href="/account/ai-promotions" className="account-outline-button"><Sparkles size={16}/> AI Promotion Studio</Link><Link href="/account/analytics" className="account-outline-button"><ChartNoAxesCombined size={16}/> Grow your own shop</Link><Link href="/account/setup" className="account-outline-button"><Plus size={16}/> Add a shop</Link></div></div>
       {connections.length ? <div className="account-connected-grid">{connections.map(c => <article className="account-connected-card" key={c.id}>
         <div className="account-store-avatar"><Instagram size={23}/><span><i/></span></div>
         <div className="account-store-info"><h3>@{c.username}</h3><p>{c.posts.length} marketplace {c.posts.length === 1 ? "product" : "products"}</p><span className="account-connected-status"><CheckCircle2 size={13}/> Instagram connected</span></div>
