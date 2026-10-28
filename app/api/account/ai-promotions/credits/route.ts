@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
+import { cinematicProviderEnabled } from "@/lib/ai-promotions/policy";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,7 @@ export async function GET() {
   const current = await user();
   if (!current) return NextResponse.json({ error: "Login required." }, { status: 401 });
   const prisma = db();
-  const starterCredits = Math.max(0, Math.min(20, Number(process.env.AI_PROMOTION_STARTER_CREDITS || 2) || 0));
+  const starterCredits = Math.max(0, Math.min(20, Number(process.env.AI_PROMOTION_STARTER_CREDITS || 1) || 0));
   const wallet = await prisma.$transaction(async (tx) => {
     const existing = await tx.aiPromotionCreditWallet.findUnique({ where: { userId: current.id } });
     if (existing) return existing;
@@ -34,6 +35,6 @@ export async function GET() {
     availableCredits: wallet.availableCredits,
     reservedCredits: wallet.reservedCredits,
     lifetimeConsumed: wallet.lifetimeConsumed,
-    cinematicEnabled: process.env.AI_PROMOTION_CINEMATIC_ENABLED === "true",
+    cinematicEnabled: cinematicProviderEnabled(),
   });
 }
