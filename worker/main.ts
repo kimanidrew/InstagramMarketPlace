@@ -37,12 +37,13 @@ function allowedSourceUrl(value: string) {
   } catch { return false; }
 }
 
-async function downloadSource(urlValue: string, maxBytes: number) {
+async function downloadSource(urlValue: string) {
   if (!allowedSourceUrl(urlValue)) throw new PermanentJobError("The source media host is not allowed.", "INVALID_SOURCE_URL");
   const response = await fetch(urlValue, { signal: AbortSignal.timeout(25_000), redirect: "error", headers: { "user-agent": "SokoLink-PromotionWorker/1.0" } });
   if (!response.ok) throw new Error(`Source media download failed (${response.status}).`);
   const mime = (response.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
   if (!mime.startsWith("image/") && !mime.startsWith("video/")) throw new PermanentJobError("The source file is not supported media.", "UNSUPPORTED_SOURCE_MEDIA");
+  const maxBytes = mime.startsWith("image/") ? MAX_IMAGE_BYTES : MAX_VIDEO_BYTES;
   const declaredLength = Number(response.headers.get("content-length") || 0);
   if (declaredLength > maxBytes) throw new PermanentJobError("The source media is too large.", "SOURCE_MEDIA_TOO_LARGE");
   const buffer = Buffer.from(await response.arrayBuffer());
@@ -124,13 +125,15 @@ async function processJob(jobId: string) {
   let providerModel: string | null = null;
   let providerTaskId: string | null = job.providerTaskId;
   try {
-    const source = await downloadSource(product.imageUrl, MAX_IMAGE_BYTES);
-    const sourcePath = path.join(directory, source.mime === "image/png" ? "source.png" : source.mime === "image/webp" ? "source.webp" : "source.jpg");
+    const source = await downloadSource(product.imageUrl);
+    const sourceIsVideo = source.mime.startsWith("video/");
+    const sourceExtension = source.mime === "image/png" ? "png" : source.mime === "image/webp" ? "webp" : source.mime === "video/mp4" ? "mp4" : "jpg";
+    const sourcePath = path.join(directory, "source." + sourceExtension);
     await writeFile(sourcePath, source.buffer);
     const videoPath = path.join(directory, "provider.mp4");
     const outputPath = path.join(directory, "final.mp4");
     let renderSource = sourcePath;
-    let renderSourceIsVideo = false;
+    let renderSourceIsVideo = sourceIsVideo;
     const canUseCinematic = campaign.mode !== "MOTION" && cinematicProviderEnabled() && campaign.durationSeconds !== 30;
 
     if (canUseCinematic) {
@@ -169,7 +172,7 @@ async function processJob(jobId: string) {
         await prisma.aiPromotionProviderUsage.upsert({
           where: { operationKey: `runway:${job.id}` },
           create: { campaignId: campaign.id, jobId: job.id, provider: "runway", model: providerModel || process.env.RUNWAY_MODEL || "wan3", operationKey: `runway:${job.id}`, inputSeconds: campaign.durationSeconds, outputSeconds: campaign.durationSeconds, estimatedCostUsd: cost, status: "COMPLETED", providerRequestId: taskId },
-          update: { status: "COMPLETED", providerRequestId: taskId, actualCostUsd: cost },
+          update: { status: "ESTIMATED", providerRequestId: taskId, estimatedCostUsd: cost },
         });
       } catch (error) {
         if (error instanceof RunwayTaskError && error.code === "PROVIDER_PENDING") throw error;
