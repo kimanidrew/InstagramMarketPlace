@@ -183,6 +183,10 @@ async function processJob(jobId: string) {
           providerTaskId = taskId;
           await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { providerTaskId: taskId, provider: "runway", stage: "cinematic-generation" } });
         }
+        await prisma.aiPromotionProviderUsage.updateMany({
+          where: { operationKey: "runway:" + job.id },
+          data: { providerRequestId: taskId, status: "ESTIMATED" },
+        });
         const result = await waitForRunwayOutput(taskId, async () => {
           await prisma.aiPromotionJob.update({ where: { id: job.id }, data: { leaseExpiresAt: new Date(Date.now() + 2 * 60_000) } });
         });
