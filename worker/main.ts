@@ -87,7 +87,8 @@ async function settleReservedCredit(campaignId: string, action: "CHARGE" | "RELE
   const key = `${action.toLowerCase()}:${campaignId}`;
   await prisma.$transaction(async (tx) => {
     const already = await tx.aiPromotionCreditLedger.findUnique({ where: { idempotencyKey: key } });
-    if (already) return;
+    const opposite = await tx.aiPromotionCreditLedger.findUnique({ where: { idempotencyKey: (action === "CHARGE" ? "release:" : "charge:") + campaignId } });
+    if (already || opposite) return;
     const wallet = await tx.aiPromotionCreditWallet.findUnique({ where: { userId: campaign.userId } });
     if (!wallet || wallet.reservedCredits < 1) return;
     if (action === "CHARGE") {
@@ -112,8 +113,11 @@ async function reserveProviderBudget(campaignId: string, jobId: string, duration
   if (existing) return existing.status !== "FALLBACK" && existing.status !== "FAILED";
   const model = process.env.RUNWAY_MODEL || "wan3";
   const defaultRate = model === "wan3" ? 0.20 : 0.12;
-  const estimatedCost = Math.max(0, Number(process.env.AI_PROMOTION_CINEMATIC_ESTIMATED_COST_USD || (durationSeconds * defaultRate)));
-  const dailyCap = Math.max(0, Number(process.env.AI_PROMOTION_DAILY_PROVIDER_BUDGET_USD || 10));
+  const costOverride = Number(process.env.AI_PROMOTION_CINEMATIC_ESTIMATED_COST_USD);
+  const estimatedCost = Number.isFinite(costOverride) && process.env.AI_PROMOTION_CINEMATIC_ESTIMATED_COST_USD
+    ? Math.max(0, costOverride) : durationSeconds * defaultRate;
+  const capValue = Number(process.env.AI_PROMOTION_DAILY_PROVIDER_BUDGET_USD || 10);
+  const dailyCap = Number.isFinite(capValue) ? Math.max(0, capValue) : 10;
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
   const usage = await prisma.aiPromotionProviderUsage.aggregate({
