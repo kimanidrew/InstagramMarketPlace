@@ -45,6 +45,12 @@ export async function POST(request: Request) {
     post = connection.posts.find(p => p.id === postId) || null;
     if (!post) return NextResponse.json({ error: "That listing does not belong to the selected shop or has no media." }, { status: 400 });
   }
+  const [activeCount, todayCount] = await Promise.all([
+    prisma.aiPromotionCampaign.count({ where: { userId: current.id, status: { in: ["QUEUED", "PLANNING", "GENERATING", "RENDERING"] } } }),
+    prisma.aiPromotionCampaign.count({ where: { userId: current.id, createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } } }),
+  ]);
+  if (activeCount >= 2) return NextResponse.json({ error: "You already have two promotions in progress. Wait for one to finish before starting another." }, { status: 429 });
+  if (todayCount >= 5) return NextResponse.json({ error: "You have reached the current limit of five AI promotions per day. Try again tomorrow." }, { status: 429 });
   const title = titleInput || (scope === "PRODUCT" ? post?.productTitle || post?.category || "Product promotion" : `@${connection.username} shop promotion`);
   const campaign = await prisma.aiPromotionCampaign.create({
     data: {

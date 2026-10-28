@@ -26,11 +26,17 @@ export async function POST(request: Request) {
 
   const prisma = db();
   const job = await prisma.aiPromotionJob.findFirst({
-    where: { status: { in: ["QUEUED", "RUNNING"] }, nextRunAt: { lte: new Date() } },
+    where: { status: { in: ["QUEUED", "RUNNING", "PROCESSING"] }, nextRunAt: { lte: new Date() } },
     include: { campaign: { include: { post: true, connection: { include: { posts: { where: { isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: { not: "VIDEO" }, mediaUrl: { not: null } }] }, select: { mediaType: true, mediaUrl: true, thumbnailUrl: true }, orderBy: { createdAt: "desc" }, take: 1 } } } } },
     orderBy: { createdAt: "asc" },
   });
   if (!job) return NextResponse.json({ processed: false, message: "No due AI promotion jobs." });
+  // Atomic claim prevents overlapping schedulers from starting duplicate provider jobs.
+  const claimed = await prisma.aiPromotionJob.updateMany({
+    where: { id: job.id, status: job.status, nextRunAt: { lte: new Date() } },
+    data: { status: "PROCESSING", nextRunAt: new Date(Date.now() + 120000) },
+  });
+  if (claimed.count !== 1) return NextResponse.json({ processed: false, message: "Another worker claimed this job." });
 
   try {
     let prediction: ReplicatePrediction;
