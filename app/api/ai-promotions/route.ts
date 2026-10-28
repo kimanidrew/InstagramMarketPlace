@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
