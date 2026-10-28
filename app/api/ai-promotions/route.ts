@@ -48,6 +48,7 @@ export async function POST(request: Request) {
   const durationSeconds = Number(b.durationSeconds);
   const postId = typeof b.postId === "string" && b.postId ? b.postId : null;
   const prompt = typeof b.prompt === "string" ? b.prompt.trim() : "";
+  const generateAudio = b.generateAudio === true;
   const idempotencyKey = typeof b.idempotencyKey === "string" && b.idempotencyKey.length <= 120 ? b.idempotencyKey : randomUUID();
   if (!connectionId || !scope || !mode || ![10, 15].includes(durationSeconds) || prompt.length < 12 || prompt.length > 1200) return NextResponse.json({ error: "Choose a shop, valid scope/mode/duration, and a 12–1,200 character prompt." }, { status: 400 });
   if (scope === "PRODUCT" && !postId) return NextResponse.json({ error: "Choose a product." }, { status: 400 });
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
       imageUrl = featured?.thumbnailUrl || (featured?.mediaType === "IMAGE" ? featured.mediaUrl : null);
     }
     if (!imageUrl) throw new Error("This shop needs a public profile image, or choose a product with a public image.");
-    const submitted = await submitPromotionVideo({ imageUrl, prompt, durationSeconds, title, shopUsername: c.username, productTitle: selectedProduct?.productTitle });
+    const submitted = await submitPromotionVideo({ imageUrl, prompt, durationSeconds, title, shopUsername: c.username, productTitle: selectedProduct?.productTitle, generateAudio });
     await p.aiPromotionProject.update({ where: { id: project.id }, data: { provider: submitted.provider, providerJobId: submitted.requestId } });
     await p.aiPromotionJob.updateMany({ where: { projectId: project.id }, data: { workerId: submitted.provider, lastError: null } });
     return NextResponse.json({ project: { ...project, status: "PROCESSING" }, message: "Video generation has started." }, { status: 201 });
