@@ -44,7 +44,7 @@ export function ForYouBannerVideo() {
   }, []);
 
   return (
-    <div ref={sectionRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black">
+    <div ref={sectionRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-[rgba(0,0,0,0.4)]">
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full scale-[1.06] object-cover opacity-75 blur-[4px] sm:blur-[6px]"
