@@ -4,6 +4,7 @@ import { db } from "@/lib/prisma";
 import { isMpesaConfigured, initiateMpesaStk, normalizeMpesaPhone } from "@/lib/mpesa";
 import { quoteAiPromotionPrice } from "@/lib/ai-promotion-pricing";
 import { refreshPaidPromotion } from "@/lib/ai-promotion-payment";
+import { submitPromotionVideo } from "@/lib/ai-promotion-provider";
 import { userFriendlyError } from "@/lib/user-friendly-errors";
 export const runtime = "nodejs";
 
@@ -39,7 +40,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const current = await user();
   if (!current) return NextResponse.json({ error: "Sign in before creating a promotion." }, { status: 401 });
-  if (!isMpesaConfigured()) return NextResponse.json({ error: "M-Pesa payments are not configured yet. Please contact support." }, { status: 503 });
+  const skipPayment = process.env.AI_PROMOTIONS_SKIP_PAYMENT !== "false";
+  if (!skipPayment && !isMpesaConfigured()) return NextResponse.json({ error: "M-Pesa payments are not configured yet. Please contact support." }, { status: 503 });
   let b: Record<string, unknown>;
   try { b = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 }); }
   const connectionId = typeof b.connectionId === "string" ? b.connectionId : "";
@@ -52,11 +54,13 @@ export async function POST(request: Request) {
   const idempotencyKey = typeof b.idempotencyKey === "string" && /^[a-zA-Z0-9_-]{16,120}$/.test(b.idempotencyKey) ? b.idempotencyKey : "";
   if (!idempotencyKey) return NextResponse.json({ error: "Refresh the form and try again; a request key is missing." }, { status: 400 });
   if (!connectionId || !scope || !mode || ![10, 15].includes(durationSeconds) || prompt.length < 12 || prompt.length > 1200 || (scope === "PRODUCT" && !postId)) return NextResponse.json({ error: "Choose a shop, product, valid duration and a 12–1,200 character prompt." }, { status: 400 });
-  let phoneNumber: string;
-  try { phoneNumber = normalizeMpesaPhone(typeof b.phoneNumber === "string" ? b.phoneNumber : ""); }
-  catch (e) { return NextResponse.json({ error: e instanceof Error ? e.message : "Enter a valid M-Pesa phone number." }, { status: 400 }); }
+  let phoneNumber = "";
+  if (!skipPayment) {
+    try { phoneNumber = normalizeMpesaPhone(typeof b.phoneNumber === "string" ? b.phoneNumber : ""); }
+    catch (e) { return NextResponse.json({ error: e instanceof Error ? e.message : "Enter a valid M-Pesa phone number." }, { status: 400 }); }
+  }
   const p = db();
-  const pendingPayment = await p.aiPromotionPayment.findFirst({
+  const pendingPayment = skipPayment ? null : await p.aiPromotionPayment.findFirst({
     where: { userId: current.id, status: { in: ["INITIATED", "PENDING"] } },
     orderBy: { createdAt: "desc" },
     include: { project: { select: { id: true, title: true, status: true } } },
@@ -82,7 +86,7 @@ export async function POST(request: Request) {
   let quote;
   try { quote = await quoteAiPromotionPrice(durationSeconds, generateAudio); }
   catch (e) { return NextResponse.json({ error: userFriendlyError(e) }, { status: 400 }); }
-  if (!Number.isInteger(b.expectedAmountKes) || Number(b.expectedAmountKes) !== quote.amountKes) return NextResponse.json({ error: "The price changed since the preview. Review the updated amount before paying.", quote }, { status: 409 });
+  if (!skipPayment && (!Number.isInteger(b.expectedAmountKes) || Number(b.expectedAmountKes) !== quote.amountKes)) return NextResponse.json({ error: "The price changed since the preview. Review the updated amount before paying.", quote }, { status: 409 });
   const title = (scope === "STORE" ? "Shop promotion" : product?.productTitle || "Product promotion") + " · @" + shop.username;
   let project;
   try {
@@ -93,6 +97,22 @@ export async function POST(request: Request) {
       if (dupe) return NextResponse.json({ project: { id: dupe.id, title: dupe.title, status: dupe.status }, payment: dupe.payments[0] ? { status: dupe.payments[0].status, amountKes: dupe.payments[0].amountKes } : null, reused: true });
     }
     throw e;
+  }
+  if (skipPayment) {
+    try {
+      const submitted = await submitPromotionVideo({
+        imageUrl, prompt, durationSeconds, title, shopUsername: shop.username,
+        productTitle: product?.productTitle || undefined, generateAudio,
+      });
+      const updated = await p.aiPromotionProject.update({ where: { id: project.id }, data: { status: "PROCESSING", provider: submitted.provider, providerJobId: submitted.requestId } });
+      await p.aiPromotionJob.create({ data: { projectId: project.id, status: "PROCESSING", attempts: 1, maxAttempts: 3, workerId: submitted.provider } });
+      return NextResponse.json({ project: updated, payment: null, message: "Payment is temporarily skipped. Your video generation has started." }, { status: 202 });
+    } catch (error) {
+      const message = userFriendlyError(error).slice(0, 350);
+      await p.aiPromotionProject.update({ where: { id: project.id }, data: { status: "FAILED", errorCode: "SUBMIT_FAILED", errorMessage: message } });
+      await p.aiPromotionJob.create({ data: { projectId: project.id, status: "FAILED", attempts: 1, maxAttempts: 3, lastError: message } });
+      return NextResponse.json({ error: message }, { status: 502 });
+    }
   }
   const payment = await p.aiPromotionPayment.create({ data: { userId: current.id, projectId: project.id, idempotencyKey, providerCostUsd: quote.providerCostUsd, amountKes: quote.amountKes, phoneNumber, status: "INITIATED", priceSnapshot: { ...quote, phoneNumber, version: 1 } } });
   try {
