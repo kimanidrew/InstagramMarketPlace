@@ -81,7 +81,7 @@ export async function POST(request: Request) {
   if (!imageUrl || !imageUrl.startsWith("https://")) return NextResponse.json({ error: "Choose a product or shop with a public HTTPS image before paying." }, { status: 400 });
   let quote;
   try { quote = await quoteAiPromotionPrice(durationSeconds, generateAudio); }
-  catch (e) { return NextResponse.json({ error: e instanceof Error ? e.message : "Could not calculate price." }, { status: 400 }); }
+  catch (e) { return NextResponse.json({ error: userFriendlyError(e) }, { status: 400 }); }
   if (!Number.isInteger(b.expectedAmountKes) || Number(b.expectedAmountKes) !== quote.amountKes) return NextResponse.json({ error: "The price changed since the preview. Review the updated amount before paying.", quote }, { status: 409 });
   const title = (scope === "STORE" ? "Shop promotion" : product?.productTitle || "Product promotion") + " · @" + shop.username;
   let project;
