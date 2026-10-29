@@ -3,7 +3,7 @@
 import { Bookmark } from "lucide-react";
 import { useState } from "react";
 
-export function WishlistButton({ id, wishlisted = false, count, compact = false, largeCompact = false, productDetailStyle = false }: { id: string; wishlisted?: boolean; count?: number; compact?: boolean; largeCompact?: boolean; productDetailStyle?: boolean }) {
+export function WishlistButton({ id, wishlisted = false, count, compact = false, largeCompact = false, productDetailStyle = false, inlineStyle = false }: { id: string; wishlisted?: boolean; count?: number; compact?: boolean; largeCompact?: boolean; productDetailStyle?: boolean; inlineStyle?: boolean }) {
   const [saved, setSaved] = useState(wishlisted);
   const [n, setN] = useState(count ?? 0);
   const [busy, setBusy] = useState(false);
@@ -50,11 +50,11 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
       aria-pressed={saved}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
-        (compact ? (largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
+        (compact ? (inlineStyle ? "h-7 w-7 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-[#555] !shadow-none ring-0 hover:!bg-[#f5f5f5] " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
         productDetailColors
       }
     >
-      <Bookmark size={compact ? (largeCompact ? 21 : 17) : 16} fill={saved ? "currentColor" : "none"} strokeWidth={saved ? 2.5 : 2} />
+      <Bookmark size={compact ? (inlineStyle ? 14 : largeCompact ? 21 : 17) : 16} fill={saved ? "currentColor" : "none"} strokeWidth={saved ? 2.5 : 2} />
       {!compact && <span>{n} saved</span>}
     </button>
   );
