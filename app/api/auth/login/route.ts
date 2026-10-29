@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { signIn } from "@/lib/auth";
+import { userFriendlyError } from "@/lib/user-friendly-errors";
 
 export async function POST(request: Request) {
   try {
@@ -8,9 +9,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Enter your email and password." }, { status: 400 });
     }
     const account = await signIn(email, password);
-    if (!account) return NextResponse.json({ error: "That email and password don't match. Please try again." }, { status: 401 });
+    if (!account) return NextResponse.json({ error: userFriendlyError("invalid credentials", "auth") }, { status: 401 });
     return NextResponse.json({ ok: true, redirect: account.role === "ADMIN" ? "/admin" : "/account" });
-  } catch {
-    return NextResponse.json({ error: "We couldn't sign you in right now. Please try again." }, { status: 500 });
+  } catch (error) {
+    console.error("Sign-in request failed", error);
+    return NextResponse.json({ error: userFriendlyError(error, "auth") }, { status: 500 });
   }
 }
