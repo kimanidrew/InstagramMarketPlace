@@ -1,344 +1,122 @@
 import Link from "next/link";
-import {
-  ArrowDown,
-  ArrowRight,
-  Check,
-  Heart,
-  Instagram,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Store,
-  Users,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, BadgePercent, BriefcaseBusiness, ChevronRight, Clock3, Flame, Grid2X2, HeartHandshake, ShieldCheck, Sparkles, Store, Truck } from "lucide-react";
+import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-import { HowMarketWorks } from "@/components/how-market-works";
-import { Reveal } from "@/components/reveal";
+import { ProductCard } from "@/components/product-card";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
 
-const editorialImages = {
-  hero: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=85",
-  people: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85",
-  seller: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=85",
-  shopping: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=85",
-};
+const categories = [
+  { label: "Fashion & clothing", tag: "fashion", icon: "✦" },
+  { label: "Beauty & skincare", tag: "beauty", icon: "✧" },
+  { label: "Home & living", tag: "home", icon: "⌂" },
+  { label: "Electronics", tag: "electronics", icon: "⌁" },
+  { label: "Food & groceries", tag: "food", icon: "❋" },
+  { label: "Services", tag: "services", icon: "↗" },
+];
 
 export default async function Home() {
   const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
-  const prisma = db();
-
-  const [products, stores] = await Promise.all([
-    prisma.instagramPost.findMany({
-      where: { isProduct: true, mediaType: "IMAGE" },
-      include: { connection: true, tags: true, likes: true },
+  const currentUser = await user();
+  const now = new Date();
+  const [rawProducts, rawStores, promotedRaw] = await Promise.all([
+    db().instagramPost.findMany({
+      where: { isProduct: true, mediaUrl: { not: null } },
+      include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
       orderBy: { timestamp: "desc" },
-      take: 12,
+      take: 32,
     }),
-    prisma.instagramConnection.findMany({
-      include: { posts: { where: { isProduct: true }, select: { id: true, mediaUrl: true }, orderBy: { timestamp: "desc" }, take: 4 } },
-      orderBy: { updatedAt: "desc" },
+    db().instagramConnection.findMany({
+      where: { posts: { some: { isProduct: true, mediaUrl: { not: null } } } },
+      include: { posts: { where: { isProduct: true, mediaUrl: { not: null } }, select: { id: true, mediaUrl: true, thumbnailUrl: true }, orderBy: { timestamp: "desc" }, take: 4 } },
+      orderBy: [{ verifiedAt: "desc" }, { updatedAt: "desc" }],
+      take: 8,
+    }),
+    db().instagramPost.findMany({
+      where: { isProduct: true, boostUntil: { gt: now }, mediaUrl: { not: null } },
+      include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
+      orderBy: { boostUntil: "desc" },
       take: 12,
     }),
   ]);
 
-  const availableProducts = (await filterAvailableInstagramMedia(products)).slice(0, 4);
-  const availableStores = (await Promise.all(stores.map(async (store) => ({ store, posts: await filterAvailableInstagramMedia(store.posts) })))).filter((x) => x.posts.length > 0).slice(0, 4);
+  const products = await filterAvailableInstagramMedia(rawProducts);
+  const promoted = await filterAvailableInstagramMedia(promotedRaw);
+  const stores = (await Promise.all(rawStores.map(async (store) => ({
+    ...store,
+    posts: await filterAvailableInstagramMedia(store.posts),
+  })))).filter((store) => store.posts.length > 0);
+  const prepare = (items: any[]) => items.map((p) => ({
+    ...p,
+    likedByCurrentUser: currentUser ? p.likes?.some((like: any) => like.userId === currentUser.id) : false,
+    wishlistedByCurrentUser: currentUser ? p.wishlistItems?.some((item: any) => item.userId === currentUser.id) : false,
+  }));
+  const freshProducts = prepare(products).slice(0, 12);
+  const promotedProducts = prepare(promoted).slice(0, 8);
+  const trendingProducts = prepare([...products].sort((a: any, b: any) =>
+    (Number(b.instagramLikeCount || 0) + Number(b._count?.likes || 0) + Number(b._count?.wishlistItems || 0)) -
+    (Number(a.instagramLikeCount || 0) + Number(a._count?.likes || 0) + Number(a._count?.wishlistItems || 0))
+  )).slice(0, 8);
 
   return (
-    <main className="home-page bg-white">
-      <section className="editorial-grid overflow-hidden border-b border-black/5">
-        <div className="shell grid min-h-[720px] items-center gap-12 py-20 lg:grid-cols-[1.02fr_.98fr]">
-          <Reveal y={34}>
-            <div className="eyebrow">
-              <Instagram size={13} /> Social shopping marketplace
-            </div>
-            <h1 className="mt-7 max-w-4xl text-6xl font-black leading-[.88] tracking-[-.075em] sm:text-7xl lg:text-[88px]">
-              Discover it.
-              <br />
-              <span className="text-[#777]">Shop it.</span>
-              <br />
-              <span>Support it.</span>
-            </h1>
-            <p className="mt-8 max-w-xl text-base leading-8 text-[#666] sm:text-lg">
-              {brandName} connects the inspiration you find on Instagram
-              with a simple way to discover and shop from the people and
-              businesses behind it.
-            </p>
-            <div className="instamart-hero-tip mt-7 max-w-xl">
-              <div className="instamart-hero-hashtag">#instamart</div>
-              <div>
-                <b>Post it. Tag it. Sell it.</b>
-                <p>Use <strong>#instamart</strong> in your Instagram post and, when your account is connected, that post can appear here as a product.</p>
-              </div>
-            </div>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link
-                href="/shop"
-                className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white transition hover:scale-[1.02]"
-              >
-                Start exploring <ArrowRight size={16} />
-              </Link>
-              <Link
-                href="/how-it-works"
-                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-7 py-4 text-sm font-bold"
-              >
-                How it works <ArrowDown size={15} />
-              </Link>
-            </div>
-          </Reveal>
-
-          <Reveal className="relative min-h-[560px] overflow-visible" y={42}>
-            <div className="hero-float hero-float-a absolute left-[8%] top-10 z-10 w-[34%] rotate-[-7deg] overflow-hidden rounded-[22px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_24px_60px_rgba(0,0,0,.18)] sm:left-[4%] sm:w-[36%]">
-              <img
-                src={products[1]?.mediaUrl || editorialImages.people}
-                alt={products[1]?.productTitle || `${brandName} product discovery`}
-                className="aspect-[4/5] w-full object-cover"
-              />
-            </div>
-
-            <div className="hero-float hero-float-b absolute right-[4%] top-2 z-20 w-[42%] rotate-[6deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_28px_70px_rgba(0,0,0,.2)] sm:right-[7%] sm:w-[41%]">
-              <img
-                src={products[0]?.mediaUrl || editorialImages.hero}
-                alt={products[0]?.productTitle || "Marketplace product"}
-                className="aspect-[4/5] w-full object-cover"
-              />
-            </div>
-
-            <div className="hero-float hero-float-c absolute bottom-5 left-[27%] z-30 w-[43%] -rotate-[2deg] overflow-hidden rounded-[24px] border-[7px] border-white bg-[#f2f2ef] shadow-[0_30px_80px_rgba(0,0,0,.22)] sm:left-[27%] sm:w-[42%]">
-              <img
-                src={products[2]?.mediaUrl || editorialImages.shopping}
-                alt={products[2]?.productTitle || "Marketplace product"}
-                className="aspect-[4/5] w-full object-cover"
-              />
-            </div>
-
-            <div className="hero-float hero-float-d absolute bottom-10 left-0 z-40 hidden w-[27%] rotate-[5deg] overflow-hidden rounded-[18px] border-[6px] border-white bg-[#f2f2ef] shadow-[0_20px_50px_rgba(0,0,0,.16)] sm:block">
-              <img
-                src={products[3]?.mediaUrl || editorialImages.seller}
-                alt={products[3]?.productTitle || "Instagram store"}
-                className="aspect-[4/5] w-full object-cover"
-              />
-            </div>
-
-            <div className="hero-pill absolute right-0 bottom-20 z-50 rounded-full border border-black/10 bg-white px-4 py-3 text-[10px] font-black uppercase tracking-[.13em] shadow-xl">
-              Discover · Shop · Support
-            </div>
-          </Reveal>
+    <main className="min-h-screen bg-[#f5f6f8] text-[#222]">
+      <div className="border-b border-[#e8e8e8] bg-white">
+        <div className="shell flex items-center gap-3 overflow-x-auto py-3 text-sm">
+          <Link href="/categories" className="flex shrink-0 items-center gap-2 rounded-lg bg-[#f5f5f5] px-3 py-2 font-semibold"><Grid2X2 size={16}/> All categories</Link>
+          {categories.map((category) => <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="shrink-0 rounded-lg px-3 py-2 text-[#555] transition hover:bg-[#f5f5f5] hover:text-black">{category.label}</Link>)}
+          <Link href="/stores" className="ml-auto hidden shrink-0 items-center gap-1 font-semibold sm:flex">Explore stores <ArrowRight size={14}/></Link>
         </div>
-      </section>
+      </div>
 
-      <section className="shell py-24">
-        <Reveal>
-        <div className="grid gap-14 lg:grid-cols-[.85fr_1.15fr] lg:items-end">
-          <div>
-            <p className="eyebrow plain">Why we exist</p>
-            <h2 className="mt-4 text-5xl font-black leading-[.95] tracking-[-.06em] sm:text-6xl">
-              Shopping should feel human.
-            </h2>
-          </div>
-          <div>
-            <p className="text-lg leading-8 text-[#555]">
-              Social media has already changed how people discover things.
-              {brandName} takes that discovery one step further — making
-              it easier to find the product, understand who made or sells it,
-              and go directly to the original Instagram story.
-            </p>
-            <p className="mt-5 text-lg leading-8 text-[#555]">
-              We are building a marketplace around <b>real people, real
-              businesses and real content</b>, rather than anonymous product
-              catalogues.
-            </p>
-          </div>
-        </div>
-        </Reveal>
-      </section>
+      <div className="shell py-5 md:py-7">
+        <section className="grid gap-4 lg:grid-cols-[230px_minmax(0,1fr)]">
+          <aside className="hidden rounded-2xl border border-[#e7e7e7] bg-white p-4 lg:block">
+            <h2 className="mb-3 flex items-center gap-2 text-sm font-bold"><Grid2X2 size={16}/> Shop by category</h2>
+            {categories.map((category) => <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex items-center gap-3 rounded-lg px-2 py-3 text-sm text-[#555] hover:bg-[#f7f7f7] hover:text-black"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f4f4f4] text-lg">{category.icon}</span><span className="flex-1">{category.label}</span><ChevronRight size={15} className="text-[#aaa] group-hover:text-black"/></Link>)}
+            <div className="mt-3 border-t border-[#eee] pt-3"><Link href="/stores" className="flex items-center gap-2 rounded-lg px-2 py-3 text-sm font-semibold"><Store size={16}/> Browse all stores</Link><Link href="/account" className="flex items-center gap-2 rounded-lg px-2 py-3 text-sm font-semibold"><HeartHandshake size={16}/> Sell on {brandName}</Link></div>
+          </aside>
 
-      <section className="shell pb-24">
-        <Reveal className="grid overflow-hidden rounded-[36px] bg-[#f4f4f1] lg:grid-cols-[1fr_1fr]" y={36}>
-          <div className="min-h-[460px]">
-            <img
-              src={editorialImages.people}
-              alt="Friends discovering and sharing products"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
-            <p className="eyebrow plain">The idea</p>
-            <h2 className="mt-5 text-4xl font-black leading-tight tracking-[-.05em] sm:text-5xl">
-              Inspiration belongs with discovery.
-            </h2>
-            <p className="mt-6 text-base leading-8 text-[#666]">
-              A post can make you stop scrolling. A product can make you want
-              to learn more. A great seller can make you want to come back.
-              {brandName} brings those moments together in one experience.
-            </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl bg-white p-5">
-                <Heart size={19} />
-                <b className="mt-7 block">Save what you love</b>
-                <span className="mt-2 block text-xs leading-5 text-[#777]">
-                  Keep favourites close while you explore.
-                </span>
+          <div className="grid min-w-0 gap-4 md:grid-cols-[minmax(0,1fr)_220px]">
+            <section className="relative flex min-h-[330px] overflow-hidden rounded-2xl bg-[#751c35] text-white sm:min-h-[390px]">
+              <div className="relative z-10 flex w-full flex-col items-start justify-center p-6 sm:p-10 md:w-[62%]">
+                <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold"><Sparkles size={13}/> THE SOCIAL MARKETPLACE</span>
+                <h1 className="max-w-xl text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl xl:text-6xl">Discover great finds. <span className="text-[#ffd8a3]">Meet the people behind them.</span></h1>
+                <p className="mt-4 max-w-md text-sm leading-6 text-white/80 sm:text-base">Shop products and services from real businesses, powered by their Instagram storefronts.</p>
+                <div className="mt-6 flex flex-wrap gap-3"><Link href="/shop" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#63172d] transition hover:-translate-y-0.5">Start shopping <ArrowRight size={16}/></Link><Link href="/stores" className="inline-flex items-center gap-2 rounded-full border border-white/35 px-5 py-3 text-sm font-semibold text-white">Meet the sellers</Link></div>
+                <p className="mt-5 text-xs text-white/65">Find it on social. Discover it on {brandName}.</p>
               </div>
-              <div className="rounded-2xl bg-white p-5">
-                <Search size={19} />
-                <b className="mt-7 block">Find it faster</b>
-                <span className="mt-2 block text-xs leading-5 text-[#777]">
-                  Discover products through stores and categories.
-                </span>
+              <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[48%] md:block">
+                <div className="absolute -right-12 -top-12 h-72 w-72 rounded-full border-[34px] border-white/10"/>
+                <div className="absolute right-8 top-8 h-44 w-44 rotate-6 overflow-hidden rounded-3xl border-4 border-white/20 shadow-2xl"><img src={products[0]?.thumbnailUrl || products[0]?.mediaUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"} alt="Featured marketplace find" className="h-full w-full object-cover"/></div>
+                <div className="absolute bottom-8 right-28 h-36 w-32 -rotate-6 overflow-hidden rounded-2xl border-4 border-white/20 shadow-2xl"><img src={products[1]?.thumbnailUrl || products[1]?.mediaUrl || "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=500&q=80"} alt="Marketplace selection" className="h-full w-full object-cover"/></div>
               </div>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      <HowMarketWorks />
-
-
-      <section className="connect-instagram-section">
-        <div className="shell">
-          <Reveal y={28}>
-            <div className="connect-instagram-card">
-              <div className="connect-instagram-icon">
-                <Instagram size={22} />
-              </div>
-              <div className="connect-instagram-copy">
-                <p className="connect-instagram-kicker">For Instagram sellers</p>
-                <h2>Turn your Instagram into a shop.</h2>
-                <p>
-                  Connect your approved Instagram Business account and your posts can
-                  become products on {brandName}. No second catalogue to build.
-                </p>
-              </div>
-              <Link href="/account" className="connect-instagram-button">
-                Connect to Instagram <ArrowRight size={16} />
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="community-showcase relative overflow-hidden py-24 sm:py-28">
-        <div className="community-orb community-orb-a" />
-        <div className="community-orb community-orb-b" />
-        <div className="community-ring community-ring-a" />
-        <div className="community-ring community-ring-b" />
-        <div className="shell relative z-10">
-          <div className="community-layout">
-            <Reveal className="community-collage-wrap" y={38}>
-              <div className="community-collage">
-                {stores.filter((store) => store.profileImageUrl).slice(0, 4).map((store, index) => ({
-                  store,
-                  index,
-                  src: store.profileImageUrl as string,
-                  alt: store.name || "Instagram store",
-                })).map(({ store, index, src, alt }) => (
-                  <Link
-                    key={index}
-                    href={"/stores/" + store.username}
-                    className={"community-photo community-photo-" + (index === 0 ? "main" : index === 1 ? "top" : index === 2 ? "bottom" : "side")}
-                  >
-                    <img src={src} alt={alt} />
-                  </Link>
-                ))}
-              </div>
-            </Reveal>
-
-            <Reveal className="community-copy-panel" y={38} delay={0.08}>
-              <div className="community-kicker"><Store size={14} /> Meet the stores</div>
-              <h2 className="community-title mt-6">Discover the people<br /><span>behind the posts.</span></h2>
-              <p className="mt-7 max-w-xl text-base leading-8 text-white/80 sm:text-lg">
-                Every store on {brandName} starts with a real Instagram presence. Explore the businesses behind the products, discover their stories and shop from the people already creating things worth sharing.
-              </p>
-              <Link href="/stores" className="community-stores-button mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-4 text-xs font-black transition hover:-translate-y-1">
-                Explore all stores <ArrowRight size={14} />
-              </Link>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      <section className="seller-showcase relative overflow-hidden py-24 sm:py-28">
-        <div className="seller-orb seller-orb-a" /><div className="seller-orb seller-orb-b" />
-        <div className="shell relative z-10">
-          <div className="grid gap-10 lg:grid-cols-[.95fr_1.05fr] lg:items-center">
-            <Reveal y={42}>
-              <div className="seller-kicker"><Store size={14} /> For sellers</div>
-              <h2 className="seller-title mt-6">Keep creating.<br /><span>We handle the storefront.</span></h2>
-              <p className="mt-7 max-w-xl text-base leading-8 text-white/65 sm:text-lg">Your Instagram already tells your story. Connect your approved account and let your posts flow into a searchable marketplace while you keep doing what you do best: creating.</p>
-              <div className="seller-points mt-8 grid gap-3 sm:grid-cols-2">
-                {["Your Instagram content stays at the centre.","New posts can automatically appear as products.","Hashtags help shoppers discover your products.","Customers can open the original Instagram post."].map((item) => <div key={item} className="seller-point"><span><Check size={13} /></span>{item}</div>)}
-              </div>
-            </Reveal>
-            <Reveal className="relative" y={52}>
-              <div className="seller-image-wrap"><img src={editorialImages.seller} alt="Small business team working together" /><div className="seller-image-glow" /><div className="seller-floating-card"><div className="flex items-center justify-between"><span className="seller-mini-label">LIVE FROM INSTAGRAM</span><Zap size={15} /></div><b>One post → marketplace</b><span>Your content. Your identity.</span></div></div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      <section className="shopper-showcase relative overflow-hidden py-24 sm:py-28">
-        <div className="shopper-grid" /><div className="shopper-orb shopper-orb-a" /><div className="shopper-orb shopper-orb-b" />
-        <div className="shell relative z-10">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
-            <Reveal className="order-2 lg:order-1" y={50}>
-              <div className="shopper-image-wrap"><img src={editorialImages.shopping} alt="Modern retail and shopping experience" /><div className="shopper-image-glow" /><div className="shopper-floating-card"><Heart size={15} fill="currentColor" /><div><span>Saved for later</span><b>Find something you love.</b></div></div></div>
-            </Reveal>
-            <Reveal className="order-1 lg:order-2" y={42}>
-              <div className="shopper-kicker"><Sparkles size={14} /> For shoppers</div>
-              <h2 className="shopper-title mt-6">Discover more.<br /><span>Shop with feeling.</span></h2>
-              <p className="mt-7 max-w-xl text-base leading-8 text-[#555] sm:text-lg">Find products through the people who share them, the stores behind them and the communities around them.</p>
-              <div className="shopper-points mt-8">
-                {[[Users,"Meet the stores behind the posts."],[Heart,"Save products you want to remember."],[ShieldCheck,"Discover approved connected sellers."]].map(([Icon,text]) => { const ItemIcon=Icon as typeof Users; return <div key={text as string} className="shopper-point"><span><ItemIcon size={17}/></span><b>{text as string}</b><ArrowRight size={14}/></div>; })}
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      <section className="shell pb-24">
-        <Reveal className="rounded-[36px] border border-black/10 bg-white p-8 text-center shadow-[0_25px_80px_rgba(0,0,0,.06)] sm:p-14" y={30}>
-          <Sparkles className="mx-auto" size={24} />
-          <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-black tracking-[-.055em] sm:text-6xl">
-            A new way to turn social discovery into meaningful shopping.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#777]">
-            {brandName} is designed to make the journey from “I love
-            this” to “I want to know more” simple, visual and human.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/shop"
-              className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-bold text-white"
-            >
-              Explore the marketplace <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="/how-it-works"
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 px-7 py-4 text-sm font-bold"
-            >
-              Learn more
-            </Link>
-          </div>
-        </Reveal>
-      </section>
-
-
-      {(products.length > 0 || stores.length > 0) && (
-        <section className="border-t border-black/5 py-14">
-          <div className="shell flex flex-wrap items-center justify-between gap-4 text-xs text-[#888]">
-            <span>
-              {products.length > 0 ? "Fresh marketplace content is waiting for you." : "Discover connected Instagram stores."}
-            </span>
-            <Link href="/shop" className="font-bold text-black">
-              Browse marketplace →
-            </Link>
+            </section>
+            <aside className="grid grid-cols-2 gap-3 md:grid-cols-1">
+              <Link href="/for-you" className="flex min-h-[150px] flex-col justify-between rounded-2xl bg-[#e9edf7] p-4 transition hover:-translate-y-0.5 sm:p-5"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white"><Sparkles size={18}/></span><span><b className="block text-base">Picked for you</b><span className="mt-1 block text-xs leading-5 text-[#646b7a]">Find something that fits your style.</span></span></Link>
+              <Link href="/categories" className="flex min-h-[150px] flex-col justify-between rounded-2xl bg-[#f8e9df] p-4 transition hover:-translate-y-0.5 sm:p-5"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white"><BadgePercent size={18}/></span><span><b className="block text-base">Explore more</b><span className="mt-1 block text-xs leading-5 text-[#806454]">Browse categories and fresh finds.</span></span></Link>
+            </aside>
           </div>
         </section>
-      )}
+
+        <section className="mt-6 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]">Shop with confidence</p><h2 className="mt-1 text-lg font-bold">A better way to discover independent sellers</h2></div><Link href="/about" className="inline-flex items-center gap-1 text-sm font-semibold">About {brandName} <ArrowRight size={15}/></Link></div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3"><div className="flex items-center gap-3 rounded-xl bg-[#f8f8f8] p-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white"><ShieldCheck size={19}/></span><span><b className="block text-sm">Seller profiles</b><span className="text-xs text-[#777]">Explore the business behind each post</span></span></div><div className="flex items-center gap-3 rounded-xl bg-[#f8f8f8] p-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white"><HeartHandshake size={19}/></span><span><b className="block text-sm">Social discovery</b><span className="text-xs text-[#777]">Find products from real creators</span></span></div><div className="flex items-center gap-3 rounded-xl bg-[#f8f8f8] p-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white"><Truck size={19}/></span><span><b className="block text-sm">Direct connection</b><span className="text-xs text-[#777]">Continue with the seller directly</span></span></div></div>
+        </section>
+
+        {promotedProducts.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><BadgePercent size={14}/> Promoted picks</p><h2 className="mt-1 text-xl font-black sm:text-2xl">In the spotlight</h2></div><Link href="/shop?tab=featured" className="flex shrink-0 items-center gap-1 text-sm font-semibold">View all <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">{promotedProducts.slice(0,5).map((p:any)=><ProductCard key={p.id} p={p}/>)}</div></section>}
+
+        <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5">
+          <div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><Flame size={14}/> Fresh from the shops</p><h2 className="mt-1 text-xl font-black sm:text-2xl">Discover new finds</h2><p className="mt-1 text-sm text-[#777]">Explore the latest products and services from connected sellers.</p></div><Link href="/shop" className="flex shrink-0 items-center gap-1 text-sm font-semibold">See all <ArrowRight size={15}/></Link></div>
+          {freshProducts.length ? <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{freshProducts.slice(0,12).map((p:any)=><ProductCard key={p.id} p={p}/>)}</div> : <div className="rounded-xl border border-dashed border-[#ddd] px-5 py-12 text-center"><Store className="mx-auto mb-3 text-[#999]" size={28}/><h3 className="font-bold">Your next great find is waiting</h3><p className="mt-1 text-sm text-[#777]">Connected shops will appear here as their products sync.</p><Link href="/stores" className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">Explore stores <ArrowRight size={15}/></Link></div>}
+        </section>
+
+        {trendingProducts.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><Clock3 size={14}/> Community favourites</p><h2 className="mt-1 text-xl font-black sm:text-2xl">Trending right now</h2></div><Link href="/shop?tab=trending" className="flex shrink-0 items-center gap-1 text-sm font-semibold">Explore trending <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{trendingProducts.map((p:any)=><ProductCard key={p.id} p={p}/>)}</div></section>}
+
+        {stores.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]">People behind the products</p><h2 className="mt-1 text-xl font-black sm:text-2xl">Meet the stores</h2></div><Link href="/stores" className="flex shrink-0 items-center gap-1 text-sm font-semibold">All stores <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{stores.slice(0,6).map((store:any)=><Link key={store.id} href={"/stores/"+store.username} className="group overflow-hidden rounded-xl border border-[#eee] transition hover:-translate-y-0.5 hover:shadow-md"><div className="aspect-[4/3] overflow-hidden bg-[#f3f3f3]">{store.profileImageUrl ? <img src={store.profileImageUrl} alt={store.name || "@"+store.username} className="h-full w-full object-cover transition group-hover:scale-105"/> : <div className="flex h-full items-center justify-center"><Store size={28}/></div>}</div><div className="p-3"><b className="block truncate text-sm">{store.name || "@"+store.username}</b><span className="mt-1 block truncate text-xs text-[#777]">@{store.username}</span><span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold">Visit shop <ArrowRight size={12}/></span></div></Link>)}</div></section>}
+
+        <section className="mt-8 flex flex-col items-start justify-between gap-4 rounded-2xl bg-[#242124] p-6 text-white sm:flex-row sm:items-center sm:p-8"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-white/55">Have something to sell?</p><h2 className="mt-2 text-2xl font-black">Bring your Instagram shop to {brandName}.</h2><p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Connect your Instagram Business account and make your posts easier for shoppers to discover.</p></div><Link href="/account" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-black">Start selling <ArrowRight size={15}/></Link></section>
+      </div>
     </main>
   );
 }
