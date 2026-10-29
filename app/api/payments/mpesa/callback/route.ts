@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { processMpesaCallback } from "@/lib/ai-promotion-payment";
-import { userFriendlyError } from "@/lib/user-friendly-errors";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   let body: unknown;
