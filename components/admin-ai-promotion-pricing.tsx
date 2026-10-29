@@ -15,7 +15,17 @@ type Refund = {
   reason: string | null;
   createdAt: string;
 };
-const defaults: Config = { usdKesRate: 130, marginPercent: 35, fixedFeeKes: 20, minPriceKes: 250, override10SilentKes: null, override10AudioKes: null, override15SilentKes: null, override15AudioKes: null, enabled: true };
+const defaults: Config = {
+  usdKesRate: 130,
+  marginPercent: 35,
+  fixedFeeKes: 20,
+  minPriceKes: 250,
+  override10SilentKes: null,
+  override10AudioKes: null,
+  override15SilentKes: null,
+  override15AudioKes: null,
+  enabled: true,
+};
 const fields: {key: keyof Config; label: string; hint: string; nullable?: boolean}[] = [
   {key:"usdKesRate",label:"USD → KSh exchange rate",hint:"Used to convert estimated fal.ai provider cost."},
   {key:"marginPercent",label:"Profit margin (%)",hint:"Applied to provider cost before adding the operating fee."},
