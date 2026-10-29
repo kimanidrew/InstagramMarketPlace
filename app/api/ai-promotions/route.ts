@@ -4,6 +4,7 @@ import { db } from "@/lib/prisma";
 import { isMpesaConfigured, initiateMpesaStk, normalizeMpesaPhone } from "@/lib/mpesa";
 import { quoteAiPromotionPrice } from "@/lib/ai-promotion-pricing";
 import { refreshPaidPromotion } from "@/lib/ai-promotion-payment";
+import { userFriendlyError } from "@/lib/user-friendly-errors";
 export const runtime = "nodejs";
 
 async function syncProject(project: any) {
@@ -20,7 +21,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   if (url.searchParams.get("quote") === "1") {
     try { return NextResponse.json({ quote: await quoteAiPromotionPrice(Number(url.searchParams.get("durationSeconds")), url.searchParams.get("generateAudio") === "true") }); }
-    catch (e) { return NextResponse.json({ error: e instanceof Error ? e.message : "Could not calculate price." }, { status: 400 }); }
+    catch (e) { return NextResponse.json({ error: userFriendlyError(e) }, { status: 400 }); }
   }
   const list = await db().aiPromotionProject.findMany({ where: { userId: current.id }, orderBy: { createdAt: "desc" }, take: 30, include: {
     connection: { select: { username: true } }, post: { select: { productTitle: true } },
@@ -99,7 +100,7 @@ export async function POST(request: Request) {
     await p.aiPromotionPayment.update({ where: { id: payment.id }, data: { status: "PENDING", merchantRequestId: stk.merchantRequestId, checkoutRequestId: stk.checkoutRequestId } });
     return NextResponse.json({ project, payment: { id: payment.id, status: "PENDING", amountKes: quote.amountKes, currency: "KES", customerMessage: stk.customerMessage }, message: `M-Pesa prompt sent for KSh ${quote.amountKes.toLocaleString("en-KE")}. Approve it on your phone; video generation starts only after payment is confirmed.` }, { status: 202 });
   } catch (e) {
-    const message = e instanceof Error ? e.message.slice(0, 350) : "Could not initiate M-Pesa payment.";
+    const message = userFriendlyError(e, "mpesa");
     await p.aiPromotionPayment.update({ where: { id: payment.id }, data: { status: "FAILED", resultDescription: message } });
     await p.aiPromotionProject.update({ where: { id: project.id }, data: { status: "FAILED", errorCode: "PAYMENT_INITIATION_FAILED", errorMessage: message } });
     return NextResponse.json({ error: message }, { status: 503 });
