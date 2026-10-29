@@ -157,7 +157,7 @@ export function PromotionProjects({ projects: initialProjects, shops }: { projec
   const [actionMessage, setActionMessage] = useState<string | null>(null);
 
   async function deleteProject(project: Project) {
-    if (!window.confirm(`Delete “${project.title}” from your recent projects? This cannot be undone.`)) return;
+    if (!window.confirm(`Remove “${project.title}” from your recent projects? Your payment record will be kept.`)) return;
     setDeletingId(project.id);
     setActionMessage(null);
     try {
