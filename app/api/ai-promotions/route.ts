@@ -86,17 +86,22 @@ export async function POST(request: Request) {
   if (existing) return NextResponse.json({ project: { id: existing.id, title: existing.title, status: existing.status }, payment: existing.payments[0] ? { status: existing.payments[0].status, amountKes: existing.payments[0].amountKes } : null, reused: true });
   const shop = await p.instagramConnection.findFirst({ where: { id: connectionId, connectedByUserId: current.id }, select: { id: true, username: true, profileImageUrl: true } });
   if (!shop) return NextResponse.json({ error: "That shop is not connected to your account." }, { status: 404 });
-  const product = scope === "PRODUCT" ? await p.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, mediaType: true } }) : null;
+  const product = scope === "PRODUCT" ? await p.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, mediaType: true, mediaItems: true } }) : null;
   if (scope === "PRODUCT" && !product) return NextResponse.json({ error: "Selected product is not an eligible listing with media." }, { status: 404 });
+  const productItems = Array.isArray(product?.mediaItems) ? product.mediaItems as Array<{ mediaType?: unknown; mediaUrl?: unknown; thumbnailUrl?: unknown }> : [];
+  const productCarouselImage = productItems.map((item) => publicHttpsUrl(item.thumbnailUrl) || (String(item.mediaType || "").toUpperCase() === "IMAGE" ? publicHttpsUrl(item.mediaUrl) : null)).find(Boolean) || null;
+  const isVideoProduct = ["VIDEO", "REEL"].includes(String(product?.mediaType || "").toUpperCase());
   let imageUrl = scope === "PRODUCT"
-    ? publicHttpsUrl(product?.thumbnailUrl) || (product?.mediaType === "IMAGE" ? publicHttpsUrl(product?.mediaUrl) : null)
+    ? publicHttpsUrl(product?.thumbnailUrl) || (product?.mediaType === "IMAGE" ? publicHttpsUrl(product?.mediaUrl) : null) || productCarouselImage
     : publicHttpsUrl(shop.profileImageUrl);
   if (scope === "STORE" && !imageUrl) {
     const featured = await p.instagramPost.findFirst({ where: { connectionId, isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: "IMAGE", mediaUrl: { not: null } }] }, orderBy: { timestamp: "desc" }, select: { thumbnailUrl: true, mediaUrl: true, mediaType: true } });
     imageUrl = publicHttpsUrl(featured?.thumbnailUrl) || (featured?.mediaType === "IMAGE" ? publicHttpsUrl(featured?.mediaUrl) : null);
   }
   if (!imageUrl) return NextResponse.json({ error: scope === "PRODUCT"
-    ? "This product does not have a usable public HTTPS image. Choose another product with an image thumbnail, or refresh your Instagram product sync."
+    ? isVideoProduct
+      ? "This Instagram reel/video has no usable public HTTPS thumbnail saved. Refresh the Instagram product sync so its thumbnail can be fetched, then try again. The reel video URL itself cannot be used as the starting image."
+      : "This product does not have a usable public HTTPS image. Choose another product with an image thumbnail, or refresh your Instagram product sync."
     : "This shop does not have a usable public HTTPS profile or product image. Add or refresh a shop image and try again." }, { status: 400 });
   let quote;
   try { quote = await quoteAiPromotionPrice(durationSeconds, generateAudio); }
