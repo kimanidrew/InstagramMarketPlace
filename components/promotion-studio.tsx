@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AlertCircle, ArrowLeft, ArrowRight, Check, CheckCircle2, Clapperboard, Clock3, LoaderCircle, Play, Sparkles, Store, WandSparkles } from "lucide-react";
+import { AlertCircle, ArrowLeft, ArrowRight, Check, CheckCircle2, Clapperboard, Clock3, ExternalLink, LoaderCircle, Play, Sparkles, Store, Trash2, WandSparkles } from "lucide-react";
+import { userFriendlyError } from "@/lib/user-friendly-errors";
 
 type Product = { id: string; title: string; image: string | null };
 type Shop = { id: string; username: string; profileImageUrl: string | null; products: Product[] };
@@ -150,9 +151,47 @@ export function PromotionStudio({ shops }: { shops: Shop[]; history?: Project[] 
   </div>;
 }
 
-export function PromotionProjects({ projects, shops }: { projects: Project[]; shops: Shop[] }) {
+export function PromotionProjects({ projects: initialProjects, shops }: { projects: Project[]; shops: Shop[] }) {
+  const [projects, setProjects] = useState(initialProjects);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
+
+  async function deleteProject(project: Project) {
+    if (!window.confirm(`Delete “${project.title}” from your recent projects? This cannot be undone.`)) return;
+    setDeletingId(project.id);
+    setActionMessage(null);
+    try {
+      const response = await fetch(`/api/ai-promotions/${encodeURIComponent(project.id)}`, { method: "DELETE" });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "We couldn't delete this promotion.");
+      setProjects(current => current.filter(item => item.id !== project.id));
+    } catch (error) {
+      setActionMessage(userFriendlyError(error));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   return <section className="rounded-[26px] border border-neutral-200 bg-white p-5 shadow-sm sm:p-7">
-    <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Your library</p><h2 className="mt-2 text-2xl font-semibold">Recent projects</h2><p className="mt-1 text-sm text-neutral-500">Check payment status, follow video generation and open completed videos.</p></div><span className="rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-neutral-600">{projects.length} {projects.length === 1 ? "project" : "projects"}</span></div>
-    {!projects.length ? <div className="rounded-2xl border border-dashed border-neutral-200 p-10 text-center"><Clapperboard className="mx-auto mb-3 text-neutral-400" size={28}/><p className="font-semibold">No projects yet</p><p className="mt-1 text-sm text-neutral-500">Create your first promotion and it will appear here.</p><a href="/account/promotion-studio" className="mt-4 inline-flex rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-semibold text-white">Create a promotion</a></div> : <div className="divide-y divide-neutral-100">{projects.map(p => { const projectShop = shops.find(s => s.username === p.shop); const projectProduct = projectShop?.products.find(x => x.title === p.product); return <article key={p.id} className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:gap-4"><div className="flex min-w-0 flex-1 items-center gap-3"><div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-neutral-100">{p.scope === "PRODUCT" && projectProduct?.image ? <img src={projectProduct.image} alt="" className="h-full w-full object-cover"/> : <div className="flex h-full items-center justify-center"><Avatar src={projectShop?.profileImageUrl} label={p.shop} size="sm"/></div>}</div><div className="min-w-0"><p className="font-semibold">{p.title}</p><p className="mt-1 text-xs leading-5 text-neutral-500">@{p.shop} · {p.scope === "STORE" ? "Whole shop" : p.product || "Product"} · {p.duration}s · {new Date(p.createdAt).toLocaleDateString()}{p.payment ? ` · KSh ${p.payment.amountKes.toLocaleString("en-KE")} · ${p.payment.status.toLowerCase().replaceAll("_", " ")}` : ""}</p>{p.payment?.receiptNumber && <p className="mt-1 text-xs text-neutral-500">M-Pesa receipt: {p.payment.receiptNumber}</p>}{p.errorMessage && <p className="mt-1 text-xs text-red-600">{p.errorMessage}</p>}</div></div><div className="flex shrink-0 items-center justify-between gap-3 sm:flex-col sm:items-end"><span className={"rounded-full px-3 py-1.5 text-[10px] font-semibold " + (p.status === "READY" ? "bg-emerald-50 text-emerald-700" : p.status === "FAILED" ? "bg-red-50 text-red-700" : "bg-neutral-100 text-neutral-700")}>{p.status === "PROCESSING" ? "GENERATING" : p.status.replaceAll("_", " ")}</span>{p.videoUrl && <a href={p.videoUrl} target="_blank" rel="noreferrer" className="text-sm font-semibold text-neutral-900 underline underline-offset-4">Preview / download</a>}{p.payment?.status === "REFUND_PENDING" && <span className="text-xs font-medium text-amber-700">Refund review pending</span>}</div></article>; })}</div>}
+    <div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">Your library</p><h2 className="mt-2 text-2xl font-semibold">Recent projects</h2><p className="mt-1 text-sm text-neutral-500">Watch completed videos, check payment status or remove projects you no longer need.</p></div><span className="rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-neutral-600">{projects.length} {projects.length === 1 ? "project" : "projects"}</span></div>
+    {actionMessage && <p role="alert" className="mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{actionMessage}</p>}
+    {!projects.length ? <div className="rounded-2xl border border-dashed border-neutral-200 p-10 text-center"><Clapperboard className="mx-auto mb-3 text-neutral-400" size={28}/><p className="font-semibold">No projects yet</p><p className="mt-1 text-sm text-neutral-500">Create a promotion and it will appear here.</p><a href="/account/promotion-studio" className="mt-4 inline-flex rounded-full bg-neutral-950 px-5 py-2.5 text-sm font-semibold text-white">Create a promotion</a></div> : <div className="divide-y divide-neutral-100">{projects.map(p => {
+      const projectShop = shops.find(s => s.username === p.shop);
+      const projectProduct = projectShop?.products.find(x => x.title === p.product);
+      const paymentPending = p.payment?.status === "PENDING" || p.payment?.status === "INITIATED";
+      const videoUrl = p.videoUrl && /^https:\/\//i.test(p.videoUrl) ? p.videoUrl : null;
+      return <article key={p.id} className="py-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex min-w-0 flex-1 items-center gap-3"><div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-neutral-100">{p.scope === "PRODUCT" && projectProduct?.image ? <img src={projectProduct.image} alt="" className="h-full w-full object-cover"/> : <div className="flex h-full items-center justify-center"><Avatar src={projectShop?.profileImageUrl} label={p.shop} size="sm"/></div>}</div><div className="min-w-0"><p className="font-semibold">{p.title}</p><p className="mt-1 text-xs leading-5 text-neutral-500">@{p.shop} · {p.scope === "STORE" ? "Whole shop" : p.product || "Product"} · {p.duration}s · {new Date(p.createdAt).toLocaleDateString()}{p.payment ? ` · KSh ${p.payment.amountKes.toLocaleString("en-KE")} · ${p.payment.status.toLowerCase().replaceAll("_", " ")}` : ""}</p>{p.payment?.receiptNumber && <p className="mt-1 text-xs text-neutral-500">M-Pesa receipt: {p.payment.receiptNumber}</p>}{p.errorMessage && <p className="mt-1 text-xs text-red-600">{userFriendlyError(p.errorMessage)}</p>}</div></div>
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 sm:justify-end"><span className={"rounded-full px-3 py-1.5 text-[10px] font-semibold " + (p.status === "READY" ? "bg-emerald-50 text-emerald-700" : p.status === "FAILED" ? "bg-red-50 text-red-700" : "bg-neutral-100 text-neutral-700")}>{p.status === "PROCESSING" ? "GENERATING" : p.status.replaceAll("_", " ")}</span>
+            {videoUrl && <a href={videoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-900 underline underline-offset-4"><ExternalLink size={14}/> Open video</a>}
+            {p.payment?.status === "REFUND_PENDING" && <span className="text-xs font-medium text-amber-700">Refund review pending</span>}
+            <button type="button" onClick={() => void deleteProject(p)} disabled={deletingId === p.id || paymentPending || p.payment?.status === "REFUND_PENDING"} title={paymentPending ? "Finish or cancel the pending payment before deleting" : p.payment?.status === "REFUND_PENDING" ? "Project is awaiting refund review" : "Delete project"} className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 px-3 py-2 text-xs font-semibold text-neutral-600 transition hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-40">{deletingId === p.id ? <LoaderCircle size={14} className="animate-spin"/> : <Trash2 size={14}/>} {deletingId === p.id ? "Deleting…" : "Delete"}</button>
+          </div>
+        </div>
+        {videoUrl && <details className="group mt-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-3 sm:p-4"><summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold"><span className="flex items-center gap-2"><Play size={16}/> Watch generated video</span><span className="text-xs font-medium text-neutral-500 group-open:hidden">Show player</span><span className="hidden text-xs font-medium text-neutral-500 group-open:inline">Hide player</span></summary><video className="mt-4 max-h-[560px] w-full rounded-xl bg-black" controls playsInline preload="metadata" src={videoUrl}>Your browser cannot play this video. Use Open video to view it in a new tab.</video><p className="mt-2 text-xs text-neutral-500">Use the video player controls to watch, or open the video in a new tab to download if supported by your browser.</p></details>}
+        {p.videoReady && !videoUrl && <p className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">Your video is ready, but its viewing link is not available right now. Please try refreshing later or contact support.</p>}
+      </article>;
+    })}</div>}
   </section>;
 }
