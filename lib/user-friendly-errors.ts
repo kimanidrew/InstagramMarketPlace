@@ -19,8 +19,8 @@ export function userFriendlyError(input: unknown, area: ErrorArea = "general"): 
   const raw = messageOf(input);
   const value = raw.toLowerCase();
 
-  if (area !== "mpesa" && /m-?pesa|daraja|stk push|ds timeout|user cannot be reached/.test(value)) return userFriendlyError(input, "mpesa");
-  if (area !== "auth" && /session expired|unauthori[sz]ed|jwt expired|invalid session|token expired/.test(value)) return userFriendlyError(input, "auth");
+  if (area === "general" && /m-?pesa|daraja|stk push|ds timeout|user cannot be reached/.test(value)) return userFriendlyError(input, "mpesa");
+  if (area === "general" && /session expired|unauthori[sz]ed|jwt expired|invalid session|token expired/.test(value)) return userFriendlyError(input, "auth");
 
   if (area === "auth") {
     if (/invalid credentials|incorrect password|wrong password|email or password|user not found|password mismatch|authentication failed/.test(value)) {
