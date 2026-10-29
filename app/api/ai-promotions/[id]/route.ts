@@ -49,8 +49,8 @@ export async function DELETE(_request: Request, context: Context) {
     return NextResponse.json({ error: "This promotion is awaiting a refund review, so it cannot be deleted yet. Please contact support for help." }, { status: 409 });
   }
   try {
-    await db().aiPromotionProject.delete({ where: { id: project.id } });
-    return NextResponse.json({ ok: true, id: project.id });
+    await db().aiPromotionProject.update({ where: { id: project.id }, data: { status: "ARCHIVED" } });
+    return NextResponse.json({ ok: true, id: project.id, message: "Promotion removed from your recent projects." });
   } catch (error) {
     console.error("Could not delete AI promotion project", error);
     return NextResponse.json({ error: "We couldn't delete this promotion right now. Please try again." }, { status: 500 });
