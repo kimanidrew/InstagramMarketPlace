@@ -54,12 +54,19 @@ export function PromotionStudio({ shops }: { shops: Shop[]; history?: Project[] 
 
   useEffect(() => {
     let alive = true;
-    fetch("/api/ai-promotions", { cache: "no-store" }).then(async r => {
-      if (!r.ok) return;
-      const data = await r.json();
-      if (alive && Array.isArray(data.projects)) setPaymentPending(data.projects.some((p: Project) => p.payment?.status === "PENDING" || p.payment?.status === "INITIATED"));
-    }).catch(() => {});
-    return () => { alive = false; };
+    const refresh = async () => {
+      try {
+        const response = await fetch("/api/ai-promotions", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (alive && Array.isArray(data.projects)) {
+          setPaymentPending(data.projects.some((p: Project) => p.payment?.status === "PENDING" || p.payment?.status === "INITIATED"));
+        }
+      } catch { /* Keep the current checkout state if the network is temporarily unavailable. */ }
+    };
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 6000);
+    return () => { alive = false; window.clearInterval(timer); };
   }, []);
 
   function canContinue() {
