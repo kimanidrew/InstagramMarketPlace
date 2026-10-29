@@ -21,7 +21,15 @@ export async function GET(_request: Request, context: Context) {
   });
   if (!project) return NextResponse.json({ error: "We couldn't find that promotion. It may have been deleted." }, { status: 404 });
   const video = project.assets.find((asset) => asset.type === "VIDEO");
-  return NextResponse.json({ project: { ...project, videoUrl: video?.storageKey || null, videoReady: Boolean(video) } });
+  const latestPaymentStatus = project.payments[0]?.status;
+  return NextResponse.json({ project: {
+    ...project,
+    errorMessage: project.errorMessage ? userFriendlyError(project.errorMessage, latestPaymentStatus === "FAILED" ? "mpesa" : "general") : null,
+    jobs: project.jobs.map((job) => ({ ...job, lastError: job.lastError ? userFriendlyError(job.lastError) : null })),
+    payments: project.payments.map((payment) => ({ ...payment, resultDescription: payment.resultDescription ? userFriendlyError(payment.resultDescription, "mpesa") : null })),
+    videoUrl: video?.storageKey || null,
+    videoReady: Boolean(video),
+  } });
 }
 
 export async function DELETE(_request: Request, context: Context) {
