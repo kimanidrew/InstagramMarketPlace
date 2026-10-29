@@ -1,4 +1,5 @@
 import "server-only";
+import { userFriendlyError } from "@/lib/user-friendly-errors";
 
 const baseUrl = () => process.env.MPESA_ENVIRONMENT === "production" ? "https://api.safaricom.co.ke" : "https://sandbox.safaricom.co.ke";
 const env = (name: string) => {
@@ -20,7 +21,7 @@ async function accessToken() {
     headers: { Authorization: `Basic ${credentials}` }, cache: "no-store", signal: AbortSignal.timeout(15000),
   });
   const body = await response.json().catch(() => ({}));
-  if (!response.ok || typeof body.access_token !== "string") throw new Error("Could not authenticate with M-Pesa. Check Daraja credentials and environment.");
+  if (!response.ok || typeof body.access_token !== "string") throw new Error(userFriendlyError("Could not authenticate with M-Pesa. Check Daraja credentials and environment.", "mpesa"));
   return body.access_token as string;
 }
 
@@ -28,7 +29,7 @@ export async function initiateMpesaStk(input: { phoneNumber: string; amountKes: 
   const shortcode = env("MPESA_SHORTCODE");
   const passkey = env("MPESA_PASSKEY");
   const callbackUrl = env("MPESA_CALLBACK_URL");
-  if (!callbackUrl.startsWith("https://")) throw new Error("MPESA_CALLBACK_URL must be a public HTTPS URL.");
+  if (!callbackUrl.startsWith("https://")) throw new Error(userFriendlyError("MPESA_CALLBACK_URL must be a public HTTPS URL.", "mpesa"));
   const timestamp = new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14);
   const password = Buffer.from(shortcode + passkey + timestamp).toString("base64");
   const token = await accessToken();
@@ -52,7 +53,7 @@ export async function initiateMpesaStk(input: { phoneNumber: string; amountKes: 
   });
   const body = await response.json().catch(() => ({}));
   if (!response.ok || Number(body.ResponseCode) !== 0 || !body.CheckoutRequestID) {
-    throw new Error(typeof body.CustomerMessage === "string" ? body.CustomerMessage : "M-Pesa could not start the payment. Check Daraja setup and try again.");
+    throw new Error(userFriendlyError(typeof body.CustomerMessage === "string" ? body.CustomerMessage : "M-Pesa could not start the payment. Check Daraja setup and try again.", "mpesa"));
   }
   return {
     merchantRequestId: String(body.MerchantRequestID || ""),
