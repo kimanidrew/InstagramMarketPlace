@@ -9929,3 +9929,124 @@ nav.mobile-bottom-nav {
   .store-directory-showcase-empty-copy h2 { font-size: 23px; }
   .store-directory-showcase-empty-note { font-size: 10px; line-height: 1.4; }
 }
+
+
+/* SokoLink signature theme: confident crimson, deep aubergine and warm ivory.
+   Store-specific accent colors remain untouched so each shop keeps its identity. */
+:root {
+  --sokolink-red: #d7263d;
+  --sokolink-red-hover: #b91f33;
+  --sokolink-plum: #3d3048;
+  --sokolink-ivory: #fff1df;
+  --sokolink-ink: #241d29;
+  --sokolink-muted: #756b78;
+  --sokolink-border: #eee3e2;
+  --sokolink-soft: #fff7f0;
+  --sokolink-ring: rgb(215 38 61 / 18%);
+  --color-primary: var(--sokolink-red);
+  --color-primary-foreground: #fff;
+  accent-color: var(--sokolink-red);
+}
+html { scroll-padding-top: 90px; }
+body { background-color: #fffdfb; color: var(--sokolink-ink); }
+::selection { background: var(--sokolink-red); color: #fff; }
+:where(input, textarea, select):focus-visible {
+  outline-color: var(--sokolink-red);
+}
+:where(button, a, input, textarea, select) {
+  -webkit-tap-highlight-color: rgb(215 38 61 / 10%);
+}
+:where(button, a):focus-visible {
+  outline: 2px solid var(--sokolink-red);
+  outline-offset: 3px;
+}
+
+/* Shared high-priority actions use the brand red; neutral and shop-themed
+   surfaces are intentionally preserved. */
+a.bg-black, button.bg-black,
+a[class~="bg-neutral-950"], button[class~="bg-neutral-950"],
+a[class*="bg-[#111]"], button[class*="bg-[#111]"] {
+  background-color: var(--sokolink-red) !important;
+  border-color: var(--sokolink-red) !important;
+  color: #fff !important;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+a.bg-black:hover, button.bg-black:hover,
+a[class~="bg-neutral-950"]:hover, button[class~="bg-neutral-950"]:hover,
+a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
+  background-color: var(--sokolink-red-hover) !important;
+  border-color: var(--sokolink-red-hover) !important;
+  color: #fff !important;
+  box-shadow: 0 7px 20px rgb(215 38 61 / 18%);
+}
+:where(.chip-active, .strip-pill.active) {
+  background: var(--sokolink-red);
+  border-color: var(--sokolink-red);
+  color: #fff;
+}
+:where(.eyebrow, .chip):focus-visible {
+  outline: 2px solid var(--sokolink-red);
+  outline-offset: 3px;
+}
+
+/* A dark aubergine navigation gives the red identity a premium, editorial frame. */
+.site-header {
+  background: rgb(39 29 45 / 97%);
+  border-color: rgb(255 241 223 / 12%);
+}
+.site-header .brand span { color: #ff8b98; }
+.site-header .icon-btn:hover,
+.site-header .icon-btn.active {
+  background: var(--sokolink-red);
+  color: #fff;
+}
+.site-header .bag-btn {
+  background: var(--sokolink-red);
+  color: #fff;
+  box-shadow: 0 8px 20px rgb(215 38 61 / 22%);
+}
+.site-header .bag-btn:hover {
+  background: var(--sokolink-red-hover);
+  box-shadow: 0 12px 25px rgb(215 38 61 / 30%);
+}
+.site-header nav .nav-link:hover,
+.site-header nav .nav-link:focus,
+.site-header nav .nav-link:focus-visible,
+.site-header nav .nav-link:active {
+  background: var(--sokolink-red) !important;
+  color: #fff !important;
+}
+.desktop-search:focus-within,
+.header-search-form:focus-within {
+  border-color: rgb(215 38 61 / 65%);
+  box-shadow: 0 0 0 3px var(--sokolink-ring);
+}
+.mobile-bottom-nav a[aria-current="page"],
+.mobile-bottom-nav a.active {
+  color: var(--sokolink-red);
+}
+.navigation-progress-bar {
+  background: linear-gradient(90deg, var(--sokolink-red), #ff8b98 45%, var(--sokolink-plum));
+  box-shadow: 0 0 8px rgb(215 38 61 / 28%);
+}
+
+/* Keep the signature palette consistent in shared footer and generic UI while
+   leaving the ivory/plum Shop Spotlight sticker and per-store colors intact. */
+.sokolink-footer-tagline,
+.sokolink-footer-discover span,
+.sokolink-footer-dot,
+.sokolink-footer-note span { color: #ff8b98; }
+.sokolink-footer-discover:hover { border-color: #ff8b98; }
+:where(.card, .seller-analytics-empty, .seller-dashboard-tabs) {
+  border-color: var(--sokolink-border);
+}
+:where(.card):hover {
+  border-color: rgb(215 38 61 / 22%);
+}
+@media (prefers-reduced-motion: reduce) {
+  a.bg-black, button.bg-black,
+  a[class~="bg-neutral-950"], button[class~="bg-neutral-950"],
+  a[class*="bg-[#111]"], button[class*="bg-[#111]"] {
+    transition: none;
+  }
+}
