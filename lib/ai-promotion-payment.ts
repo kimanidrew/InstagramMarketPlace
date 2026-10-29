@@ -1,5 +1,6 @@
 import "server-only";
 import { db } from "@/lib/prisma";
+import { userFriendlyError } from "@/lib/user-friendly-errors";
 import { getPromotionVideoStatus, getPromotionVideoResult, submitPromotionVideo } from "@/lib/ai-promotion-provider";
 
 type CallbackMetadata = { Item?: Array<{ Name?: string; Value?: string | number }> };
@@ -15,7 +16,7 @@ export async function processMpesaCallback(payload: any) {
   if (payment.merchantRequestId && callback.MerchantRequestID && String(callback.MerchantRequestID) !== payment.merchantRequestId) return { accepted: false, reason: "Merchant request ID mismatch." };
   if (payment.status === "PAID" || payment.status === "REFUND_PENDING" || payment.status === "REFUNDED") return { accepted: true, duplicate: true };
   const resultCode = String(callback.ResultCode ?? "");
-  const resultDescription = String(callback.ResultDesc || "M-Pesa payment did not complete.").slice(0, 350);
+  const resultDescription = userFriendlyError(String(callback.ResultDesc || "M-Pesa payment did not complete."), "mpesa").slice(0, 350);
   if (resultCode !== "0") {
     await p.aiPromotionPayment.updateMany({ where: { id: payment.id, status: { in: ["INITIATED", "PENDING"] } }, data: { status: "FAILED", resultCode, resultDescription } });
     await p.aiPromotionProject.updateMany({ where: { id: payment.projectId, status: "PENDING_PAYMENT" }, data: { status: "FAILED", errorCode: "PAYMENT_FAILED", errorMessage: resultDescription } });
@@ -67,7 +68,7 @@ export async function processMpesaCallback(payload: any) {
     await p.aiPromotionJob.create({ data: { projectId: project.id, status: "PROCESSING", attempts: 1, maxAttempts: 3, workerId: submitted.provider } });
     return { accepted: true, paid: true, generationStarted: true, projectId: project.id };
   } catch (error) {
-    const message = error instanceof Error ? error.message.slice(0, 350) : "Video generation could not be started.";
+    const message = userFriendlyError(error).slice(0, 350);
     await p.aiPromotionProject.update({ where: { id: project.id }, data: { status: "FAILED", errorCode: "SUBMIT_FAILED", errorMessage: message } });
     await p.aiPromotionJob.create({ data: { projectId: project.id, status: "FAILED", attempts: 1, maxAttempts: 3, lastError: message } });
     await p.aiPromotionPayment.update({ where: { id: payment.id }, data: { status: "REFUND_PENDING", resultDescription: ("Payment succeeded but generation could not start. " + message).slice(0, 350) } });
@@ -90,7 +91,7 @@ export async function refreshPaidPromotion(projectId: string) {
       await p.aiPromotionProject.updateMany({ where: { id: projectId, status: "PROCESSING" }, data: { status: "READY", completedAt: new Date(), errorCode: null, errorMessage: null } });
       await p.aiPromotionJob.updateMany({ where: { projectId }, data: { status: "SUCCEEDED", lockedAt: null, workerId: null, lastError: null } });
     } else if (state === "FAILED" || state === "ERROR") {
-      const message = "The AI video provider could not generate this paid video. Refund review is required.";
+      const message = "We couldn't generate your video after payment. Your payment has been flagged for refund review. Please contact support if you need an update.";
       await p.aiPromotionProject.updateMany({ where: { id: projectId, status: "PROCESSING" }, data: { status: "FAILED", errorCode: "PROVIDER_FAILED", errorMessage: message } });
       await p.aiPromotionJob.updateMany({ where: { projectId }, data: { status: "FAILED", lockedAt: null, workerId: null, lastError: message } });
       await p.aiPromotionPayment.updateMany({ where: { projectId, status: "PAID" }, data: { status: "REFUND_PENDING", resultDescription: message } });
