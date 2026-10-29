@@ -20,18 +20,18 @@ export default async function Home() {
   const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
   const currentUser = await user();
   const now = new Date();
-  const [rawProducts, rawStores, promotedRaw] = await Promise.all([
+  const [rawProducts, rawStores, promotedRaw, activeProductCampaigns, activeStoreCampaigns] = await Promise.all([
     db().instagramPost.findMany({
       where: { isProduct: true, mediaUrl: { not: null } },
       include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } },
       orderBy: { timestamp: "desc" },
-      take: 32,
+      take: 36,
     }),
     db().instagramConnection.findMany({
       where: { posts: { some: { isProduct: true, mediaUrl: { not: null } } } },
       include: { posts: { where: { isProduct: true, mediaUrl: { not: null } }, select: { id: true, mediaUrl: true, thumbnailUrl: true }, orderBy: { timestamp: "desc" }, take: 4 } },
       orderBy: [{ verifiedAt: "desc" }, { updatedAt: "desc" }],
-      take: 8,
+      take: 16,
     }),
     db().instagramPost.findMany({
       where: { isProduct: true, boostUntil: { gt: now }, mediaUrl: { not: null } },
@@ -39,25 +39,55 @@ export default async function Home() {
       orderBy: { boostUntil: "desc" },
       take: 12,
     }),
+    db().promotionCampaign.findMany({
+      where: {
+        status: "ACTIVE",
+        targetType: "PRODUCT",
+        AND: [{ OR: [{ startsAt: null }, { startsAt: { lte: now } }] }, { endsAt: { gt: now } }],
+        postId: { not: null },
+      },
+      include: { post: { include: { connection: true, tags: true, likes: true, wishlistItems: true, _count: { select: { likes: true, wishlistItems: true } } } } },
+      orderBy: [{ endsAt: "desc" }, { createdAt: "desc" }],
+      take: 12,
+    }),
+    db().promotionCampaign.findMany({
+      where: {
+        status: "ACTIVE",
+        targetType: "STORE",
+        AND: [{ OR: [{ startsAt: null }, { startsAt: { lte: now } }] }, { endsAt: { gt: now } }],
+      },
+      select: { connectionId: true },
+      orderBy: [{ endsAt: "desc" }, { createdAt: "desc" }],
+      take: 12,
+    }),
   ]);
 
   const products = await filterAvailableInstagramMedia(rawProducts);
-  const promoted = await filterAvailableInstagramMedia(promotedRaw);
+  const boosted = await filterAvailableInstagramMedia(promotedRaw);
+  const campaignProducts = await filterAvailableInstagramMedia(activeProductCampaigns.map((campaign: any) => campaign.post).filter(Boolean));
+  const promoted = [...campaignProducts, ...boosted].filter((product: any, index: number, all: any[]) => all.findIndex((candidate: any) => candidate.id === product.id) === index);
   const stores = (await Promise.all(rawStores.map(async (store) => ({
     ...store,
     posts: await filterAvailableInstagramMedia(store.posts),
   })))).filter((store) => store.posts.length > 0);
+  const shuffle = <T,>(items: T[]) => [...items].sort(() => Math.random() - 0.5);
+  const activeStoreIds = new Set(activeStoreCampaigns.map((campaign: any) => campaign.connectionId));
+  const paidPromotedStores = stores.filter((store: any) => activeStoreIds.has(store.id));
+  const promotedStores = (paidPromotedStores.length ? paidPromotedStores : shuffle(stores)).slice(0, 8);
+  const isProductPromotionFallback = promoted.length === 0;
+  const promotionProductsSource = isProductPromotionFallback ? shuffle(products) : promoted;
   const prepare = (items: any[]) => items.map((p) => ({
     ...p,
     likedByCurrentUser: currentUser ? p.likes?.some((like: any) => like.userId === currentUser.id) : false,
     wishlistedByCurrentUser: currentUser ? p.wishlistItems?.some((item: any) => item.userId === currentUser.id) : false,
   }));
   const freshProducts = prepare(products).slice(0, 12);
-  const promotedProducts = prepare(promoted).slice(0, 8);
+  const promotedProducts = prepare(promotionProductsSource).slice(0, 10);
   const trendingProducts = prepare([...products].sort((a: any, b: any) =>
     (Number(b.instagramLikeCount || 0) + Number(b._count?.likes || 0) + Number(b._count?.wishlistItems || 0)) -
     (Number(a.instagramLikeCount || 0) + Number(a._count?.likes || 0) + Number(a._count?.wishlistItems || 0))
   )).slice(0, 8);
+  const serviceProducts = prepare(products.filter((product: any) => String(product.listingType || "").toUpperCase() === "SERVICE")).slice(0, 8);
 
   return (
     <main className="min-h-screen bg-[#eaeff2] text-[#17202a]">
@@ -109,23 +139,29 @@ export default async function Home() {
   <Link href="/stores" className="group flex min-w-0 min-h-[180px] flex-col items-start gap-3 rounded-xl border border-[#cce7d1] bg-gradient-to-r from-[#e8f8e9] to-[#c8edcf] p-3 transition hover:-translate-y-0.5 hover:shadow-md sm:p-5"><span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-[#267443] shadow-sm"><Store size={22}/></span><span className="min-w-0 flex-1"><b className="block text-base sm:text-lg">Shop local stores</b><span className="mt-1 block text-xs leading-5 text-[#4d7056]">Meet sellers and discover their latest drops.</span><span className="mt-2 inline-flex items-center gap-1 text-xs font-extrabold text-[#267443]">Meet sellers <ArrowRight size={13}/></span></span></Link>
         </div>
 
-        <section className="mt-6 rounded-xl border border-[#d5d9d9] bg-white p-4 shadow-sm sm:p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]">Shop with confidence</p><h2 className="mt-1 text-lg font-bold">A better way to discover independent sellers</h2></div><Link href="/about" className="inline-flex items-center gap-1 text-sm font-semibold">About {brandName} <ArrowRight size={15}/></Link></div>
+        <section className="mt-6 rounded-2xl border border-[#e5e9eb] bg-white p-4 shadow-sm sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-[11px] font-extrabold uppercase tracking-[.18em] text-[#8a2c45]">Shop with confidence</p><h2 className="mt-1 text-xl font-black tracking-tight text-[#17202a] sm:text-2xl">A better way to discover independent sellers</h2></div><Link href="/about" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#d7dfe3] px-4 py-2 text-sm font-bold text-[#253543] transition hover:bg-[#f4f7f9]">About {brandName} <ArrowRight size={15}/></Link></div>
           <div className="mt-4 grid gap-3 sm:grid-cols-3"><div className="flex items-center gap-3 rounded-xl bg-[#f8f8f8] p-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white"><ShieldCheck size={19}/></span><span><b className="block text-sm">Seller profiles</b><span className="text-xs text-[#777]">Explore the business behind each post</span></span></div><div className="flex items-center gap-3 rounded-xl bg-[#f8f8f8] p-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white"><HeartHandshake size={19}/></span><span><b className="block text-sm">Social discovery</b><span className="text-xs text-[#777]">Find products from real creators</span></span></div><div className="flex items-center gap-3 rounded-xl bg-[#f8f8f8] p-3"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-white"><Truck size={19}/></span><span><b className="block text-sm">Direct connection</b><span className="text-xs text-[#777]">Continue with the seller directly</span></span></div></div>
         </section>
 
-        {promotedProducts.length > 0 && <section className="mt-8 rounded-xl border border-[#d5d9d9] bg-white p-4 shadow-sm sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><BadgePercent size={14}/> Promoted picks</p><h2 className="mt-1 text-xl font-black sm:text-2xl">In the spotlight</h2></div><Link href="/shop?tab=featured" className="flex shrink-0 items-center gap-1 text-sm font-semibold">View all <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">{promotedProducts.slice(0,5).map((p:any)=><ProductCard key={p.id} p={p}/>)}</div></section>}
+        {promotedProducts.length > 0 && <section className="mt-8 overflow-hidden rounded-2xl border border-[#f0d7ad] bg-gradient-to-br from-[#fffaf0] via-white to-[#fff1d6] p-4 shadow-sm sm:p-6"><div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[.18em] text-[#9a5700]"><BadgePercent size={14}/> {isProductPromotionFallback ? "Featured discovery" : "Promoted products"}</p><h2 className="mt-1 text-2xl font-black tracking-tight text-[#17202a] sm:text-3xl">{isProductPromotionFallback ? "Worth a closer look" : "In the spotlight"}</h2><p className="mt-1 max-w-xl text-sm leading-6 text-[#69727c]">{isProductPromotionFallback ? "A rotating selection from shops across SokoLink." : "Discover businesses currently promoting their products."}</p></div><Link href="/shop?tab=featured" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#d8a85c] bg-white px-4 py-2 text-sm font-bold text-[#754100] transition hover:bg-[#fff1d6]">View all <ArrowRight size={15}/></Link></div><div className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-3 [scrollbar-width:thin]">{promotedProducts.map((p:any)=><div key={p.id} className="w-[190px] shrink-0 snap-start sm:w-[220px] lg:w-[235px]"><ProductCard p={p}/></div>)}</div></section>}
 
-        <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5">
-          <div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><Flame size={14}/> Fresh from the shops</p><h2 className="mt-1 text-xl font-black sm:text-2xl">Discover new finds</h2><p className="mt-1 text-sm text-[#777]">Explore the latest products and services from connected sellers.</p></div><Link href="/shop" className="flex shrink-0 items-center gap-1 text-sm font-semibold">See all <ArrowRight size={15}/></Link></div>
+        <section className="mt-8 rounded-2xl border border-[#e5e9eb] bg-white p-4 shadow-sm sm:p-6">
+          <div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><Flame size={14}/> Fresh from the shops</p><h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">Discover new finds</h2><p className="mt-1 text-sm text-[#777]">Explore the latest products and services from connected sellers.</p></div><Link href="/shop" className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border border-[#d7dfe3] bg-white px-4 py-2 text-sm font-bold text-[#253543] transition hover:bg-[#f4f7f9]">See all <ArrowRight size={15}/></Link></div>
           {freshProducts.length ? <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{freshProducts.slice(0,12).map((p:any)=><ProductCard key={p.id} p={p}/>)}</div> : <div className="rounded-xl border border-dashed border-[#ddd] px-5 py-12 text-center"><Store className="mx-auto mb-3 text-[#999]" size={28}/><h3 className="font-bold">Your next great find is waiting</h3><p className="mt-1 text-sm text-[#777]">Connected shops will appear here as their products sync.</p><Link href="/stores" className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">Explore stores <ArrowRight size={15}/></Link></div>}
         </section>
 
         {trendingProducts.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]"><Clock3 size={14}/> Community favourites</p><h2 className="mt-1 text-xl font-black sm:text-2xl">Trending right now</h2></div><Link href="/shop?tab=trending" className="flex shrink-0 items-center gap-1 text-sm font-semibold">Explore trending <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{trendingProducts.map((p:any)=><ProductCard key={p.id} p={p}/>)}</div></section>}
 
-        {stores.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#8a2c45]">People behind the products</p><h2 className="mt-1 text-xl font-black sm:text-2xl">Meet the stores</h2></div><Link href="/stores" className="flex shrink-0 items-center gap-1 text-sm font-semibold">All stores <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{stores.slice(0,6).map((store:any)=><Link key={store.id} href={"/stores/"+store.username} className="group overflow-hidden rounded-xl border border-[#eee] transition hover:-translate-y-0.5 hover:shadow-md"><div className="aspect-[4/3] overflow-hidden bg-[#f3f3f3]">{store.profileImageUrl ? <img src={store.profileImageUrl} alt={store.name || "@"+store.username} className="h-full w-full object-cover transition group-hover:scale-105"/> : <div className="flex h-full items-center justify-center"><Store size={28}/></div>}</div><div className="p-3"><b className="block truncate text-sm">{store.name || "@"+store.username}</b><span className="mt-1 block truncate text-xs text-[#777]">@{store.username}</span><span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold">Visit shop <ArrowRight size={12}/></span></div></Link>)}</div></section>}
+        {promotedStores.length > 0 && <section className="mt-8 overflow-hidden rounded-2xl border border-[#cfe3e8] bg-gradient-to-br from-[#f2fbfc] via-white to-[#e8f5f8] p-4 shadow-sm sm:p-6"><div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[.18em] text-[#176b87]"><Store size={14}/> {paidPromotedStores.length ? "Promoted stores" : "Store spotlight"}</p><h2 className="mt-1 text-2xl font-black tracking-tight text-[#17202a] sm:text-3xl">{paidPromotedStores.length ? "Stores in the spotlight" : "Meet your next favourite shop"}</h2><p className="mt-1 text-sm leading-6 text-[#667780]">{paidPromotedStores.length ? "Discover stores running an active promotion." : "A rotating mix of sellers and independent businesses to explore."}</p></div><Link href="/stores" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#9dcbd5] bg-white px-4 py-2 text-sm font-bold text-[#145b70] transition hover:bg-[#e8f5f8]">Explore stores <ArrowRight size={15}/></Link></div><div className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-3 [scrollbar-width:thin]">{promotedStores.map((store:any)=><Link key={store.id} href={"/stores/"+store.username} className="group w-[220px] shrink-0 snap-start overflow-hidden rounded-2xl border border-[#dce8eb] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:w-[250px]"><div className="relative aspect-[5/3] overflow-hidden bg-[#e9f1f3]">{store.posts[0]?.thumbnailUrl || store.posts[0]?.mediaUrl ? <img src={store.posts[0]?.thumbnailUrl || store.posts[0]?.mediaUrl} alt={store.name || "@"+store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/> : store.profileImageUrl ? <img src={store.profileImageUrl} alt={store.name || "@"+store.username} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/> : <div className="flex h-full items-center justify-center"><Store size={32} className="text-[#176b87]"/></div>}<span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#145b70]">{paidPromotedStores.length ? "Promoted" : "Featured shop"}</span></div><div className="p-4"><b className="block truncate text-base font-extrabold text-[#17202a]">{store.name || "@"+store.username}</b><span className="mt-1 block truncate text-sm text-[#697780]">@{store.username}</span><span className="mt-3 inline-flex min-h-9 items-center gap-2 rounded-full bg-[#176b87] px-3.5 py-2 text-xs font-bold text-white transition group-hover:bg-[#124f63]">Visit store <ArrowRight size={13}/></span></div></Link>)}</div></section>}
 
-        <section className="mt-8 flex flex-col items-start justify-between gap-4 rounded-xl bg-gradient-to-r from-[#172b4d] via-[#176b87] to-[#e47911] p-6 text-white shadow-sm sm:flex-row sm:items-center sm:p-8"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-white/55">Have something to sell?</p><h2 className="mt-2 text-2xl font-black">Bring your Instagram shop to {brandName}.</h2><p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Connect your Instagram Business account and make your posts easier for shoppers to discover.</p></div><Link href="/account" className="inline-flex shrink-0 items-center gap-2 rounded-md bg-[#ff9900] px-5 py-3 text-sm font-black text-[#17202a] hover:bg-[#ffb84d]">Start selling <ArrowRight size={15}/></Link></section>
+        {stores.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="text-[11px] font-extrabold uppercase tracking-[.16em] text-[#8a2c45]">People behind the products</p><h2 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">More stores to discover</h2></div><Link href="/stores" className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border border-[#d7dfe3] bg-white px-4 py-2 text-sm font-bold text-[#253543] transition hover:bg-[#f4f7f9]">All stores <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{stores.filter((store:any)=>!promotedStores.some((featured:any)=>featured.id===store.id)).slice(0,6).map((store:any)=><Link key={store.id} href={"/stores/"+store.username} className="group overflow-hidden rounded-xl border border-[#e5e9eb] bg-white transition hover:-translate-y-0.5 hover:shadow-md"><div className="aspect-[4/3] overflow-hidden bg-[#f3f6f7]">{store.profileImageUrl ? <img src={store.profileImageUrl} alt={store.name || "@"+store.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105"/> : <div className="flex h-full items-center justify-center"><Store size={28} className="text-[#7b8a93]"/></div>}</div><div className="p-3.5"><b className="block truncate text-sm font-extrabold text-[#17202a]">{store.name || "@"+store.username}</b><span className="mt-1 block truncate text-xs text-[#71808a]">@{store.username}</span><span className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#176b87]">Visit shop <ArrowRight size={12}/></span></div></Link>)}</div></section>}
+
+        {serviceProducts.length > 0 && <section className="mt-8 rounded-2xl border border-[#e5e9eb] bg-white p-4 shadow-sm sm:p-6"><div className="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p className="text-[11px] font-extrabold uppercase tracking-[.18em] text-[#8a2c45]">Beyond shopping</p><h2 className="mt-1 text-2xl font-black tracking-tight text-[#17202a] sm:text-3xl">Services worth discovering</h2><p className="mt-1 text-sm leading-6 text-[#71808a]">Find talented businesses and service providers in one place.</p></div><Link href="/search?type=service" className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#d7dfe3] px-4 py-2 text-sm font-bold text-[#253543] transition hover:bg-[#f4f7f9]">Explore services <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{serviceProducts.map((p:any)=><ProductCard key={p.id} p={p}/>)}</div></section>}
+
+        <section className="mt-8 rounded-2xl border border-[#e5e9eb] bg-white p-4 shadow-sm sm:p-6"><div className="grid gap-5 md:grid-cols-3"><div className="rounded-xl bg-[#f2f8fb] p-4 sm:p-5"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#176b87] shadow-sm"><ShieldCheck size={20}/></span><h3 className="mt-3 text-base font-extrabold tracking-tight text-[#17202a]">Discover the seller</h3><p className="mt-1 text-sm leading-6 text-[#697780]">Open store profiles to learn more about the businesses behind each listing.</p></div><div className="rounded-xl bg-[#fff7e9] p-4 sm:p-5"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#a65b00] shadow-sm"><HeartHandshake size={20}/></span><h3 className="mt-3 text-base font-extrabold tracking-tight text-[#17202a]">Connect directly</h3><p className="mt-1 text-sm leading-6 text-[#697780]">Use the listing details to reach sellers and ask the right questions.</p></div><div className="rounded-xl bg-[#f2f8f3] p-4 sm:p-5"><span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#267443] shadow-sm"><Truck size={20}/></span><h3 className="mt-3 text-base font-extrabold tracking-tight text-[#17202a]">Shop with context</h3><p className="mt-1 text-sm leading-6 text-[#697780]">Explore a seller’s other products and services before deciding what works for you.</p></div></div></section>
+
+        <section className="mt-8 flex flex-col items-start justify-between gap-5 rounded-2xl bg-gradient-to-r from-[#172b4d] via-[#176b87] to-[#e47911] p-6 text-white shadow-md sm:flex-row sm:items-center sm:p-9"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-white/55">Have something to sell?</p><h2 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Bring your Instagram shop to {brandName}.</h2><p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Connect your Instagram Business account and make your posts easier for shoppers to discover.</p></div><Link href="/account" className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full bg-[#ff9900] px-6 py-3 text-sm font-extrabold text-[#17202a] shadow-md transition hover:-translate-y-0.5 hover:bg-[#ffb84d]">Start selling <ArrowRight size={15}/></Link></section>
       </div>
     </main>
   );
