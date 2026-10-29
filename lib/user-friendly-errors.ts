@@ -26,7 +26,7 @@ export function userFriendlyError(input: unknown, area: ErrorArea = "general"): 
     if (/session expired|unauthori[sz]ed|sign in required|not authenticated|jwt expired|invalid session|token expired/.test(value)) {
       return "Your session has expired. Please sign in again to continue.";
     }
-    if (/forbidden|access denied|not allowed|admin only|permission denied/.test(value)) {
+    if (/^admin$|forbidden|access denied|not allowed|admin only|permission denied/.test(value)) {
       return "You don't have permission to do that. If you think this is a mistake, contact support.";
     }
     if (/already exists|unique constraint|p2002/.test(value)) {
