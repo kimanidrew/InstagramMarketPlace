@@ -8,7 +8,7 @@ export default async function PromotionProjectsPage() {
  const current=await user(); if(!current) redirect("/login");
  const [shops, projects]=await Promise.all([
   db().instagramConnection.findMany({where:{connectedByUserId:current.id},orderBy:{createdAt:"desc"},include:{posts:{where:{isProduct:true,OR:[{mediaUrl:{not:null}},{thumbnailUrl:{not:null}}]},select:{id:true,productTitle:true,mediaUrl:true,thumbnailUrl:true}}}}),
-  db().aiPromotionProject.findMany({where:{userId:current.id},orderBy:{createdAt:"desc"},take:50,include:{connection:{select:{username:true}},post:{select:{productTitle:true}},assets:{where:{type:"VIDEO"},take:1,select:{id:true,storageKey:true}},payments:{orderBy:{createdAt:"desc"},take:1,select:{status:true,amountKes:true,phoneNumber:true,receiptNumber:true,resultDescription:true}}}})
+  db().aiPromotionProject.findMany({where:{userId:current.id,status:{not:"ARCHIVED"}},orderBy:{createdAt:"desc"},take:50,include:{connection:{select:{username:true}},post:{select:{productTitle:true}},assets:{where:{type:"VIDEO"},take:1,select:{id:true,storageKey:true}},payments:{orderBy:{createdAt:"desc"},take:1,select:{status:true,amountKes:true,phoneNumber:true,receiptNumber:true,resultDescription:true}}}})
  ]);
  return <main className="mx-auto min-h-screen max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
   <header className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
