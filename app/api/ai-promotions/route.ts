@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     try { return NextResponse.json({ quote: await quoteAiPromotionPrice(Number(url.searchParams.get("durationSeconds")), url.searchParams.get("generateAudio") === "true") }); }
     catch (e) { return NextResponse.json({ error: userFriendlyError(e) }, { status: 400 }); }
   }
-  const list = await db().aiPromotionProject.findMany({ where: { userId: current.id }, orderBy: { createdAt: "desc" }, take: 30, include: {
+  const list = await db().aiPromotionProject.findMany({ where: { userId: current.id, status: { not: "ARCHIVED" } }, orderBy: { createdAt: "desc" }, take: 30, include: {
     connection: { select: { username: true } }, post: { select: { productTitle: true } },
     assets: { where: { type: "VIDEO" }, take: 1, select: { id: true, storageKey: true } },
     payments: { orderBy: { createdAt: "desc" }, take: 1, select: { status: true, amountKes: true, phoneNumber: true, receiptNumber: true, resultDescription: true } },
