@@ -3,6 +3,7 @@ import { ArrowRight, BadgePercent, BriefcaseBusiness, ChevronRight, Clock3, Flam
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
+import { SpotlightStoreCard } from "@/components/store-directory";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,15 @@ const categories = [
   { label: "Electronics", tag: "electronics", icon: "⌁" },
   { label: "Food & groceries", tag: "food", icon: "❋" },
   { label: "Services", tag: "services", icon: "↗" },
+];
+
+const productCategories = [
+  { label: "Fashion & clothing", tag: "fashion", description: "Everyday style, statement pieces and wardrobe finds.", aliases: ["fashion", "clothing", "apparel", "wear", "shoes", "accessories"] },
+  { label: "Beauty & skincare", tag: "beauty", description: "Beauty essentials, skincare and self-care favourites.", aliases: ["beauty", "skincare", "skin care", "makeup", "cosmetic", "hair", "fragrance"] },
+  { label: "Home & living", tag: "home", description: "Thoughtful pieces to refresh your home and everyday spaces.", aliases: ["home", "living", "furniture", "decor", "kitchen", "household"] },
+  { label: "Electronics", tag: "electronics", description: "Useful tech, gadgets and accessories worth a closer look.", aliases: ["electronic", "tech", "gadget", "phone", "computer", "device"] },
+  { label: "Food & groceries", tag: "food", description: "Food, treats and everyday essentials from local sellers.", aliases: ["food", "grocery", "groceries", "drink", "snack", "bakery", "cake"] },
+  { label: "Services", tag: "services", description: "Discover talented service providers and independent businesses.", aliases: ["service", "salon", "event", "photography", "repair", "cleaning", "design"] },
 ];
 
 export default async function Home() {
@@ -88,6 +98,29 @@ export default async function Home() {
     (Number(a.instagramLikeCount || 0) + Number(a._count?.likes || 0) + Number(a._count?.wishlistItems || 0))
   )).slice(0, 8);
   const serviceProducts = prepare(products.filter((product: any) => String(product.listingType || "").toUpperCase() === "SERVICE")).slice(0, 8);
+  const categoryMatches = (product: any, category: (typeof productCategories)[number]) => {
+    if (category.tag === "services" && String(product.listingType || "").toUpperCase() === "SERVICE") return true;
+    const values = [product.category, product.subcategory, ...(product.tags || []).map((tag: any) => tag.name)]
+      .filter(Boolean).map((value: any) => String(value).toLowerCase().trim());
+    return values.some((value: string) => category.aliases.some((alias) => value.includes(alias)));
+  };
+  const categorySections = productCategories.map((category) => ({
+    ...category,
+    products: prepare(products.filter((product: any) => categoryMatches(product, category)))
+      .filter((product: any, index: number, all: any[]) => all.findIndex((candidate: any) => candidate.id === product.id) === index)
+      .slice(0, 6),
+  }));
+  const storeBannerEntries = stores.map((store: any) => ({
+    store: {
+      id: store.id, username: store.username, name: store.name, biography: store.biography,
+      profileImageUrl: store.profileImageUrl, profileAccentColor: store.profileAccentColor,
+      verifiedAt: store.verifiedAt, verifiedUntil: store.verifiedUntil, proUntil: store.proUntil,
+    },
+    posts: store.posts,
+    promoted: activeStoreIds.has(store.id),
+    activeVerified: !!store.verifiedAt && (!store.verifiedUntil || store.verifiedUntil > now),
+    activePro: !!store.proUntil && store.proUntil > now,
+  }));
 
   return (
     <main className="min-h-screen bg-[#eaeff2] text-[#17202a]">
@@ -150,6 +183,22 @@ export default async function Home() {
           <div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.14em] text-[#8a2c45]"><Flame size={14}/> Fresh from the shops</p><h2 className="mt-1 text-xl font-black tracking-tight sm:text-2xl">Discover new finds</h2><p className="mt-1 text-sm text-[#777]">Explore the latest products and services from connected sellers.</p></div><Link href="/shop" className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-[#d7dfe3] bg-white px-4 py-2 text-sm font-bold text-[#253543] transition hover:bg-[#f4f7f9]">See all <ArrowRight size={15}/></Link></div>
           {freshProducts.length ? <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{freshProducts.slice(0,12).map((p:any)=><ProductCard key={p.id} p={p}/>)}</div> : <div className="rounded-xl border border-dashed border-[#ddd] px-5 py-12 text-center"><Store className="mx-auto mb-3 text-[#999]" size={28}/><h3 className="font-bold">Your next great find is waiting</h3><p className="mt-1 text-sm text-[#777]">Connected shops will appear here as their products sync.</p><Link href="/stores" className="mt-4 inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white">Explore stores <ArrowRight size={15}/></Link></div>}
         </section>
+
+        {categorySections.map((category, index) => category.products.length > 0 ? (
+          <div key={category.tag} className="mt-8 space-y-5">
+            <section className="rounded-2xl border border-[#e5e9eb] bg-white p-4 shadow-sm sm:p-6">
+              <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#fff0d6] text-lg text-[#9a5700]">{categories.find((item) => item.tag === category.tag)?.icon || "✦"}</span>
+                  <div><p className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#8a2c45]">Shop by category</p><h2 className="mt-1 text-lg font-extrabold tracking-tight text-[#17202a] sm:text-xl">{category.label}</h2><p className="mt-1 max-w-xl text-sm leading-5 text-[#71808a]">{category.description}</p></div>
+                </div>
+                <Link href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-[#d7dfe3] bg-white px-4 py-2 text-sm font-bold text-[#253543] transition hover:bg-[#f4f7f9]">Explore {category.tag === "services" ? "services" : "category"} <ArrowRight size={14}/></Link>
+              </div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{category.products.map((p: any) => <ProductCard key={p.id} p={p}/>)}</div>
+            </section>
+            {(index === 1 || index === 3) && storeBannerEntries.length > 0 && <section className="store-directory-showcase-stage" aria-label="Shop spotlight"><SpotlightStoreCard entry={storeBannerEntries[(index === 1 ? 0 : 1) % storeBannerEntries.length]} /></section>}
+          </div>
+        ) : null)}
 
         {trendingProducts.length > 0 && <section className="mt-8 rounded-2xl border border-[#e7e7e7] bg-white p-4 sm:p-5"><div className="mb-4 flex items-end justify-between gap-3"><div><p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.14em] text-[#8a2c45]"><Clock3 size={14}/> Community favourites</p><h2 className="mt-1 text-lg font-extrabold sm:text-xl">Trending right now</h2></div><Link href="/shop?tab=trending" className="flex shrink-0 items-center gap-1 text-sm font-semibold">Explore trending <ArrowRight size={15}/></Link></div><div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">{trendingProducts.map((p:any)=><ProductCard key={p.id} p={p}/>)}</div></section>}
 
