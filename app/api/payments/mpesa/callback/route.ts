@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { processMpesaCallback } from "@/lib/ai-promotion-payment";
+import { userFriendlyError } from "@/lib/user-friendly-errors";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ ResultCode: 1, ResultDesc: "Invalid callback payload." }, { status: 400 }); }
+  try { body = await request.json(); }
+  catch { return NextResponse.json({ ResultCode: 1, ResultDesc: "Invalid callback payload." }, { status: 400 }); }
   try {
     const result = await processMpesaCallback(body);
     if (!result.accepted) {
