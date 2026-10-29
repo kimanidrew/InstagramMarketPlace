@@ -8,6 +8,17 @@ import { submitPromotionVideo } from "@/lib/ai-promotion-provider";
 import { userFriendlyError } from "@/lib/user-friendly-errors";
 export const runtime = "nodejs";
 
+function publicHttpsUrl(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim()) return null;
+  const candidate = value.trim();
+  try {
+    const parsed = new URL(candidate);
+    return parsed.protocol === "https:" ? candidate : null;
+  } catch {
+    return null;
+  }
+}
+
 async function syncProject(project: any) {
   if (project.status === "PROCESSING" && project.providerJobId && !project.assets?.length) await refreshPaidPromotion(project.id);
   return db().aiPromotionProject.findUnique({ where: { id: project.id }, include: {
@@ -77,12 +88,16 @@ export async function POST(request: Request) {
   if (!shop) return NextResponse.json({ error: "That shop is not connected to your account." }, { status: 404 });
   const product = scope === "PRODUCT" ? await p.instagramPost.findFirst({ where: { id: postId!, connectionId, isProduct: true, OR: [{ mediaUrl: { not: null } }, { thumbnailUrl: { not: null } }] }, select: { id: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, mediaType: true } }) : null;
   if (scope === "PRODUCT" && !product) return NextResponse.json({ error: "Selected product is not an eligible listing with media." }, { status: 404 });
-  let imageUrl = scope === "PRODUCT" ? product?.thumbnailUrl || (product?.mediaType === "IMAGE" ? product.mediaUrl : null) : shop.profileImageUrl;
+  let imageUrl = scope === "PRODUCT"
+    ? publicHttpsUrl(product?.thumbnailUrl) || (product?.mediaType === "IMAGE" ? publicHttpsUrl(product?.mediaUrl) : null)
+    : publicHttpsUrl(shop.profileImageUrl);
   if (scope === "STORE" && !imageUrl) {
     const featured = await p.instagramPost.findFirst({ where: { connectionId, isProduct: true, OR: [{ thumbnailUrl: { not: null } }, { mediaType: "IMAGE", mediaUrl: { not: null } }] }, orderBy: { timestamp: "desc" }, select: { thumbnailUrl: true, mediaUrl: true, mediaType: true } });
-    imageUrl = featured?.thumbnailUrl || (featured?.mediaType === "IMAGE" ? featured.mediaUrl : null);
+    imageUrl = publicHttpsUrl(featured?.thumbnailUrl) || (featured?.mediaType === "IMAGE" ? publicHttpsUrl(featured?.mediaUrl) : null);
   }
-  if (!imageUrl || !imageUrl.startsWith("https://")) return NextResponse.json({ error: "Choose a product or shop with a public HTTPS image before paying." }, { status: 400 });
+  if (!imageUrl) return NextResponse.json({ error: scope === "PRODUCT"
+    ? "This product does not have a usable public HTTPS image. Choose another product with an image thumbnail, or refresh your Instagram product sync."
+    : "This shop does not have a usable public HTTPS profile or product image. Add or refresh a shop image and try again." }, { status: 400 });
   let quote;
   try { quote = await quoteAiPromotionPrice(durationSeconds, generateAudio); }
   catch (e) { return NextResponse.json({ error: userFriendlyError(e) }, { status: 400 }); }
