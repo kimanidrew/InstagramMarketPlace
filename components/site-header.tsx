@@ -127,7 +127,8 @@ export function SiteHeader({ user }: { user: any }) {
     { title: "For You", description: "Personalised picks and recommendations", href: "/for-you", terms: "for you personalised recommendations interests", icon: Compass },
     { title: "Stores", description: "Discover Instagram shops and sellers", href: "/stores", terms: "stores shops sellers instagram businesses", icon: Store },
     { title: "Categories", description: "Explore products by category", href: "/categories", terms: "categories types collections explore", icon: Sparkles },
-    { title: "How it works", description: "Learn how SokoLink works", href: "/how-it-works", terms: "help guide how it works about getting started", icon: CircleHelp },
+    { title: "About", description: "Our mission and how SokoLink works", href: "/about", terms: "company mission about story social shopping", icon: CircleHelp },
+    { title: "How it works", description: "Learn how SokoLink works", href: "/how-it-works", terms: "help guide how it works getting started", icon: CircleHelp },
     { title: "Wishlist", description: "Return to your saved listings", href: "/wishlist", terms: "wishlist saved favourites favorites", icon: Heart },
     ...(user ? [{ title: "Grow your own shop", description: "Manage your shop growth and analytics", href: "/account/analytics", terms: "grow shop seller analytics promotions insights", icon: BriefcaseBusiness }] : []),
   ];
@@ -173,6 +174,7 @@ export function SiteHeader({ user }: { user: any }) {
             ["/stores", "Stores"],
             ["/categories", "Categories"],
             ["/how-it-works", "How it works"],
+            ["/about", "About"],
           ].map(([href, label]) => {
             const active = pathname === href || (href !== "/shop" && pathname.startsWith(href + "/"));
             return (
