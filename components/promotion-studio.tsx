@@ -21,7 +21,9 @@ function Avatar({ src, label, size = "md" }: { src: string | null | undefined; l
   return src ? <img src={src} alt={label} className={sizeClass + " shrink-0 rounded-full border border-black/5 bg-neutral-100 object-cover"} /> : <span className={sizeClass + " flex shrink-0 items-center justify-center rounded-full bg-neutral-100 font-semibold text-neutral-600"}>{label.replace("@", "").slice(0, 1).toUpperCase() || "S"}</span>;
 }
 
-export function PromotionStudio({ shops, skipPayment = true }: { shops: Shop[]; history?: Project[]; skipPayment?: boolean }) {
+export function PromotionStudio(props: { shops: Shop[]; history?: Project[]; skipPayment?: boolean }) {
+  const { shops } = props;
+  const skipPayment: boolean = props.skipPayment ?? true;
   const [step, setStep] = useState(1);
   const [scope, setScope] = useState<"PRODUCT" | "STORE">("PRODUCT");
   const [mode, setMode] = useState<"HYBRID" | "AI" | "MOTION">("HYBRID");
@@ -146,7 +148,7 @@ export function PromotionStudio({ shops, skipPayment = true }: { shops: Shop[]; 
 
       {message && <p role="status" className={"mt-6 flex items-start gap-2 rounded-xl p-3 text-sm " + (message.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700")}>{message.ok ? <CheckCircle2 size={17} className="mt-0.5 shrink-0"/> : <AlertCircle size={17} className="mt-0.5 shrink-0"/>}<span>{message.text}</span></p>}
       {!!shops.length && <div className="mt-7 flex flex-col-reverse gap-3 border-t border-neutral-100 pt-5 sm:flex-row sm:items-center sm:justify-between"><button type="button" onClick={() => { setMessage(null); setStep(s => Math.max(1, s - 1)); }} disabled={step === 1 || busy} className="inline-flex items-center justify-center gap-2 rounded-full border border-neutral-200 px-5 py-3 text-sm font-semibold disabled:opacity-30"><ArrowLeft size={16}/> Back</button>{step < 4 ? <button type="button" onClick={() => { if (canContinue()) setStep(s => Math.min(4, s + 1)); }} className="inline-flex items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800">Continue <ArrowRight size={16}/></button> : <button type="button" disabled={busy || (!skipPayment && paymentPending) || (!skipPayment && (!quote || !phoneNumber.trim())) || prompt.trim().length < 12} onClick={() => void submit()} className="inline-flex items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-40">{busy ? <LoaderCircle size={17} className="animate-spin"/> : <Sparkles size={17}/>} {busy ? (skipPayment ? "Starting video generation…" : "Sending M-Pesa prompt…") : !skipPayment && paymentPending ? "Awaiting M-Pesa payment…" : skipPayment ? "Generate video (payment skipped)" : quote ? `Pay KSh ${quote.amountKes.toLocaleString("en-KE")} & create promotion` : "Price unavailable"}</button>}</div>}
-      <p className="mt-4 text-center text-xs leading-5 text-neutral-500">{skipPayment ? "Payment is temporarily skipped. Video generation still incurs AI provider costs." : "{skipPayment ? "Payment is temporarily skipped. Video generation still incurs AI provider costs." : "You’ll review the price before checkout. Video generation starts only after successful M-Pesa payment confirmation. Failed paid generations are flagged for refund review."}"}</p>
+      <p className="mt-4 text-center text-xs leading-5 text-neutral-500">{skipPayment ? "Payment is temporarily skipped. Video generation still incurs AI provider costs." : "You’ll review the price before checkout. Video generation starts only after successful M-Pesa payment confirmation. Failed paid generations are flagged for refund review."}</p>
     </section>
   </div>;
 }
