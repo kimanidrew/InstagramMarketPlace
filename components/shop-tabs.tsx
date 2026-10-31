@@ -138,16 +138,24 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     };
     const storeSlidesAll = unique.filter((slide) => slide.type === "store");
     const productSlidesAll = unique.filter((slide) => slide.type === "product");
-    // Always reserve as many of the five spotlight positions as possible for
-    // shop cards. Product spotlights fill only the positions left after shops.
-    const choose = (items: PromoSlide[], count: number) => {
-      const featuredItems = shuffleSlides(items.filter(isFeatured));
-      const organicItems = shuffleSlides(items.filter((item) => !isFeatured(item)));
-      return [...featuredItems, ...organicItems].slice(0, count);
-    };
-    const selectedStores = choose(storeSlidesAll, Math.min(5, storeSlidesAll.length));
-    const selectedProducts = choose(productSlidesAll, Math.max(0, 5 - selectedStores.length));
-    return shuffleSlides([...selectedStores, ...selectedProducts]).slice(0, 5);
+    // Randomly mix shop and product spotlights in each five-item rotation.
+    // When both types are available, guarantee at least one of each.
+    const shuffledStores = shuffleSlides(storeSlidesAll);
+    const shuffledProducts = shuffleSlides(productSlidesAll);
+    const selected: PromoSlide[] = [];
+
+    if (shuffledStores.length && shuffledProducts.length) {
+      selected.push(shuffledStores[0], shuffledProducts[0]);
+      const remaining = shuffleSlides([
+        ...shuffledStores.slice(1),
+        ...shuffledProducts.slice(1),
+      ]);
+      selected.push(...remaining.slice(0, 3));
+    } else {
+      selected.push(...shuffleSlides([...shuffledStores, ...shuffledProducts]).slice(0, 5));
+    }
+
+    return shuffleSlides(selected).slice(0, 5);
   });
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
