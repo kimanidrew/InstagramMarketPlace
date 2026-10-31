@@ -293,27 +293,11 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     | { type: "saved" }
     | { type: "category"; section: { label: string; type: "product" | "service"; items: any[] }; sectionIndex: number };
   const productFeed: FeedItem[] = [];
-  const recommendationIndexes = new Set<number>();
-  const recommendationSections = new Map<number, any[]>();
-
-  // Place the first recommendation section immediately after product index 15
-  // (the 16th listing), then repeat every 12 indexes to preserve the feed rhythm.
-  // Recommended products are taken from later positions and omitted from the main
-  // feed so listings are never duplicated and the grid stays aligned.
-  for (let sectionIndex = 15; sectionIndex < products.length; sectionIndex += 12) {
-    const picks = [sectionIndex + 1, sectionIndex + 4, sectionIndex + 7, sectionIndex + 10]
-      .filter((index) => index < products.length);
-    const pickedProducts = picks.map((index) => {
-      recommendationIndexes.add(index);
-      return products[index];
-    });
-    if (pickedProducts.length) recommendationSections.set(sectionIndex, pickedProducts);
-  }
-
   const visibleCategorySections = categorySections.filter((section) => !["other", "other category", "more to explore"].includes(section.label.trim().toLowerCase()) && section.items.length > 0);
 
   products.forEach((product, index) => {
-    if (!recommendationIndexes.has(index)) productFeed.push({ type: "product", product });
+    // Every listing remains in the main feed; interludes never consume product indexes.
+    productFeed.push({ type: "product", product });
 
     // Show the first store section after product 4, then after each 12 more products.
     if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 4) {
@@ -327,10 +311,6 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
       if (section) productFeed.push({ type: "category", section, sectionIndex });
     }
 
-    if (recommendationSections.has(index)) {
-      const batchIndex = Math.floor((index - 15) / 12);
-      productFeed.push({ type: "recommendations", batchIndex, products: recommendationSections.get(index)! });
-    }
   });
   // Keep Saved for Later available even when the feed has fewer than eight products.
   if (savedProducts.length > 0 && !productFeed.some((item) => item.type === "saved")) {
@@ -353,7 +333,10 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
               </div>
               <Link href={item.section.type === "service" ? "/search?type=service" : "/search?category=" + encodeURIComponent(item.section.label)} className="inline-flex shrink-0 items-center gap-1 text-xs font-black text-[#555] hover:text-black">Explore <ArrowRight size={13} /></Link>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:hidden">
+              {item.section.items.slice(0, 4).map((product: any) => <div key={product.id} className="min-w-0"><ProductCard p={product} /></div>)}
+            </div>
+            <div className="hidden grid-cols-5 gap-4 sm:grid">
               {item.section.items.slice(0, 5).map((product: any) => <div key={product.id} className="min-w-0"><ProductCard p={product} /></div>)}
             </div>
           </section>
