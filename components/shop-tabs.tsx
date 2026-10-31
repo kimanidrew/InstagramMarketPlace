@@ -363,43 +363,12 @@ export function ShopTabs({
                   </section>
                 )}
 
-                {categorySections.length > 0 && (
-                  <div className="space-y-10" aria-label="Shop by popular categories">
-                    {categorySections.map((section) => (
-                      <section key={section.type + "-" + section.label} className="category-product-shelf">
-                        <div className="mb-4 flex items-end justify-between gap-3">
-                          <div className="min-w-0">
-                            <p className="eyebrow plain">{section.type === "service" ? "Services" : "Shop by category"}</p>
-                            <h2 className="mt-1 truncate text-2xl font-black tracking-[-.045em] md:text-3xl">{section.label}</h2>
-                            <p className="mt-1 text-xs font-semibold text-[#888]">{section.items.length} listings to explore</p>
-                          </div>
-                          <Link
-                            href={section.type === "service"
-                              ? "/search?type=service&category=" + encodeURIComponent(section.label)
-                              : "/search?category=" + encodeURIComponent(section.label)}
-                            className="inline-flex shrink-0 items-center gap-1 text-xs font-black text-[#555] hover:text-black"
-                          >
-                            View all <ArrowRight size={13} />
-                          </Link>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-                          {section.items.slice(0, 10).map((product: any) => (
-                            <div key={product.id} className="min-w-0">
-                              <ProductCard p={product} />
-                            </div>
-                          ))}
-                        </div>
-                      </section>
-                    ))}
-                  </div>
-                )}
-
                 <section id="shop-all">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
                     <span className="text-xs font-bold text-[#999]">Products & services</span>
                   </div>
-                  <div className="mt-6"><ProductMasonry q="" tag="" stores={filteredFeaturedStores} wishlistProducts={wishlistProducts} /></div>
+                  <div className="mt-6"><ProductMasonry q="" tag="" stores={filteredFeaturedStores} wishlistProducts={wishlistProducts} categorySections={categorySections} /></div>
                 </section>
               </div>
             )}
