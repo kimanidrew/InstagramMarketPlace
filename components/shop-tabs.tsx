@@ -71,7 +71,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
         parsed.search = "";
         parsed.hash = "";
         parsed.hostname = parsed.hostname.toLowerCase();
-        parsed.pathname = parsed.pathname.replace(/\\/+$/, "");
+        while (parsed.pathname.endsWith("/")) parsed.pathname = parsed.pathname.slice(0, -1);
         const pathParts = parsed.pathname.split("/");
         const uploadIndex = pathParts.findIndex((part) => part === "upload");
         if (uploadIndex >= 0 && pathParts[uploadIndex + 1] && /^(?:w_|h_|c_|q_|f_|ar_|fit_|crop_|dpr_|e_)/i.test(pathParts[uploadIndex + 1])) {
