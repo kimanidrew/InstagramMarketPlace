@@ -342,6 +342,28 @@ export function ShopTabs({
                   </section>
                 )}
 
+                <section className="rounded-[30px] border border-[#e7edf4] bg-gradient-to-br from-[#f4f9ff] via-white to-[#f7f5ff] p-5 md:p-7" aria-label="Trending products">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="eyebrow plain"><TrendingUp size={13} /> Popular right now</p>
+                      <h2 className="mt-2 text-2xl font-black tracking-[-.045em] md:text-3xl">Trending products</h2>
+                      <p className="mt-2 text-sm text-[#777]">Products shoppers are liking and saving across SokoLink.</p>
+                    </div>
+                    <Link href="/trending" className="inline-flex w-fit items-center gap-2 rounded-full bg-black px-4 py-2.5 text-xs font-black text-white transition hover:bg-black/80">Explore trending <ArrowRight size={14} /></Link>
+                  </div>
+                  {filteredTrendingProducts.length > 0 ? (
+                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+                      {filteredTrendingProducts.slice(0, 10).map((product: any) => (
+                        <div key={product.id} className="min-w-0">
+                          <ProductCard p={product} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="mt-5 rounded-2xl border border-dashed border-[#dfe6ee] bg-white/70 px-5 py-8 text-center text-sm font-semibold text-[#888]">Trending products will appear here as shoppers interact with listings.</div>
+                  )}
+                </section>
+
                 <section className="rounded-[30px] border border-[#f0e6e8] bg-gradient-to-br from-[#fff8f7] via-white to-[#f7f8ff] p-5 md:p-7" aria-label="Featured products">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
