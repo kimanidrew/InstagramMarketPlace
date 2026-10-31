@@ -72,7 +72,6 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       ) : productImages[0] ? (
         <div className="shop-promo-single-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /><span className="shop-promo-single-glow" /></div>
       ) : null}
-      <span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span>
     </div>
   ) : (
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
