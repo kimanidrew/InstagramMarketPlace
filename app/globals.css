@@ -11081,3 +11081,13 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     min-height:100%!important;
   }
 }
+
+
+/* Flatten the spotlight visual and remove the carousel elevation. */
+.shop-page .shop-promo-carousel {
+  box-shadow:none!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual {
+  border-radius:0!important;
+  box-shadow:none!important;
+}
