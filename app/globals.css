@@ -10365,3 +10365,14 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-single-image img {
   padding:0!important;
 }
+
+
+/* Add breathing room around the spotlight visual without changing image sizing. */
+.shop-page .shop-promo-product-visual {
+  padding:20px!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-product-visual {
+    padding:14px!important;
+  }
+}
