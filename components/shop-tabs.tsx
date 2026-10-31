@@ -285,28 +285,17 @@ export function ShopTabs({
   return (
     <div className="shop-tabs-wrap mt-0">
       <ShopPromoCarousel stores={filteredFeaturedStores} products={filteredFeaturedProducts} />
-      <div className="shop-tabs flex w-full max-w-full flex-nowrap overflow-x-auto overscroll-x-contain" role="tablist" aria-label="Shop discovery">
-        {tabs.map(({ id, label, icon: Icon, copy }) => {
-          const selected = active === id;
-          return (
-            <Link
-              key={id}
-              href={"/shop?tab=" + id}
-              role="tab"
-              aria-selected={selected}
-              aria-controls={"shop-tab-panel-" + id}
-              className={"shop-tab shrink-0 " + (selected ? "shop-tab-active" : "")}
-              onFocus={(event) => event.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })}
-            >
-              <span className="shop-tab-icon"><Icon size={16} /></span>
-              <span className="shop-tab-copy">
-                <b>{label}</b>
-                <small>{copy}</small>
-              </span>
-              <span className="shop-tab-indicator" aria-hidden="true" />
-            </Link>
-          );
-        })}
+      <div className="mb-7 flex flex-col gap-4 border-b border-black/[.07] pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#999]">SokoLink marketplace</p>
+          <h2 className="mt-1 text-2xl font-black tracking-[-.05em] text-[#171717]">{active === "discover" ? "Discover" : active === "trending" ? "Trending now" : "Featured collection"}</h2>
+          <p className="mt-1 text-sm text-[#777]">{active === "discover" ? "Explore fresh finds, stores and categories." : active === "trending" ? "See what shoppers are loving right now." : "Explore standout stores and promoted listings."}</p>
+        </div>
+        <nav aria-label="Marketplace sections" className="flex flex-wrap items-center gap-2">
+          <span aria-current={active === "discover" ? "page" : undefined} className={"rounded-full px-4 py-2 text-xs font-black " + (active === "discover" ? "bg-black text-white" : "bg-[#f4f4f2] text-[#777]")}>Discover</span>
+          <Link href="/trending" aria-current={active === "trending" ? "page" : undefined} className={"rounded-full px-4 py-2 text-xs font-black transition " + (active === "trending" ? "bg-black text-white" : "bg-[#f4f4f2] text-[#333] hover:bg-black hover:text-white")}>Trending <TrendingUp size={13} className="ml-1 inline" /></Link>
+          <Link href="/featured" aria-current={active === "featured" ? "page" : undefined} className={"rounded-full px-4 py-2 text-xs font-black transition " + (active === "featured" ? "bg-black text-white" : "bg-[#f4f4f2] text-[#333] hover:bg-black hover:text-white")}>Featured <Sparkles size={13} className="ml-1 inline" /></Link>
+        </nav>
       </div>
 
       <div className="shop-tab-panel" role="tabpanel" id={"shop-tab-panel-" + active}>
