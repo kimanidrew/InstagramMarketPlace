@@ -10173,3 +10173,14 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 @keyframes shop-promo-image-float-back{0%,100%{transform:translate3d(0,0,0) rotate(7deg)}50%{transform:translate3d(0,-12px,0) rotate(12deg)}}
 @media(max-width:767px){.shop-promo-product-visual.has-floating-images{min-height:190px}.shop-promo-floating-gallery{width:88%;height:185px;min-height:185px}.shop-promo-main-image,.shop-promo-float-image{border-width:3px;border-radius:15px}}
 @media(prefers-reduced-motion:reduce){.shop-promo-main-image,.shop-promo-float-image{animation:none!important}}
+
+
+/* Single-image product spotlights get the same lively floating treatment. */
+.shop-promo-single-image{position:relative;display:grid;place-items:center;width:min(78%,390px);height:min(82%,330px);min-height:220px;margin:auto;isolation:isolate}
+.shop-promo-single-image:before{content:"";position:absolute;inset:10% 12%;z-index:-1;border-radius:48%;background:radial-gradient(ellipse,rgba(255,255,255,.8),rgba(255,255,255,0) 70%);filter:blur(12px)}
+.shop-promo-single-image img{position:relative;z-index:1;width:min(78%,300px);height:88%;object-fit:cover;border:6px solid rgba(255,255,255,.94);border-radius:26px;box-shadow:0 25px 60px rgba(25,18,24,.22);transform:rotate(-4deg);animation:shop-promo-single-float 5.2s ease-in-out infinite;will-change:transform}
+.shop-promo-single-glow{position:absolute;z-index:0;left:20%;right:20%;bottom:2%;height:18px;border-radius:50%;background:rgba(20,15,20,.18);filter:blur(13px);animation:shop-promo-single-shadow 5.2s ease-in-out infinite}
+@keyframes shop-promo-single-float{0%,100%{transform:translate3d(0,0,0) rotate(-4deg)}50%{transform:translate3d(0,-14px,0) rotate(1deg)}}
+@keyframes shop-promo-single-shadow{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(.78);opacity:.3}}
+@media(max-width:767px){.shop-promo-single-image{width:88%;height:180px;min-height:180px}.shop-promo-single-image img{width:min(70%,190px);border-width:4px;border-radius:18px}}
+@media(prefers-reduced-motion:reduce){.shop-promo-single-image img,.shop-promo-single-glow{animation:none!important}}
