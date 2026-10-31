@@ -247,6 +247,10 @@ export async function Products({
             trendingStores,
             trendingProducts: prepareProducts(trendingProducts),
             featuredProducts: prepareProducts(featuredProductsRaw),
+            featuredFallbackProducts: prepareProducts([...categoryProductsRaw]
+              .filter((post: any) => !featuredProductsRaw.some((featured: any) => featured.id === post.id))
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 5)),
             categorySections: categorySections.map((section) => ({ ...section, items: prepareProducts(section.items) })),
           }),
         );
@@ -260,6 +264,7 @@ export async function Products({
             trendingStores={shopData.trendingStores}
             trendingProducts={shopData.trendingProducts}
             featuredProducts={shopData.featuredProducts}
+            featuredFallbackProducts={shopData.featuredFallbackProducts}
             categorySections={shopData.categorySections}
             now={now.toISOString()}
           />
