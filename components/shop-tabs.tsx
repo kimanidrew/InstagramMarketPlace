@@ -46,26 +46,33 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       <Link href="/stores" className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore all shops <ArrowRight size={14} /></Link>
     </>
   );
-  const productImages = slide.type === "product" ? (() => {
-    const mediaItems = Array.isArray(slide.product.mediaItems) ? slide.product.mediaItems : [];
-    const fromItems = mediaItems.map((item: any) => typeof item === "string" ? item : item?.media_url || item?.mediaUrl || item?.url || item?.thumbnail_url).filter((url: any): url is string => typeof url === "string" && /^https?:\/\//i.test(url));
-    const candidates = [slide.product.thumbnailUrl, ...fromItems, slide.product.mediaUrl].filter((url: any): url is string => typeof url === "string" && /^https?:\/\//i.test(url));
-    return Array.from(new Set(candidates)).slice(0, 4);
-  })() : [];
+  const productImage = slide.type === "product" ? (() => {
+    const product = slide.product;
+    const isVideoUrl = (url: unknown) => typeof url === "string" && /\\.(mp4|mov|webm|m3u8)(?:[?#]|$)/i.test(url);
+    const mediaItems = Array.isArray(product.mediaItems) ? product.mediaItems : [];
+    const mediaThumbnail = mediaItems.map((item: any) => {
+      if (typeof item === "string") return isVideoUrl(item) ? null : item;
+      const mediaType = String(item?.media_type || item?.mediaType || item?.type || "").toLowerCase();
+      const video = mediaType.includes("video") || isVideoUrl(item?.media_url || item?.mediaUrl || item?.url);
+      return video
+        ? item?.thumbnail_url || item?.thumbnailUrl || null
+        : item?.thumbnail_url || item?.thumbnailUrl || item?.media_url || item?.mediaUrl || item?.url || null;
+    }).find((url: unknown) => typeof url === "string" && /^https?:\\/\\//i.test(url) && !isVideoUrl(url));
+    const candidates = [product.thumbnailUrl, mediaThumbnail, !isVideoUrl(product.mediaUrl) ? product.mediaUrl : null];
+    return candidates.find((url: unknown) => typeof url === "string" && /^https?:\\/\\//i.test(url)) || null;
+  })() : null;
   const visual = slide.type === "product" ? (
-    <div className={"shop-promo-product-visual " + (productImages.length > 1 ? "has-floating-images" : "")}>
-      {productImages.length > 1 ? (
-        <div className="shop-promo-floating-gallery">
-          {productImages.slice(1).map((src, i) => <span key={src} className={"shop-promo-float-image shop-promo-float-image-" + (i + 1)}><img src={src} alt="" /></span>)}
-          <span className="shop-promo-main-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
-        </div>
-      ) : <div className="shop-promo-single-image"><img src={productImages[0] || slide.product.thumbnailUrl || slide.product.mediaUrl} alt={slide.product.productTitle || "Promoted listing"} /><span className="shop-promo-single-glow" /></div>}
+    <div className="shop-promo-product-visual">
+      {productImage && <img src={productImage} alt={slide.product.productTitle || "Promoted listing"} />}
+      <span className="shop-promo-product-image-shade" />
       <span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span>
     </div>
   ) : (
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
-  const slideContent = <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
+  const slideContent = slide.type === "product"
+    ? <>{visual}<div className="shop-promo-product-copy">{copy}</div></>
+    : <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
   if (slide.type === "product") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }
