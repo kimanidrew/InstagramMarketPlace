@@ -10247,3 +10247,40 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   .shop-promo-product .shop-promo-product-visual{min-height:190px}
   .shop-promo-floating-gallery{width:88%;height:185px;min-height:185px}
 }
+
+/* Keep spotlight image cards fully inside the visual frame; the frame itself
+   stays transparent and has no decorative shadow or overlay. */
+.shop-page .shop-promo-product-visual{
+  position:relative!important;
+  min-width:0;
+  min-height:0;
+  overflow:hidden!important;
+  isolation:isolate;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.shop-page .shop-promo-product-visual:before,
+.shop-page .shop-promo-product-visual:after{
+  content:none!important;
+  display:none!important;
+}
+.shop-page .shop-promo-floating-gallery{
+  box-sizing:border-box;
+  width:min(94%,470px);
+  max-width:100%;
+  height:min(88%,340px);
+  max-height:100%;
+  min-height:0;
+  overflow:hidden;
+}
+.shop-page .shop-promo-main-image,
+.shop-page .shop-promo-float-image{
+  box-sizing:border-box;
+  max-width:100%;
+  max-height:100%;
+}
+.shop-page .shop-promo-single-image{
+  max-width:100%;
+  max-height:100%;
+  overflow:hidden;
+}
