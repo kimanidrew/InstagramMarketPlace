@@ -11119,3 +11119,13 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     transition:none!important;
   }
 }
+
+
+/* Shop by category section: use a consistent 20px corner radius. */
+.shop-page .shop-by-category,
+.shop-page .shop-by-category-section,
+.shop-page .shop-category-section,
+.shop-page [class*="shop-by-category"]{
+  border-radius:20px!important;
+  overflow:hidden;
+}
