@@ -10929,3 +10929,42 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     animation:none!important;
   }
 }
+
+
+/* Per-card horizontal swipe transition for the Shop spotlight carousel. */
+.shop-page .shop-promo-active {
+  position:relative!important;
+  display:block!important;
+  overflow:hidden!important;
+  touch-action:pan-y!important;
+}
+.shop-page .shop-promo-track {
+  display:flex!important;
+  width:100%!important;
+  height:100%!important;
+  transition:transform .72s cubic-bezier(.22,.75,.25,1)!important;
+  will-change:transform;
+}
+.shop-page .shop-promo-track-item {
+  position:relative!important;
+  display:block!important;
+  flex:0 0 100%!important;
+  width:100%!important;
+  min-width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+}
+.shop-page .shop-promo-track-item > .shop-promo-slide {
+  position:relative!important;
+  inset:auto!important;
+  display:grid!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  max-height:none!important;
+  animation:none!important;
+  transform:none!important;
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-track { transition:none!important; }
+}
