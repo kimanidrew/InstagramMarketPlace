@@ -10802,3 +10802,65 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   animation:shop-promo-main-float 5.5s ease-in-out infinite!important;
   will-change:transform;
 }
+
+
+/* Final single-photo spotlight layout.
+   Keep the wrapper stretched over the entire visual column, center the photo
+   in that full area, and size it against the available height so the portrait
+   never runs outside the banner. Animate the image itself like the collage's
+   main card; the wrapper remains stationary and centered. */
+.shop-page .shop-promo-product .shop-promo-product-visual:not(.has-floating-images) {
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:210px!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-product-visual:not(.has-floating-images) > .shop-promo-single-image {
+  position:absolute!important;
+  inset:0!important;
+  display:grid!important;
+  place-items:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:14px!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-product-visual:not(.has-floating-images) > .shop-promo-single-image > img {
+  position:relative!important;
+  inset:auto!important;
+  display:block!important;
+  justify-self:center!important;
+  align-self:center!important;
+  width:clamp(120px,40%,190px)!important;
+  height:min(78%,250px)!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:100%!important;
+  max-height:calc(100% - 28px)!important;
+  margin:0!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  transform-origin:center center;
+  animation:shop-promo-main-float 5.5s ease-in-out infinite!important;
+  will-change:transform;
+}
+.shop-page .shop-promo-product-visual:not(.has-floating-images) > .shop-promo-single-image > .shop-promo-single-glow {
+  display:none!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-product-visual:not(.has-floating-images) > .shop-promo-single-image > img {
+    width:clamp(108px,42%,156px)!important;
+    height:min(78%,158px)!important;
+    max-height:calc(100% - 24px)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-product-visual:not(.has-floating-images) > .shop-promo-single-image > img {
+    animation:none!important;
+  }
+}
