@@ -48,7 +48,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
   );
   const productImage = slide.type === "product" ? (() => {
     const product = slide.product;
-    const isVideoUrl = (url: unknown) => typeof url === "string" && /\\.(mp4|mov|webm|m3u8)(?:[?#]|$)/i.test(url);
+    const isVideoUrl = (url: unknown) => typeof url === "string" && /\.(mp4|mov|webm|m3u8)(?:[?#]|$)/i.test(url);
     const mediaItems = Array.isArray(product.mediaItems) ? product.mediaItems : [];
     const mediaThumbnail = mediaItems.map((item: any) => {
       if (typeof item === "string") return isVideoUrl(item) ? null : item;
@@ -57,9 +57,9 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       return video
         ? item?.thumbnail_url || item?.thumbnailUrl || null
         : item?.thumbnail_url || item?.thumbnailUrl || item?.media_url || item?.mediaUrl || item?.url || null;
-    }).find((url: unknown) => typeof url === "string" && /^https?:\\/\\//i.test(url) && !isVideoUrl(url));
+    }).find((url: unknown) => typeof url === "string" && /^https?:\/\//i.test(url) && !isVideoUrl(url));
     const candidates = [product.thumbnailUrl, mediaThumbnail, !isVideoUrl(product.mediaUrl) ? product.mediaUrl : null];
-    return candidates.find((url: unknown) => typeof url === "string" && /^https?:\\/\\//i.test(url)) || null;
+    return candidates.find((url: unknown) => typeof url === "string" && /^https?:\/\//i.test(url)) || null;
   })() : null;
   const visual = slide.type === "product" ? (
     <div className="shop-promo-product-visual">
