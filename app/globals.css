@@ -10284,3 +10284,68 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   max-height:100%;
   overflow:hidden;
 }
+
+
+/* Final spotlight image treatment: photos fill their own cards, while the
+   single-photo card floats just like the multi-photo gallery. */
+.shop-page .shop-promo-main-image,
+.shop-page .shop-promo-float-image,
+.shop-page [class*="shop-promo-float-image-"] {
+  overflow:hidden!important;
+  padding:0!important;
+}
+.shop-page .shop-promo-main-image img,
+.shop-page .shop-promo-float-image img,
+.shop-page [class*="shop-promo-float-image-"] img {
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+}
+.shop-page .shop-promo-single-image {
+  position:absolute!important;
+  inset:0!important;
+  display:grid!important;
+  place-items:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+.shop-page .shop-promo-single-image img {
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border:5px solid rgb(255 255 255 / 92%)!important;
+  border-radius:22px!important;
+  box-shadow:0 22px 55px rgb(30 20 30 / 22%)!important;
+  transform:rotate(-3deg);
+  animation:shop-promo-main-float 5.5s ease-in-out infinite!important;
+  will-change:transform;
+}
+.shop-page .shop-promo-single-glow {
+  display:block!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-single-image img {
+    border-width:3px!important;
+    border-radius:15px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-single-image img { animation:none!important; }
+}
