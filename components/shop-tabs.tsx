@@ -228,7 +228,6 @@ export function ShopTabs({
   const [recentStores, setRecentStores] = useState<any[]>([]);
   const [clearingHistory, setClearingHistory] = useState(false);
   const [removingHistoryKeys, setRemovingHistoryKeys] = useState<string[]>([]);
-  const recentHistoryScrollRef = React.useRef<HTMLDivElement>(null);
   useEffect(() => {
     let cancelled = false;
     const visitorId = analyticsVisitorId();
@@ -323,25 +322,21 @@ export function ShopTabs({
                         <p className="mt-2 text-sm text-[#777]">Revisit products, services and stores you recently checked out.</p>
                       </div>
                       <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
-                        <div className="hidden items-center gap-2 md:flex" aria-label="Scroll shopping history">
-                          <button type="button" onClick={() => recentHistoryScrollRef.current?.scrollBy({ left: -360, behavior: "smooth" })} aria-label="Scroll history left" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border !border-black !bg-black text-white transition-colors hover:!border-black hover:!bg-black active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronLeft size={18} /></button>
-                          <button type="button" onClick={() => recentHistoryScrollRef.current?.scrollBy({ left: 360, behavior: "smooth" })} aria-label="Scroll history right" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border !border-black !bg-black text-white transition-colors hover:!border-black hover:!bg-black active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronRight size={18} /></button>
-                        </div>
                         <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} aria-label={clearingHistory ? "Clearing history" : "Clear history"} title={clearingHistory ? "Clearing history" : "Clear history"} className="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full border border-black/10 text-[#666] transition hover:border-black hover:text-black disabled:cursor-wait disabled:opacity-70 sm:h-auto sm:w-auto sm:px-4 sm:py-2"><Trash2 size={17} aria-hidden="true" className={clearingHistory ? "animate-bounce text-black" : "transition-transform duration-200 hover:rotate-[-8deg]"} /><span className="hidden text-[12px] font-black leading-5 sm:inline">{clearingHistory ? "Clearing…" : "Clear history"}</span></button>
                       </div>
                     </div>
                     {(recentItems.length > 0 || recentStores.length > 0) && (
-                      <div ref={recentHistoryScrollRef} className="mt-6 -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 scroll-smooth md:-mx-7 md:px-7">
+                      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7 md:gap-4">
                         {[
                           ...recentItems.slice(0, 7).map((item: any) => ({ kind: "product", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
                           ...recentStores.slice(0, 7).map((item: any) => ({ kind: "store", item, viewedAt: new Date(item.historyViewedAt || 0).getTime() })),
-                        ].sort((a: any, b: any) => b.viewedAt - a.viewedAt).map(({ kind, item }: any) => kind === "product" ? (() => {
+                        ].sort((a: any, b: any) => b.viewedAt - a.viewedAt).slice(0, 14).map(({ kind, item }: any) => kind === "product" ? (() => {
                           const isVideo = String(item.mediaType || "").toUpperCase() === "VIDEO";
                           const isService = String(item.listingType || "").toUpperCase() === "SERVICE";
                           const href = "/" + (isService ? "service" : "product") + "/" + item.productSlug;
                           const image = item.thumbnailUrl || item.mediaUrl;
                           return (
-                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group relative block h-[148px] w-[112px] shrink-0 sm:h-[160px] sm:w-[136px]">
+                            <Link key={"product-" + item.id} href={href} aria-label={item.productTitle || "Recently viewed listing"} className="group relative block aspect-square min-w-0 w-full">
                               <button type="button" aria-label="Remove from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("product-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("product", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
                               <div className="h-full w-full overflow-hidden rounded-[22px] bg-[#eeeeeb]">
                                 {isVideo && item.mediaUrl ? <video src={item.mediaUrl} poster={item.thumbnailUrl || undefined} muted loop playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={item.productTitle || "Recently viewed listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
@@ -349,9 +344,9 @@ export function ShopTabs({
                             </Link>
                           );
                         })() : (
-                          <Link key={"store-" + item.id} href={"/stores/" + item.username} className="group relative flex h-[148px] w-[112px] shrink-0 flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white sm:h-[160px] sm:w-[136px]">
+                          <Link key={"store-" + item.id} href={"/stores/" + item.username} className="group relative flex aspect-square min-w-0 w-full flex-col items-center justify-center rounded-[22px] border border-black/[.05] bg-[#f8f8f6] p-3 text-center transition hover:border-black/10 hover:bg-white">
                             <button type="button" aria-label="Remove store from shopping history" title="Remove from history" disabled={removingHistoryKeys.includes("store-" + item.id)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); void removeHistoryItem("store", item); }} className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-black/80 text-white shadow-sm transition hover:bg-black disabled:opacity-50"><X size={14} /></button>
-                            <span className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-[#ecece8] sm:h-[76px] sm:w-[76px]">
+                            <span className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[#ecece8] sm:h-16 sm:w-16">
                               {item.profileImageUrl ? <img src={item.profileImageUrl} alt={"@" + item.username} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <span className="flex h-full w-full items-center justify-center font-black text-[#777]">@</span>}
                             </span>
                             <b className="mt-3 max-w-full truncate text-xs font-extrabold text-[#171717]">@{item.username}</b>
