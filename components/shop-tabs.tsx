@@ -178,9 +178,13 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
 
   useEffect(() => {
     if (slides.length < 2) return;
-    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 5200);
-    return () => window.clearInterval(timer);
-  }, [slides.length]);
+    // Schedule from the currently displayed slide so manual navigation never
+    // races a previously scheduled interval and every card gets a full dwell.
+    const timer = window.setTimeout(() => {
+      setIndex((current) => (current + 1) % slides.length);
+    }, 5600);
+    return () => window.clearTimeout(timer);
+  }, [index, slides.length]);
 
   useEffect(() => {
     const container = measureRef.current;
