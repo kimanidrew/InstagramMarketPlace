@@ -10383,3 +10383,66 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page [class*="shop-promo-float-image-"] {
   box-shadow: none!important;
 }
+
+/* Give every multi-image spotlight card a consistent portrait footprint. */
+.shop-page .shop-promo-main-image,
+.shop-page .shop-promo-float-image,
+.shop-page [class*="shop-promo-float-image-"] {
+  width:160px!important;
+  height:220px!important;
+  min-width:160px!important;
+  min-height:220px!important;
+  max-width:none!important;
+  max-height:none!important;
+  aspect-ratio:4 / 5;
+}
+.shop-page .shop-promo-main-image {
+  left:calc(50% - 80px)!important;
+  top:50%!important;
+  margin-top:-110px!important;
+}
+.shop-page .shop-promo-float-image-1 {
+  left:calc(50% - 205px)!important;
+  top:50%!important;
+  margin-top:-85px!important;
+}
+.shop-page .shop-promo-float-image-2 {
+  left:calc(50% + 45px)!important;
+  right:auto!important;
+  top:50%!important;
+  margin-top:-95px!important;
+}
+.shop-page .shop-promo-float-image-3 {
+  left:calc(50% - 80px)!important;
+  top:0!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-main-image,
+  .shop-page .shop-promo-float-image,
+  .shop-page [class*="shop-promo-float-image-"] {
+    width:112px!important;
+    height:154px!important;
+    min-width:112px!important;
+    min-height:154px!important;
+    aspect-ratio:4 / 5;
+  }
+  .shop-page .shop-promo-main-image {
+    left:calc(50% - 56px)!important;
+    top:50%!important;
+    margin-top:-77px!important;
+  }
+  .shop-page .shop-promo-float-image-1 {
+    left:calc(50% - 139px)!important;
+    top:50%!important;
+    margin-top:-58px!important;
+  }
+  .shop-page .shop-promo-float-image-2 {
+    left:calc(50% + 27px)!important;
+    top:50%!important;
+    margin-top:-66px!important;
+  }
+  .shop-page .shop-promo-float-image-3 {
+    left:calc(50% - 56px)!important;
+    top:0!important;
+  }
+}
