@@ -10676,3 +10676,105 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     }
   }
 }
+
+
+/* Final multi-image spotlight collage geometry.
+   All card dimensions and offsets are derived from the measured visual height.
+   The gallery occupies the full visual lane and the complete collage is centered
+   as one group, rather than centering each card independently. */
+.shop-page .shop-promo-product .shop-promo-product-visual.has-floating-images {
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:210px!important;
+  padding:20px!important;
+  overflow:hidden!important;
+  container-type:size;
+}
+.shop-page .shop-promo-product-visual.has-floating-images > .shop-promo-floating-gallery {
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-main-image,
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image {
+  position:absolute!important;
+  box-sizing:border-box!important;
+  width:clamp(88px,45cqh,170px)!important;
+  height:clamp(120px,62cqh,235px)!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:4px solid rgb(255 255 255 / 94%)!important;
+  border-radius:18px!important;
+  box-shadow:none!important;
+  aspect-ratio:45 / 62!important;
+}
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-main-image {
+  z-index:4!important;
+  left:calc(50% - 22.5cqh)!important;
+  top:calc(50% - 31cqh)!important;
+}
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image-1 {
+  z-index:3!important;
+  left:calc(50% - 56.5cqh)!important;
+  right:auto!important;
+  top:calc(50% - 23cqh)!important;
+}
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image-2 {
+  z-index:2!important;
+  left:calc(50% + 11.5cqh)!important;
+  right:auto!important;
+  top:calc(50% - 23cqh)!important;
+}
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image-3 {
+  z-index:1!important;
+  left:calc(50% - 22.5cqh)!important;
+  right:auto!important;
+  top:calc(50% - 34cqh)!important;
+  opacity:.88!important;
+}
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-main-image img,
+.shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image img {
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  padding:0!important;
+  object-fit:cover!important;
+  object-position:center!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-product .shop-promo-product-visual.has-floating-images {
+    height:190px!important;
+    min-height:190px!important;
+    max-height:190px!important;
+    padding:14px!important;
+  }
+  .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-main-image,
+  .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image {
+    border-width:3px!important;
+    border-radius:12px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-main-image,
+  .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image {
+    animation:none!important;
+  }
+}
