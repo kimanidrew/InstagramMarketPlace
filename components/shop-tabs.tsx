@@ -59,7 +59,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
           {productImages.slice(1).map((src, i) => <span key={src} className={"shop-promo-float-image shop-promo-float-image-" + (i + 1)}><img src={src} alt="" /></span>)}
           <span className="shop-promo-main-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
         </div>
-      ) : <img src={productImages[0] || slide.product.thumbnailUrl || slide.product.mediaUrl} alt={slide.product.productTitle || "Promoted listing"} />}
+      ) : <div className="shop-promo-single-image"><img src={productImages[0] || slide.product.thumbnailUrl || slide.product.mediaUrl} alt={slide.product.productTitle || "Promoted listing"} /><span className="shop-promo-single-glow" /></div>}
       <span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span>
     </div>
   ) : (
@@ -102,13 +102,13 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     const productSlidesAll = unique.filter((slide) => slide.type === "product");
     // Keep a healthy mix in every five-slide rotation: randomly use two or
     // three shops, then fill the remaining positions with product spotlights.
-    const shopCount = Math.random() < 0.5 ? 2 : 3;
+    const shopCount = Math.min(storeSlidesAll.length, Math.random() < 0.5 ? 2 : 3);
     const choose = (items: PromoSlide[], count: number) => {
       const featuredItems = shuffleSlides(items.filter(isFeatured));
       const organicItems = shuffleSlides(items.filter((item) => !isFeatured(item)));
       return [...featuredItems, ...organicItems].slice(0, count);
     };
-    const selectedStores = choose(storeSlidesAll, Math.min(shopCount, storeSlidesAll.length));
+    const selectedStores = choose(storeSlidesAll, shopCount);
     const selectedProducts = choose(productSlidesAll, Math.min(5 - selectedStores.length, productSlidesAll.length));
     // If one category has too few entries, use the remaining available slots
     // from the other category without duplicating a spotlight.
