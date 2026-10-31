@@ -10482,3 +10482,11 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     min-height:240px!important;
   }
 }
+
+/* Remove the shadow from the single-photo spotlight card as well. */
+.shop-page .shop-promo-single-image img {
+  box-shadow:none!important;
+}
+.shop-page .shop-promo-single-glow {
+  display:none!important;
+}
