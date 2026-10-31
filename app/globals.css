@@ -10706,8 +10706,8 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image {
   position:absolute!important;
   box-sizing:border-box!important;
-  width:clamp(88px,45cqh,170px)!important;
-  height:clamp(120px,62cqh,235px)!important;
+  width:clamp(98px,50cqh,190px)!important;
+  height:clamp(135px,69cqh,260px)!important;
   min-width:0!important;
   min-height:0!important;
   max-width:none!important;
@@ -10722,18 +10722,18 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 }
 .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-main-image {
   z-index:4!important;
-  left:calc(50% - 22.5cqh)!important;
-  top:calc(50% - 31cqh)!important;
+  left:calc(50% - 25cqh)!important;
+  top:calc(50% - 34.5cqh)!important;
 }
 .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image-1 {
   z-index:3!important;
-  left:calc(50% - 56.5cqh)!important;
+  left:calc(50% - 62cqh)!important;
   right:auto!important;
   top:calc(50% - 23cqh)!important;
 }
 .shop-page .shop-promo-product-visual.has-floating-images .shop-promo-float-image-2 {
   z-index:2!important;
-  left:calc(50% + 11.5cqh)!important;
+  left:calc(50% + 12cqh)!important;
   right:auto!important;
   top:calc(50% - 23cqh)!important;
 }
@@ -10880,11 +10880,11 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-product-visual:not(.has-floating-images) > .shop-promo-single-card {
   position:absolute!important;
   z-index:4!important;
-  left:calc(50% - 26cqh)!important;
-  top:calc(50% - 36cqh)!important;
+  left:calc(50% - 29cqh)!important;
+  top:calc(50% - 40cqh)!important;
   display:block!important;
-  width:clamp(98px,52cqh,160px)!important;
-  height:clamp(135px,72cqh,220px)!important;
+  width:clamp(109px,58cqh,210px)!important;
+  height:clamp(145px,80cqh,300px)!important;
   min-width:0!important;
   min-height:0!important;
   max-width:none!important;
