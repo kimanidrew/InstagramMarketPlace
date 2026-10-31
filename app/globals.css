@@ -10794,3 +10794,11 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   align-self:center!important;
   margin:0 auto!important;
 }
+
+
+/* Match the single-photo card's motion to the main card in the multi-photo
+   collage: same 5.5s float cycle, lift distance, and tilt transition. */
+.shop-page .shop-promo-single-image img {
+  animation:shop-promo-main-float 5.5s ease-in-out infinite!important;
+  will-change:transform;
+}
