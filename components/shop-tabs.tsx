@@ -199,7 +199,30 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   );
 }
 
-export function ShopTabs({
+export function AnimatedMarketplaceBanner({ variant = "discover" }: { variant?: "discover" | "sell" }) {
+  const selling = variant === "sell";
+  return (
+    <section className={"shop-animated-banner " + (selling ? "shop-animated-banner-sell" : "shop-animated-banner-discover")} aria-label={selling ? "Start selling on SokoLink" : "Discover SokoLink shops"}>
+      <div className="shop-animated-banner-copy">
+        <span className="shop-animated-banner-kicker"><Sparkles size={12} /> {selling ? "GROW WITH SOKOLINK" : "A WORLD OF FINDS"}</span>
+        <h2>{selling ? <>Your shop deserves<br /><em>the spotlight.</em></> : <>Good finds.<br /><em>Great stories.</em></>}</h2>
+        <p>{selling ? "Put your products in front of shoppers who are ready to discover something new." : "Explore independent shops, fresh arrivals and products worth talking about."}</p>
+        <Link href={selling ? "/account/setup" : "/stores"}>{selling ? "Set up your shop" : "Meet the sellers"} <ArrowRight size={15} /></Link>
+      </div>
+      <div className="shop-animated-banner-art" aria-hidden="true">
+        <span className="shop-banner-orbit shop-banner-orbit-one" />
+        <span className="shop-banner-orbit shop-banner-orbit-two" />
+        <span className="shop-banner-spark shop-banner-spark-one">✳</span>
+        <span className="shop-banner-spark shop-banner-spark-two">✦</span>
+        <span className="shop-banner-float shop-banner-float-one">{selling ? "YOUR BRAND" : "NEW FINDS"}</span>
+        <span className="shop-banner-float shop-banner-float-two">{selling ? "GROW • REACH • SELL" : "STYLE • HOME • MORE"}</span>
+        <span className="shop-banner-disc" />
+      </div>
+    </section>
+  );
+}
+
+function ShopTabs({
   initialTab = "discover",
   wishlistProducts = [],
   recentlyViewedProducts = [],
