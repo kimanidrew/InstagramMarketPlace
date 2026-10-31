@@ -50,11 +50,11 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
       aria-pressed={saved}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
-        (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-7 w-7 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-[#555] !shadow-none ring-0 hover:!bg-[#f5f5f5] " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
+        (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-9 w-9 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-black !shadow-none ring-0 hover:!bg-[#f5f5f5] " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
         productDetailColors
       }
     >
-      <Bookmark size={compact ? (smallCompact || inlineStyle ? 13 : largeCompact ? 21 : 17) : 16} fill={saved ? "currentColor" : "none"} strokeWidth={saved ? 2.5 : 2} />
+      <Bookmark size={compact ? (smallCompact ? 15 : inlineStyle ? 21 : largeCompact ? 23 : 19) : 16} fill={saved ? "black" : "none"} stroke="black" strokeWidth={saved ? 2.7 : 2.2} />
       {!compact && <span>{n} saved</span>}
     </button>
   );
