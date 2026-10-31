@@ -10033,3 +10033,25 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     transition: none;
   }
 }
+
+
+/* Category shelves: enforce five desktop columns despite legacy feed overrides. */
+@media (min-width: 768px) {
+  .shop-page .shop-tab-panel .category-product-shelf > .category-product-grid-desktop {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+  .shop-page .shop-tab-panel .category-product-shelf > .category-product-grid-mobile {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .shop-page .shop-tab-panel .category-product-shelf > .category-product-grid-desktop {
+    display: none !important;
+  }
+  .shop-page .shop-tab-panel .category-product-shelf > .category-product-grid-mobile {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
