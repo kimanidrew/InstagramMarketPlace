@@ -208,7 +208,7 @@ export async function Products({
   return (
     <main className="shop-page shell py-5 md:py-7">
       {showDiscovery && (
-        <section className="relative mb-6 overflow-hidden rounded-[24px] border border-rose-100/80 bg-gradient-to-br from-[#fff7f4] via-[#fff9ed] to-[#f0f7ff] p-4 sm:rounded-[28px] sm:p-5" aria-label="Shop by category">
+        <section className="relative mb-6 overflow-hidden rounded-[10px] border border-rose-100/80 bg-gradient-to-br from-[#fff7f4] via-[#fff9ed] to-[#f0f7ff] p-4 sm:rounded-[10px] sm:p-5" aria-label="Shop by category">
           <div className="pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full bg-white/70 blur-3xl" aria-hidden="true" />
           <div className="relative mb-4 flex items-center justify-between gap-3 sm:mb-5">
             <div className="min-w-0">
