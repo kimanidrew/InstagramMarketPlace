@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Compass, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, Trash2, TrendingUp, X } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, Trash2, TrendingUp, X } from "lucide-react";
 import { ProductMasonry, StoreCard, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
@@ -271,12 +271,6 @@ export function ShopTabs({
   };
 
   const currentNow = new Date(now);
-
-  const tabs = [
-    { id: "discover" as const, label: "Discover", icon: Compass, copy: "Fresh finds & stores" },
-    { id: "trending" as const, label: "Trending", icon: TrendingUp, copy: "Loved by shoppers" },
-    { id: "featured" as const, label: "Featured", icon: Sparkles, copy: "Growth-powered picks" },
-  ];
 
   const filteredTrendingProducts = trendingProducts;
   const filteredFeaturedProducts = featuredProducts;
