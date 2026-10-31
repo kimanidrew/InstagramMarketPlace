@@ -131,11 +131,6 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl || (Array.isArray(product.mediaItems) && product.mediaItems.length)))
       .map((product) => ({ type: "product" as const, key: "product-" + product.id, product }));
     const unique = Array.from(new Map<string, PromoSlide>([...storeSlides, ...productSlides].map((slide): [string, PromoSlide] => [slide.key, slide])).values());
-    const isFeatured = (slide: PromoSlide) => {
-      if (slide.type === "store") return Boolean(slide.store.paidPromotionActive);
-      if (slide.type === "product") return Boolean(slide.product.boostUntil && new Date(slide.product.boostUntil).getTime() > Date.now());
-      return false;
-    };
     const storeSlidesAll = unique.filter((slide) => slide.type === "store");
     const productSlidesAll = unique.filter((slide) => slide.type === "product");
     // Randomly mix shop and product spotlights in each five-item rotation.
@@ -373,11 +368,11 @@ export function ShopTabs({
     ...featuredProducts.slice(0, 5),
     ...featuredFallbackProducts.filter((product: any) => !featuredProducts.some((featured: any) => featured.id === product.id)).slice(0, Math.max(0, 5 - featuredProducts.length)),
   ];
-  const filteredFeaturedStores = featuredStores;
+  // If no promoted/featured shops are available, recommend shops from the trending collection.\n  const spotlightStores = featuredStores.length ? featuredStores : trendingStores;
 
   return (
     <div className="shop-tabs-wrap mt-0">
-      <ShopPromoCarousel stores={filteredFeaturedStores} products={[...filteredFeaturedProducts, ...featuredFallbackProducts]} />
+      <ShopPromoCarousel stores={spotlightStores} products={[...filteredFeaturedProducts, ...featuredFallbackProducts]} />
       <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#999]">SokoLink marketplace</p>
