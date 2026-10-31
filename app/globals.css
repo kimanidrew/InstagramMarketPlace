@@ -11051,3 +11051,33 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-shimmer b {
   background:rgba(145,136,124,.075)!important;
 }
+
+
+/* Let product spotlight artwork stretch to the full banner height. */
+.shop-page .shop-promo-active > .shop-promo-product {
+  height:100%!important;
+  min-height:100%!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  align-items:stretch!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual {
+  align-self:stretch!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual > .shop-promo-floating-gallery,
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual > .shop-promo-single-card {
+  height:100%!important;
+  min-height:100%!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual .shop-promo-floating-gallery {
+  position:absolute!important;
+  inset:0!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual {
+    height:100%!important;
+    min-height:100%!important;
+  }
+}
