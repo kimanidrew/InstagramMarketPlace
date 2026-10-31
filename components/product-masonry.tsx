@@ -299,14 +299,14 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     // Every listing remains in the main feed; interludes never consume product indexes.
     productFeed.push({ type: "product", product });
 
-    // Show the first store section after product 4, then after each 12 more products.
-    if ((index === 3 || (index > 3 && (index - 3) % 12 === 0)) && stores.length > Math.floor((index - 3) / 12) * 4) {
-      productFeed.push({ type: "stores", batchIndex: Math.floor((index - 3) / 12) });
+    // Show the first full-width section after product 5, then after each 12 more products.
+    if ((index === 4 || (index > 4 && (index - 4) % 12 === 0)) && stores.length > Math.floor((index - 4) / 12) * 4) {
+      productFeed.push({ type: "stores", batchIndex: Math.floor((index - 4) / 12) });
     }
     if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
 
-    if (index === 3 || (index > 3 && (index - 3) % 12 === 0)) {
-      const sectionIndex = Math.floor((index - 3) / 12);
+    if (index === 4 || (index > 4 && (index - 4) % 12 === 0)) {
+      const sectionIndex = Math.floor((index - 4) / 12);
       const section = visibleCategorySections[sectionIndex];
       if (section) productFeed.push({ type: "category", section, sectionIndex });
     }
