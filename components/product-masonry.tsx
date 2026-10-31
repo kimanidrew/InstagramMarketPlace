@@ -296,14 +296,18 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   const visibleCategorySections = categorySections.filter((section) => !["other", "other category", "more to explore"].includes(section.label.trim().toLowerCase()) && section.items.length > 0);
 
   products.forEach((product, index) => {
-    // Keep every listing in the primary feed. Full-width interludes are only
-    // inserted after each complete 10-product block (two full desktop rows
-    // and five complete mobile rows), so neither responsive grid is split.
+    // Keep every listing in sequence. The first discovery pair is deliberately
+    // placed immediately after listing five: Meet the Makers, then category.
     productFeed.push({ type: "product", product });
 
     const productCount = index + 1;
-    if (productCount > 0 && productCount % 10 === 0) {
-      const sectionBatchIndex = Math.floor(productCount / 10) - 1;
+    const isFirstDiscoveryPair = productCount === 5;
+    const isLaterDiscoveryPair = productCount > 5 && (productCount - 5) % 10 === 0;
+
+    if (isFirstDiscoveryPair || isLaterDiscoveryPair) {
+      const sectionBatchIndex = isFirstDiscoveryPair
+        ? 0
+        : Math.floor((productCount - 5) / 10);
 
       if (stores.length > sectionBatchIndex * 4) {
         productFeed.push({ type: "stores", batchIndex: sectionBatchIndex });
@@ -313,10 +317,10 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
       if (section) {
         productFeed.push({ type: "category", section, sectionIndex: sectionBatchIndex });
       }
+    }
 
-      if (productCount === 10 && savedProducts.length > 0) {
-        productFeed.push({ type: "saved" });
-      }
+    if (productCount === 10 && savedProducts.length > 0) {
+      productFeed.push({ type: "saved" });
     }
   });
 
