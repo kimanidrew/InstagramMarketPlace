@@ -10586,7 +10586,7 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   max-height:none!important;
   object-fit:cover!important;
   object-position:center!important;
-  transform:rotate(-3deg)!important;
+  transform:rotate(-3deg);
   animation:shop-promo-single-float 5.2s ease-in-out infinite!important;
 }
 
