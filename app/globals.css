@@ -10778,3 +10778,19 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     animation:none!important;
   }
 }
+
+
+/* Keep the single-photo spotlight card precisely centered in its visual lane.
+   Center it as a grid item so the float animation only controls vertical motion
+   and tilt, never its horizontal alignment. */
+.shop-page .shop-promo-single-image {
+  display:grid!important;
+  place-items:center!important;
+  justify-items:center!important;
+  align-items:center!important;
+}
+.shop-page .shop-promo-single-image img {
+  justify-self:center!important;
+  align-self:center!important;
+  margin:0 auto!important;
+}
