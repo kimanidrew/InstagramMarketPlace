@@ -10349,3 +10349,19 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 @media(prefers-reduced-motion:reduce) {
   .shop-page .shop-promo-single-image img { animation:none!important; }
 }
+
+
+/* Remove the frame inset so spotlight photos use every pixel of their card. */
+.shop-page .shop-promo-main-image,
+.shop-page .shop-promo-float-image,
+.shop-page [class*="shop-promo-float-image-"] {
+  padding:0!important;
+}
+.shop-page .shop-promo-main-image img,
+.shop-page .shop-promo-float-image img,
+.shop-page [class*="shop-promo-float-image-"] img {
+  padding:0!important;
+}
+.shop-page .shop-promo-single-image img {
+  padding:0!important;
+}
