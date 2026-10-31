@@ -122,7 +122,7 @@ export function ProductCard({ p }: { p: any }) {
         </div>
 </div>
 
-      <div className="pt-3 sm:pt-4">
+      <div className="pt-2 sm:pt-3">
         <div className="flex items-center justify-between gap-2">
           <div className={"product-card-like-line min-w-0 " + (likeFlash ? "is-updated" : "")} aria-label={likeCount.toLocaleString() + " likes"}>
             <Heart size={16} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
