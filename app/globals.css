@@ -10490,3 +10490,24 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-single-glow {
   display:none!important;
 }
+
+/* Let portrait spotlight cards and their floating motion extend beyond the
+   visual column without being cut off by the slide or gallery wrappers. */
+.shop-page .shop-promo-slide.shop-promo-product {
+  overflow:visible!important;
+}
+.shop-page .shop-promo-product .shop-promo-product-visual {
+  min-height:380px!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-floating-gallery {
+  overflow:visible!important;
+}
+.shop-page .shop-promo-single-image {
+  overflow:visible!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-product .shop-promo-product-visual {
+    min-height:290px!important;
+  }
+}
