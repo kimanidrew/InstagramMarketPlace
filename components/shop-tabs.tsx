@@ -322,6 +322,7 @@ export function ShopTabs({
                         <p className="mt-2 text-sm text-[#777]">Revisit products, services and stores you recently checked out.</p>
                       </div>
                       <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
+                        <Link href="/history" className="inline-flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs font-black text-[#222] transition hover:border-black hover:bg-black hover:text-white">View all <ArrowRight size={14} /></Link>
                         <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} aria-label={clearingHistory ? "Clearing history" : "Clear history"} title={clearingHistory ? "Clearing history" : "Clear history"} className="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full border border-black/10 text-[#666] transition hover:border-black hover:text-black disabled:cursor-wait disabled:opacity-70 sm:h-auto sm:w-auto sm:px-4 sm:py-2"><Trash2 size={17} aria-hidden="true" className={clearingHistory ? "animate-bounce text-black" : "transition-transform duration-200 hover:rotate-[-8deg]"} /><span className="hidden text-[12px] font-black leading-5 sm:inline">{clearingHistory ? "Clearing…" : "Clear history"}</span></button>
                       </div>
                     </div>
@@ -373,7 +374,6 @@ export function ShopTabs({
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div><p className="eyebrow plain"><TrendingUp size={13} /> Trending now</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">What shoppers are saving and loving.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Ranked from marketplace activity — likes plus saves — so the products people actually respond to rise naturally.</p></div>
                   <div className="flex shrink-0 items-center gap-3 self-start sm:self-auto">
-                        <Link href="/history" className="inline-flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs font-black text-[#222] transition hover:border-black hover:bg-black hover:text-white">View all <ArrowRight size={14} /></Link>
                         <button type="button" onClick={clearRecentHistory} disabled={clearingHistory} aria-label={clearingHistory ? "Clearing history" : "Clear history"} title={clearingHistory ? "Clearing history" : "Clear history"} className="inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full border border-black/10 text-[#666] transition hover:border-black hover:text-black disabled:cursor-wait disabled:opacity-70 sm:h-auto sm:w-auto sm:px-4 sm:py-2"><Trash2 size={17} aria-hidden="true" className={clearingHistory ? "animate-bounce text-black" : "transition-transform duration-200 hover:rotate-[-8deg]"} /><span className="hidden text-[12px] font-black leading-5 sm:inline">{clearingHistory ? "Clearing…" : "Clear history"}</span></button>
                       </div>
                 </div>
