@@ -46,8 +46,22 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       <Link href="/stores" className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-black text-black">Explore all shops <ArrowRight size={14} /></Link>
     </>
   );
+  const productImages = slide.type === "product" ? (() => {
+    const mediaItems = Array.isArray(slide.product.mediaItems) ? slide.product.mediaItems : [];
+    const fromItems = mediaItems.map((item: any) => typeof item === "string" ? item : item?.media_url || item?.mediaUrl || item?.url || item?.thumbnail_url).filter((url: any): url is string => typeof url === "string" && /^https?:\\/\\//i.test(url));
+    const candidates = [slide.product.thumbnailUrl, ...fromItems, slide.product.mediaUrl].filter((url: any): url is string => typeof url === "string" && /^https?:\\/\\//i.test(url));
+    return Array.from(new Set(candidates)).slice(0, 4);
+  })() : [];
   const visual = slide.type === "product" ? (
-    <div className="shop-promo-product-visual"><img src={slide.product.thumbnailUrl || slide.product.mediaUrl} alt={slide.product.productTitle || "Promoted listing"} /><span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span></div>
+    <div className={"shop-promo-product-visual " + (productImages.length > 1 ? "has-floating-images" : "")}>
+      {productImages.length > 1 ? (
+        <div className="shop-promo-floating-gallery">
+          {productImages.slice(1).map((src, i) => <span key={src} className={"shop-promo-float-image shop-promo-float-image-" + (i + 1)}><img src={src} alt="" /></span>)}
+          <span className="shop-promo-main-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
+        </div>
+      ) : <img src={productImages[0] || slide.product.thumbnailUrl || slide.product.mediaUrl} alt={slide.product.productTitle || "Promoted listing"} />}
+      <span className="shop-promo-product-sticker">IN THE SPOTLIGHT</span>
+    </div>
   ) : (
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
@@ -79,15 +93,28 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl))
       .map((product) => ({ type: "product" as const, key: "product-" + product.id, product }));
     const unique = Array.from(new Map<string, PromoSlide>([...storeSlides, ...productSlides].map((slide): [string, PromoSlide] => [slide.key, slide])).values());
-    const featured = unique.filter((slide) => {
+    const isFeatured = (slide: PromoSlide) => {
       if (slide.type === "store") return Boolean(slide.store.paidPromotionActive);
-      if (slide.type === "product") {
-        return Boolean(slide.product.boostUntil && new Date(slide.product.boostUntil).getTime() > Date.now());
-      }
+      if (slide.type === "product") return Boolean(slide.product.boostUntil && new Date(slide.product.boostUntil).getTime() > Date.now());
       return false;
-    });
-    const organic = unique.filter((slide) => !featured.some((item) => item.key === slide.key));
-    return [...shuffleSlides(featured), ...shuffleSlides(organic)].slice(0, 5);
+    };
+    const storeSlidesAll = unique.filter((slide) => slide.type === "store");
+    const productSlidesAll = unique.filter((slide) => slide.type === "product");
+    // Keep a healthy mix in every five-slide rotation: randomly use two or
+    // three shops, then fill the remaining positions with product spotlights.
+    const shopCount = Math.random() < 0.5 ? 2 : 3;
+    const choose = (items: PromoSlide[], count: number) => {
+      const featuredItems = shuffleSlides(items.filter(isFeatured));
+      const organicItems = shuffleSlides(items.filter((item) => !isFeatured(item)));
+      return [...featuredItems, ...organicItems].slice(0, count);
+    };
+    const selectedStores = choose(storeSlidesAll, Math.min(shopCount, storeSlidesAll.length));
+    const selectedProducts = choose(productSlidesAll, Math.min(5 - selectedStores.length, productSlidesAll.length));
+    // If one category has too few entries, use the remaining available slots
+    // from the other category without duplicating a spotlight.
+    const selectedKeys = new Set([...selectedStores, ...selectedProducts].map((slide) => slide.key));
+    const remaining = choose(unique.filter((slide) => !selectedKeys.has(slide.key)), 5 - selectedKeys.size);
+    return shuffleSlides([...selectedStores, ...selectedProducts, ...remaining]).slice(0, 5);
   });
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
