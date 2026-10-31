@@ -270,3 +270,5 @@ export async function Products({
     </main>
   );
 }
+
+export default Products;
