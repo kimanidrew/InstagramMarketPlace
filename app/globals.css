@@ -10155,3 +10155,21 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   .shop-promo-shimmer b{left:20px;bottom:42%;width:36%}
 }
 @media(prefers-reduced-motion:reduce){.shop-promo-shimmer{animation:none}}
+
+
+/* Floating product-image gallery for multi-image Shop Spotlight listings. */
+.shop-promo-product-visual.has-floating-images{display:grid;place-items:center;position:relative;min-height:260px;overflow:hidden;isolation:isolate}
+.shop-promo-floating-gallery{position:relative;width:min(88%,440px);height:min(82%,330px);min-height:230px;perspective:900px}
+.shop-promo-main-image,.shop-promo-float-image{position:absolute;display:block;overflow:hidden;border:5px solid rgba(255,255,255,.92);border-radius:22px;background:#f3eee9;box-shadow:0 22px 55px rgba(30,20,30,.2);will-change:transform}
+.shop-promo-main-image{z-index:3;left:25%;top:8%;width:52%;height:82%;transform:rotate(-3deg);animation:shop-promo-main-float 5.5s ease-in-out infinite}
+.shop-promo-main-image img,.shop-promo-float-image img{width:100%;height:100%;object-fit:cover}
+.shop-promo-float-image-1{z-index:2;left:2%;top:20%;width:39%;height:65%;transform:rotate(-13deg);animation:shop-promo-image-float-left 6s ease-in-out infinite}
+.shop-promo-float-image-2{z-index:1;right:1%;top:14%;width:37%;height:62%;transform:rotate(12deg);animation:shop-promo-image-float-right 6.5s ease-in-out infinite}
+.shop-promo-float-image-3{z-index:0;left:32%;top:0;width:37%;height:56%;transform:rotate(7deg);opacity:.82;animation:shop-promo-image-float-back 7s ease-in-out infinite}
+.shop-promo-product-sticker{z-index:5}
+@keyframes shop-promo-main-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-11px) rotate(1deg)}}
+@keyframes shop-promo-image-float-left{0%,100%{transform:translate3d(0,0,0) rotate(-13deg)}50%{transform:translate3d(-7px,-13px,0) rotate(-8deg)}}
+@keyframes shop-promo-image-float-right{0%,100%{transform:translate3d(0,0,0) rotate(12deg)}50%{transform:translate3d(8px,-15px,0) rotate(7deg)}}
+@keyframes shop-promo-image-float-back{0%,100%{transform:translate3d(0,0,0) rotate(7deg)}50%{transform:translate3d(0,-12px,0) rotate(12deg)}}
+@media(max-width:767px){.shop-promo-product-visual.has-floating-images{min-height:190px}.shop-promo-floating-gallery{width:88%;height:185px;min-height:185px}.shop-promo-main-image,.shop-promo-float-image{border-width:3px;border-radius:15px}}
+@media(prefers-reduced-motion:reduce){.shop-promo-main-image,.shop-promo-float-image{animation:none!important}}
