@@ -333,10 +333,10 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
               </div>
               <Link href={item.section.type === "service" ? "/search?type=service" : "/search?category=" + encodeURIComponent(item.section.label)} className="inline-flex shrink-0 items-center gap-1 text-xs font-black text-[#555] hover:text-black">Explore <ArrowRight size={13} /></Link>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:hidden">
+            <div className="category-product-grid-mobile grid grid-cols-2 gap-3 sm:hidden">
               {item.section.items.slice(0, 4).map((product: any) => <div key={product.id} className="min-w-0"><ProductCard p={product} /></div>)}
             </div>
-            <div className="hidden grid-cols-5 gap-4 sm:grid">
+            <div className="category-product-grid-desktop hidden grid-cols-5 gap-4 sm:grid">
               {item.section.items.slice(0, 5).map((product: any) => <div key={product.id} className="min-w-0"><ProductCard p={product} /></div>)}
             </div>
           </section>
