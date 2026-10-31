@@ -372,7 +372,9 @@ export function ShopTabs({
     ...featuredProducts.slice(0, 5),
     ...featuredFallbackProducts.filter((product: any) => !featuredProducts.some((featured: any) => featured.id === product.id)).slice(0, Math.max(0, 5 - featuredProducts.length)),
   ];
-  const filteredFeaturedStores = featuredStores;\n  // If no featured shops are available, recommend shops from the trending collection.\n  const spotlightStores = filteredFeaturedStores.length ? filteredFeaturedStores : trendingStores;
+  const filteredFeaturedStores = featuredStores;
+  // If no featured shops are available, recommend shops from the trending collection.
+  const spotlightStores = filteredFeaturedStores.length ? filteredFeaturedStores : trendingStores;
 
   return (
     <div className="shop-tabs-wrap mt-0">
