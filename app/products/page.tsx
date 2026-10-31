@@ -208,20 +208,20 @@ export async function Products({
   return (
     <main className="shop-page shell py-5 md:py-7">
       {showDiscovery && (
-        <section className="relative mb-6 overflow-hidden rounded-[10px] border border-rose-100/80 bg-gradient-to-br from-[#fff7f4] via-[#fff9ed] to-[#f0f7ff] p-4 sm:rounded-[10px] sm:p-5" aria-label="Shop by category">
+        <section className="shop-by-category relative mb-4 overflow-hidden rounded-[20px] border border-rose-100/80 bg-gradient-to-br from-[#fff8f6] via-[#fffaf2] to-[#f4f8ff] p-3 sm:mb-5 sm:p-4" aria-label="Shop by category">
           <div className="pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full bg-white/70 blur-3xl" aria-hidden="true" />
-          <div className="relative mb-4 flex items-center justify-between gap-3 sm:mb-5">
+          <div className="relative mb-3 flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="mb-1 text-[9px] font-extrabold uppercase tracking-[.2em] text-[#b45365] sm:text-[10px]">Find your next favourite</p>
-              <h1 className="flex items-center gap-2 text-lg font-black leading-tight tracking-[-.035em] text-[#20202a] sm:text-xl"><Grid2X2 size={18} strokeWidth={2.5} className="text-[#b83250]" /> Shop by category</h1>
+              <p className="mb-0.5 text-[8px] font-extrabold uppercase tracking-[.18em] text-[#b45365] sm:text-[9px]">Find your next favourite</p>
+              <h1 className="flex items-center gap-1.5 text-base font-black leading-tight tracking-[-.035em] text-[#20202a] sm:text-lg"><Grid2X2 size={16} strokeWidth={2.5} className="text-[#b83250]" /> Shop by category</h1>
             </div>
-            <Link href="/categories" className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#e8b9c1] bg-white/75 px-3 py-2 text-[11px] font-extrabold leading-none text-[#8f2942] transition-colors hover:bg-white sm:px-3.5 sm:text-xs">View all <ChevronRight size={14} /></Link>
+            <Link href="/categories" className="inline-flex shrink-0 items-center gap-0.5 rounded-full border border-[#e8b9c1] bg-white/80 px-2.5 py-1.5 text-[10px] font-extrabold leading-none text-[#8f2942] transition-colors hover:bg-white sm:px-3 sm:text-[11px]">View all <ChevronRight size={14} /></Link>
           </div>
-          <div className="relative grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 lg:grid-cols-6">
+          <div className="relative grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-2 lg:grid-cols-6">
             {shopCategories.map((category) => (
-              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-h-[58px] min-w-0 items-center gap-2.5 rounded-xl border border-white/90 bg-white/75 px-2.5 py-2.5 transition-colors hover:border-[#e9b7c1] hover:bg-white sm:min-h-[64px] sm:gap-3 sm:px-3">
-                <span className={category.color + " flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] text-lg"}>{category.icon}</span>
-                <span className="min-w-0 text-[11px] font-extrabold leading-[1.25] tracking-[-.01em] text-[#30303a] transition-colors group-hover:text-[#a52d49] sm:text-xs">{category.label}</span>
+              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-h-[48px] min-w-0 items-center gap-2 rounded-xl border border-white/90 bg-white/80 px-2 py-1.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e9b7c1] hover:bg-white hover:shadow-sm sm:min-h-[52px] sm:gap-2.5 sm:px-2.5">
+                <span className={category.color + " flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] text-base"}>{category.icon}</span>
+                <span className="min-w-0 text-[10px] font-extrabold leading-[1.2] tracking-[-.015em] text-[#30303a] transition-colors group-hover:text-[#a52d49] sm:text-[11px]">{category.label}</span>
               </Link>
             ))}
           </div>
