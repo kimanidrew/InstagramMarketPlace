@@ -138,21 +138,16 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     };
     const storeSlidesAll = unique.filter((slide) => slide.type === "store");
     const productSlidesAll = unique.filter((slide) => slide.type === "product");
-    // Keep a healthy mix in every five-slide rotation: randomly use two or
-    // three shops, then fill the remaining positions with product spotlights.
-    const shopCount = Math.min(storeSlidesAll.length, Math.random() < 0.5 ? 2 : 3);
+    // Always reserve as many of the five spotlight positions as possible for
+    // shop cards. Product spotlights fill only the positions left after shops.
     const choose = (items: PromoSlide[], count: number) => {
       const featuredItems = shuffleSlides(items.filter(isFeatured));
       const organicItems = shuffleSlides(items.filter((item) => !isFeatured(item)));
       return [...featuredItems, ...organicItems].slice(0, count);
     };
-    const selectedStores = choose(storeSlidesAll, shopCount);
-    const selectedProducts = choose(productSlidesAll, Math.min(5 - selectedStores.length, productSlidesAll.length));
-    // If one category has too few entries, use the remaining available slots
-    // from the other category without duplicating a spotlight.
-    const selectedKeys = new Set([...selectedStores, ...selectedProducts].map((slide) => slide.key));
-    const remaining = choose(unique.filter((slide) => !selectedKeys.has(slide.key)), 5 - selectedKeys.size);
-    return shuffleSlides([...selectedStores, ...selectedProducts, ...remaining]).slice(0, 5);
+    const selectedStores = choose(storeSlidesAll, Math.min(5, storeSlidesAll.length));
+    const selectedProducts = choose(productSlidesAll, Math.max(0, 5 - selectedStores.length));
+    return shuffleSlides([...selectedStores, ...selectedProducts]).slice(0, 5);
   });
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
