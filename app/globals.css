@@ -2114,7 +2114,7 @@ select:focus-visible,
 
 /* Compact inline likes row above each product caption */
 .product-card-like-line{display:inline-flex;align-items:center;justify-content:flex-start;gap:5px;width:fit-content;max-width:100%;margin:0 0 3px;color:#777;font-size:12px;font-weight:700;line-height:1}
-.product-card-like-line-icon{display:block;flex:none;align-self:center;color:#ec4899;transform-origin:center;transition:transform .4s cubic-bezier(.22,1,.36,1),color .25s ease}
+.product-card-like-line-icon{display:block;flex:none;align-self:center;width:12px;height:12px;max-height:1em;color:#ec4899;transform-origin:center;transition:transform .4s cubic-bezier(.22,1,.36,1),color .25s ease}
 .product-card-like-line b,.product-card-like-line span{display:inline-flex;align-items:center;align-self:center;line-height:1;white-space:nowrap}
 .product-card-like-line b{color:#292929;font:inherit;font-weight:inherit;font-variant-numeric:tabular-nums}
 .product-card-like-line.is-updated .product-card-like-line-icon,.product-card-like-line-icon.is-animated{animation:productLikeIconPop .45s cubic-bezier(.22,1,.36,1) both}
