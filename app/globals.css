@@ -11091,3 +11091,31 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   border-radius:0!important;
   box-shadow:none!important;
 }
+
+
+/* Smooth, synchronized spotlight transitions and indicator feedback. */
+.shop-promo-active>.shop-promo-slide{
+  animation:shopPromoSlideIn .68s cubic-bezier(.22,.75,.25,1) both!important;
+  backface-visibility:hidden;
+  transform-origin:center;
+}
+@keyframes shopPromoSlideIn{
+  from{opacity:.35;transform:translate3d(14px,0,0)}
+  to{opacity:1;transform:translate3d(0,0,0)}
+}
+.shop-promo-carousel>.shop-promo-controls .shop-promo-dots button{
+  transition:width .32s cubic-bezier(.22,.75,.25,1),background-color .32s ease,opacity .32s ease!important;
+}
+.shop-promo-carousel>.shop-promo-controls .shop-promo-dots button.is-active{
+  width:24px!important;
+  opacity:1!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .shop-promo-active>.shop-promo-slide{
+    animation:none!important;
+    transform:none!important;
+  }
+  .shop-promo-carousel>.shop-promo-controls .shop-promo-dots button{
+    transition:none!important;
+  }
+}
