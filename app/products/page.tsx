@@ -30,7 +30,7 @@ export default async function Products({
   const currentUser = await user();
   const now = new Date();
 
-  const [wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topInstagramLiked, topLiked, topSaved] =
+  const [wishlistProducts, recentlyViewedProducts, featuredProductsRaw, featuredStoresRaw, topInstagramLiked, topLiked, topSaved, categoryProductsRaw] =
     await Promise.all([
       currentUser
         ? db().instagramPost.findMany({
@@ -135,6 +135,18 @@ export default async function Products({
         orderBy: { wishlistItems: { _count: "desc" } },
         take: 24,
       }),
+      db().instagramPost.findMany({
+        where: { isProduct: true, mediaUrl: { not: null } },
+        include: {
+          connection: true,
+          tags: true,
+          likes: true,
+          wishlistItems: true,
+          _count: { select: { likes: true, wishlistItems: true } },
+        },
+        orderBy: [{ timestamp: "desc" }, { createdAt: "desc" }],
+        take: 600,
+      }).then((items) => filterAvailableInstagramMedia(items)),
     ]);
 
   const featuredStores = (
@@ -177,6 +189,19 @@ export default async function Products({
     .map(({ store, posts }) => ({ store: { ...store, paidPromotionActive: paidStoreIds.has(store.id) }, posts }))
     .sort((a, b) => Number(Boolean(b.store.paidPromotionActive)) - Number(Boolean(a.store.paidPromotionActive)));
 
+  const categoryGroups = new Map<string, { label: string; type: "product" | "service"; items: any[] }>();
+  for (const post of categoryProductsRaw as any[]) {
+    const isService = String(post.listingType || "").toUpperCase() === "SERVICE";
+    const label = String(post.category || post.subcategory || (isService ? "Services" : "More to explore")).trim();
+    const key = (isService ? "service:" : "product:") + label.toLowerCase();
+    const group = categoryGroups.get(key) || { label, type: isService ? "service" as const : "product" as const, items: [] };
+    group.items.push(post);
+    categoryGroups.set(key, group);
+  }
+  const categorySections = [...categoryGroups.values()]
+    .sort((a, b) => b.items.length - a.items.length || a.label.localeCompare(b.label))
+    .map((group) => ({ ...group, items: group.items.slice(0, 10) }));
+
   const showDiscovery = !text;
 
   return (
@@ -217,6 +242,7 @@ export default async function Products({
             trendingStores,
             trendingProducts: prepareProducts(trendingProducts),
             featuredProducts: prepareProducts(featuredProductsRaw),
+            categorySections: categorySections.map((section) => ({ ...section, items: prepareProducts(section.items) })),
           }),
         );
 
@@ -229,6 +255,7 @@ export default async function Products({
             trendingStores={shopData.trendingStores}
             trendingProducts={shopData.trendingProducts}
             featuredProducts={shopData.featuredProducts}
+            categorySections={shopData.categorySections}
             now={now.toISOString()}
           />
         );
