@@ -78,7 +78,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     const productSlides: PromoSlide[] = products
       .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl))
       .map((product) => ({ type: "product" as const, key: "product-" + product.id, product }));
-    const unique = [...new Map([...storeSlides, ...productSlides].map((slide) => [slide.key, slide])).values()];
+    const unique = Array.from(new Map<string, PromoSlide>([...storeSlides, ...productSlides].map((slide): [string, PromoSlide] => [slide.key, slide])).values());
     const featured = unique.filter((slide) =>
       slide.type === "store"
         ? Boolean(slide.store.paidPromotionActive)
