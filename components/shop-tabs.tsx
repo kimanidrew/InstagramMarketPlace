@@ -60,7 +60,34 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     }).filter((url: unknown): url is string => typeof url === "string" && /^https?:\/\//i.test(url) && !isVideoUrl(url));
     const candidates = [product.thumbnailUrl, ...fromItems, !isVideoUrl(product.mediaUrl) ? product.mediaUrl : null]
       .filter((url: unknown): url is string => typeof url === "string" && /^https?:\/\//i.test(url) && !isVideoUrl(url));
-    return Array.from(new Set(candidates)).slice(0, 4);
+
+    // The same uploaded image can appear as thumbnailUrl, mediaUrl and a mediaItems
+    // entry with different resize/query parameters. Deduplicate by the underlying
+    // asset URL before assigning collage positions.
+    const seenImages = new Set<string>();
+    return candidates.filter((url) => {
+      try {
+        const parsed = new URL(url);
+        parsed.search = "";
+        parsed.hash = "";
+        parsed.hostname = parsed.hostname.toLowerCase();
+        parsed.pathname = parsed.pathname.replace(/\\/+$/, "");
+        const pathParts = parsed.pathname.split("/");
+        const uploadIndex = pathParts.findIndex((part) => part === "upload");
+        if (uploadIndex >= 0 && pathParts[uploadIndex + 1] && /^(?:w_|h_|c_|q_|f_|ar_|fit_|crop_|dpr_|e_)/i.test(pathParts[uploadIndex + 1])) {
+          pathParts.splice(uploadIndex + 1, 1);
+          parsed.pathname = pathParts.join("/");
+        }
+        const identity = parsed.toString();
+        if (seenImages.has(identity)) return false;
+        seenImages.add(identity);
+        return true;
+      } catch {
+        if (seenImages.has(url)) return false;
+        seenImages.add(url);
+        return true;
+      }
+    }).slice(0, 4);
   })() : [];
   const visual = slide.type === "product" ? (
     <div className={"shop-promo-product-visual " + (productImages.length > 1 ? "has-floating-images" : "")}>
