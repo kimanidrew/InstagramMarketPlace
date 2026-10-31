@@ -321,8 +321,8 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     }
     if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
 
-    if (index === 11 || (index > 11 && (index - 11) % 12 === 0)) {
-      const sectionIndex = Math.floor((index - 11) / 12);
+    if (index === 3 || (index > 3 && (index - 3) % 12 === 0)) {
+      const sectionIndex = Math.floor((index - 3) / 12);
       const section = visibleCategorySections[sectionIndex];
       if (section) productFeed.push({ type: "category", section, sectionIndex });
     }
