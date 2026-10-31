@@ -208,16 +208,16 @@ export async function Products({
   return (
     <main className="shop-page shell py-5 md:py-7">
       {showDiscovery && (
-        <section className="mb-6 rounded-2xl border border-black/[.06] bg-white p-4 shadow-sm sm:p-5" aria-label="Shop by category">
+        <section className="mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-[#171717] via-[#541b32] to-[#a51f35] p-4 sm:p-5" aria-label="Shop by category">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h1 className="flex items-center gap-2 text-base font-black tracking-tight text-[#17202a] sm:text-lg"><Grid2X2 size={18} /> Shop by category</h1>
-            <Link href="/categories" className="inline-flex shrink-0 items-center gap-1 text-xs font-bold text-[#555] hover:text-black">View all <ChevronRight size={14} /></Link>
+            <h1 className="flex items-center gap-2 text-base font-black tracking-tight text-white sm:text-lg"><Grid2X2 size={18} /> Shop by category</h1>
+            <Link href="/categories" className="inline-flex shrink-0 items-center gap-1 text-xs font-extrabold text-white/90 transition hover:text-white">View all <ChevronRight size={14} /></Link>
           </div>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
             {shopCategories.map((category) => (
-              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-w-0 items-center gap-2 rounded-xl border border-black/[.05] bg-[#fafafa] p-2.5 transition hover:border-black/15 hover:bg-white sm:p-3">
+              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-w-0 items-center gap-2 rounded-xl border border-white/15 bg-white/10 p-2.5 transition-colors hover:border-white/30 hover:bg-white/20 sm:p-3">
                 <span className={category.color + " flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-lg"}>{category.icon}</span>
-                <span className="min-w-0 text-xs font-bold leading-4 text-[#34404a] group-hover:text-black">{category.label}</span>
+                <span className="min-w-0 text-xs font-extrabold leading-4 text-white transition-colors group-hover:text-white">{category.label}</span>
               </Link>
             ))}
           </div>
