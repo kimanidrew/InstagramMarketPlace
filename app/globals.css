@@ -10215,14 +10215,31 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   object-fit:cover;
 }
 .shop-promo-single-image{
-  width:min(86%,390px);
-  height:min(88%,340px);
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:0;
+  margin:0;
+  overflow:hidden;
 }
 .shop-promo-single-image img{
-  width:min(88%,330px);
-  height:92%;
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:none;
   object-fit:cover;
+  object-position:center;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  transform:none;
+  animation:none;
 }
+.shop-promo-single-glow{display:none}
 .shop-promo-product .shop-promo-product-copy{display:none}
 @media(max-width:767px){
   .shop-promo-slide.shop-promo-product{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(190px,1fr)}
