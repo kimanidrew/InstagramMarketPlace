@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Grid2X2, ChevronRight } from "lucide-react";
 import { user } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { ProductCard } from "@/components/product-card";
@@ -6,6 +8,16 @@ import { ProductMasonry } from "@/components/product-masonry";
 import { ShopTabs } from "@/components/shop-tabs";
 
 export const dynamic = "force-dynamic";
+
+
+const shopCategories = [
+  { label: "Fashion & clothing", tag: "fashion", icon: "✦", color: "bg-[#e2f3ff]" },
+  { label: "Beauty & skincare", tag: "beauty", icon: "✧", color: "bg-[#fff0d6]" },
+  { label: "Home & living", tag: "home", icon: "⌂", color: "bg-[#e7f6e8]" },
+  { label: "Electronics", tag: "electronics", icon: "⌁", color: "bg-[#f3e8ff]" },
+  { label: "Food & groceries", tag: "food", icon: "❋", color: "bg-[#ffe7e7]" },
+  { label: "Services", tag: "services", icon: "↗", color: "bg-[#e7f4f1]" },
+];
 
 export default async function Products({
   searchParams,
@@ -169,6 +181,22 @@ export default async function Products({
 
   return (
     <main className="shop-page shell py-5 md:py-7">
+      {showDiscovery && (
+        <section className="mb-6 rounded-2xl border border-black/[.06] bg-white p-4 shadow-sm sm:p-5" aria-label="Shop by category">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h1 className="flex items-center gap-2 text-base font-black tracking-tight text-[#17202a] sm:text-lg"><Grid2X2 size={18} /> Shop by category</h1>
+            <Link href="/categories" className="inline-flex shrink-0 items-center gap-1 text-xs font-bold text-[#555] hover:text-black">View all <ChevronRight size={14} /></Link>
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+            {shopCategories.map((category) => (
+              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-w-0 items-center gap-2 rounded-xl border border-black/[.05] bg-[#fafafa] p-2.5 transition hover:border-black/15 hover:bg-white sm:p-3">
+                <span className={category.color + " flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-lg"}>{category.icon}</span>
+                <span className="min-w-0 text-xs font-bold leading-4 text-[#34404a] group-hover:text-black">{category.label}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
       {showDiscovery && (() => {
         const prepareProducts = (items: any[]) =>
           items.map((product: any) => ({
