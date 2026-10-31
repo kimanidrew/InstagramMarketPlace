@@ -159,6 +159,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   const [isMeasured, setIsMeasured] = useState(false);
   const measureRef = React.useRef<HTMLDivElement>(null);
   const swipeStartX = React.useRef<number | null>(null);
+  const didSwipe = React.useRef(false);
   const visitorId = analyticsVisitorId();
 
   const goToSlide = (next: number) => {
@@ -173,6 +174,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     const delta = event.clientX - swipeStartX.current;
     swipeStartX.current = null;
     if (Math.abs(delta) < 45 || slides.length < 2) return;
+    didSwipe.current = true;
     goToSlide(index + (delta < 0 ? 1 : -1));
   };
 
@@ -235,6 +237,12 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
         onPointerDown={handleSwipeStart}
         onPointerUp={handleSwipeEnd}
         onPointerCancel={() => { swipeStartX.current = null; }}
+        onClickCapture={(event) => {
+          if (!didSwipe.current) return;
+          event.preventDefault();
+          event.stopPropagation();
+          didSwipe.current = false;
+        }}
       >
         <div className="shop-promo-track" style={{ transform: `translate3d(-${index * 100}%,0,0)` }}>
           {slides.map((slide) => (
