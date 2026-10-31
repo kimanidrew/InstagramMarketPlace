@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BadgeCheck, Bookmark, Crown, ArrowRight, ChevronLeft, ChevronRight, LoaderCircle, Store, Sparkles } from "lucide-react";
+import { BadgeCheck, Bookmark, Crown, ArrowRight, LoaderCircle, Store, Sparkles } from "lucide-react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -138,7 +138,6 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
   const [error, setError] = useState(false);
   const pageRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const savedForLaterScrollRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -376,22 +375,16 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
                 <h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Still loving these?</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-[#777]">Your saved products and services are ready whenever you are.</p>
               </div>
-              <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
-                <div className="hidden items-center gap-2 md:flex" aria-label="Scroll saved listings">
-                  <button type="button" onClick={() => savedForLaterScrollRef.current?.scrollBy({ left: -360, behavior: "smooth" })} aria-label="Scroll saved listings left" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border !border-black !bg-black text-white transition-colors hover:!border-black hover:!bg-black active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronLeft size={18} /></button>
-                  <button type="button" onClick={() => savedForLaterScrollRef.current?.scrollBy({ left: 360, behavior: "smooth" })} aria-label="Scroll saved listings right" style={{ backgroundColor: "#000000", color: "#ffffff", borderColor: "#000000" }} className="flex h-10 w-10 items-center justify-center rounded-full border !border-black !bg-black text-white transition-colors hover:!border-black hover:!bg-black active:!bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"><ChevronRight size={18} /></button>
-                </div>
-                <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
-              </div>
+              <Link href="/wishlist" className="saved-for-later-link group inline-flex shrink-0 items-center gap-2 text-xs font-black leading-5">View full wishlist <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" /></Link>
             </div>
-            <div ref={savedForLaterScrollRef} className="saved-for-later-list mt-6 -mx-6 flex flex-nowrap gap-3 overflow-x-auto px-6 pb-2 scroll-smooth md:-mx-9 md:px-9 md:gap-4">
+            <div className="saved-for-later-list mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7 md:gap-4">
               {savedProducts.slice(0, 7).map((x: any) => {
                 const isVideo = String(x.mediaType || "").toUpperCase() === "VIDEO";
                 const isService = String(x.listingType || "").toUpperCase() === "SERVICE";
                 const href = "/" + (isService ? "service" : "product") + "/" + x.productSlug;
                 const image = x.mediaUrl || x.thumbnailUrl;
                 return (
-                  <div key={x.id} className="saved-for-later-card group relative h-[112px] w-[112px] shrink-0 overflow-hidden rounded-[20px] bg-[#eeeeeb] sm:h-[136px] sm:w-[136px] md:h-[180px] md:w-[180px] md:shrink-0">
+                  <div key={x.id} className="saved-for-later-card group relative aspect-square min-w-0 w-full overflow-hidden rounded-[20px] bg-[#eeeeeb]">
                     <Link href={href} aria-label={x.productTitle || "Saved listing"} className="block h-full w-full">
                       {isVideo && x.mediaUrl ? <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
                     </Link>
