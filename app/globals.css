@@ -10511,3 +10511,146 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     min-height:290px!important;
   }
 }
+
+/* Size product portrait collages from the measured spotlight banner height.
+   The measurement slides use the same visual height rules as the shimmer,
+   while the visible slide scales cards to its actual available visual area. */
+.shop-page .shop-promo-product .shop-promo-product-visual {
+  container-type:size;
+  box-sizing:border-box;
+  height:100%!important;
+  min-height:210px!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-floating-gallery {
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-main-image,
+.shop-page .shop-promo-float-image,
+.shop-page [class*="shop-promo-float-image-"] {
+  width:160px!important;
+  height:220px!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  aspect-ratio:11 / 15!important;
+}
+.shop-page .shop-promo-main-image {
+  left:calc(50% - 80px)!important;
+  top:calc(50% - 110px)!important;
+  margin:0!important;
+}
+.shop-page .shop-promo-float-image-1 {
+  left:calc(50% - 210px)!important;
+  top:calc(50% - 85px)!important;
+  margin:0!important;
+}
+.shop-page .shop-promo-float-image-2 {
+  left:calc(50% + 50px)!important;
+  right:auto!important;
+  top:calc(50% - 95px)!important;
+  margin:0!important;
+}
+.shop-page .shop-promo-float-image-3 {
+  left:calc(50% - 80px)!important;
+  top:0!important;
+}
+.shop-page .shop-promo-single-image {
+  position:absolute!important;
+  inset:0!important;
+  display:grid!important;
+  place-items:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-single-image img {
+  position:relative!important;
+  inset:auto!important;
+  width:240px!important;
+  height:320px!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  transform:rotate(-3deg)!important;
+  animation:shop-promo-single-float 5.2s ease-in-out infinite!important;
+}
+
+/* Container-query units scale every card from the real visual height, not
+   arbitrary viewport widths or hard-coded desktop/mobile card dimensions. */
+@supports (height:1cqh) {
+  .shop-page .shop-promo-main-image,
+  .shop-page .shop-promo-float-image,
+  .shop-page [class*="shop-promo-float-image-"] {
+    width:clamp(98px,52cqh,160px)!important;
+    height:clamp(135px,72cqh,220px)!important;
+  }
+  .shop-page .shop-promo-main-image {
+    left:calc(50% - 26cqh)!important;
+    top:calc(50% - 36cqh)!important;
+  }
+  .shop-page .shop-promo-float-image-1 {
+    left:calc(50% - 70cqh)!important;
+    top:calc(50% - 28cqh)!important;
+  }
+  .shop-page .shop-promo-float-image-2 {
+    left:calc(50% + 18cqh)!important;
+    top:calc(50% - 32cqh)!important;
+  }
+  .shop-page .shop-promo-float-image-3 {
+    left:calc(50% - 26cqh)!important;
+    top:2cqh!important;
+  }
+  .shop-page .shop-promo-single-image img {
+    width:clamp(135px,61.5cqh,240px)!important;
+    height:clamp(180px,82cqh,320px)!important;
+  }
+}
+
+/* Match the hidden measurement stage to the visible banner's visual lane so
+   its calculated height also determines the shimmer's exact height. */
+.shop-page .shop-promo-measure-slide .shop-promo-product-visual {
+  height:210px!important;
+  min-height:210px!important;
+  max-height:210px!important;
+  container-type:size;
+}
+.shop-page .shop-promo-measure-slide .shop-promo-floating-gallery,
+.shop-page .shop-promo-measure-slide .shop-promo-single-image {
+  height:100%!important;
+}
+.shop-page .shop-promo-active > .shop-promo-slide.shop-promo-product {
+  overflow:visible!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-product .shop-promo-product-visual {
+    height:190px!important;
+    min-height:190px!important;
+    max-height:190px!important;
+  }
+  .shop-page .shop-promo-measure-slide .shop-promo-product-visual {
+    height:190px!important;
+    min-height:190px!important;
+    max-height:190px!important;
+  }
+  .shop-page .shop-promo-main-image,
+  .shop-page .shop-promo-float-image,
+  .shop-page [class*="shop-promo-float-image-"] {
+    border-width:3px!important;
+    border-radius:12px!important;
+  }
+}
