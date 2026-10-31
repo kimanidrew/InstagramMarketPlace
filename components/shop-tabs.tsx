@@ -56,145 +56,115 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }
 
+function shuffleSlides<T,>(items: T[]): T[] {
+  const shuffled = [...items];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[] }) {
-  const promotedStores = stores.filter(({ store }) => store.paidPromotionActive);
-  const promotedProducts = products.filter((product) => product.boostUntil && new Date(product.boostUntil).getTime() > Date.now());
-  // Always keep a shop in the carousel, even when no paid shop campaign is active.
-  const fallbackShop = promotedStores.length ? null : stores.find(({ store, posts }) => store && (store.profileImageUrl || posts?.length)) || stores[0] || null;
-  const shopSlides: PromoSlide[] = promotedStores.length
-    ? promotedStores.map(({ store, posts }) => ({ type: "store" as const, key: "store-" + store.id, store, posts }))
-    : fallbackShop
-      ? [{ type: "store" as const, key: "shop-spotlight-" + fallbackShop.store.id, store: fallbackShop.store, posts: fallbackShop.posts || [] }]
-      : [];
-  const allSlides: PromoSlide[] = [
-    ...shopSlides,
-    ...promotedProducts.map((product) => ({ type: "product" as const, key: "product-" + product.id, product })),
-  ];
-  // Keep the marketplace spotlight art only if no shop or product is available.
-  const promotionSlides: PromoSlide[] = allSlides.length ? allSlides : [{ type: "ad", key: "sokolink-promo" }];
-  const [seenPromoKeys, setSeenPromoKeys] = useState<string[]>([]);
-  const seenPromoKeysRef = React.useRef<string[]>([]);
+  const [slides] = useState<PromoSlide[]>(() => {
+    const storeSlides: PromoSlide[] = stores
+      .filter(({ store }) => store)
+      .map(({ store, posts }) => ({
+        type: "store" as const,
+        key: "store-" + store.id,
+        store,
+        posts: posts || [],
+      }));
+    const productSlides: PromoSlide[] = products
+      .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl))
+      .map((product) => ({ type: "product" as const, key: "product-" + product.id, product }));
+    const unique = [...new Map([...storeSlides, ...productSlides].map((slide) => [slide.key, slide])).values()];
+    const featured = unique.filter((slide) =>
+      slide.type === "store"
+        ? Boolean(slide.store.paidPromotionActive)
+        : Boolean(slide.product.boostUntil && new Date(slide.product.boostUntil).getTime() > Date.now())
+    );
+    const organic = unique.filter((slide) => !featured.some((item) => item.key === slide.key));
+    return [...shuffleSlides(featured), ...shuffleSlides(organic)].slice(0, 5);
+  });
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
+  const [isMeasured, setIsMeasured] = useState(false);
   const measureRef = React.useRef<HTMLDivElement>(null);
   const visitorId = analyticsVisitorId();
-  const progressKey = "imarket_promo_view_cycle_" + visitorId;
-  const cycleStartKey = progressKey + "_started";
-
-  useEffect(() => {
-    let cancelled = false;
-    try {
-      const stored = JSON.parse(window.localStorage.getItem(progressKey) || "[]");
-      const validStored = Array.isArray(stored)
-        ? stored.filter((key: unknown): key is string => typeof key === "string" && allSlides.some((slide) => slide.key === key))
-        : [];
-      // On the first cycle, include earlier detail-page views too.
-      let cycleStart = Number(window.localStorage.getItem(cycleStartKey) || 1);
-      if (!Number.isFinite(cycleStart) || cycleStart <= 0) {
-        cycleStart = 1;
-      }
-      if (!window.localStorage.getItem(cycleStartKey)) {
-        window.localStorage.setItem(cycleStartKey, String(cycleStart));
-      }
-      fetch("/api/shopper/promotion-views?visitorId=" + encodeURIComponent(visitorId) + "&since=" + encodeURIComponent(String(cycleStart)), { cache: "no-store" })
-        .then((response) => response.ok ? response.json() : { storeConnectionIds: [], productPostIds: [] })
-        .then((data) => {
-          if (cancelled) return;
-          const viewedKeys = allSlides.filter((slide) =>
-            slide.type === "store"
-              ? Array.isArray(data.storeConnectionIds) && data.storeConnectionIds.includes(slide.store.id)
-              : slide.type === "product" && Array.isArray(data.productPostIds) && data.productPostIds.includes(slide.product.id)
-          ).map((slide) => slide.key);
-          const combined = [...new Set([...validStored, ...viewedKeys])];
-          const cycleComplete = allSlides.length > 0 && allSlides.every((slide) => combined.includes(slide.key));
-          if (cycleComplete) {
-            const nextStart = Date.now();
-            window.localStorage.setItem(progressKey, "[]");
-            window.localStorage.setItem(cycleStartKey, String(nextStart));
-            seenPromoKeysRef.current = [];
-            setSeenPromoKeys([]);
-          } else {
-            window.localStorage.setItem(progressKey, JSON.stringify(combined));
-            seenPromoKeysRef.current = combined;
-            setSeenPromoKeys(combined);
-          }
-        })
-        .catch(() => { if (!cancelled) { seenPromoKeysRef.current = validStored; setSeenPromoKeys(validStored); } });
-    } catch {
-      seenPromoKeysRef.current = [];
-      setSeenPromoKeys([]);
-    }
-    return () => { cancelled = true; };
-  // Refresh only when the visitor or active promotion inventory changes.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [progressKey, cycleStartKey, visitorId, allSlides.map((slide) => slide.key).join("|")]);
-
-  const remainingSlides = promotionSlides.filter((slide) => !seenPromoKeys.includes(slide.key));
-  // Keep at least one shop slide visible even when every shop promotion has already been seen.
-  const visibleRemaining = shopSlides.length && !remainingSlides.some((slide) => slide.type === "store")
-    ? [...remainingSlides, shopSlides[0]]
-    : remainingSlides;
-  const slides = visibleRemaining.length ? visibleRemaining : promotionSlides;
-
-  useEffect(() => {
-    setIndex((current) => slides.length ? current % slides.length : 0);
-  }, [slides.length, slides.map((slide) => slide.key).join("|")]);
 
   useEffect(() => {
     if (slides.length < 2) return;
-    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 6500);
+    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 6000);
     return () => window.clearInterval(timer);
-  }, [slides.length, slides.map((slide) => slide.key).join("|")]);
+  }, [slides.length]);
 
   useEffect(() => {
+    const container = measureRef.current;
+    if (!container) return;
+    let frame = 0;
     const measure = () => {
-      const nodes = measureRef.current?.querySelectorAll<HTMLElement>(".shop-promo-measure-slide");
-      if (!nodes?.length) return;
-      const max = Math.ceil(Math.max(...Array.from(nodes, (node) => node.getBoundingClientRect().height)));
-      if (max > 0) setBannerHeight(max);
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const nodes = container.querySelectorAll<HTMLElement>(".shop-promo-measure-slide");
+        if (!nodes.length) return;
+        const max = Math.ceil(Math.max(...Array.from(nodes, (node) => node.getBoundingClientRect().height)));
+        if (max > 0) {
+          setBannerHeight((current) => current === max ? current : max);
+          setIsMeasured(true);
+        }
+      });
     };
     measure();
-    const observer = measureRef.current ? new ResizeObserver(measure) : null;
-    if (measureRef.current && observer) observer.observe(measureRef.current);
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    observer?.observe(container);
+    const images = Array.from(container.querySelectorAll("img"));
+    images.forEach((img) => {
+      if (img.complete) return;
+      img.addEventListener("load", measure);
+      img.addEventListener("error", measure);
+    });
     window.addEventListener("resize", measure);
-    const images = measureRef.current?.querySelectorAll("img") || [];
-    images.forEach((img) => img.addEventListener("load", measure));
     return () => {
+      cancelAnimationFrame(frame);
       observer?.disconnect();
+      images.forEach((img) => {
+        img.removeEventListener("load", measure);
+        img.removeEventListener("error", measure);
+      });
       window.removeEventListener("resize", measure);
-      images.forEach((img) => img.removeEventListener("load", measure));
     };
-  }, [slides.map((slide) => slide.key).join("|"), stores, products]);
+  }, [slides]);
 
   if (!slides.length) return null;
   const activeSlide = slides[index] || slides[0];
-  const markImpression = (slide: PromoSlide) => {
-    if (slide.type === "ad" || seenPromoKeysRef.current.includes(slide.key)) return;
-    const nextSeen = [...new Set([...seenPromoKeysRef.current, slide.key])];
-    seenPromoKeysRef.current = nextSeen;
-    const cycleComplete = allSlides.length > 0 && allSlides.every((item) => nextSeen.includes(item.key));
-    if (cycleComplete) {
-      window.localStorage.setItem(progressKey, "[]");
-      window.localStorage.setItem(cycleStartKey, String(Date.now()));
-      seenPromoKeysRef.current = [];
-    } else {
-      window.localStorage.setItem(progressKey, JSON.stringify(nextSeen));
-    }
-  };
-  const previous = () => setIndex((current) => (current - 1 + slides.length) % slides.length);
-  const next = () => setIndex((current) => (current + 1) % slides.length);
 
   return (
-    <section className="shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7" style={{ height: bannerHeight, minHeight: bannerHeight }} aria-label="Promoted shops, products and marketplace ads">
-      <div className="shop-promo-active" style={{ height: bannerHeight }}>
+    <section
+      className={"shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7 " + (!isMeasured ? "shop-promo-loading" : "")}
+      style={{ height: bannerHeight, minHeight: bannerHeight, ["--shop-promo-height" as any]: bannerHeight + "px" }}
+      aria-label="Five featured shop and product spotlights"
+    >
+      {!isMeasured && <div className="shop-promo-shimmer" aria-label="Loading spotlights"><span /><i /><b /></div>}
+      <div className="shop-promo-active" style={{ height: bannerHeight, visibility: isMeasured ? "visible" : "hidden" }}>
         <PromoSlideContent key={activeSlide.key} slide={activeSlide} />
-        {activeSlide.type === "store" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.store.id} onImpression={() => markImpression(activeSlide)} />}
-        {activeSlide.type === "product" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.product.connectionId} postId={activeSlide.product.id} onImpression={() => markImpression(activeSlide)} />}
+        {activeSlide.type === "store" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.store.id} />}
+        {activeSlide.type === "product" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.product.connectionId} postId={activeSlide.product.id} />}
       </div>
       <div ref={measureRef} className="shop-promo-measurement" aria-hidden="true">
         {slides.map((slide) => <PromoSlideContent key={"measure-" + slide.key} slide={slide} measure />)}
       </div>
-      {slides.length > 1 && <div className="shop-promo-controls" aria-label="Promotion carousel controls"><div className="shop-promo-dots" role="group" aria-label="Choose a promotion">{slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show promotion " + (i + 1)} aria-current={i === index ? "true" : undefined} onClick={() => setIndex(i)} className={i === index ? "is-active" : ""} />)}</div><div className="flex gap-2"><button type="button" onClick={previous} aria-label="Previous promotion"><ChevronLeft size={16} /></button><button type="button" onClick={next} aria-label="Next promotion"><ChevronRight size={16} /></button></div></div>}
+      {isMeasured && slides.length > 1 && (
+        <div className="shop-promo-controls" aria-label="Spotlight carousel controls">
+          <div className="shop-promo-dots" role="group" aria-label="Choose a spotlight">
+            {slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show spotlight " + (i + 1)} aria-current={i === index ? "true" : undefined} onClick={() => setIndex(i)} className={i === index ? "is-active" : ""} />)}
+          </div>
+          <div className="flex gap-2">
+            <button type="button" onClick={() => setIndex((current) => (current - 1 + slides.length) % slides.length)} aria-label="Previous spotlight"><ChevronLeft size={16} /></button>
+            <button type="button" onClick={() => setIndex((current) => (current + 1) % slides.length)} aria-label="Next spotlight"><ChevronRight size={16} /></button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -307,7 +277,7 @@ export function ShopTabs({
 
   return (
     <div className="shop-tabs-wrap mt-0">
-      <ShopPromoCarousel stores={filteredFeaturedStores} products={filteredFeaturedProducts} />
+      <ShopPromoCarousel stores={filteredFeaturedStores} products={[...filteredFeaturedProducts, ...featuredFallbackProducts]} />
       <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#999]">SokoLink marketplace</p>
