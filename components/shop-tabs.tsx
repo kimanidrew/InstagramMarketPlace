@@ -97,7 +97,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
           <span className="shop-promo-main-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
         </div>
       ) : productImages[0] ? (
-        <div className="shop-promo-single-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /><span className="shop-promo-single-glow" /></div>
+        <span className="shop-promo-main-image shop-promo-single-card"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
       ) : null}
     </div>
   ) : (
