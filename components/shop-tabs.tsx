@@ -48,8 +48,8 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
   );
   const productImages = slide.type === "product" ? (() => {
     const mediaItems = Array.isArray(slide.product.mediaItems) ? slide.product.mediaItems : [];
-    const fromItems = mediaItems.map((item: any) => typeof item === "string" ? item : item?.media_url || item?.mediaUrl || item?.url || item?.thumbnail_url).filter((url: any): url is string => typeof url === "string" && /^https?:\\/\\//i.test(url));
-    const candidates = [slide.product.thumbnailUrl, ...fromItems, slide.product.mediaUrl].filter((url: any): url is string => typeof url === "string" && /^https?:\\/\\//i.test(url));
+    const fromItems = mediaItems.map((item: any) => typeof item === "string" ? item : item?.media_url || item?.mediaUrl || item?.url || item?.thumbnail_url).filter((url: any): url is string => typeof url === "string" && /^https?:\/\//i.test(url));
+    const candidates = [slide.product.thumbnailUrl, ...fromItems, slide.product.mediaUrl].filter((url: any): url is string => typeof url === "string" && /^https?:\/\//i.test(url));
     return Array.from(new Set(candidates)).slice(0, 4);
   })() : [];
   const visual = slide.type === "product" ? (
@@ -90,7 +90,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
         posts: posts || [],
       }));
     const productSlides: PromoSlide[] = products
-      .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl))
+      .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl || (Array.isArray(product.mediaItems) && product.mediaItems.length)))
       .map((product) => ({ type: "product" as const, key: "product-" + product.id, product }));
     const unique = Array.from(new Map<string, PromoSlide>([...storeSlides, ...productSlides].map((slide): [string, PromoSlide] => [slide.key, slide])).values());
     const isFeatured = (slide: PromoSlide) => {
