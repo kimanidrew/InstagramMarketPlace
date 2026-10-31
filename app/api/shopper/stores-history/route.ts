@@ -14,7 +14,7 @@ export async function GET(request: Request) {
       where: { visitorId, type: "VIEW", postId: null },
       orderBy: { createdAt: "desc" },
       distinct: ["connectionId"],
-      take: 7,
+      take: 200,
       select: {
         createdAt: true,
         connection: {
