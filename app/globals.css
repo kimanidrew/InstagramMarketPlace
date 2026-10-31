@@ -10993,3 +10993,49 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     will-change:auto;
   }
 }
+
+
+/* Lighter homepage spotlight palette: warm ivory canvas, soft neutral product
+   panel, charcoal typography and restrained accent details. */
+.shop-page .shop-promo-carousel {
+  background:#f8f7f3!important;
+  border:1px solid #e9e6de!important;
+  box-shadow:0 12px 34px rgba(35,31,24,.07)!important;
+}
+.shop-page .shop-promo-product {
+  color:#24231f!important;
+  background:linear-gradient(118deg,#fbfaf7 0%,#f1eee7 58%,#eae6dc 100%)!important;
+}
+.shop-page .shop-promo-product:before {
+  background:radial-gradient(ellipse at 82% 18%,rgba(255,255,255,.78),transparent 48%)!important;
+}
+.shop-page .shop-promo-product h2 { color:#25231f!important; }
+.shop-page .shop-promo-product p { color:#6d6961!important; }
+.shop-page .shop-promo-product .shop-promo-label {
+  color:#51483e!important;
+  background:#eee8dd!important;
+  border:1px solid #e2d9ca!important;
+  box-shadow:none!important;
+}
+.shop-page .shop-promo-product>div:first-child>span.mt-6 {
+  color:#fff!important;
+  background:#292722!important;
+  border-color:#292722!important;
+  box-shadow:0 6px 16px rgba(35,31,24,.12)!important;
+}
+.shop-page .shop-promo-product-visual {
+  background:linear-gradient(145deg,#f0ece3,#e3ded2)!important;
+  box-shadow:0 8px 24px rgba(35,31,24,.09)!important;
+}
+.shop-page .shop-promo-product-visual:after {
+  background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 55%,rgba(35,31,24,.08))!important;
+}
+.shop-page .shop-promo-controls .shop-promo-dots button { background:rgba(50,46,39,.22)!important; }
+.shop-page .shop-promo-controls .shop-promo-dots button.is-active { background:#292722!important; }
+.shop-page .shop-promo-controls>div:last-child button {
+  color:#292722!important;
+  border-color:#d8d3c8!important;
+  background:rgba(255,255,255,.72)!important;
+  backdrop-filter:blur(10px);
+}
+.shop-page .shop-promo-controls>div:last-child button:hover { background:#fff!important; }
