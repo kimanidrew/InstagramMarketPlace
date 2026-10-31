@@ -12,6 +12,7 @@ type ProductMasonryProps = {
   personalized?: boolean;
   stores?: any[];
   wishlistProducts?: any[];
+  categorySections?: { label: string; type: "product" | "service"; items: any[] }[];
 };
 
 function ProductShimmer({ compact = false }: { compact?: boolean }) {
@@ -128,7 +129,7 @@ function LazyProductCard({ product }: { product: any }) {
   );
 }
 
-export function ProductMasonry({ q = "", tag = "", personalized = false, stores = [], wishlistProducts = [] }: ProductMasonryProps) {
+export function ProductMasonry({ q = "", tag = "", personalized = false, stores = [], wishlistProducts = [], categorySections = [] }: ProductMasonryProps) {
   const [products, setProducts] = useState<any[]>([]);
   const [savedProducts, setSavedProducts] = useState<any[]>(wishlistProducts);
   const [loading, setLoading] = useState(true);
@@ -289,7 +290,8 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     | { type: "product"; product: any }
     | { type: "stores"; batchIndex: number }
     | { type: "recommendations"; batchIndex: number; products: any[] }
-    | { type: "saved" };
+    | { type: "saved" }
+    | { type: "category"; section: { label: string; type: "product" | "service"; items: any[] }; sectionIndex: number };
   const productFeed: FeedItem[] = [];
   const recommendationIndexes = new Set<number>();
   const recommendationSections = new Map<number, any[]>();
@@ -308,6 +310,8 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
     if (pickedProducts.length) recommendationSections.set(sectionIndex, pickedProducts);
   }
 
+  const visibleCategorySections = categorySections.filter((section) => !["other", "other category", "more to explore"].includes(section.label.trim().toLowerCase()) && section.items.length > 0);
+
   products.forEach((product, index) => {
     if (!recommendationIndexes.has(index)) productFeed.push({ type: "product", product });
 
@@ -316,6 +320,12 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
       productFeed.push({ type: "stores", batchIndex: Math.floor((index - 3) / 12) });
     }
     if (index === 7 && savedProducts.length > 0) productFeed.push({ type: "saved" });
+
+    if (index === 11 || (index > 11 && (index - 11) % 12 === 0)) {
+      const sectionIndex = Math.floor((index - 11) / 12);
+      const section = visibleCategorySections[sectionIndex];
+      if (section) productFeed.push({ type: "category", section, sectionIndex });
+    }
 
     if (recommendationSections.has(index)) {
       const batchIndex = Math.floor((index - 15) / 12);
@@ -334,6 +344,19 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
           <div key={item.product.id} className="product-feed-item"><LazyProductCard product={item.product} /></div>
         ) : item.type === "stores" ? (
           <div key={"store-section-" + item.batchIndex} className="product-store-interlude-row"><StoreInlineSection stores={stores} batchIndex={item.batchIndex} /></div>
+        ) : item.type === "category" ? (
+          <section key={"category-interlude-" + item.sectionIndex} className="product-feed-full-row category-product-shelf" aria-label={item.section.label}>
+            <div className="mb-4 flex items-end justify-between gap-3">
+              <div className="min-w-0">
+                <p className="eyebrow plain">{item.section.type === "service" ? "Services" : "Popular category"}</p>
+                <h3 className="mt-1 truncate text-xl font-black tracking-[-.045em] sm:text-2xl">{item.section.label}</h3>
+              </div>
+              <Link href={item.section.type === "service" ? "/search?type=service" : "/search?category=" + encodeURIComponent(item.section.label)} className="inline-flex shrink-0 items-center gap-1 text-xs font-black text-[#555] hover:text-black">Explore <ArrowRight size={13} /></Link>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+              {item.section.items.slice(0, 5).map((product: any) => <div key={product.id} className="min-w-0"><ProductCard p={product} /></div>)}
+            </div>
+          </section>
         ) : item.type === "recommendations" ? (
           <section key={"recommended-products-" + item.batchIndex} className="product-feed-full-row product-recommendations-interlude rounded-[26px] border border-black/[.06] bg-[#f7f7f4] px-5 py-5 sm:rounded-[30px] sm:px-8 sm:py-8" aria-label="Picked for you">
             <div className="mb-4 flex items-end justify-between gap-3 sm:mb-5">
