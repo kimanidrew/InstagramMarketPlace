@@ -353,7 +353,7 @@ export function ShopTabs({
                   </div>
                   {filteredTrendingProducts.length > 0 ? (
                     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-                      {filteredTrendingProducts.slice(0, 10).map((product: any) => (
+                      {filteredTrendingProducts.slice(0, 5).map((product: any) => (
                         <div key={product.id} className="min-w-0">
                           <ProductCard p={product} />
                         </div>
@@ -375,7 +375,7 @@ export function ShopTabs({
                   </div>
                   {filteredFeaturedProducts.length > 0 ? (
                     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-                      {filteredFeaturedProducts.slice(0, 10).map((product: any) => (
+                      {filteredFeaturedProducts.slice(0, 5).map((product: any) => (
                         <div key={product.id} className="min-w-0">
                           <ProductCard p={product} />
                         </div>
