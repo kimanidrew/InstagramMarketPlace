@@ -79,11 +79,13 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       .filter((product) => product?.id && product?.productSlug && (product.thumbnailUrl || product.mediaUrl))
       .map((product) => ({ type: "product" as const, key: "product-" + product.id, product }));
     const unique = Array.from(new Map<string, PromoSlide>([...storeSlides, ...productSlides].map((slide): [string, PromoSlide] => [slide.key, slide])).values());
-    const featured = unique.filter((slide) =>
-      slide.type === "store"
-        ? Boolean(slide.store.paidPromotionActive)
-        : Boolean(slide.product.boostUntil && new Date(slide.product.boostUntil).getTime() > Date.now())
-    );
+    const featured = unique.filter((slide) => {
+      if (slide.type === "store") return Boolean(slide.store.paidPromotionActive);
+      if (slide.type === "product") {
+        return Boolean(slide.product.boostUntil && new Date(slide.product.boostUntil).getTime() > Date.now());
+      }
+      return false;
+    });
     const organic = unique.filter((slide) => !featured.some((item) => item.key === slide.key));
     return [...shuffleSlides(featured), ...shuffleSlides(organic)].slice(0, 5);
   });
