@@ -3645,11 +3645,11 @@ body:has(.admin-workspace) main{min-height:calc(100vh - 76px)}
 
 
 
-/* Shop and For You discovery feeds: four product columns on desktop, two on mobile. */
+/* Shop and For You discovery feeds: five product columns on desktop, two on mobile. */
 .shop-tabs-wrap .product-feed-layout,
 .product-feed-layout{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(5,minmax(0,1fr));
   align-items:start;
   gap:clamp(14px,1.6vw,24px);
   min-width:0;
