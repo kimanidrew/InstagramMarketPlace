@@ -10376,3 +10376,10 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     padding:14px!important;
   }
 }
+
+/* Remove drop shadows from the floating spotlight image cards. */
+.shop-page .shop-promo-main-image,
+.shop-page .shop-promo-float-image,
+.shop-page [class*="shop-promo-float-image-"] {
+  box-shadow: none!important;
+}
