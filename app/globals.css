@@ -10654,3 +10654,25 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     border-radius:12px!important;
   }
 }
+
+/* Keep the mobile visual row and hidden measurement row in lockstep. */
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-slide.shop-promo-product {
+    grid-template-rows:auto 190px!important;
+  }
+  .shop-page .shop-promo-measure-slide {
+    grid-template-rows:auto 190px!important;
+  }
+  .shop-page .shop-promo-single-image img {
+    width:150px!important;
+    height:200px!important;
+  }
+}
+@supports (height:1cqh) {
+  @media(max-width:767px) {
+    .shop-page .shop-promo-single-image img {
+      width:clamp(109px,61.5cqh,240px)!important;
+      height:clamp(145px,82cqh,320px)!important;
+    }
+  }
+}
