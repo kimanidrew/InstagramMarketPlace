@@ -10056,3 +10056,70 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* Animated editorial banners between homepage discovery shelves. */
+.shop-animated-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(220px, .95fr);
+  min-height: 260px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 10px;
+  padding: clamp(24px, 4vw, 42px);
+  animation: shop-banner-reveal .7s cubic-bezier(.2,.75,.25,1) both;
+}
+.shop-animated-banner-discover {
+  color: #2a1d32;
+  background: linear-gradient(112deg, #ffe8e8 0%, #fff0d8 48%, #e8e9ff 100%);
+}
+.shop-animated-banner-sell {
+  color: #fff;
+  background: linear-gradient(112deg, #281d35 0%, #572b50 52%, #b52d49 100%);
+}
+.shop-animated-banner-copy { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.shop-animated-banner-kicker { display: inline-flex; align-items: center; gap: 7px; font-size: 9px; font-weight: 900; letter-spacing: .18em; }
+.shop-animated-banner-discover .shop-animated-banner-kicker { color: #a23e58; }
+.shop-animated-banner-sell .shop-animated-banner-kicker { color: #ffc3cc; }
+.shop-animated-banner h2 { margin: 14px 0 0; font-size: clamp(30px, 4.4vw, 52px); font-weight: 950; line-height: .98; letter-spacing: -.06em; }
+.shop-animated-banner h2 em { font-style: normal; }
+.shop-animated-banner-discover h2 em { color: #b62f50; }
+.shop-animated-banner-sell h2 em { color: #ffc1cc; }
+.shop-animated-banner p { max-width: 390px; margin: 12px 0 0; font-size: 12px; line-height: 1.7; }
+.shop-animated-banner-discover p { color: #66545f; }
+.shop-animated-banner-sell p { color: rgb(255 255 255 / 72%); }
+.shop-animated-banner-copy > a { display: inline-flex; align-items: center; gap: 9px; margin-top: 19px; border-radius: 999px; padding: 11px 16px; background: #241d29; color: #fff; font-size: 11px; font-weight: 900; transition: transform .2s ease, box-shadow .2s ease; }
+.shop-animated-banner-sell .shop-animated-banner-copy > a { background: #fff; color: #39243a; }
+.shop-animated-banner-copy > a:hover { transform: translateY(-3px); box-shadow: 0 9px 24px rgb(0 0 0 / 16%); }
+.shop-animated-banner-art { position: relative; min-height: 190px; overflow: hidden; }
+.shop-banner-orbit { position: absolute; display: block; aspect-ratio: 1; border: 1px solid currentColor; border-radius: 50%; opacity: .2; animation: shop-banner-orbit 16s linear infinite; }
+.shop-banner-orbit-one { width: 82%; top: 4%; left: 10%; }
+.shop-banner-orbit-two { width: 58%; top: 16%; left: 22%; border-style: dashed; animation-direction: reverse; animation-duration: 22s; }
+.shop-banner-disc { position: absolute; width: clamp(115px, 18vw, 190px); aspect-ratio: 1; top: 50%; left: 50%; border-radius: 42% 58% 63% 37% / 42% 39% 61% 58%; transform: translate(-50%,-50%); background: linear-gradient(135deg, rgb(255 255 255 / 90%), rgb(255 255 255 / 18%)); box-shadow: 0 24px 60px rgb(55 29 55 / 14%); animation: shop-banner-morph 8s ease-in-out infinite; }
+.shop-animated-banner-sell .shop-banner-disc { background: linear-gradient(135deg, #ffbdc9, #e84d70 75%); }
+.shop-banner-float { position: absolute; z-index: 2; display: inline-flex; border: 1px solid rgb(255 255 255 / 70%); border-radius: 12px; padding: 12px 15px; background: rgb(255 255 255 / 78%); color: #39263d; box-shadow: 0 14px 35px rgb(45 25 45 / 12%); font-size: 9px; font-weight: 950; letter-spacing: .12em; white-space: nowrap; backdrop-filter: blur(10px); }
+.shop-banner-float-one { top: 22%; left: 13%; transform: rotate(-9deg); animation: shop-banner-float 5s ease-in-out infinite; }
+.shop-banner-float-two { right: 4%; bottom: 19%; transform: rotate(7deg); animation: shop-banner-float 6s ease-in-out -2s infinite; }
+.shop-banner-spark { position: absolute; z-index: 2; color: #c23a5c; font-size: 27px; animation: shop-banner-twinkle 2.8s ease-in-out infinite; }
+.shop-animated-banner-sell .shop-banner-spark { color: #ffd1d8; }
+.shop-banner-spark-one { top: 8%; right: 18%; }
+.shop-banner-spark-two { bottom: 7%; left: 17%; font-size: 19px; animation-delay: -1.2s; }
+@keyframes shop-banner-reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shop-banner-orbit { to { transform: rotate(360deg); } }
+@keyframes shop-banner-morph { 0%,100% { border-radius: 42% 58% 63% 37% / 42% 39% 61% 58%; transform: translate(-50%,-50%) rotate(-8deg); } 50% { border-radius: 58% 42% 38% 62% / 53% 60% 40% 47%; transform: translate(-50%,-50%) rotate(9deg); } }
+@keyframes shop-banner-float { 0%,100% { margin-top: 0; } 50% { margin-top: -12px; } }
+@keyframes shop-banner-twinkle { 0%,100% { opacity: .55; transform: scale(.85) rotate(-10deg); } 50% { opacity: 1; transform: scale(1.18) rotate(15deg); } }
+@media (max-width: 640px) {
+  .shop-animated-banner { grid-template-columns: minmax(0, 1fr) 112px; min-height: 230px; padding: 21px 16px; }
+  .shop-animated-banner-art { min-height: 185px; }
+  .shop-animated-banner h2 { font-size: clamp(27px, 7vw, 36px); }
+  .shop-animated-banner p { font-size: 10px; line-height: 1.55; }
+  .shop-banner-float { padding: 9px 8px; font-size: 7px; letter-spacing: .07em; }
+  .shop-banner-float-one { left: -4%; top: 24%; }
+  .shop-banner-float-two { right: -16%; bottom: 20%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-animated-banner, .shop-banner-orbit, .shop-banner-disc, .shop-banner-float, .shop-banner-spark { animation: none !important; }
+  .shop-animated-banner-copy > a { transition: none; }
+}
