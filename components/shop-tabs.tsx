@@ -279,7 +279,7 @@ export function ShopTabs({
   return (
     <div className="shop-tabs-wrap mt-0">
       <ShopPromoCarousel stores={filteredFeaturedStores} products={filteredFeaturedProducts} />
-      <div className="mb-7 flex flex-col gap-4 border-b border-black/[.07] pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#999]">SokoLink marketplace</p>
           <h2 className="mt-1 text-2xl font-black tracking-[-.05em] text-[#171717]">{active === "discover" ? "Discover" : active === "trending" ? "Trending now" : "Featured collection"}</h2>
