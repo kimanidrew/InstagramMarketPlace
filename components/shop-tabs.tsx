@@ -342,6 +342,28 @@ export function ShopTabs({
                   </section>
                 )}
 
+                <section className="rounded-[30px] border border-[#f0e6e8] bg-gradient-to-br from-[#fff8f7] via-white to-[#f7f8ff] p-5 md:p-7" aria-label="Featured products">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="eyebrow plain"><Sparkles size={13} /> Handpicked for you</p>
+                      <h2 className="mt-2 text-2xl font-black tracking-[-.045em] md:text-3xl">Featured products</h2>
+                      <p className="mt-2 text-sm text-[#777]">Standout finds from shops across SokoLink.</p>
+                    </div>
+                    <Link href="/featured" className="inline-flex w-fit items-center gap-2 rounded-full bg-black px-4 py-2.5 text-xs font-black text-white transition hover:bg-black/80">Explore featured <ArrowRight size={14} /></Link>
+                  </div>
+                  {filteredFeaturedProducts.length > 0 ? (
+                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+                      {filteredFeaturedProducts.slice(0, 10).map((product: any) => (
+                        <div key={product.id} className="min-w-0">
+                          <ProductCard p={product} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="mt-5 rounded-2xl border border-dashed border-[#e8dfe2] bg-white/70 px-5 py-8 text-center text-sm font-semibold text-[#888]">Featured products will appear here as sellers promote their listings.</div>
+                  )}
+                </section>
+
                 <section id="shop-all">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div><p className="eyebrow plain"><Grid2X2 size={13} /> Fresh marketplace</p><h2 className="mt-2 text-3xl font-black tracking-[-.05em] md:text-4xl">Find something made for you.</h2></div>
