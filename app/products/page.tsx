@@ -19,7 +19,7 @@ const shopCategories = [
   { label: "Services", tag: "services", icon: "↗", color: "bg-[#e7f4f1]" },
 ];
 
-export default async function Products({
+export async function Products({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string; tab?: string }>;
