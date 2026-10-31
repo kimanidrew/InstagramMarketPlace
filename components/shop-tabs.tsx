@@ -180,7 +180,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
 
   useEffect(() => {
     if (slides.length < 2) return;
-    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 6000);
+    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 5200);
     return () => window.clearInterval(timer);
   }, [slides.length]);
 
@@ -244,13 +244,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
           didSwipe.current = false;
         }}
       >
-        <div className="shop-promo-track" style={{ transform: `translate3d(-${index * 100}%,0,0)` }}>
-          {slides.map((slide) => (
-            <div className="shop-promo-track-item" key={slide.key}>
-              <PromoSlideContent slide={slide} />
-            </div>
-          ))}
-        </div>
+        <PromoSlideContent key={activeSlide.key} slide={activeSlide} />
         {activeSlide.type === "store" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.store.id} />}
         {activeSlide.type === "product" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.product.connectionId} postId={activeSlide.product.id} />}
       </div>
