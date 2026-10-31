@@ -207,6 +207,7 @@ export function ShopTabs({
   trendingProducts = [],
   trendingStores = [],
   featuredProducts = [],
+  featuredFallbackProducts = [],
   categorySections = [],
   now,
 }: {
@@ -217,6 +218,7 @@ export function ShopTabs({
   trendingProducts?: any[];
   trendingStores?: any[];
   featuredProducts?: any[];
+  featuredFallbackProducts?: any[];
   categorySections?: { label: string; type: "product" | "service"; items: any[] }[];
   now: string;
 }) {
@@ -274,6 +276,10 @@ export function ShopTabs({
 
   const filteredTrendingProducts = trendingProducts;
   const filteredFeaturedProducts = featuredProducts;
+  const featuredHomeProducts = [
+    ...featuredProducts.slice(0, 5),
+    ...featuredFallbackProducts.filter((product: any) => !featuredProducts.some((featured: any) => featured.id === product.id)).slice(0, Math.max(0, 5 - featuredProducts.length)),
+  ];
   const filteredFeaturedStores = featuredStores;
 
   return (
@@ -373,16 +379,16 @@ export function ShopTabs({
                     </div>
                     <Link href="/featured" className="inline-flex w-fit items-center gap-2 rounded-full bg-black px-4 py-2.5 text-xs font-black text-white transition hover:bg-black/80">Explore featured <ArrowRight size={14} /></Link>
                   </div>
-                  {filteredFeaturedProducts.length > 0 ? (
+                  {featuredHomeProducts.length > 0 ? (
                     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-                      {filteredFeaturedProducts.slice(0, 5).map((product: any) => (
+                      {featuredHomeProducts.map((product: any) => (
                         <div key={product.id} className="min-w-0">
                           <ProductCard p={product} />
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="mt-5 rounded-2xl border border-dashed border-[#e8dfe2] bg-white/70 px-5 py-8 text-center text-sm font-semibold text-[#888]">Featured products will appear here as sellers promote their listings.</div>
+                    <div className="mt-5 rounded-2xl border border-dashed border-[#e8dfe2] bg-white/70 px-5 py-8 text-center text-sm font-semibold text-[#888]">Fresh marketplace picks selected to complete this collection.</div>
                   )}
                 </section>
 
