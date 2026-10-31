@@ -10446,3 +10446,39 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     top:0!important;
   }
 }
+
+/* Keep the single-photo spotlight portrait, with a larger fixed footprint. */
+.shop-page .shop-promo-single-image {
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:visible!important;
+}
+.shop-page .shop-promo-single-image img {
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:240px!important;
+  height:320px!important;
+  min-width:240px!important;
+  min-height:320px!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  transform:translate(-50%,-50%) rotate(-3deg)!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-single-image img {
+    width:180px!important;
+    height:240px!important;
+    min-width:180px!important;
+    min-height:240px!important;
+  }
+}
