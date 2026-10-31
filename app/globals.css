@@ -11039,3 +11039,15 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   backdrop-filter:blur(10px);
 }
 .shop-page .shop-promo-controls>div:last-child button:hover { background:#fff!important; }
+
+
+/* Softer, lighter loading shimmer for the homepage spotlight banner. */
+.shop-page .shop-promo-shimmer {
+  background:linear-gradient(110deg,#faf9f6 8%,#fff 18%,#faf9f6 33%)!important;
+  background-size:220% 100%!important;
+}
+.shop-page .shop-promo-shimmer span,
+.shop-page .shop-promo-shimmer i,
+.shop-page .shop-promo-shimmer b {
+  background:rgba(145,136,124,.075)!important;
+}
