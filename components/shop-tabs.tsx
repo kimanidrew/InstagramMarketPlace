@@ -158,7 +158,23 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   const [bannerHeight, setBannerHeight] = useState(300);
   const [isMeasured, setIsMeasured] = useState(false);
   const measureRef = React.useRef<HTMLDivElement>(null);
+  const swipeStartX = React.useRef<number | null>(null);
   const visitorId = analyticsVisitorId();
+
+  const goToSlide = (next: number) => {
+    setIndex((next + slides.length) % slides.length);
+  };
+  const handleSwipeStart = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") return;
+    swipeStartX.current = event.clientX;
+  };
+  const handleSwipeEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (swipeStartX.current === null) return;
+    const delta = event.clientX - swipeStartX.current;
+    swipeStartX.current = null;
+    if (Math.abs(delta) < 45 || slides.length < 2) return;
+    goToSlide(index + (delta < 0 ? 1 : -1));
+  };
 
   useEffect(() => {
     if (slides.length < 2) return;
@@ -213,8 +229,20 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       aria-label="Five featured shop and product spotlights"
     >
       {!isMeasured && <div className="shop-promo-shimmer" aria-label="Loading spotlights"><span /><i /><b /></div>}
-      <div className="shop-promo-active" style={{ height: bannerHeight, visibility: isMeasured ? "visible" : "hidden" }}>
-        <PromoSlideContent key={activeSlide.key} slide={activeSlide} />
+      <div
+        className="shop-promo-active"
+        style={{ height: bannerHeight, visibility: isMeasured ? "visible" : "hidden" }}
+        onPointerDown={handleSwipeStart}
+        onPointerUp={handleSwipeEnd}
+        onPointerCancel={() => { swipeStartX.current = null; }}
+      >
+        <div className="shop-promo-track" style={{ transform: `translate3d(-${index * 100}%,0,0)` }}>
+          {slides.map((slide) => (
+            <div className="shop-promo-track-item" key={slide.key}>
+              <PromoSlideContent slide={slide} />
+            </div>
+          ))}
+        </div>
         {activeSlide.type === "store" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.store.id} />}
         {activeSlide.type === "product" && <AnalyticsImpression key={activeSlide.key} connectionId={activeSlide.product.connectionId} postId={activeSlide.product.id} />}
       </div>
@@ -224,11 +252,11 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       {isMeasured && slides.length > 1 && (
         <div className="shop-promo-controls" aria-label="Spotlight carousel controls">
           <div className="shop-promo-dots" role="group" aria-label="Choose a spotlight">
-            {slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show spotlight " + (i + 1)} aria-current={i === index ? "true" : undefined} onClick={() => setIndex(i)} className={i === index ? "is-active" : ""} />)}
+            {slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show spotlight " + (i + 1)} aria-current={i === index ? "true" : undefined} onClick={() => goToSlide(i)} className={i === index ? "is-active" : ""} />)}
           </div>
           <div className="flex gap-2">
-            <button type="button" onClick={() => setIndex((current) => (current - 1 + slides.length) % slides.length)} aria-label="Previous spotlight"><ChevronLeft size={16} /></button>
-            <button type="button" onClick={() => setIndex((current) => (current + 1) % slides.length)} aria-label="Next spotlight"><ChevronRight size={16} /></button>
+            <button type="button" onClick={() => goToSlide(index - 1)} aria-label="Previous spotlight"><ChevronLeft size={16} /></button>
+            <button type="button" onClick={() => goToSlide(index + 1)} aria-label="Next spotlight"><ChevronRight size={16} /></button>
           </div>
         </div>
       )}
