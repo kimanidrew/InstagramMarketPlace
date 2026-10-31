@@ -1,9 +1,9 @@
 "use client";
 
-import { Pause, Play } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useEffect, useRef } from "react";
 
-const PREVIEW_DURATION_MS = 4500;
+const PREVIEW_DURATION_MS = 8000;
 const visibleVideos = new Map<HTMLVideoElement, true>();
 let activeVideo: HTMLVideoElement | null = null;
 let previewTimer: ReturnType<typeof setTimeout> | null = null;
@@ -60,10 +60,9 @@ export function ProductMedia({
   src?: string | null;
   poster?: string | null;
   alt?: string;
-  href?: string;
+  href: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -100,24 +99,9 @@ export function ProductMedia({
     };
   }, []);
 
-  function togglePlay() {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (!video.paused) {
-      clearPreviewTimer();
-      video.pause();
-      if (activeVideo === video) activeVideo = null;
-      playNextVisibleVideo();
-      return;
-    }
-
-    // A deliberate tap keeps the existing sound-on playback behavior.
-    playVideo(video, false);
-  }
 
   return (
-    <div className="group relative h-full w-full overflow-hidden bg-black">
+    <Link href={href} aria-label={"View " + (alt || "listing")} className="group relative block h-full w-full overflow-hidden bg-black">
       <video
         ref={videoRef}
         src={src || undefined}
@@ -127,28 +111,11 @@ export function ProductMedia({
         loop
         preload="none"
         aria-label={alt || "Product video"}
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onClick={togglePlay}
-        className="h-full w-full cursor-pointer object-cover"
+        className="pointer-events-none h-full w-full object-cover"
       />
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/5" />
 
-      <button
-        type="button"
-        onClick={(event) => {
-          event.stopPropagation();
-          togglePlay();
-        }}
-        aria-label={playing ? "Pause video" : "Play video"}
-        className={
-          "absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-black shadow-xl transition-all duration-500 hover:scale-105 " +
-          (playing ? "opacity-0 group-hover:opacity-100" : "opacity-100")
-        }
-      >
-        {playing ? <Pause size={21} fill="currentColor" /> : <Play size={21} fill="currentColor" className="ml-0.5" />}
-      </button>
-    </div>
+    </Link>
   );
 }
