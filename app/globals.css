@@ -10968,3 +10968,28 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 @media(prefers-reduced-motion:reduce) {
   .shop-page .shop-promo-track { transition:none!important; }
 }
+
+
+/* Match the /stores spotlight's slide-in entrance on every Shop carousel card.
+   The active card remounts per selection, just like the rotating Stores banner. */
+.shop-page .shop-promo-active > .shop-promo-slide,
+.shop-page .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo {
+  animation:store-showcase-slide-in .65s cubic-bezier(.2,.75,.25,1) both!important;
+  animation-delay:0ms!important;
+  will-change:opacity,transform;
+}
+.shop-page .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo {
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  border-radius:24px!important;
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-active > .shop-promo-slide,
+  .shop-page .shop-promo-active > .store-directory-showcase-card.store-directory-showcase-promo {
+    animation:none!important;
+    will-change:auto;
+  }
+}
