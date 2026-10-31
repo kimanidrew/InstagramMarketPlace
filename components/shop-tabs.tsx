@@ -393,6 +393,8 @@ function ShopTabs({
                   )}
                 </section>
 
+                <AnimatedMarketplaceBanner variant="discover" />
+
                 <section className="rounded-[30px] border border-[#f0e6e8] bg-gradient-to-br from-[#fff8f7] via-white to-[#f7f8ff] p-5 md:p-7" aria-label="Featured products">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
@@ -414,6 +416,8 @@ function ShopTabs({
                     <div className="mt-5 rounded-2xl border border-dashed border-[#e8dfe2] bg-white/70 px-5 py-8 text-center text-sm font-semibold text-[#888]">Fresh marketplace picks selected to complete this collection.</div>
                   )}
                 </section>
+
+                <AnimatedMarketplaceBanner variant="sell" />
 
                 <section id="shop-all">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
