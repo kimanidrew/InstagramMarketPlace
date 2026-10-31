@@ -222,7 +222,7 @@ export function AnimatedMarketplaceBanner({ variant = "discover" }: { variant?: 
   );
 }
 
-function ShopTabs({
+export function ShopTabs({
   initialTab = "discover",
   wishlistProducts = [],
   recentlyViewedProducts = [],
