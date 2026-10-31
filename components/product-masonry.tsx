@@ -389,7 +389,7 @@ export function ProductMasonry({ q = "", tag = "", personalized = false, stores 
                       {isVideo && x.mediaUrl ? <video src={x.mediaUrl} poster={x.thumbnailUrl || undefined} muted loop autoPlay playsInline className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : image ? <img src={image} alt={x.productTitle || "Saved listing"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" /> : <div className="flex h-full w-full items-center justify-center text-xs font-bold text-[#999]">No media</div>}
                     </Link>
                     <div className="absolute right-2 top-2 z-10">
-                      <WishlistButton id={x.id} wishlisted compact />
+                      <WishlistButton id={x.id} wishlisted compact smallCompact />
                     </div>
                   </div>
                 );
