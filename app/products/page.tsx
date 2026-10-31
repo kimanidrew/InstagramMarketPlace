@@ -192,7 +192,7 @@ export default async function Products({
   const categoryGroups = new Map<string, { label: string; type: "product" | "service"; items: any[] }>();
   for (const post of categoryProductsRaw as any[]) {
     const isService = String(post.listingType || "").toUpperCase() === "SERVICE";
-    const label = String(post.category || post.subcategory || (isService ? "Services" : "")).trim();
+    const label = String(post.category || post.subcategory || post.tags?.[0]?.name || "").trim();
     if (!label || ["other", "other category", "more to explore"].includes(label.toLowerCase())) continue;
     const key = (isService ? "service:" : "product:") + label.toLowerCase();
     const group = categoryGroups.get(key) || { label, type: isService ? "service" as const : "product" as const, items: [] };
