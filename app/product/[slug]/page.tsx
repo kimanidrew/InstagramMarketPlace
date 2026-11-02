@@ -160,13 +160,9 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
             <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
               <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
                 <div>
-                  <p className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888]"><ShoppingBag size={13} /> Keep exploring</p>
-                  <h2 id="related-products-heading" className="text-2xl font-black tracking-[-.05em] text-[#171717] sm:text-3xl">You might also like</h2>
-                  <p className="mt-2 text-sm text-[#777]">More finds from SokoLink shops, picked for their similarity.</p>
                 </div>
-                <Link href="/shop" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#e8e8e8] px-4 py-2.5 text-xs font-bold transition hover:border-black hover:bg-black hover:text-white">Explore shop <ArrowRight size={14} /></Link>
               </div>
-              <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
+              <div className="sokolink-recommendation-scroll grid grid-cols-2 gap-x-3 gap-y-7 overflow-y-auto sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
                 {relatedProducts.map((item) => <ProductCard key={item.id} p={{...item, totalLikes: Number(item.instagramLikeCount || 0) + item.likes.length}} />)}
               </div>
             </section>
