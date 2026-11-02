@@ -11985,11 +11985,10 @@ html body .shop-page .shop-promo-active > .shop-promo-product > .relative.z-10{
   }
 }
 
-/* Product homepage banner: the copy panel is inside the active slide, not a direct
-   child of .shop-promo-active. Match its inset exactly to the carousel controls. */
+/* Product homepage banner: use a 64px desktop left inset (Tailwind pl-16). */
 html body .shop-page .shop-promo-active > .shop-promo-slide.shop-promo-product > div.relative.z-10 {
-  padding-left: max(16px, calc((100% - 1180px) / 2)) !important;
-  padding-inline-start: max(16px, calc((100% - 1180px) / 2)) !important;
+  padding-left: 64px !important;
+  padding-inline-start: 64px !important;
 }
 @media (max-width: 640px) {
   html body .shop-page .shop-promo-active > .shop-promo-slide.shop-promo-product > div.relative.z-10 {
