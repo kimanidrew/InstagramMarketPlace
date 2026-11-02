@@ -1,3 +1,4 @@
+@import "tailwindcss";
 
 /* /stores rotating showcase adopts the /shop promotion banner layout, tinted per-store. */
 .store-directory-showcase-stage {
@@ -177,7 +178,7 @@
   .store-directory-showcase-promo-cta { transition: none; }
 }
 
-@import "tailwindcss";
+
 
 @font-face {
   font-family: "Plus Jakarta Sans";
