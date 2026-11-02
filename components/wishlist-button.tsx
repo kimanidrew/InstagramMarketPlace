@@ -37,7 +37,7 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
   }
 
   const productDetailColors = spotlightStyle
-    ? (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-1 ring-black/10 shadow-sm" : "!bg-white/90 !text-[#171717] ring-1 ring-black/10 shadow-sm hover:!bg-white")
+    ? (saved ? "!border !border-[#d5a943] !bg-[#fff0bd] !text-[#6f4b00] ring-1 ring-black/10 shadow-sm" : "!border !border-black/25 !bg-white/90 !text-[#171717] ring-1 ring-black/10 shadow-sm hover:!bg-white")
     : productDetailStyle
     ? (saved ? "!bg-white !text-black ring-1 ring-black/10" : "!bg-white !text-black ring-1 ring-black/10 hover:!bg-[#f7f7f7] active:!bg-[#f0f0f0]")
     : (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-2 ring-white/90 shadow-md shadow-black/10" : "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 ring-1 ring-white/25 backdrop-blur-sm");
