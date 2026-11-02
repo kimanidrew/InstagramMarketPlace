@@ -7,7 +7,7 @@ import { X, ChevronDown, ChevronUp } from "lucide-react";
 export function FullscreenListingModal({ children, label }: { children: React.ReactNode; label: string }) {
   const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollModal = (direction: number) => scrollRef.current?.scrollBy({ top: direction * Math.max(420, window.innerHeight * 0.72), behavior: "smooth" });
+  const scrollModal = (direction: number) => scrollRef.current?.querySelector<HTMLElement>(".sokolink-recommendation-scroll")?.scrollBy({ top: direction * 420, behavior: "smooth" });
   useEffect(() => {
     const previousBodyOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
