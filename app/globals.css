@@ -11381,7 +11381,7 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     radial-gradient(3.5px 3.5px at 86% 95%,rgba(255,239,207,.9) 50%,transparent 100%),
     radial-gradient(1px 1px at 95% 52%,rgba(255,255,255,.88) 50%,transparent 100%),
     radial-gradient(2px 2px at 91% 18%,rgba(255,220,170,.84) 50%,transparent 100%);
-  animation:shop-promo-star-pulse 5.7s ease-in-out -2.3s infinite!important;
+  animation:shop-promo-star-drift 7.4s ease-in-out -2.3s infinite!important;
 }
 .shop-page .shop-promo-active > .shop-promo-product > div:first-child {
   background:transparent!important;
@@ -11413,8 +11413,13 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   top:calc(5% - 10px)!important;
 }
 @keyframes shop-promo-star-pulse {
-  0%,100% { opacity:.28; filter:brightness(.78); }
-  50% { opacity:1; filter:brightness(1.4); }
+  0%,100% { opacity:.28; filter:brightness(.78); transform:translate3d(0,0,0) scale(.88); }
+  50% { opacity:1; filter:brightness(1.4); transform:translate3d(0,-9px,0) scale(1.06); }
+}
+@keyframes shop-promo-star-drift {
+  0%,100% { opacity:.3; transform:translate3d(0,0,0) scale(.92); }
+  35% { opacity:.85; transform:translate3d(5px,-7px,0) scale(1.04); }
+  70% { opacity:.55; transform:translate3d(-4px,-13px,0) scale(.96); }
 }
 @media(prefers-reduced-motion:reduce) {
   .shop-page .shop-promo-active > .shop-promo-product:before,
