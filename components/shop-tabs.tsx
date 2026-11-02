@@ -8,6 +8,8 @@ import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
 import { analyticsVisitorId } from "@/lib/analytics-client";
 import { SpotlightStoreCard, type StoreEntry } from "@/components/store-directory";
+import { LikeButton } from "@/components/like-button";
+import { WishlistButton } from "@/components/wishlist-button";
 
 type ShopTab = "discover" | "trending" | "featured";
 
@@ -22,6 +24,42 @@ function shopProfileContrast(accent: string) {
   const match = /^#?([0-9a-f]{6})$/i.exec(accent.trim());
   const border = match ? "rgb(23 23 23 / 16%)" : "rgb(23 23 23 / 12%)";
   return { text: "#171717", muted: "#555555", border };
+}
+
+function promoLikeCount(product: any) {
+  return Number(product.totalLikes ?? (Number(product.instagramLikeCount ?? product.like_count ?? 0) + Number(product._count?.likes ?? product.likes?.length ?? 0)));
+}
+
+function PromoProductEngagement({ product }: { product: any }) {
+  const [count, setCount] = useState(() => promoLikeCount(product));
+  const [liked, setLiked] = useState(Boolean(product.likedByCurrentUser));
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    setCount(promoLikeCount(product));
+    setLiked(Boolean(product.likedByCurrentUser));
+  }, [product.id, product.totalLikes, product.instagramLikeCount, product.like_count, product._count?.likes, product.likes?.length, product.likedByCurrentUser]);
+
+  useEffect(() => {
+    const onLike = (event: Event) => {
+      const detail = (event as CustomEvent<{ id: string; count: number; liked?: boolean }>).detail;
+      if (detail?.id !== product.id) return;
+      setCount(detail.count);
+      if (typeof detail.liked === "boolean") setLiked(detail.liked);
+      setAnimated(true);
+      window.setTimeout(() => setAnimated(false), 500);
+    };
+    window.addEventListener("listing-like-updated", onLike);
+    return () => window.removeEventListener("listing-like-updated", onLike);
+  }, [product.id]);
+
+  return (
+    <div className={"shop-promo-like-count mt-3 inline-flex w-fit items-center gap-2 text-sm font-bold " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
+      <Heart size={17} strokeWidth={2.5} fill={liked ? "currentColor" : "none"} className={"shop-promo-like-icon " + (liked ? "is-liked" : "") + (animated ? " is-animated" : "")} aria-hidden="true" />
+      <b className={"shop-promo-like-value " + (animated ? "is-count-updated" : "")}>{count.toLocaleString()}</b>
+      <span>likes</span>
+    </div>
+  );
 }
 
 const SHOP_PROMO_STARS = [
@@ -47,6 +85,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     <>
       <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
       <span className="shop-promo-product-title mt-4 block max-w-lg font-black tracking-[-.045em]">{slide.product.productTitle || "A find worth sharing."}</span>
+      <PromoProductEngagement product={slide.product} />
       {slide.product.connection?.username && (() => {
         const accent = slide.product.connection.profileAccentColor || "#eee5f2";
         const contrast = shopProfileContrast(accent);
@@ -79,11 +118,15 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
           </Link>
         );
       })()}
-      <Link
-        href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug}
-        className="mt-10 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
-        onClick={(event) => event.stopPropagation()}
-      >{String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "Discover service" : "Discover product"} <ArrowRight size={14} /></Link>
+      <div className="mt-8 flex flex-wrap items-center gap-2">
+        <Link
+          href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug}
+          className="inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
+          onClick={(event) => event.stopPropagation()}
+        >{String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "Discover service" : "Discover product"} <ArrowRight size={14} /></Link>
+        <LikeButton id={slide.product.id} count={promoLikeCount(slide.product)} initialLiked={Boolean(slide.product.likedByCurrentUser)} />
+        <WishlistButton id={slide.product.id} count={slide.product.wishlistItems?.length || 0} wishlisted={Boolean(slide.product.wishlistedByCurrentUser ?? slide.product.wishlistItems?.length)} />
+      </div>
     </>
   ) : (
     <>
