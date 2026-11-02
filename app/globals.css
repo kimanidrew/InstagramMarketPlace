@@ -11283,3 +11283,20 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-carousel .shop-promo-active {
   border-radius:0!important;
 }
+
+
+/* Align spotlight copy and carousel controls to one shared left inset. */
+.shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+  padding-left:clamp(28px,5vw,76px)!important;
+}
+.shop-page .shop-promo-carousel > .shop-promo-controls {
+  left:clamp(28px,5vw,76px)!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+    padding-left:24px!important;
+  }
+  .shop-page .shop-promo-carousel > .shop-promo-controls {
+    left:24px!important;
+  }
+}
