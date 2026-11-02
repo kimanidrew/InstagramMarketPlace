@@ -11261,3 +11261,9 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   overflow:hidden!important;
   text-overflow:ellipsis!important;
 }
+
+
+/* Raise the single-image spotlight card by 5px without affecting collage cards. */
+.shop-page .shop-promo-active .shop-promo-product-visual .shop-promo-single-card {
+  top:calc(5% - 5px)!important;
+}
