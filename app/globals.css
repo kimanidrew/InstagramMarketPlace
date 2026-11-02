@@ -11919,3 +11919,11 @@ html body .shop-page button[aria-label="Unlike listing"] {
     left:11px;
   }
 }
+
+/* Force square corners on the complete Shop Spotlight card and its slide surfaces. */
+html body .shop-page .shop-promo-carousel,
+html body .shop-page .shop-promo-active,
+html body .shop-page .shop-promo-slide{
+  border-radius:0!important;
+  clip-path:none!important;
+}
