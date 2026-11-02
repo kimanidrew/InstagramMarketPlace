@@ -54,7 +54,7 @@ function PromoProductEngagement({ product }: { product: any }) {
   }, [product.id]);
 
   return (
-    <div className={"product-card-like-line min-w-0 !gap-1 " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
+    <div className={"product-card-like-line mt-3 min-w-0 !gap-1 " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
       <Heart size={13} strokeWidth={2.4} fill={liked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (liked ? "text-[#ff3b6b]" : "") + (animated ? " is-animated" : "")} aria-hidden="true" />
       <b className={"interaction-stat-value " + (animated ? "is-count-updated" : "")}>{count.toLocaleString()}</b>
       <span>likes</span>
@@ -121,7 +121,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       <div className="mt-8 flex flex-wrap items-center gap-2">
         <Link
           href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug}
-          className="inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
+          className="inline-flex h-10 w-fit items-center gap-2 rounded-full border border-black bg-black px-5 text-xs font-black text-white transition hover:bg-black/80"
           onClick={(event) => event.stopPropagation()}
         >{String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "Discover service" : "Discover product"} <ArrowRight size={14} /></Link>
         <LikeButton id={slide.product.id} count={promoLikeCount(slide.product)} compact initialLiked={Boolean(slide.product.likedByCurrentUser)} />
