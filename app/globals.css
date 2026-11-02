@@ -11973,3 +11973,14 @@ html body .store-directory-showcase-card.store-directory-showcase-promo .store-d
     padding:20px!important;
   }
 }
+
+
+/* Align the product-promo copy panel's left inset with the carousel arrows. */
+html body .shop-page .shop-promo-active > .shop-promo-product > .relative.z-10{
+  padding-left:max(16px,calc((100% - 1180px)/2))!important;
+}
+@media(max-width:640px){
+  html body .shop-page .shop-promo-active > .shop-promo-product > .relative.z-10{
+    padding-left:11px!important;
+  }
+}
