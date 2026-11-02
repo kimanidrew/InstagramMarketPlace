@@ -83,7 +83,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
       })()}
       <Link
         href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug}
-        className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
+        className="mt-10 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
         onClick={(event) => event.stopPropagation()}
       >Discover listing <ArrowRight size={14} /></Link>
     </>
