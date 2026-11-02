@@ -50,6 +50,7 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
       title={saved ? "Remove from wishlist" : "Add to wishlist"}
       aria-busy={busy}
       aria-pressed={saved}
+      style={spotlightStyle ? { borderColor: saved ? "#ff3b6b" : "rgb(0 0 0 / 30%)", borderWidth: 1, borderStyle: "solid" } : undefined}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
         (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-9 w-9 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-black !shadow-none ring-0 hover:!bg-[#f5f5f5] " : spotlightStyle ? "shrink-0 !shadow-none " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
