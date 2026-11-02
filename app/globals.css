@@ -11949,6 +11949,24 @@ html body .shop-page .shop-promo-carousel > .shop-promo-controls{
   }
 }
 
+/* Align the product/store spotlight copy with the left edge of the carousel arrow controls. */
+html body .shop-page .shop-promo-carousel > .shop-promo-controls{
+  flex-direction:row-reverse!important;
+  justify-content:flex-end!important;
+}
+html body .shop-page .shop-promo-active > .shop-promo-slide > div:first-child,
+html body .shop-page .shop-promo-active > .shop-promo-product > div:first-child,
+html body .shop-page .shop-promo-active > .shop-promo-ad > div:first-child{
+  padding-left:max(16px,calc((100% - 1180px)/2))!important;
+}
+@media(max-width:640px){
+  html body .shop-page .shop-promo-active > .shop-promo-slide > div:first-child,
+  html body .shop-page .shop-promo-active > .shop-promo-product > div:first-child,
+  html body .shop-page .shop-promo-active > .shop-promo-ad > div:first-child{
+    padding-left:11px!important;
+  }
+}
+
 /* Restore the full responsive inset for the store-directory showcase copy, with roomier spacing. */
 html body .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy{
   padding:clamp(28px,4vw,48px)!important;
