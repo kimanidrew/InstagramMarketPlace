@@ -11586,3 +11586,44 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   width:inherit!important;
   height:inherit!important;
 }
+
+
+/* Refine the product spotlight: smaller decorative stars and a soft,
+   translucent white copy panel with strong readable typography. */
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-stars .shop-promo-star {
+  opacity:.48!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-stars .shop-promo-star svg {
+  width:inherit!important;
+  height:inherit!important;
+  max-width:none!important;
+  max-height:none!important;
+  stroke-width:1.6!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 {
+  align-self:stretch!important;
+  min-height:100%!important;
+  background:rgba(255,255,255,.78)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+  backdrop-filter:blur(10px)!important;
+  border-right:1px solid rgba(20,20,20,.06)!important;
+  color:#171717!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 h1,
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 h2,
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 h3 {
+  color:#171717!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 p {
+  color:#555!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 a,
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 button {
+  color:#fff!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 {
+    border-right:0!important;
+    border-bottom:1px solid rgba(20,20,20,.06)!important;
+  }
+}
