@@ -11927,3 +11927,24 @@ html body .shop-page .shop-promo-slide{
   border-radius:0!important;
   clip-path:none!important;
 }
+
+/* Keep spotlight copy and left-side carousel arrows on the exact same homepage gutter. */
+html body .shop-page .shop-promo-active > .shop-promo-slide > div:first-child,
+html body .shop-page .shop-promo-active > .shop-promo-product > div:first-child,
+html body .shop-page .shop-promo-active > .shop-promo-ad > div:first-child{
+  padding-left:max(16px,calc((100% - 1180px)/2))!important;
+}
+html body .shop-page .shop-promo-carousel > .shop-promo-controls{
+  left:max(16px,calc((100% - 1180px)/2))!important;
+  right:auto!important;
+}
+@media(max-width:640px){
+  html body .shop-page .shop-promo-active > .shop-promo-slide > div:first-child,
+  html body .shop-page .shop-promo-active > .shop-promo-product > div:first-child,
+  html body .shop-page .shop-promo-active > .shop-promo-ad > div:first-child{
+    padding-left:11px!important;
+  }
+  html body .shop-page .shop-promo-carousel > .shop-promo-controls{
+    left:11px!important;
+  }
+}
