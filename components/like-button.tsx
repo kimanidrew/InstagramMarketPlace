@@ -48,7 +48,7 @@ export function LikeButton({ id, count, compact = false, largeCompact = false, i
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
         (compact ? (largeCompact ? "h-12 w-12 shadow-sm " : "h-10 w-10 shadow-sm ") : "px-5 py-3 text-sm font-semibold ") +
-        (liked ? "bg-[#ff3b6b] text-white ring-2 ring-white/80 shadow-md shadow-[#ff3b6b]/30" : "bg-white/90 text-black border-0 ring-0 shadow-sm backdrop-blur-sm")
+        (liked ? "border border-[#ff3b6b] bg-[#ff3b6b] text-white ring-1 ring-white/80 shadow-md shadow-[#ff3b6b]/30" : "border border-black/25 bg-white/90 !text-black ring-0 shadow-sm backdrop-blur-sm")
       }
     >
       <Heart size={compact ? (largeCompact ? 21 : 17) : 16} fill={liked ? "currentColor" : "none"} strokeWidth={liked ? 2.5 : 2} />
