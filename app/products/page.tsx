@@ -208,7 +208,8 @@ export async function Products({
   return (
     <main className="shop-page shell py-0">
       {showDiscovery && (
-        <section className="shop-by-category relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden rounded-none border-0 bg-gradient-to-br from-[#fff8f6] via-[#fffaf2] to-[#f4f8ff] px-3 py-2 sm:px-5 sm:py-2.5" aria-label="Shop by category">
+        <section className="shop-by-category relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden rounded-none border-0 bg-gradient-to-br from-[#fff8f6] via-[#fffaf2] to-[#f4f8ff] py-2 sm:py-2.5" aria-label="Shop by category">
+          <div className="shell">
           <div className="pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full bg-white/70 blur-3xl" aria-hidden="true" />
           <div className="relative mb-2 flex items-center justify-between gap-3">
             <div className="min-w-0">
@@ -224,6 +225,7 @@ export async function Products({
                 <span className="min-w-0 text-[9px] font-extrabold leading-[1.15] tracking-[-.015em] text-[#30303a] transition-colors group-hover:text-[#a52d49] sm:text-[10px]">{category.label}</span>
               </Link>
             ))}
+          </div>
           </div>
         </section>
       )}
