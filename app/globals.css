@@ -11809,3 +11809,30 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     transition:none!important;
   }
 }
+
+
+/* Product title: preserve comfortable line spacing and prevent glyph clipping. */
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 > .shop-promo-product-title {
+  display:-webkit-box!important;
+  flex:0 0 auto!important;
+  box-sizing:content-box!important;
+  font-size:20px!important;
+  line-height:1.22!important;
+  padding:1px 0 3px!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;
+  line-clamp:4!important;
+  text-overflow:ellipsis!important;
+  white-space:normal!important;
+}
+
+/* Key the visible slide container to the selected item so React replaces the
+   complete card, not just its nested content, on every indicator/button tap. */
+.shop-page .shop-promo-active {
+  position:relative;
+  isolation:isolate;
+  min-width:0;
+}
