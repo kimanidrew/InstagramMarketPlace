@@ -11836,3 +11836,47 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   isolation:isolate;
   min-width:0;
 }
+
+
+/* Promoted product engagement feedback mirrors the product-card interaction row. */
+.shop-page .shop-promo-like-count {
+  min-height:22px;
+  color:#171717;
+}
+.shop-page .shop-promo-like-icon {
+  flex:0 0 auto;
+  color:#777;
+  transform-origin:center;
+  transition:color .18s ease,transform .22s ease;
+}
+.shop-page .shop-promo-like-icon.is-liked {
+  color:#ff3b6b;
+}
+.shop-page .shop-promo-like-icon.is-animated {
+  animation:shop-promo-heart-pop .48s cubic-bezier(.2,.8,.2,1);
+}
+.shop-page .shop-promo-like-value {
+  display:inline-block;
+  font-variant-numeric:tabular-nums;
+  transition:transform .2s ease,color .2s ease;
+}
+.shop-page .shop-promo-like-value.is-count-updated {
+  color:#ff3b6b;
+  animation:shop-promo-count-pop .45s ease;
+}
+@keyframes shop-promo-heart-pop {
+  0%,100% { transform:scale(1); }
+  35% { transform:scale(1.42) rotate(-9deg); }
+  65% { transform:scale(.92) rotate(5deg); }
+}
+@keyframes shop-promo-count-pop {
+  0%,100% { transform:scale(1); }
+  45% { transform:scale(1.18); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-like-icon,
+  .shop-page .shop-promo-like-value {
+    animation:none!important;
+    transition:none!important;
+  }
+}
