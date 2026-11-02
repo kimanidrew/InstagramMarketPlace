@@ -202,6 +202,10 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   const [index, setIndex] = useState(0);
   const [bannerHeight, setBannerHeight] = useState(300);
   const [isMeasured, setIsMeasured] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [motionAllowed, setMotionAllowed] = useState(true);
+  const carouselRef = React.useRef<HTMLElement>(null);
   const measureRef = React.useRef<HTMLDivElement>(null);
   const swipeStartX = React.useRef<number | null>(null);
   const didSwipe = React.useRef(false);
@@ -224,14 +228,41 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   };
 
   useEffect(() => {
-    if (slides.length < 2) return;
-    // Schedule from the currently displayed slide so manual navigation never
-    // races a previously scheduled interval and every card gets a full dwell.
+    const node = carouselRef.current;
+    if (!node) return;
+
+    const updateVisibility = () => setIsInView(!document.hidden);
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotionPreference = () => setMotionAllowed(!motionQuery.matches);
+    updateVisibility();
+    updateMotionPreference();
+    document.addEventListener("visibilitychange", updateVisibility);
+    motionQuery.addEventListener?.("change", updateMotionPreference);
+
+    const observer = typeof IntersectionObserver !== "undefined"
+      ? new IntersectionObserver(([entry]) => {
+          setIsInView(Boolean(entry?.isIntersecting) && !document.hidden);
+        }, { rootMargin: "120px 0px", threshold: 0.01 })
+      : null;
+    if (observer) observer.observe(node);
+    else setIsInView(true);
+
+    return () => {
+      document.removeEventListener("visibilitychange", updateVisibility);
+      motionQuery.removeEventListener?.("change", updateMotionPreference);
+      observer?.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (slides.length < 2 || !isInView || isPaused || !motionAllowed) return;
+    // Advance only while visible, motion is allowed, and the user is not
+    // interacting. A fresh dwell starts after every slide change or resume.
     const timer = window.setTimeout(() => {
       setIndex((current) => (current + 1) % slides.length);
     }, 5600);
     return () => window.clearTimeout(timer);
-  }, [index, slides.length]);
+  }, [index, slides.length, isInView, isPaused, motionAllowed]);
 
   useEffect(() => {
     const container = measureRef.current;
@@ -275,6 +306,13 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
 
   return (
     <section
+      ref={carouselRef}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsPaused(false);
+      }}
       className={"shop-promo-carousel relative mb-5 overflow-hidden rounded-[28px] sm:mb-7 " + (!isMeasured ? "shop-promo-loading" : "")}
       style={{ height: bannerHeight, minHeight: bannerHeight, ["--shop-promo-height" as any]: bannerHeight + "px" }}
       aria-label="Five featured shop and product spotlights"
