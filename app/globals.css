@@ -12106,3 +12106,11 @@ html body .sokolink-reel-feed {
   max-height: 100vh !important;
   overscroll-behavior: contain !important;
 }
+
+/* Shared slide-out navigation for fullscreen listing and reel experiences. */
+.sokolink-modal-menu-trigger { -webkit-tap-highlight-color: transparent; }
+.sokolink-modal-side-drawer { animation: sokolink-drawer-in .22s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sokolink-drawer-in {
+  from { opacity: .7; transform: translateX(-100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
