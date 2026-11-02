@@ -11721,9 +11721,15 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   }
 }
 
-/* Keep the Shop spotlight product title fixed at 15px against inherited
-   typography and responsive utility overrides. */
-.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 > span:not(.shop-promo-label) {
-  font-size:15px!important;
-  line-height:1.02!important;
+/* Product spotlight title: fixed 20px type, clamped to four lines. */
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 > .shop-promo-product-title {
+  display:-webkit-box!important;
+  font-size:20px!important;
+  line-height:1.08!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;
+  line-clamp:4!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:normal!important;
 }
