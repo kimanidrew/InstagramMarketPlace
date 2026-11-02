@@ -11778,3 +11778,34 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     scroll-behavior:auto!important;
   }
 }
+
+
+/* Keep spotlight controls responsive and always in sync with the active slide. */
+.shop-page .shop-promo-carousel > .shop-promo-controls {
+  z-index:20!important;
+  pointer-events:auto!important;
+}
+.shop-page .shop-promo-carousel > .shop-promo-controls button {
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  cursor:pointer;
+}
+.shop-page .shop-promo-carousel > .shop-promo-controls .shop-promo-dots button {
+  flex:0 0 auto;
+  transition:width .16s ease,background-color .16s ease,transform .16s ease!important;
+}
+.shop-page .shop-promo-carousel > .shop-promo-controls .shop-promo-dots button.is-active {
+  width:22px!important;
+  transform:scale(1.02);
+}
+.shop-page .shop-promo-carousel > .shop-promo-controls > div:last-child button {
+  transition:background-color .14s ease,transform .14s ease!important;
+}
+.shop-page .shop-promo-carousel > .shop-promo-controls > div:last-child button:active {
+  transform:scale(.94);
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-carousel > .shop-promo-controls button {
+    transition:none!important;
+  }
+}
