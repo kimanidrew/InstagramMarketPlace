@@ -11539,8 +11539,8 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 }
 .shop-page .shop-promo-star svg {
   display:block!important;
-  width:auto!important;
-  height:auto!important;
+  width:var(--star-size)!important;
+  height:var(--star-size)!important;
   max-width:none!important;
   max-height:none!important;
   fill:rgba(239,197,112,.2)!important;
