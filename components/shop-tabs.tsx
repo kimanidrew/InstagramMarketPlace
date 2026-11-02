@@ -140,8 +140,8 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     <div className={"shop-promo-product-visual " + (productImages.length > 1 ? "has-floating-images" : "")}>
       {productImages.length > 1 ? (
         <div className="shop-promo-floating-gallery">
-          {productImages.slice(1).map((src, i) => <span key={src} className={"shop-promo-float-image shop-promo-float-image-" + (i + 1)}><img src={src} alt="" /></span>)}
-          <span className="shop-promo-main-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
+          {productImages.slice(1).map((src, i) => <span key={src} className={"shop-promo-float-image shop-promo-float-image-" + (i + 1)}><img src={src} alt="" loading={measure ? "lazy" : "eager"} decoding="async" fetchPriority="low" draggable={false} /></span>)}
+          <span className="shop-promo-main-image"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} loading={measure ? "lazy" : "eager"} decoding="async" fetchPriority="high" draggable={false} /></span>
         </div>
       ) : productImages[0] ? (
         <span className="shop-promo-main-image shop-promo-single-card"><img src={productImages[0]} alt={slide.product.productTitle || "Promoted listing"} /></span>
