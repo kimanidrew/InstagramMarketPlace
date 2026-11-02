@@ -322,7 +322,10 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     >
       {!isMeasured && <div className="shop-promo-shimmer" aria-label="Loading spotlights"><span /><i /><b /></div>}
       <div
+        key={activeSlide.key}
         className="shop-promo-active"
+        data-active-slide={activeSlide.key}
+        aria-live="polite"
         style={{ height: bannerHeight, visibility: isMeasured ? "visible" : "hidden" }}
         onPointerDown={handleSwipeStart}
         onPointerUp={handleSwipeEnd}
