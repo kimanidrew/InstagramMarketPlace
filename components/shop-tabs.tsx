@@ -143,7 +143,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     }).slice(0, 4);
   })() : [];
   const visual = slide.type === "product" ? (
-    <div className={"shop-promo-product-visual " + (productImages.length > 1 ? "has-floating-images" : "")}>
+    <div className={"shop-promo-product-visual relative z-10 " + (productImages.length > 1 ? "has-floating-images" : "")}>
       {productImages.length > 1 ? (
         <div className="shop-promo-floating-gallery">
           {productImages.slice(1).map((src, i) => <span key={src} className={"shop-promo-float-image shop-promo-float-image-" + (i + 1)}><img src={src} alt="" /></span>)}
