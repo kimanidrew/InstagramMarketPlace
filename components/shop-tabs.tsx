@@ -46,7 +46,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
   const copy = slide.type === "product" ? (
     <>
       <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
-      <h2 className="mt-4 max-w-lg text-xl font-black leading-[1.02] tracking-[-.045em]">{slide.product.productTitle || "A find worth sharing."}</h2>
+      <h2 className="mt-4 max-w-lg text-[15px] font-black leading-[1.02] tracking-[-.045em]">{slide.product.productTitle || "A find worth sharing."}</h2>
       {slide.product.connection?.username && (() => {
         const accent = slide.product.connection.profileAccentColor || "#eee5f2";
         const contrast = shopProfileContrast(accent);
