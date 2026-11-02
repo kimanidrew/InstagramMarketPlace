@@ -12114,3 +12114,30 @@ html body .sokolink-reel-feed {
   from { opacity: .7; transform: translateX(-100%); }
   to { opacity: 1; transform: translateX(0); }
 }
+
+/* Listing details as a centered popup over the previous page. */
+html body .sokolink-listing-overlay {
+  background: rgba(0,0,0,.62) !important;
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); padding:16px 0;
+}
+html body .sokolink-listing-modal {
+  position:relative !important; inset:auto !important; z-index:1 !important;
+  width:min(1440px,calc(100vw - 48px)) !important;
+  height:calc(100vh - 32px) !important; min-height:0 !important;
+  max-height:calc(100vh - 32px) !important; overflow-x:hidden !important;
+  overflow-y:auto !important; background:#fff !important; border-radius:24px !important;
+  -webkit-backdrop-filter:none !important; backdrop-filter:none !important;
+  box-shadow:0 28px 100px rgba(0,0,0,.35) !important;
+}
+html body .sokolink-listing-modal::before { display:none !important; }
+html body .sokolink-listing-modal-close { z-index:10002 !important; }
+html body .sokolink-modal-scroll-controls button { cursor:pointer; transition:transform .16s ease,background .16s ease; }
+html body .sokolink-modal-scroll-controls button:hover { transform:scale(1.06); background:#111 !important; color:#fff !important; }
+html body .sokolink-recommendation-scroll { max-height:min(68vh,760px); padding:4px 4px 18px; scrollbar-width:thin; overscroll-behavior:contain; }
+@media(max-width:640px) {
+ html body .sokolink-listing-overlay { padding:0; }
+ html body .sokolink-listing-modal { width:100vw !important; height:100vh !important; max-height:100vh !important; border-radius:0 !important; }
+ html body .sokolink-modal-scroll-controls { right:8px; }
+ html body .sokolink-modal-scroll-controls button { width:36px; height:36px; }
+ html body .sokolink-listing-modal .product-detail-page > .shell { padding-top:64px; }
+}
