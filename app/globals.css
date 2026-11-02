@@ -11316,15 +11316,21 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   }
 }
 
-/* Premium animated starfield behind product artwork on the right side. */
+/* Light, full-bleed animated backdrop filling the entire right artwork panel. */
 .shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual {
   position:relative!important;
   isolation:isolate!important;
   overflow:hidden!important;
+  align-self:stretch!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  box-sizing:border-box!important;
   background:
-    radial-gradient(ellipse at 50% 48%,rgba(255,224,170,.24),transparent 58%),
-    radial-gradient(circle at 18% 22%,rgba(255,255,255,.16),transparent 24%),
-    linear-gradient(145deg,#7b2636 0%,#4f1425 55%,#32101f 100%)!important;
+    radial-gradient(ellipse at 52% 46%,rgba(255,255,255,.98),transparent 55%),
+    radial-gradient(circle at 18% 20%,rgba(255,226,190,.48),transparent 30%),
+    radial-gradient(circle at 82% 78%,rgba(218,226,240,.48),transparent 34%),
+    linear-gradient(135deg,#fffefa 0%,#f8f8f6 52%,#f1f3f6 100%)!important;
 }
 .shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual:before {
   content:""!important;
@@ -11333,15 +11339,15 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   z-index:0!important;
   inset:0!important;
   pointer-events:none!important;
-  opacity:.8!important;
+  opacity:.72!important;
   background-image:
-    radial-gradient(2px 2px at 12% 18%,rgba(255,244,210,.95) 50%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 28% 72%,rgba(255,255,255,.9) 50%,transparent 100%),
-    radial-gradient(2px 2px at 43% 28%,rgba(255,224,170,.9) 50%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 68% 16%,rgba(255,255,255,.9) 50%,transparent 100%),
-    radial-gradient(2px 2px at 84% 62%,rgba(255,224,170,.95) 50%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 91% 32%,rgba(255,255,255,.85) 50%,transparent 100%),
-    radial-gradient(1px 1px at 56% 84%,rgba(255,255,255,.8) 50%,transparent 100%);
+    radial-gradient(2px 2px at 12% 18%,rgba(190,151,91,.62) 50%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 28% 72%,rgba(151,163,180,.55) 50%,transparent 100%),
+    radial-gradient(2px 2px at 43% 28%,rgba(210,177,124,.6) 50%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 68% 16%,rgba(151,163,180,.55) 50%,transparent 100%),
+    radial-gradient(2px 2px at 84% 62%,rgba(190,151,91,.58) 50%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 91% 32%,rgba(151,163,180,.52) 50%,transparent 100%),
+    radial-gradient(1px 1px at 56% 84%,rgba(190,151,91,.55) 50%,transparent 100%);
   animation:shop-promo-starfield 9s ease-in-out infinite alternate!important;
 }
 .shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual:after {
@@ -11353,11 +11359,11 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   width:90%!important;
   height:76%!important;
   pointer-events:none!important;
-  color:rgba(255,232,190,.68)!important;
+  color:rgba(176,145,99,.42)!important;
   font-size:clamp(17px,2vw,27px)!important;
   letter-spacing:clamp(14px,3vw,38px)!important;
   line-height:3.8!important;
-  text-shadow:0 0 10px rgba(255,220,160,.75),0 0 24px rgba(255,220,160,.32)!important;
+  text-shadow:0 0 12px rgba(205,181,143,.38)!important;
   white-space:normal!important;
   animation:shop-promo-twinkle 4.2s ease-in-out infinite!important;
 }
@@ -11369,13 +11375,13 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   top:calc(5% - 10px)!important;
 }
 @keyframes shop-promo-starfield {
-  0% { opacity:.45; transform:translate3d(0,0,0) scale(1); }
-  50% { opacity:.9; }
-  100% { opacity:.62; transform:translate3d(-7px,-9px,0) scale(1.025); }
+  0% { opacity:.38; transform:translate3d(0,0,0) scale(1); }
+  50% { opacity:.76; }
+  100% { opacity:.5; transform:translate3d(-7px,-9px,0) scale(1.025); }
 }
 @keyframes shop-promo-twinkle {
-  0%,100% { opacity:.38; transform:translateY(3px) rotate(-3deg); }
-  50% { opacity:.95; transform:translateY(-5px) rotate(3deg); }
+  0%,100% { opacity:.24; transform:translateY(3px) rotate(-3deg); }
+  50% { opacity:.68; transform:translateY(-5px) rotate(3deg); }
 }
 @media(prefers-reduced-motion:reduce) {
   .shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual:before,
