@@ -212,7 +212,12 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
   const visitorId = analyticsVisitorId();
 
   const goToSlide = (next: number) => {
-    setIndex((next + slides.length) % slides.length);
+    setIndex(((next % slides.length) + slides.length) % slides.length);
+    setIsPaused(true);
+  };
+  const goBy = (direction: -1 | 1) => {
+    setIndex((current) => (current + direction + slides.length) % slides.length);
+    setIsPaused(true);
   };
   const handleSwipeStart = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "mouse") return;
@@ -224,7 +229,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
     swipeStartX.current = null;
     if (Math.abs(delta) < 45 || slides.length < 2) return;
     didSwipe.current = true;
-    goToSlide(index + (delta < 0 ? 1 : -1));
+    goBy(delta < 0 ? 1 : -1);
   };
 
   useEffect(() => {
@@ -341,11 +346,22 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       {isMeasured && slides.length > 1 && (
         <div className="shop-promo-controls" aria-label="Spotlight carousel controls">
           <div className="shop-promo-dots" role="group" aria-label="Choose a spotlight">
-            {slides.map((slide, i) => <button key={slide.key} type="button" aria-label={"Show spotlight " + (i + 1)} aria-current={i === index ? "true" : undefined} onClick={() => goToSlide(i)} className={i === index ? "is-active" : ""} />)}
+            {slides.map((slide, i) => (
+              <button
+                key={slide.key}
+                type="button"
+                aria-label={"Show spotlight " + (i + 1)}
+                aria-current={i === index ? "true" : undefined}
+                aria-pressed={i === index}
+                onPointerDown={(event) => event.stopPropagation()}
+                onClick={(event) => { event.stopPropagation(); goToSlide(i); }}
+                className={i === index ? "is-active" : ""}
+              />
+            ))}
           </div>
           <div className="flex gap-2">
-            <button type="button" onClick={() => goToSlide(index - 1)} aria-label="Previous spotlight"><ChevronLeft size={16} /></button>
-            <button type="button" onClick={() => goToSlide(index + 1)} aria-label="Next spotlight"><ChevronRight size={16} /></button>
+            <button type="button" onPointerDown={(event) => event.stopPropagation()} onClick={(event) => { event.stopPropagation(); goBy(-1); }} aria-label="Previous spotlight"><ChevronLeft size={16} /></button>
+            <button type="button" onPointerDown={(event) => event.stopPropagation()} onClick={(event) => { event.stopPropagation(); goBy(1); }} aria-label="Next spotlight"><ChevronRight size={16} /></button>
           </div>
         </div>
       )}
