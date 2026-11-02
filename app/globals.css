@@ -11267,3 +11267,19 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-active .shop-promo-product-visual .shop-promo-single-card {
   top:calc(5% - 5px)!important;
 }
+
+
+/* Full-bleed Shop spotlight: span the viewport edge-to-edge with square corners. */
+.shop-page > .shop-promo-carousel,
+.shop-page .shop-promo-carousel {
+  position:relative!important;
+  left:50%!important;
+  width:100vw!important;
+  max-width:100vw!important;
+  margin-left:-50vw!important;
+  border-radius:0!important;
+}
+.shop-page .shop-promo-carousel,
+.shop-page .shop-promo-carousel .shop-promo-active {
+  border-radius:0!important;
+}
