@@ -11359,7 +11359,7 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     radial-gradient(1px 1px at 89% 7%,rgba(255,255,255,.88) 50%,transparent 100%),
     radial-gradient(2px 2px at 97% 93%,rgba(255,239,207,.88) 50%,transparent 100%),
     radial-gradient(1px 1px at 11% 45%,rgba(255,255,255,.8) 50%,transparent 100%),
-    radial-gradient(2.5px 2.5px at 49% 8%,rgba(255,220,170,.86) 50%,transparent 100%),
+    radial-gradient(2.5px 2.5px at 49% 8%,rgba(255,220,170,.86) 50%,transparent 100%);
   animation:shop-promo-star-pulse 4.1s ease-in-out infinite!important;
 }
 .shop-page .shop-promo-active > .shop-promo-product:after {
