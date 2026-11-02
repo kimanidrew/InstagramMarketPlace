@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ModalSideDrawer } from "@/components/modal-side-drawer";
 
 type Reel = { id: string; productSlug: string; productTitle: string | null; mediaUrl: string | null; thumbnailUrl: string | null; listingType: string | null; connection: { username: string; profileImageUrl: string | null } };
 
@@ -37,7 +36,6 @@ export function ReelViewer({ reels, initialId }: { reels: Reel[]; initialId: str
     };
   }, []);
   return <div ref={container} className="sokolink-reel-feed fixed inset-0 z-[10000] h-[100vh] min-h-[100vh] max-h-[100vh] overflow-y-auto bg-black text-white snap-y snap-mandatory">
-    <ModalSideDrawer />
     <button onClick={() => router.back()} aria-label="Close reels" className="fixed right-4 top-4 z-[10003] flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur"><X size={20}/></button>
     <div className="fixed right-4 top-1/2 z-20 flex -translate-y-1/2 flex-col gap-3">
       <button onClick={() => move(-1)} aria-label="Previous reel" className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur hover:bg-white/25"><ChevronUp/></button>
