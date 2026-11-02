@@ -11582,10 +11582,6 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   position:relative!important;
   z-index:10!important;
 }
-.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual {
-  position:relative!important;
-  z-index:10!important;
-}
 .shop-page .shop-promo-star svg {
   width:inherit!important;
   height:inherit!important;
