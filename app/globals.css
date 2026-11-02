@@ -11985,10 +11985,10 @@ html body .shop-page .shop-promo-active > .shop-promo-product > .relative.z-10{
   }
 }
 
-/* Product homepage banner: use a 64px desktop left inset (Tailwind pl-16). */
+/* Product homepage banner: use an 80px desktop left inset (Tailwind pl-20). */
 html body .shop-page .shop-promo-active > .shop-promo-slide.shop-promo-product > div.relative.z-10 {
-  padding-left: 64px !important;
-  padding-inline-start: 64px !important;
+  padding-left: 80px !important;
+  padding-inline-start: 80px !important;
 }
 @media (max-width: 640px) {
   html body .shop-page .shop-promo-active > .shop-promo-slide.shop-promo-product > div.relative.z-10 {
