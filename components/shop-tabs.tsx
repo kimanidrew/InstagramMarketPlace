@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import { ArrowRight, BadgeCheck, Bookmark, ChevronLeft, ChevronRight, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, Trash2, TrendingUp, X } from "lucide-react";
+import { ArrowRight, BadgeCheck, Bookmark, Star, ChevronLeft, ChevronRight, Crown, Grid2X2, Heart, Megaphone, Sparkles, Store, Trash2, TrendingUp, X } from "lucide-react";
 import { ProductMasonry, StoreCard, StoreInlineSection } from "@/components/product-masonry";
 import { ProductCard } from "@/components/product-card";
 import { AnalyticsImpression } from "@/components/analytics-impression";
@@ -29,6 +29,10 @@ function shopProfileContrast(accent: string) {
     ? { text: "#3d3048", muted: "#756482", border: "rgb(61 48 72 / 18%)" }
     : { text: "#fff1df", muted: "#e2cfe9", border: "rgb(255 241 223 / 28%)" };
 }
+
+const SHOP_PROMO_STARS = [
+  [3,12,34],[9,72,46],[14,36,30],[19,88,38],[24,16,54],[29,61,32],[34,29,42],[39,81,58],[44,10,36],[49,49,48],[54,91,34],[59,24,62],[64,68,40],[69,8,32],[74,43,52],[79,83,36],[84,18,44],[89,59,64],[95,32,34],[97,91,46],[7,48,58],[17,6,36],[31,95,44],[47,73,34],[62,46,56],[76,6,38],[91,76,42],[56,5,32],
+] as const;
 
 function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSlide; measure?: boolean; onVisit?: (key: string) => void }) {
   if (slide.type === "store") {
@@ -152,7 +156,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
   ) : (
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
-  const slideContent = <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
+  const slideContent = <><div className="shop-promo-stars" aria-hidden="true">{SHOP_PROMO_STARS.map(([left, top, size], i) => <span key={i} className="shop-promo-star" style={{ left: left + "%", top: top + "%", animationDelay: (i % 9) * -0.7 + "s", animationDuration: 5.5 + (i % 7) * 0.8 + "s" }}><Star size={size} strokeWidth={1.35} /></span>)}</div><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</></>;
   if (slide.type === "product") return <div key={measure ? "measure-" + slide.key : slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")}>{slideContent}</div>;
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }
