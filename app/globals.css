@@ -11688,3 +11688,35 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     padding-bottom:82px!important;
   }
 }
+
+/* Anchor the translucent copy panel to the measured banner height itself.
+   This avoids percentage-height collapse inside the carousel's nested grid. */
+.shop-page .shop-promo-active > .shop-promo-product {
+  height:var(--shop-promo-height)!important;
+  min-height:var(--shop-promo-height)!important;
+  max-height:var(--shop-promo-height)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  align-items:stretch!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 {
+  position:relative!important;
+  grid-row:1!important;
+  align-self:stretch!important;
+  height:var(--shop-promo-height)!important;
+  min-height:var(--shop-promo-height)!important;
+  max-height:var(--shop-promo-height)!important;
+  box-sizing:border-box!important;
+  background:rgba(255,255,255,.78)!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-product {
+    height:var(--shop-promo-height)!important;
+    min-height:var(--shop-promo-height)!important;
+    max-height:var(--shop-promo-height)!important;
+  }
+  .shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 {
+    height:var(--shop-promo-height)!important;
+    min-height:var(--shop-promo-height)!important;
+    max-height:var(--shop-promo-height)!important;
+  }
+}
