@@ -11627,3 +11627,30 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     border-bottom:1px solid rgba(20,20,20,.06)!important;
   }
 }
+
+/* Make the spotlight copy column occupy the full banner height. Distribute
+   its content vertically while keeping a clear bottom lane for carousel controls. */
+.shop-page .shop-promo-active > .shop-promo-product {
+  align-items:stretch!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+  align-self:stretch!important;
+  height:100%!important;
+  min-height:100%!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-evenly!important;
+  padding-top:clamp(24px,4vh,42px)!important;
+  padding-bottom:84px!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+    height:100%!important;
+    min-height:100%!important;
+    justify-content:space-evenly!important;
+    padding-top:20px!important;
+    padding-bottom:76px!important;
+  }
+}
+
