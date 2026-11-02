@@ -11899,16 +11899,23 @@ html body .shop-page button[aria-label="Unlike listing"] {
   box-shadow: none !important;
 }
 
-/* Align full-width homepage spotlight content and navigation with the shared page shell. */
+/* Align spotlight copy and carousel controls with the shared homepage shell. */
 .shop-promo-slide>div:first-child{
-  padding-left:max(11px,calc((100% - 1180px)/2))!important;
+  padding-left:max(16px,calc((100% - 1180px)/2))!important;
+  padding-bottom:64px!important;
 }
 .shop-promo-controls{
-  left:max(11px,calc((100% - 1180px)/2));
+  left:max(16px,calc((100% - 1180px)/2));
   right:auto;
 }
-
-/* Reserve a dedicated control lane beneath evenly distributed spotlight copy. */
-.shop-promo-slide>div:first-child{
-  padding-bottom:64px!important;
+.shop-promo-carousel{
+  border-radius:0!important;
+}
+@media(max-width:640px){
+  .shop-promo-slide>div:first-child{
+    padding-left:11px!important;
+  }
+  .shop-promo-controls{
+    left:11px;
+  }
 }
