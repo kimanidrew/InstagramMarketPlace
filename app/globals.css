@@ -11560,3 +11560,33 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 @media(prefers-reduced-motion:reduce) {
   .shop-page .shop-promo-star { animation:none!important; }
 }
+
+
+/* Keep the decorative starfield spanning the entire spotlight banner,
+   behind both the copy column and the product visual column. */
+.shop-page .shop-promo-active > .shop-promo-product {
+  position:relative!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-stars {
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  z-index:0!important;
+  pointer-events:none!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-stars .shop-promo-star {
+  z-index:0!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 {
+  position:relative!important;
+  z-index:10!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > .shop-promo-product-visual {
+  position:relative!important;
+  z-index:10!important;
+}
+.shop-page .shop-promo-star svg {
+  width:inherit!important;
+  height:inherit!important;
+}
