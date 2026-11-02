@@ -359,7 +359,7 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsPaused(false);
       }}
-      className={"shop-promo-carousel relative mb-0 overflow-hidden rounded-none " + (!isMeasured ? "shop-promo-loading" : "")}
+      className={"shop-promo-carousel relative mb-6 overflow-hidden rounded-none " + (!isMeasured ? "shop-promo-loading" : "")}
       style={{ height: bannerHeight, minHeight: bannerHeight, ["--shop-promo-height" as any]: bannerHeight + "px" }}
       aria-label="Five featured shop and product spotlights"
     >
