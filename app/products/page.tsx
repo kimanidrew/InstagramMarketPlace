@@ -208,9 +208,8 @@ export async function Products({
   return (
     <main className="shop-page shell py-0">
       {showDiscovery && (
-        <section className="shop-by-category relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden rounded-none border-0 bg-gradient-to-br from-[#fff8f6] via-[#fffaf2] to-[#f4f8ff] py-2 sm:py-2.5" aria-label="Shop by category">
+        <section className="shop-by-category relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden rounded-none border-0 bg-transparent py-2 sm:py-2.5" aria-label="Shop by category">
           <div className="shell">
-          <div className="pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full bg-white/70 blur-3xl" aria-hidden="true" />
           <div className="relative mb-2 flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="mb-0.5 text-[8px] font-extrabold uppercase tracking-[.18em] text-[#b45365] sm:text-[9px]">Find your next favourite</p>
@@ -220,8 +219,8 @@ export async function Products({
           </div>
           <div className="relative grid grid-cols-2 gap-1 sm:grid-cols-3 sm:gap-1.5 lg:grid-cols-6">
             {shopCategories.map((category) => (
-              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-h-[40px] min-w-0 items-center gap-1.5 rounded-full border border-white/90 bg-white/90 px-2 py-1 shadow-[0_2px_10px_rgba(31,41,55,0.045)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e9b7c1] hover:bg-white hover:shadow-[0_5px_16px_rgba(31,41,55,0.09)] sm:min-h-[44px] sm:gap-2 sm:px-2.5">
-                <span className={category.color + " flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm shadow-inner sm:h-8 sm:w-8"}>{category.icon}</span>
+              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-h-[40px] min-w-0 items-center gap-1.5 rounded-full border border-white/90 bg-white/90 px-2 py-1 shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e9b7c1] hover:bg-white hover:shadow-none sm:min-h-[44px] sm:gap-2 sm:px-2.5">
+                <span className={category.color + " flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm shadow-none sm:h-8 sm:w-8"}>{category.icon}</span>
                 <span className="min-w-0 text-[11px] font-bold leading-tight tracking-[-.01em] text-[#252530] transition-colors group-hover:text-[#a52d49] sm:text-[12px]">{category.label}</span>
               </Link>
             ))}
