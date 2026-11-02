@@ -11300,3 +11300,18 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     left:24px!important;
   }
 }
+
+/* Distribute spotlight copy evenly through the left panel while reserving
+   the bottom navigation lane for carousel arrows and slide indicators. */
+.shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-evenly!important;
+  padding-bottom:76px!important;
+}
+@media(max-width:767px) {
+  .shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+    justify-content:space-evenly!important;
+    padding-bottom:68px!important;
+  }
+}
