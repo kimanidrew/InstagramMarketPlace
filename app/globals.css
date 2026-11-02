@@ -11880,3 +11880,12 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     transition:none!important;
   }
 }
+
+/* Keep the spotlight Save icon outline aligned with the carousel scroll controls.
+   This intentionally comes last to beat the button's important Tailwind border utility. */
+.shop-page .shop-promo-active button[aria-label="Add to wishlist"],
+.shop-page .shop-promo-active button[aria-label="Remove from wishlist"] {
+  border-color: rgba(0, 0, 0, .2) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
