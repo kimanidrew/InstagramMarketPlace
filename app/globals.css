@@ -11243,3 +11243,21 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     bottom:10px!important;
   }
 }
+
+
+/* Shop spotlight: stretch the themed copy panel to the full banner height
+   and keep product captions to four lines with a clean ellipsis. */
+.shop-page .shop-promo-active > .shop-promo-product > div:first-child {
+  align-self:stretch!important;
+  height:100%!important;
+  min-height:var(--shop-promo-height,100%)!important;
+  box-sizing:border-box!important;
+}
+.shop-page .shop-promo-active > .shop-promo-product > div:first-child > p {
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;
+  line-clamp:4!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
