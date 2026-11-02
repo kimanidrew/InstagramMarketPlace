@@ -3,7 +3,7 @@
 import { Bookmark } from "lucide-react";
 import { useState } from "react";
 
-export function WishlistButton({ id, wishlisted = false, count, compact = false, largeCompact = false, smallCompact = false, productDetailStyle = false, inlineStyle = false }: { id: string; wishlisted?: boolean; count?: number; compact?: boolean; largeCompact?: boolean; smallCompact?: boolean; productDetailStyle?: boolean; inlineStyle?: boolean }) {
+export function WishlistButton({ id, wishlisted = false, count, compact = false, largeCompact = false, smallCompact = false, productDetailStyle = false, inlineStyle = false, spotlightStyle = false }: { id: string; wishlisted?: boolean; count?: number; compact?: boolean; largeCompact?: boolean; smallCompact?: boolean; productDetailStyle?: boolean; inlineStyle?: boolean; spotlightStyle?: boolean }) {
   const [saved, setSaved] = useState(wishlisted);
   const [n, setN] = useState(count ?? 0);
   const [busy, setBusy] = useState(false);
@@ -36,7 +36,9 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
     }
   }
 
-  const productDetailColors = productDetailStyle
+  const productDetailColors = spotlightStyle
+    ? (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-1 ring-black/10 shadow-sm" : "!bg-white/90 !text-[#171717] ring-1 ring-black/10 shadow-sm hover:!bg-white")
+    : productDetailStyle
     ? (saved ? "!bg-white !text-black ring-1 ring-black/10" : "!bg-white !text-black ring-1 ring-black/10 hover:!bg-[#f7f7f7] active:!bg-[#f0f0f0]")
     : (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-2 ring-white/90 shadow-md shadow-black/10" : "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 ring-1 ring-white/25 backdrop-blur-sm");
 
@@ -50,11 +52,11 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
       aria-pressed={saved}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
-        (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-9 w-9 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-black !shadow-none ring-0 hover:!bg-[#f5f5f5] " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
+        (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-9 w-9 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-black !shadow-none ring-0 hover:!bg-[#f5f5f5] " : spotlightStyle ? "shrink-0 shadow-sm " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
         productDetailColors
       }
     >
-      <Bookmark size={compact ? (smallCompact ? 15 : inlineStyle ? 21 : largeCompact ? 23 : 19) : 16} fill={saved ? "black" : "none"} stroke="black" strokeWidth={saved ? 2.7 : 2.2} />
+      <Bookmark size={compact ? (smallCompact ? 15 : inlineStyle ? 21 : largeCompact ? 23 : 19) : 16} fill={saved ? (spotlightStyle ? "currentColor" : "black") : "none"} stroke="currentColor" strokeWidth={saved ? 2.7 : 2.2} />
       {!compact && <span>{n} saved</span>}
     </button>
   );
