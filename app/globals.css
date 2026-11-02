@@ -11898,3 +11898,12 @@ html body .shop-page button[aria-label="Unlike listing"] {
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* Align full-width homepage spotlight content and navigation with the shared page shell. */
+.shop-promo-slide>div:first-child{
+  padding-left:max(11px,calc((100% - 1180px)/2))!important;
+}
+.shop-promo-controls{
+  left:max(11px,calc((100% - 1180px)/2));
+  right:auto;
+}
