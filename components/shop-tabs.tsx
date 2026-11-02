@@ -213,11 +213,9 @@ function ShopPromoCarousel({ stores, products }: { stores: any[]; products: any[
 
   const goToSlide = (next: number) => {
     setIndex(((next % slides.length) + slides.length) % slides.length);
-    setIsPaused(true);
   };
   const goBy = (direction: -1 | 1) => {
     setIndex((current) => (current + direction + slides.length) % slides.length);
-    setIsPaused(true);
   };
   const handleSwipeStart = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "mouse") return;
