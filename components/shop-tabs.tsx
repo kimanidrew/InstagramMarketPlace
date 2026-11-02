@@ -55,21 +55,27 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
         return (
           <Link
             href={"/stores/" + slide.product.connection.username}
-            className="mt-5 inline-flex w-fit max-w-full items-center gap-3 rounded-2xl border px-3 py-2.5 transition duration-200 hover:-translate-y-0.5 hover:shadow-md"
-            style={{ backgroundColor: accent, color: contrast.text, borderColor: contrast.border }}
+            className="mt-5 inline-flex w-fit max-w-full items-center gap-3 transition duration-200 hover:-translate-y-0.5"
+            style={{ color: contrast.text }}
             onClick={(event) => event.stopPropagation()}
             aria-label={"Visit @" + slide.product.connection.username + " shop"}
           >
-            <span className="h-11 w-11 shrink-0 overflow-hidden rounded-xl ring-2 ring-white/60 shadow-sm">
-              {slide.product.connection.profileImageUrl ? (
-                <img src={slide.product.connection.profileImageUrl} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <span className="flex h-full w-full items-center justify-center text-base font-black" style={{ backgroundColor: "rgb(255 255 255 / 24%)", color: contrast.text }}>{slide.product.connection.username.slice(0, 1).toUpperCase()}</span>
-              )}
+            <span className="relative h-12 w-12 shrink-0">
+              <span className="absolute -left-1 -top-1 animate-pulse text-[12px] leading-none" style={{ color: contrast.muted }}>✦</span>
+              <span className="absolute -right-1 top-0 animate-pulse text-[10px] leading-none [animation-delay:350ms]" style={{ color: contrast.text }}>✧</span>
+              <span className="absolute -bottom-1 left-0 animate-pulse text-[9px] leading-none [animation-delay:700ms]" style={{ color: contrast.muted }}>✧</span>
+              <span className="absolute -bottom-0.5 -right-1 animate-pulse text-[12px] leading-none [animation-delay:500ms]" style={{ color: contrast.text }}>✦</span>
+              <span className="absolute inset-1 overflow-hidden rounded-full">
+                {slide.product.connection.profileImageUrl ? (
+                  <img src={slide.product.connection.profileImageUrl} alt="" className="h-full w-full rounded-full object-cover" />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center rounded-full text-base font-black" style={{ backgroundColor: "rgb(255 255 255 / 18%)", color: contrast.text }}>{slide.product.connection.username.slice(0, 1).toUpperCase()}</span>
+                )}
+              </span>
             </span>
             <span className="flex min-w-0 flex-col items-start leading-tight">
               <span className="text-[9px] font-black uppercase tracking-[.16em]" style={{ color: contrast.muted }}>Shop profile</span>
-              <span className="mt-1 max-w-[190px] truncate text-sm font-black tracking-[-.02em]">@{slide.product.connection.username}</span>
+              <span className="mt-1 max-w-[190px] truncate text-sm font-black tracking-[-.02em]" style={{ color: contrast.text }}>@{slide.product.connection.username}</span>
             </span>
             <ArrowRight size={14} className="ml-1 shrink-0" />
           </Link>
