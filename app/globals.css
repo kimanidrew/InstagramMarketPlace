@@ -11720,3 +11720,10 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
     max-height:var(--shop-promo-height)!important;
   }
 }
+
+/* Keep the Shop spotlight product title fixed at 15px against inherited
+   typography and responsive utility overrides. */
+.shop-page .shop-promo-active > .shop-promo-product > .relative.z-10 > span:not(.shop-promo-label) {
+  font-size:15px!important;
+  line-height:1.02!important;
+}
