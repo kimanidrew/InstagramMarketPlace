@@ -16,6 +16,20 @@ type PromoSlide =
   | { type: "product"; key: string; product: any }
   | { type: "ad"; key: string };
 
+function shopProfileContrast(accent: string) {
+  const match = /^#?([0-9a-f]{6})$/i.exec(accent.trim());
+  if (!match) return { text: "#3d3048", muted: "#756482", border: "rgb(61 48 72 / 16%)" };
+  const value = match[1];
+  const channels = [0, 2, 4].map((offset) => {
+    const channel = parseInt(value.slice(offset, offset + 2), 16) / 255;
+    return channel <= 0.04045 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
+  });
+  const luminance = channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+  return luminance > 0.42
+    ? { text: "#3d3048", muted: "#756482", border: "rgb(61 48 72 / 18%)" }
+    : { text: "#fff1df", muted: "#e2cfe9", border: "rgb(255 241 223 / 28%)" };
+}
+
 function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSlide; measure?: boolean; onVisit?: (key: string) => void }) {
   if (slide.type === "store") {
     const now = Date.now();
@@ -35,22 +49,32 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     <>
       <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
       <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{slide.product.productTitle || "A find worth sharing."}</h2>
-      {slide.product.connection?.username && (
-        <Link
-          href={"/stores/" + slide.product.connection.username}
-          className="mt-4 inline-flex w-fit max-w-full items-center gap-3 rounded-full transition-opacity hover:opacity-75"
-          onClick={(event) => event.stopPropagation()}
-        >
-          <span className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-black/10">
-            {slide.product.connection.profileImageUrl ? (
-              <img src={slide.product.connection.profileImageUrl} alt="" className="h-full w-full object-cover" />
-            ) : (
-              <span className="flex h-full w-full items-center justify-center text-sm font-black text-black/60">{slide.product.connection.username.slice(0, 1).toUpperCase()}</span>
-            )}
-          </span>
-          <span className="min-w-0 truncate text-sm font-extrabold text-black">@{slide.product.connection.username}</span>
-        </Link>
-      )}
+      {slide.product.connection?.username && (() => {
+        const accent = slide.product.connection.profileAccentColor || "#eee5f2";
+        const contrast = shopProfileContrast(accent);
+        return (
+          <Link
+            href={"/stores/" + slide.product.connection.username}
+            className="mt-5 inline-flex w-fit max-w-full items-center gap-3 rounded-2xl border px-3 py-2.5 transition duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            style={{ backgroundColor: accent, color: contrast.text, borderColor: contrast.border }}
+            onClick={(event) => event.stopPropagation()}
+            aria-label={"Visit @" + slide.product.connection.username + " shop"}
+          >
+            <span className="h-11 w-11 shrink-0 overflow-hidden rounded-xl ring-2 ring-white/60 shadow-sm">
+              {slide.product.connection.profileImageUrl ? (
+                <img src={slide.product.connection.profileImageUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="flex h-full w-full items-center justify-center text-base font-black" style={{ backgroundColor: "rgb(255 255 255 / 24%)", color: contrast.text }}>{slide.product.connection.username.slice(0, 1).toUpperCase()}</span>
+              )}
+            </span>
+            <span className="flex min-w-0 flex-col items-start leading-tight">
+              <span className="text-[9px] font-black uppercase tracking-[.16em]" style={{ color: contrast.muted }}>Shop profile</span>
+              <span className="mt-1 max-w-[190px] truncate text-sm font-black tracking-[-.02em]">@{slide.product.connection.username}</span>
+            </span>
+            <ArrowRight size={14} className="ml-1 shrink-0" />
+          </Link>
+        );
+      })()}
       <Link
         href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug}
         className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
