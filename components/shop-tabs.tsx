@@ -54,8 +54,8 @@ function PromoProductEngagement({ product }: { product: any }) {
   }, [product.id]);
 
   return (
-    <div className={"product-card-like-line min-w-0 " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
-      <Heart size={16} strokeWidth={2.4} fill={liked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (liked ? "text-[#ff3b6b]" : "") + (animated ? " is-animated" : "")} aria-hidden="true" />
+    <div className={"product-card-like-line min-w-0 !gap-1 " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
+      <Heart size={13} strokeWidth={2.4} fill={liked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (liked ? "text-[#ff3b6b]" : "") + (animated ? " is-animated" : "")} aria-hidden="true" />
       <b className={"interaction-stat-value " + (animated ? "is-count-updated" : "")}>{count.toLocaleString()}</b>
       <span>likes</span>
     </div>
