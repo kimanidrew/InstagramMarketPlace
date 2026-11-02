@@ -11760,15 +11760,7 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
 .shop-page .shop-promo-active .shop-promo-single-glow {
   will-change:auto!important;
 }
-@media (hover:hover) and (pointer:fine) {
-  .shop-page .shop-promo-carousel:hover .shop-promo-star,
-  .shop-page .shop-promo-carousel:hover .shop-promo-main-image,
-  .shop-page .shop-promo-carousel:hover .shop-promo-float-image,
-  .shop-page .shop-promo-carousel:hover .shop-promo-single-image img,
-  .shop-page .shop-promo-carousel:hover .shop-promo-single-glow {
-    animation-play-state:paused!important;
-  }
-}
+/* Hover pauses only carousel autoplay in the component; visual promo animations keep running. */
 @media(prefers-reduced-motion:reduce) {
   .shop-page .shop-promo-carousel *,
   .shop-page .shop-promo-carousel *::before,
