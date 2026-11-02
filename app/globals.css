@@ -11907,3 +11907,8 @@ html body .shop-page button[aria-label="Unlike listing"] {
   left:max(11px,calc((100% - 1180px)/2));
   right:auto;
 }
+
+/* Reserve a dedicated control lane beneath evenly distributed spotlight copy. */
+.shop-promo-slide>div:first-child{
+  padding-bottom:64px!important;
+}
