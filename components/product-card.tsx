@@ -93,7 +93,7 @@ export function ProductCard({ p }: { p: any }) {
               src={p.mediaUrl}
               poster={p.thumbnailUrl}
               alt={p.productTitle || "Product video"}
-              href={href}
+              href={"/reel/" + p.productSlug}
             />
           </div>
         ) : (
