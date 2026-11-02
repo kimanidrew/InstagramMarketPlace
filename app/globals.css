@@ -12015,3 +12015,55 @@ html body .shop-page .shop-promo-active > .store-directory-showcase-card.store-d
 html body .site-header {
   border-bottom: 1px solid rgba(255, 255, 255, .2) !important;
 }
+
+
+/* Full-screen listing and reel browsing experience */
+.sokolink-listing-modal {
+  overscroll-behavior: contain;
+  animation: sokolink-modal-enter .22s ease-out both;
+}
+.sokolink-listing-modal > div > main.product-detail-page {
+  min-height: 100dvh;
+}
+.sokolink-listing-modal .product-detail-page > .shell {
+  width: min(100% - 32px, 1440px);
+  max-width: 1440px;
+  padding-top: 68px;
+  padding-bottom: 48px;
+}
+.sokolink-listing-modal-close {
+  box-shadow: 0 8px 30px rgba(0,0,0,.14);
+}
+.sokolink-listing-modal .product-recommendations .grid {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding: 2px 2px 18px;
+  scrollbar-width: thin;
+}
+.sokolink-listing-modal .product-recommendations .grid > * {
+  flex: 0 0 clamp(190px, 22vw, 270px);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.sokolink-reel-feed {
+  overscroll-behavior-y: contain;
+  scrollbar-width: none;
+}
+.sokolink-reel-feed::-webkit-scrollbar { display: none; }
+.sokolink-reel-feed section { scroll-margin: 0; }
+@keyframes sokolink-modal-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 640px) {
+  .sokolink-listing-modal .product-detail-page > .shell {
+    width: 100%;
+    padding: 64px 14px 32px;
+  }
+  .sokolink-listing-modal .product-recommendations .grid > * {
+    flex-basis: min(68vw, 245px);
+  }
+}
