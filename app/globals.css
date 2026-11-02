@@ -12009,3 +12009,9 @@ html body .shop-page .shop-promo-active > .store-directory-showcase-card.store-d
     padding-inline-start: 20px !important;
   }
 }
+
+
+/* Ensure the main navbar always has a clearly visible bottom divider. */
+html body .site-header {
+  border-bottom: 1px solid rgba(255, 255, 255, .2) !important;
+}
