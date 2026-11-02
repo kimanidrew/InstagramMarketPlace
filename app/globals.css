@@ -11948,3 +11948,13 @@ html body .shop-page .shop-promo-carousel > .shop-promo-controls{
     left:11px!important;
   }
 }
+
+/* Align store-directory showcase copy with the homepage's horizontal page gutter. */
+html body .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy{
+  padding-left:16px!important;
+}
+@media(max-width:640px){
+  html body .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy{
+    padding-left:11px!important;
+  }
+}
