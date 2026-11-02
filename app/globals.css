@@ -11889,4 +11889,12 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   border-color: rgba(0, 0, 0, .2) !important;
   border-width: 1px !important;
   border-style: solid !important;
+}/* Force wishlist and like icon-button borders to exactly match the spotlight scroll controls. */
+html body .shop-page button[aria-label="Add to wishlist"],
+html body .shop-page button[aria-label="Remove from wishlist"],
+html body .shop-page button[aria-label="Like listing"],
+html body .shop-page button[aria-label="Unlike listing"] {
+  border: 1px solid rgba(0, 0, 0, .2) !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
