@@ -11949,12 +11949,17 @@ html body .shop-page .shop-promo-carousel > .shop-promo-controls{
   }
 }
 
-/* Align store-directory showcase copy with the homepage's horizontal page gutter. */
+/* Restore the full responsive inset for the store-directory showcase copy, with roomier spacing. */
 html body .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy{
-  padding-left:16px!important;
+  padding:clamp(28px,4vw,48px)!important;
 }
-@media(max-width:640px){
+@media(max-width:760px){
   html body .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy{
-    padding-left:11px!important;
+    padding:22px!important;
+  }
+}
+@media(max-width:480px){
+  html body .store-directory-showcase-card.store-directory-showcase-promo .store-directory-showcase-promo-copy{
+    padding:20px!important;
   }
 }
