@@ -54,9 +54,9 @@ function PromoProductEngagement({ product }: { product: any }) {
   }, [product.id]);
 
   return (
-    <div className={"shop-promo-like-count mt-3 inline-flex w-fit items-center gap-2 text-sm font-bold " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
-      <Heart size={17} strokeWidth={2.5} fill={liked ? "currentColor" : "none"} className={"shop-promo-like-icon " + (liked ? "is-liked" : "") + (animated ? " is-animated" : "")} aria-hidden="true" />
-      <b className={"shop-promo-like-value " + (animated ? "is-count-updated" : "")}>{count.toLocaleString()}</b>
+    <div className={"product-card-like-line min-w-0 " + (animated ? "is-updated" : "")} aria-live="polite" aria-label={count.toLocaleString() + " likes"}>
+      <Heart size={16} strokeWidth={2.4} fill={liked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (liked ? "text-[#ff3b6b]" : "") + (animated ? " is-animated" : "")} aria-hidden="true" />
+      <b className={"interaction-stat-value " + (animated ? "is-count-updated" : "")}>{count.toLocaleString()}</b>
       <span>likes</span>
     </div>
   );
@@ -125,7 +125,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
           onClick={(event) => event.stopPropagation()}
         >{String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "Discover service" : "Discover product"} <ArrowRight size={14} /></Link>
         <LikeButton id={slide.product.id} count={promoLikeCount(slide.product)} compact initialLiked={Boolean(slide.product.likedByCurrentUser)} />
-        <WishlistButton id={slide.product.id} count={slide.product.wishlistItems?.length || 0} compact inlineStyle wishlisted={Boolean(slide.product.wishlistedByCurrentUser ?? slide.product.wishlistItems?.length)} />
+        <WishlistButton id={slide.product.id} count={slide.product.wishlistItems?.length || 0} compact spotlightStyle wishlisted={Boolean(slide.product.wishlistedByCurrentUser ?? slide.product.wishlistItems?.length)} />
       </div>
     </>
   ) : (
