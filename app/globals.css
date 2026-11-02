@@ -11733,3 +11733,48 @@ a[class*="bg-[#111]"]:hover, button[class*="bg-[#111]"]:hover {
   text-overflow:ellipsis!important;
   white-space:normal!important;
 }
+
+/* High-performance Shop spotlight motion.
+   Keep movement on compositor-friendly transforms/opacity, limit continuously
+   animated star layers, and stop offscreen/hidden autoplay in the component. */
+.shop-page .shop-promo-carousel {
+  transition:none!important;
+  contain:layout paint;
+}
+.shop-page .shop-promo-active > .shop-promo-slide {
+  backface-visibility:hidden;
+  transform:translateZ(0);
+}
+.shop-page .shop-promo-star {
+  will-change:auto!important;
+  filter:none!important;
+  animation-duration:12s!important;
+  animation-timing-function:ease-in-out!important;
+}
+.shop-page .shop-promo-star:nth-child(n+17) {
+  animation:none!important;
+}
+.shop-page .shop-promo-active .shop-promo-main-image,
+.shop-page .shop-promo-active .shop-promo-float-image,
+.shop-page .shop-promo-active .shop-promo-single-image img,
+.shop-page .shop-promo-active .shop-promo-single-glow {
+  will-change:auto!important;
+}
+@media (hover:hover) and (pointer:fine) {
+  .shop-page .shop-promo-carousel:hover .shop-promo-star,
+  .shop-page .shop-promo-carousel:hover .shop-promo-main-image,
+  .shop-page .shop-promo-carousel:hover .shop-promo-float-image,
+  .shop-page .shop-promo-carousel:hover .shop-promo-single-image img,
+  .shop-page .shop-promo-carousel:hover .shop-promo-single-glow {
+    animation-play-state:paused!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .shop-page .shop-promo-carousel *,
+  .shop-page .shop-promo-carousel *::before,
+  .shop-page .shop-promo-carousel *::after {
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important;
+  }
+}
