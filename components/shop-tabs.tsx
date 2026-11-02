@@ -17,17 +17,11 @@ type PromoSlide =
   | { type: "ad"; key: string };
 
 function shopProfileContrast(accent: string) {
+  // Shop profile text sits on the translucent white promo panel, so keep
+  // the typography dark and readable regardless of the shop's accent color.
   const match = /^#?([0-9a-f]{6})$/i.exec(accent.trim());
-  if (!match) return { text: "#3d3048", muted: "#756482", border: "rgb(61 48 72 / 16%)" };
-  const value = match[1];
-  const channels = [0, 2, 4].map((offset) => {
-    const channel = parseInt(value.slice(offset, offset + 2), 16) / 255;
-    return channel <= 0.04045 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
-  });
-  const luminance = channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
-  return luminance > 0.42
-    ? { text: "#3d3048", muted: "#756482", border: "rgb(61 48 72 / 18%)" }
-    : { text: "#fff1df", muted: "#e2cfe9", border: "rgb(255 241 223 / 28%)" };
+  const border = match ? "rgb(23 23 23 / 16%)" : "rgb(23 23 23 / 12%)";
+  return { text: "#171717", muted: "#555555", border };
 }
 
 const SHOP_PROMO_STARS = [
