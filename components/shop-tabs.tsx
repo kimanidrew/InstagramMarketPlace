@@ -35,8 +35,27 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     <>
       <span className="shop-promo-label"><Sparkles size={11} /> Promoted</span>
       <h2 className="mt-4 max-w-lg text-3xl font-black leading-[.98] tracking-[-.055em] sm:text-4xl md:text-5xl">{slide.product.productTitle || "A find worth sharing."}</h2>
-      <p className="mt-3 max-w-md text-sm leading-6 text-black/60">Handpicked for a closer look. Discover the details, then shop directly from the seller.</p>
-      <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white">Discover listing <ArrowRight size={14} /></span>
+      {slide.product.connection?.username && (
+        <Link
+          href={"/stores/" + slide.product.connection.username}
+          className="mt-4 inline-flex w-fit max-w-full items-center gap-3 rounded-full transition-opacity hover:opacity-75"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <span className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-black/10">
+            {slide.product.connection.profileImageUrl ? (
+              <img src={slide.product.connection.profileImageUrl} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <span className="flex h-full w-full items-center justify-center text-sm font-black text-black/60">{slide.product.connection.username.slice(0, 1).toUpperCase()}</span>
+            )}
+          </span>
+          <span className="min-w-0 truncate text-sm font-extrabold text-black">@{slide.product.connection.username}</span>
+        </Link>
+      )}
+      <Link
+        href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug}
+        className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-black text-white transition hover:bg-black/80"
+        onClick={(event) => event.stopPropagation()}
+      >Discover listing <ArrowRight size={14} /></Link>
     </>
   ) : (
     <>
@@ -104,7 +123,7 @@ function PromoSlideContent({ slide, measure = false, onVisit }: { slide: PromoSl
     <div className="shop-promo-ad-art" aria-hidden="true"><span className="promo-art-card promo-art-card-a">DISCOVER</span><span className="promo-art-card promo-art-card-b">LOCAL FINDS</span><span className="promo-art-spark">✳</span><span className="promo-art-ring" /></div>
   );
   const slideContent = <><div className="relative z-10 flex flex-col justify-center p-6 sm:p-9 md:p-10">{copy}</div>{visual}</>;
-  if (slide.type === "product") return measure ? <div className={className}>{slideContent}</div> : <Link href={"/" + (String(slide.product.listingType || "").toUpperCase() === "SERVICE" ? "service" : "product") + "/" + slide.product.productSlug} key={slide.key} className={"shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")} onClick={() => onVisit?.(slide.key)}>{slideContent}</Link>;
+  if (slide.type === "product") return <div key={measure ? "measure-" + slide.key : slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-product " + className.split(" ").slice(3).join(" ")}>{slideContent}</div>;
   return <div key={slide.key} className={measure ? className : "shop-promo-slide shop-promo-enter shop-promo-ad group grid overflow-hidden md:grid-cols-[1fr_.85fr]"}>{slideContent}</div>;
 }
 
