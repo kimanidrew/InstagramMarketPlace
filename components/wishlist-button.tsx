@@ -37,7 +37,7 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
   }
 
   const productDetailColors = spotlightStyle
-    ? (saved ? "!border !border-[#d5a943] !bg-[#fff0bd] !text-[#6f4b00] ring-1 ring-black/10 shadow-sm" : "!border !border-black/25 !bg-white/90 !text-[#171717] ring-1 ring-black/10 shadow-sm hover:!bg-white")
+    ? (saved ? "!border !border-[#b88925] !bg-[#fff0bd] !text-[#6f4b00] ring-0 !shadow-none" : "!border !border-black/30 !bg-white/90 !text-[#171717] ring-0 !shadow-none hover:!bg-white")
     : productDetailStyle
     ? (saved ? "!bg-white !text-black ring-1 ring-black/10" : "!bg-white !text-black ring-1 ring-black/10 hover:!bg-[#f7f7f7] active:!bg-[#f0f0f0]")
     : (saved ? "!bg-[#fff0bd] !text-[#6f4b00] ring-2 ring-white/90 shadow-md shadow-black/10" : "!bg-black/60 !text-white hover:!bg-black/75 active:!bg-black/75 ring-1 ring-white/25 backdrop-blur-sm");
@@ -52,7 +52,7 @@ export function WishlistButton({ id, wishlisted = false, count, compact = false,
       aria-pressed={saved}
       className={
         "inline-flex items-center justify-center gap-2 rounded-full transition hover:-translate-y-0.5 " +
-        (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-9 w-9 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-black !shadow-none ring-0 hover:!bg-[#f5f5f5] " : spotlightStyle ? "shrink-0 shadow-sm " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
+        (compact ? (smallCompact ? "h-7 w-7 " : inlineStyle ? "h-9 w-9 " : largeCompact ? "h-12 w-12 " : "h-10 w-10 ") + (inlineStyle ? "shrink-0 !bg-transparent !text-black !shadow-none ring-0 hover:!bg-[#f5f5f5] " : spotlightStyle ? "shrink-0 !shadow-none " : productDetailStyle ? "" : "shadow-sm ") : "px-5 py-3.5 text-sm font-bold ") +
         productDetailColors
       }
     >
