@@ -12067,3 +12067,42 @@ html body .site-header {
     flex-basis: min(68vw, 245px);
   }
 }
+
+
+/* Fullscreen overlays must sit above every app navigation/floating control.
+   The translucent surface leaves the previous route subtly visible underneath. */
+html body .sokolink-listing-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  isolation: isolate;
+  background: rgba(255,255,255,.94) !important;
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  scrollbar-gutter: stable;
+}
+html body .sokolink-listing-modal::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: rgba(0,0,0,.42);
+}
+html body .sokolink-listing-modal-close {
+  z-index: 10002 !important;
+}
+html body .sokolink-reel-feed {
+  z-index: 10000 !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-height: 100vh !important;
+  overscroll-behavior: contain !important;
+}
