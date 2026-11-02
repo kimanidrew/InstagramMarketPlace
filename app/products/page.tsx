@@ -220,9 +220,9 @@ export async function Products({
           </div>
           <div className="relative grid grid-cols-2 gap-1 sm:grid-cols-3 sm:gap-1.5 lg:grid-cols-6">
             {shopCategories.map((category) => (
-              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-h-[46px] min-w-0 items-center gap-2 rounded-full border border-white/90 bg-white/90 px-2.5 py-1.5 shadow-[0_2px_10px_rgba(31,41,55,0.045)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e9b7c1] hover:bg-white hover:shadow-[0_5px_16px_rgba(31,41,55,0.09)] sm:min-h-[50px] sm:gap-2.5 sm:px-3">
-                <span className={category.color + " flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base shadow-inner sm:h-9 sm:w-9"}>{category.icon}</span>
-                <span className="min-w-0 text-[12px] font-extrabold leading-tight tracking-[-.015em] text-[#252530] transition-colors group-hover:text-[#a52d49] sm:text-[13px]">{category.label}</span>
+              <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className="group flex min-h-[40px] min-w-0 items-center gap-1.5 rounded-full border border-white/90 bg-white/90 px-2 py-1 shadow-[0_2px_10px_rgba(31,41,55,0.045)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e9b7c1] hover:bg-white hover:shadow-[0_5px_16px_rgba(31,41,55,0.09)] sm:min-h-[44px] sm:gap-2 sm:px-2.5">
+                <span className={category.color + " flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm shadow-inner sm:h-8 sm:w-8"}>{category.icon}</span>
+                <span className="min-w-0 text-[11px] font-bold leading-tight tracking-[-.01em] text-[#252530] transition-colors group-hover:text-[#a52d49] sm:text-[12px]">{category.label}</span>
               </Link>
             ))}
           </div>
