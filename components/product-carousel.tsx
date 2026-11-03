@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronUp, Play, Volume2, VolumeX, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Play, Volume2, VolumeX } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type MediaItem = { mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null };
@@ -92,11 +92,6 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
               )}
             </div>
 
-            <div className="absolute inset-x-0 top-0 z-20 flex items-start justify-between p-4">
-              <button type="button" onClick={() => window.dispatchEvent(new Event("sokolink-close-listing-modal"))} aria-label="Close details" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black hover:text-white">
-                <X size={20} />
-              </button>
-            </div>
           </div>
         </div>
 
