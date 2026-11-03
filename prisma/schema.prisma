@@ -61,6 +61,8 @@ model User {
   aiPromotionProjects  AiPromotionProject[]
   aiPromotionPayments  AiPromotionPayment[]
   notifications       Notification[]
+  postComments        PostComment[]
+  postCommentLikes    PostCommentLike[]
 }
 
 model StoreRequest {
@@ -136,6 +138,7 @@ model InstagramPost {
   aiPromotionProjects   AiPromotionProject[]
   wishlistItems          WishlistItem[]
   recentlyViewedBy       RecentlyViewedProduct[]
+  comments              PostComment[]
 
   @@index([connectionId, isProduct])
 }
@@ -589,4 +592,35 @@ model AiPromotionPayment {
   @@index([userId, createdAt])
   @@index([projectId, status])
   @@index([status, createdAt])
+}
+
+
+model PostComment {
+  id        String            @id @default(cuid())
+  postId    String
+  userId    String
+  parentId  String?
+  body      String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  post      InstagramPost     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent    PostComment?      @relation("PostCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   PostComment[]     @relation("PostCommentReplies")
+  likes     PostCommentLike[]
+
+  @@index([postId, parentId, createdAt])
+  @@index([parentId, createdAt])
+}
+
+model PostCommentLike {
+  id        String      @id @default(cuid())
+  commentId String
+  userId    String
+  createdAt DateTime    @default(now())
+  comment   PostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId])
+  @@index([userId, createdAt])
 }
