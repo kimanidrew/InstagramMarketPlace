@@ -52,13 +52,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     body.classList.add("sokolink-modal-open");
     html.classList.add("sokolink-modal-open");
 
-    // Keep the page behind the fixed modal stationary. The fixed overlay
-    // itself is the single scroll surface for long listing content.
-    const previousBodyOverflow = body.style.overflow;
-    const previousHtmlOverflow = html.style.overflow;
-    body.style.overflow = "hidden";
-    html.style.overflow = "hidden";
-
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") router.back();
     };
@@ -68,8 +61,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     return () => {
       body.classList.remove("sokolink-modal-open");
       html.classList.remove("sokolink-modal-open");
-      body.style.overflow = previousBodyOverflow;
-      html.style.overflow = previousHtmlOverflow;
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("sokolink-close-listing-modal", closeListingModal);
     };
