@@ -13487,3 +13487,124 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     min-height: 240px !important;
   }
 }
+
+
+/* Fixed listing overlay with one right-edge scrollbar for all modal content. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  height: 100% !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+html body .sokolink-listing-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+  background: rgba(0,0,0,.64) !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar {
+  display: block !important;
+  width: 12px !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar-thumb {
+  background: #a9a9a9 !important;
+  border: 3px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal {
+  position: relative !important;
+  inset: auto !important;
+  flex: 0 0 min(1440px, calc(100vw - 112px)) !important;
+  width: min(1440px, calc(100vw - 112px)) !important;
+  max-width: min(1440px, calc(100vw - 112px)) !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+}
+html body .sokolink-listing-modal > div.min-h-full,
+html body .sokolink-listing-modal main.product-detail-page,
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  overflow: visible !important;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  align-items: start !important;
+  overflow: visible !important;
+}
+html body .sokolink-listing-modal .product-gallery-sticky {
+  position: sticky !important;
+  top: 0 !important;
+  align-self: start !important;
+  height: calc(100dvh - 24px) !important;
+  min-height: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 8px 0 32px !important;
+  scrollbar-width: none !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: none !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  html body .sokolink-listing-modal .product-detail-modal-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100dvh !important;
+    gap: 18px !important;
+  }
+  html body .sokolink-listing-modal .product-gallery-sticky {
+    position: relative !important;
+    top: auto !important;
+    width: 100% !important;
+    height: min(58vh, 560px) !important;
+    min-height: 280px !important;
+  }
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 0 28px !important;
+  }
+}
+@media (max-width: 640px) {
+  html body .sokolink-listing-modal .product-detail-page > .shell {
+    padding: 62px 14px 24px !important;
+  }
+  html body .sokolink-listing-modal .product-gallery-sticky {
+    height: 42vh !important;
+    min-height: 240px !important;
+  }
+}
