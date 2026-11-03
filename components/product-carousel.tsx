@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Image as ImageIcon, Play, Volume2, VolumeX } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type MediaItem = { mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null };
@@ -56,11 +56,11 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
           <div className="flex h-full items-center justify-center text-sm text-[#999]">No media available</div>
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-between p-4">
-          <span className="rounded-full border border-black/[0.08] bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-black shadow-sm backdrop-blur-md">
-            {isVideo ? "Video" : "Photo"} {media.length > 1 ? "· " + (index + 1) + "/" + media.length : ""}
-          </span>
-          {media.length > 1 && <span className="rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[10px] font-black text-white shadow-sm backdrop-blur-md">Swipe to explore</span>}
+        <div className="absolute inset-x-0 top-0 z-20 flex items-start justify-between p-4">
+          <button type="button" onClick={() => window.dispatchEvent(new Event("sokolink-close-listing-modal"))} aria-label="Close details" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black hover:text-white">
+            <X size={20} />
+          </button>
+          {media.length > 1 && <span className="pointer-events-none rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[10px] font-black text-white shadow-sm backdrop-blur-md">Swipe to explore</span>}
         </div>
 
         {media.length > 1 && (
@@ -76,7 +76,7 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
           <div className="product-carousel-dots" aria-label="Product media">
             {media.map((item, i) => (
               <button key={i} type="button" onClick={() => go(i)} aria-label={"View media " + (i + 1)} aria-current={i === index} className={"product-carousel-dot" + (i === index ? " active" : "")}>
-                <span>{String(item.mediaType || "").toUpperCase() === "VIDEO" ? <Play size={10} fill="currentColor" /> : <ImageIcon size={10} />}</span>
+                <span>{String(item.mediaType || "").toUpperCase() === "VIDEO" ? <Play size={10} fill="currentColor" /> : <span className="block h-1.5 w-1.5 rounded-full bg-current" />}</span>
               </button>
             ))}
           </div>
