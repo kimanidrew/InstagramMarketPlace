@@ -7,9 +7,9 @@ import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
-import { ReviewSection } from "@/components/review-section";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { ProductCard } from "@/components/product-card";
+import { ListingComments } from "@/components/listing-comments";
 
 export const dynamic = "force-dynamic";
 
@@ -83,48 +83,17 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
 
           <div className="product-detail-scroll-area min-w-0"><aside>
             <section className="min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><BriefcaseBusiness size={11} /> Service</span>
-                <span className="rounded-full bg-[#f5f5f2] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#555]">{service.category} · {service.subcategory}</span>
-                {service.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}
-              </div>
-
-              <Link href={"/stores/" + service.connection.username} className="mt-5 inline-flex max-w-full items-center gap-2 rounded-full border border-black/[0.08] bg-[#fafaf8] px-3 py-2 text-xs font-bold text-[#444] transition hover:border-black hover:text-black"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black text-[10px] font-black text-white">{service.connection.username.slice(0, 1).toUpperCase()}</span><span className="truncate">@{service.connection.username}</span>{service.connection.verifiedAt && <ShieldCheck size={14} className="shrink-0 text-[#8a6a16]" />}</Link>
-
-              <h1 className="mt-5 break-words text-[clamp(2rem,5vw,3.5rem)] font-black leading-[1.02] tracking-[-.055em] text-[#171717]">{service.productTitle || "Instagram service"}</h1>
-
-              <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                <div className="flex gap-0.5 text-[#d4a72c]">
-                  {[1,2,3,4,5].map((star) => <Star key={star} size={17} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
-                </div>
-                <span className="text-sm font-bold text-[#555]">{service.reviews.length ? average.toFixed(1) : "New"}</span>
-                <span className="text-sm text-[#999]">({service.reviews.length} {service.reviews.length === 1 ? "review" : "reviews"})</span>
-              </div>
-
-              <p className="mt-6 whitespace-pre-line text-[15px] leading-7 text-[#666]">
-                {cleanCaption || "Discover this service from @" + service.connection.username + " and contact the provider directly on Instagram for pricing, availability and details."}
-              </p>
-
-              {tags.length > 0 && <div className="mt-6 flex flex-wrap gap-2">{tags.map((tag) => <Link key={tag.name} href={"/products?tag=" + tag.name} className="rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-xs font-semibold text-[#555]">{tag.name}</Link>)}</div>}
-
-              <div className="mt-6 grid grid-cols-3 gap-2 sm:mt-7">
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.instagramLikeCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">IG likes</p></div>
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Comments</p></div>
-                <div className="rounded-[18px] bg-[#f7f7f4] p-3.5"><b className="block text-lg font-black">{service.wishlistItems.length}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Wishlist</p></div>
-              </div>
-
-              <div className="mt-6 flex flex-col gap-3 sm:mt-7">
-                <ProductInquiryButton username={service.connection.username} productTitle={service.productTitle || "this service"} postUrl={service.permalink || ""} />
-                <div className="flex flex-wrap gap-3">
-                  <LikeButton id={service.id} count={service.likes.length} initialLiked={service.likes.some((like) => like.userId === currentUser?.id)} />
-                  <WishlistButton id={service.id} count={service.wishlistItems.length} wishlisted={service.wishlistItems.length > 0} />
-                </div>
-                {service.permalink && <a href={service.permalink} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-black/[0.1] bg-white px-5 py-3.5 text-sm font-bold hover:border-black hover:bg-black hover:text-white"><Instagram size={16} /> View original post <ArrowUpRight size={14} /></a>}
-              </div>
-
-              <div className="mt-6 border-t border-black/[0.07] pt-5">
-                <p className="text-xs leading-5 text-[#777]"><b className="text-black">Contact the provider directly.</b> Ask for current pricing, availability, location and delivery details before booking.</p>
-              </div>
+              <div className="listing-detail-actions flex items-center gap-2 border-b border-[#ededeb] pb-5"><LikeButton id={service.id} count={service.likes.length + Number(service.instagramLikeCount || 0)} compact largeCompact initialLiked={service.likes.some((like) => like.userId === currentUser?.id)} /><WishlistButton id={service.id} count={service.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={service.wishlistItems.length > 0} /></div>
+              <div className="mt-5 flex flex-wrap items-center gap-2"><span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><BriefcaseBusiness size={11} /> Service</span>{service.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}</div>
+              <h1 className="mt-5 break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-[#171717]">{service.productTitle || "Instagram service"}</h1>
+              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5"><div className="flex gap-0.5 text-[#d4a72c]">{[1,2,3,4,5].map((star) => <Star key={star} size={15} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}</div><span className="text-sm font-bold text-[#555]">{service.reviews.length ? average.toFixed(1) : "New"}</span><span className="text-xs text-[#999]">{service.reviews.length} {service.reviews.length === 1 ? "review" : "reviews"}</span></div>
+              <p className="mt-5 whitespace-pre-line text-sm leading-7 text-[#666]">{cleanCaption || "Discover this service from @" + service.connection.username + " and contact the provider directly on Instagram for pricing, availability and details."}</p>
+              <div className="mt-6 grid grid-cols-3 gap-2 border-y border-[#ededeb] py-5"><div className="rounded-2xl bg-[#f7f7f4] p-3"><b className="block text-lg font-black">{(service.instagramLikeCount + service.likes.length).toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Likes</p></div><div className="rounded-2xl bg-[#f7f7f4] p-3"><b className="block text-lg font-black">{service.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">IG comments</p></div><div className="rounded-2xl bg-[#f7f7f4] p-3"><b className="block text-lg font-black">{service.wishlistItems.length.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Saved</p></div></div>
+              {(service.category || service.subcategory || tags.length > 0) && <div className="mt-5"><h2 className="mb-3 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">Service categories</h2><div className="flex flex-wrap gap-2">{[service.category, service.subcategory, ...tags.map((tag) => tag.name)].filter((value): value is string => Boolean(value?.trim())).map((tag) => <Link key={tag} href={"/search?tag=" + encodeURIComponent(tag)} className="rounded-full border border-black/[0.08] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#555] transition hover:border-black hover:bg-black hover:text-white">{tag}</Link>)}</div></div>}
+              <div className="mt-6 border-t border-[#ededeb] pt-5"><span className="mb-3 block text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">PROVIDED BY</span><Link href={"/stores/" + service.connection.username} className="inline-flex w-full max-w-full items-center gap-3 rounded-2xl border border-black/[0.08] bg-white px-3 py-3 text-xs font-bold text-[#333] transition hover:border-black"><span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ee] text-sm font-black text-[#777]">{service.connection.profileImageUrl ? <img src={service.connection.profileImageUrl} alt="" className="h-full w-full object-cover"/> : service.connection.username.slice(0,1).toUpperCase()}</span><span className="min-w-0 flex-1 truncate">@{service.connection.username}<small className="mt-1 block font-medium text-[#888]">Visit provider profile</small></span>{service.connection.verifiedAt && <ShieldCheck size={16} className="text-[#8a6a16]"/>}</Link></div>
+              <div className="mt-6 border-t border-[#ededeb] pt-5"><ListingComments postId={service.id} /></div>
+              <div className="mt-6 flex flex-col gap-3 border-t border-[#ededeb] pt-5 sm:mt-7"><ProductInquiryButton username={service.connection.username} productTitle={service.productTitle || "this service"} postUrl={service.permalink || ""} />{service.permalink && <a href={service.permalink} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-black/[0.1] bg-white px-5 py-3.5 text-sm font-bold hover:border-black hover:bg-black hover:text-white"><Instagram size={16}/> View original post <ArrowUpRight size={14}/></a>}</div>
+              <p className="mt-5 text-xs leading-5 text-[#777]"><b className="text-black">Contact the provider directly.</b> Ask for current pricing, availability, location and delivery details before booking.</p>
             </section>
           </aside>
           {relatedServices.length > 0 && <section className="product-recommendations mt-8 border-t border-[#ededeb] pt-6" aria-label="Recommended services">
@@ -135,7 +104,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
           </div>
         </div>
 
-        <ReviewSection type="product" targetId={service.id} reviews={service.reviews} currentUserId={currentUser?.id} title="Service reviews" />
+
       </div>
     </main>
   );
