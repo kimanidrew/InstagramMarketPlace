@@ -13653,3 +13653,19 @@ html body .sokolink-listing-modal {
     max-width: 100% !important;
   }
 }
+
+
+/* Keep the underlying app's native scrollbar visible while a listing modal
+   is open. The fixed modal overlay retains its own scrolling behavior. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
+}
+html body.sokolink-modal-open {
+  position: static !important;
+  height: auto !important;
+  min-height: 100% !important;
+}
