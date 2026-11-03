@@ -2,7 +2,7 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Star, ShieldCheck, Package, ShoppingBag, ArrowRight } from "lucide-react";
+import { ArrowUpRight, Instagram, ShieldCheck, Package, ShoppingBag, ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -23,7 +23,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
       tags: true,
       likes: true,
       wishlistItems: currentUser ? { where: { userId: currentUser.id } } : { where: { userId: "__anonymous__" } },
-      reviews: { include: { user: { select: { id: true, name: true } } }, orderBy: { createdAt: "desc" } },
     },
   });
 
@@ -53,9 +52,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
     : "";
   const tags = product.tags.filter((tag) => tag.name !== "instagrammarket");
   const categoryLabels = [...new Set([product.category, product.subcategory, ...tags.map((tag) => tag.name)].filter((value): value is string => Boolean(value?.trim())))];
-  const average = product.reviews.length
-    ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
-    : 0;
   const totalLikes = Number(product.instagramLikeCount || 0) + product.likes.length;
 
   const relatedProducts = await db().instagramPost.findMany({
@@ -96,7 +92,6 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
               <div className="mt-5">
                 <h1 className="product-detail-title break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-black">{product.productTitle?.trim() || "Product"}</h1>
-                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5"><div className="flex gap-0.5 text-[#d4a72c]" aria-label={average ? `Rated ${average.toFixed(1)} out of 5` : "No ratings yet"}>{[1,2,3,4,5].map((star) => <Star key={star} size={15} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}</div><span className="text-sm font-bold text-[#333]">{product.reviews.length ? average.toFixed(1) : "New"}</span><span className="text-xs text-[#888]">{product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"}</span></div>
                 {fullCaption && <p className="mt-5 whitespace-pre-line break-words text-sm leading-7 text-[#555]">{fullCaption}</p>}
               </div>
               <div className="mt-6 grid grid-cols-3 gap-2 border-y border-[#ededeb] py-5">
