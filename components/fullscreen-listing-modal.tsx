@@ -93,14 +93,16 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
           navigateListing(event.deltaY > 0 ? 1 : -1);
         }}
       >
-      <button type="button" onClick={() => router.back()} aria-label="Close details" className="sokolink-listing-modal-close fixed right-4 top-4 z-[10002] flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black hover:text-white sm:right-7 sm:top-6">
-        <X size={20} />
-      </button>
       <div className="min-h-full">{children}</div>
       </div>
-      <div className="sokolink-modal-scroll-controls fixed right-5 top-1/2 z-[10003] flex -translate-y-1/2 flex-col gap-2">
-        <button type="button" onClick={() => navigateListing(-1)} aria-label="Previous product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronUp size={20}/></button>
-        <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronDown size={20}/></button>
+      <div className="sokolink-modal-control-rail fixed inset-y-0 right-5 z-[10003] flex flex-col items-center">
+        <button type="button" onClick={() => router.back()} aria-label="Close details" className="sokolink-listing-modal-close mt-[18px] flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black hover:text-white">
+          <X size={20} />
+        </button>
+        <div className="sokolink-modal-scroll-controls absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2">
+          <button type="button" onClick={() => navigateListing(-1)} aria-label="Previous product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronUp size={20}/></button>
+          <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronDown size={20}/></button>
+        </div>
       </div>
     </div>
   );
