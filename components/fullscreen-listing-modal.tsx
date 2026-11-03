@@ -8,7 +8,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
   const router = useRouter();
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const touchStartY = useRef<number | null>(null);
   const navigationLock = useRef(false);
 
   const navigateListing = useCallback((direction: number) => {
@@ -79,13 +78,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
       <div
         ref={scrollRef}
         className="sokolink-listing-modal relative h-[calc(100vh-32px)] w-[min(1440px,calc(100vw-48px))] overflow-hidden rounded-[24px] bg-white shadow-2xl"
-        onTouchStart={(event) => { touchStartY.current = event.target instanceof Element && event.target.closest(".product-detail-scroll-area") ? (event.touches[0]?.clientY ?? null) : null; }}
-        onTouchEnd={(event) => {
-          if (touchStartY.current === null) return;
-          const delta = touchStartY.current - (event.changedTouches[0]?.clientY ?? touchStartY.current);
-          touchStartY.current = null;
-          if (Math.abs(delta) > 75) navigateListing(delta > 0 ? 1 : -1);
-        }}
       >
       <div className="min-h-full">{children}</div>
       </div>
