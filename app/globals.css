@@ -12816,3 +12816,57 @@ html body .sokolink-modal-scroll-controls button {
   html body .sokolink-modal-scroll-controls { left: 10px !important; right: 10px !important; }
   html body .sokolink-modal-scroll-controls button { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
 }
+
+/* Keep listing navigation on the dark overlay, outside the white listing panel. */
+html body .sokolink-listing-overlay {
+  padding: 0 !important;
+}
+html body .sokolink-listing-modal {
+  width: calc(100vw - 160px) !important;
+  max-width: 1440px !important;
+}
+html body .sokolink-modal-control-rail {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  pointer-events: none !important;
+}
+html body .sokolink-modal-scroll-controls {
+  position: absolute !important;
+  top: 50% !important;
+  left: 20px !important;
+  right: 20px !important;
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+}
+html body .sokolink-modal-scroll-controls button {
+  pointer-events: auto !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal {
+    width: calc(100vw - 112px) !important;
+    height: calc(100dvh - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+  }
+  html body .sokolink-modal-scroll-controls { left: 12px !important; right: 12px !important; }
+}
+@media (max-width: 640px) {
+  html body .sokolink-listing-modal {
+    width: calc(100vw - 104px) !important;
+    height: calc(100dvh - 16px) !important;
+    max-height: calc(100dvh - 16px) !important;
+    border-radius: 14px !important;
+  }
+  html body .sokolink-modal-scroll-controls { left: 8px !important; right: 8px !important; }
+  html body .sokolink-modal-scroll-controls button {
+    width: 38px !important;
+    height: 38px !important;
+    flex-basis: 38px !important;
+  }
+}
