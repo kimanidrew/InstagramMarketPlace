@@ -38,7 +38,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     }
 
     navigationLock.current = true;
-    const modal = scrollRef.current;
     setIsNavigating(true);
     router.replace(target);
   }, [pathname, router]);
