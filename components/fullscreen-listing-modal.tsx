@@ -46,27 +46,21 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     window.setTimeout(() => { navigationLock.current = false; }, 650);
   }, [pathname, router]);
   useEffect(() => {
-    const scrollY = window.scrollY;
     const body = document.body;
     const html = document.documentElement;
-    const previousBodyStyles = {
-      position: body.style.position,
-      top: body.style.top,
-      left: body.style.left,
-      right: body.style.right,
-      width: body.style.width,
-      overflow: body.style.overflow,
-    };
-    const previousHtmlOverflow = html.style.overflow;
     body.classList.add("sokolink-modal-open");
     html.classList.add("sokolink-modal-open");
-    body.style.position = "fixed";
-    body.style.top = `-${scrollY}px`;
-    body.style.left = "0";
-    body.style.right = "0";
-    body.style.width = "100%";
-    body.style.overflow = "hidden";
-    html.style.overflow = "hidden";
+
+    // Keep the app's vertical scrollbar visible, but prevent the page behind
+    // the modal from responding to wheel/touch scrolling.
+    const preventBackgroundScroll = (event: WheelEvent | TouchEvent) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest(".sokolink-listing-overlay")) return;
+      event.preventDefault();
+    };
+    document.addEventListener("wheel", preventBackgroundScroll, { capture: true, passive: false });
+    document.addEventListener("touchmove", preventBackgroundScroll, { capture: true, passive: false });
+
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") router.back();
     };
@@ -74,14 +68,8 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     return () => {
       body.classList.remove("sokolink-modal-open");
       html.classList.remove("sokolink-modal-open");
-      body.style.position = previousBodyStyles.position;
-      body.style.top = previousBodyStyles.top;
-      body.style.left = previousBodyStyles.left;
-      body.style.right = previousBodyStyles.right;
-      body.style.width = previousBodyStyles.width;
-      body.style.overflow = previousBodyStyles.overflow;
-      html.style.overflow = previousHtmlOverflow;
-      window.scrollTo(0, scrollY);
+      document.removeEventListener("wheel", preventBackgroundScroll, true);
+      document.removeEventListener("touchmove", preventBackgroundScroll, true);
       window.removeEventListener("keydown", onKey);
     };
   }, [router]);
