@@ -14005,3 +14005,24 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   width: 0 !important;
   height: 0 !important;
 }
+
+/* Details scrollbar: exactly 10px inset from the panel edge, with no arrows. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  padding-right: 10px !important;
+  box-sizing: border-box !important;
+  scrollbar-gutter: stable !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  width: 10px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:single-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-corner {
+  display: none !important;
+  appearance: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
