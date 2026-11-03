@@ -52,15 +52,10 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     body.classList.add("sokolink-modal-open");
     html.classList.add("sokolink-modal-open");
 
-    // Keep the app's vertical scrollbar visible, but prevent the page behind
-    // the modal from responding to wheel/touch scrolling.
-    const preventBackgroundScroll = (event: WheelEvent | TouchEvent) => {
-      const target = event.target;
-      if (target instanceof Element && target.closest(".sokolink-listing-overlay")) return;
-      event.preventDefault();
-    };
-    document.addEventListener("wheel", preventBackgroundScroll, { capture: true, passive: false });
-    document.addEventListener("touchmove", preventBackgroundScroll, { capture: true, passive: false });
+    // The listing overlay participates in document flow so the browser's
+    // native page scrollbar is the only vertical scrollbar while it is open.
+    const previousScrollY = window.scrollY;
+    window.scrollTo({ top: 0, behavior: "instant" });
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") router.back();
@@ -71,8 +66,7 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     return () => {
       body.classList.remove("sokolink-modal-open");
       html.classList.remove("sokolink-modal-open");
-      document.removeEventListener("wheel", preventBackgroundScroll, true);
-      document.removeEventListener("touchmove", preventBackgroundScroll, true);
+      window.scrollTo({ top: previousScrollY, behavior: "instant" });
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("sokolink-close-listing-modal", closeListingModal);
     };
