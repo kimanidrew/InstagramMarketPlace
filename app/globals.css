@@ -13181,3 +13181,24 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     min-height: 240px !important;
   }
 }
+
+
+/* Close the listing modal from the upper-right overlay gutter, aligned with
+   the next-listing control on the right edge. */
+html body .sokolink-modal-control-rail .sokolink-listing-modal-close {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  z-index: 10005 !important;
+  margin: 0 !important;
+  pointer-events: auto !important;
+}
+@media (max-width: 640px) {
+  html body .sokolink-modal-control-rail .sokolink-listing-modal-close {
+    top: 8px !important;
+    right: 8px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+}
