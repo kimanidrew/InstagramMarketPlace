@@ -59,7 +59,6 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
                 >
                   {item.thumbnailUrl || (!video && item.mediaUrl) ? <img src={item.thumbnailUrl || item.mediaUrl || ""} alt="" loading="lazy" decoding="async" /> : <span className="product-carousel-thumbnail-empty" />}
                   {video && <span className="product-carousel-thumbnail-play"><Play size={12} fill="currentColor" /></span>}
-                  <span className="product-carousel-thumbnail-index">{String(i + 1).padStart(2, "0")}</span>
                 </button>
               );
             })}
@@ -97,7 +96,6 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
               <button type="button" onClick={() => window.dispatchEvent(new Event("sokolink-close-listing-modal"))} aria-label="Close details" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black hover:text-white">
                 <X size={20} />
               </button>
-              {media.length > 1 && <span className="pointer-events-none rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[10px] font-black text-white shadow-sm backdrop-blur-md">{index + 1} / {media.length}</span>}
             </div>
           </div>
         </div>
@@ -105,7 +103,6 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
         {media.length > 1 && (
           <div className="product-carousel-vertical-controls">
             <button type="button" onClick={() => go(index - 1)} aria-label="Previous image" className="product-carousel-vertical-button" disabled={false}><ChevronUp size={21} /></button>
-            <span className="product-carousel-vertical-count">{String(index + 1).padStart(2, "0")}<i />{String(media.length).padStart(2, "0")}</span>
             <button type="button" onClick={() => go(index + 1)} aria-label="Next image" className="product-carousel-vertical-button" disabled={false}><ChevronDown size={21} /></button>
           </div>
         )}
