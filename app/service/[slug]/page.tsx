@@ -2,7 +2,7 @@ import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowUpRight, Instagram, Sparkles, BriefcaseBusiness, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Instagram, Sparkles, BriefcaseBusiness, ShieldCheck, ArrowRight } from "lucide-react";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
@@ -80,11 +80,11 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
           <div className="product-detail-scroll-area min-w-0"><aside>
             <section className="min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="listing-detail-actions flex items-center gap-2 border-b border-[#ededeb] pb-5">
-                <Link href={"/stores/" + service.connection.username} className="listing-seller-action group flex min-w-0 flex-1 items-center gap-2.5 rounded-2xl border border-[#e8e8e5] bg-[#fafaf8] px-2.5 py-2 transition hover:border-[#bdbdb8] hover:bg-white">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#ededeb] text-xs font-black text-[#777] ring-1 ring-black/[0.04]">{service.connection.profileImageUrl ? <img src={service.connection.profileImageUrl} alt="" className="h-full w-full object-cover" /> : service.connection.username.slice(0, 1).toUpperCase()}</span>
-                  <span className="min-w-0 flex-1"><span className="block text-[9px] font-extrabold uppercase tracking-[.12em] text-[#999]">Provider</span><span className="mt-0.5 block truncate text-[11px] font-extrabold text-[#222]">@{service.connection.username}</span></span>
-                  {service.connection.verifiedAt && <ShieldCheck size={14} className="shrink-0 text-[#8a6a16]" />}
-                  <ArrowRight size={14} className="shrink-0 text-[#888] transition group-hover:translate-x-0.5" />
+                <Link href={"/stores/" + service.connection.username} className="listing-seller-action group flex min-w-0 flex-1 items-center gap-3 rounded-[20px] border border-[#e9e9e6] bg-white px-3 py-2.5 transition-all duration-200 hover:border-[#d0d0ca] hover:bg-[#fcfcfa] hover:shadow-[0_8px_24px_rgba(0,0,0,.06)]">
+                  <span className="listing-seller-avatar flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ed] p-[2px] text-sm font-black text-[#666]">{service.connection.profileImageUrl ? <img src={service.connection.profileImageUrl} alt="" className="h-full w-full rounded-full object-cover" /> : <span className="flex h-full w-full items-center justify-center rounded-full bg-[#e8e8e4]">{service.connection.username.slice(0, 1).toUpperCase()}</span>}</span>
+                  <span className="min-w-0 flex-1"><span className="mb-1 block text-[9px] font-extrabold uppercase tracking-[.14em] text-[#a0a09a]">Service provider</span><span className="block truncate text-[12px] font-extrabold tracking-[-.02em] text-[#171717]">@{service.connection.username}</span><span className="mt-1 block text-[9px] font-semibold text-[#8b8b84]">View provider profile</span></span>
+                  {service.connection.verifiedAt && <span className="listing-seller-verified inline-flex shrink-0 items-center gap-1 rounded-full bg-[#f6f1df] px-2 py-1 text-[9px] font-extrabold text-[#8a6a16]"><ShieldCheck size={12}/> Verified</span>}
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f5f5f2] text-[#555] transition group-hover:translate-x-0.5 group-hover:bg-black group-hover:text-white"><ArrowRight size={15}/></span>
                 </Link>
                 <div className="listing-detail-social-actions flex shrink-0 items-center gap-2">
                   <LikeButton id={service.id} count={service.likes.length + Number(service.instagramLikeCount || 0)} compact largeCompact initialLiked={service.likes.some((like) => like.userId === currentUser?.id)} />
