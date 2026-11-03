@@ -27,7 +27,6 @@ export function ReelViewer({ reels, initialId }: { reels: Reel[]; initialId: str
   const index = Math.max(0, reels.findIndex(item => item.id === initialId));
   const [activeIndex, setActiveIndex] = useState(index);
   const [playing, setPlaying] = useState(true);
-  const activeReel = reels[activeIndex];
 
   const move = (direction: number) => {
     const current = refs.current.findIndex(el => el && Math.abs(el.getBoundingClientRect().top) < window.innerHeight * .6);
@@ -41,6 +40,24 @@ export function ReelViewer({ reels, initialId }: { reels: Reel[]; initialId: str
     if (video.paused) void video.play().catch(() => setPlaying(false));
     else video.pause();
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting || entry.intersectionRatio < 0.6) continue;
+        const nextIndex = refs.current.findIndex(element => element === entry.target);
+        if (nextIndex < 0) continue;
+        setActiveIndex(nextIndex);
+        videoRefs.current.forEach((video, videoIndex) => {
+          if (!video) return;
+          if (videoIndex === nextIndex) void video.play().catch(() => setPlaying(false));
+          else video.pause();
+        });
+      }
+    }, { root: container.current, threshold: [0.6] });
+    refs.current.forEach(element => { if (element) observer.observe(element); });
+    return () => observer.disconnect();
+  }, [reels.length]);
 
   useEffect(() => {
     refs.current[index]?.scrollIntoView({ block: "start" });
@@ -62,10 +79,6 @@ export function ReelViewer({ reels, initialId }: { reels: Reel[]; initialId: str
     };
   }, []);
 
-  const sellerMessage = `Hi @${activeReel.connection.username}! I'm interested in "${activeReel.productTitle || "your listing"}" that I saw on SokoLink. Could you please share the price, availability and more details?${activeReel.permalink ? "\\n\\nInstagram post: " + activeReel.permalink : ""}`;
-  const askSellerUrl = `https://ig.me/m/${encodeURIComponent(activeReel.connection.username)}?text=${encodeURIComponent(sellerMessage)}`;
-  const listingType = activeReel.listingType === "SERVICE" ? "service" : "product";
-  const average = activeReel.reviews.length ? activeReel.reviews.reduce((sum, review) => sum + review.rating, 0) / activeReel.reviews.length : 0;
 
   return <div ref={container} className="sokolink-reel-feed fixed inset-0 z-[10000] h-[100vh] min-h-[100vh] max-h-[100vh] overflow-y-auto bg-[#090909] text-white snap-y snap-mandatory">
     <button onClick={() => router.back()} aria-label="Close reels" className="fixed right-4 top-4 z-[10003] flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/50 backdrop-blur"><X size={20}/></button>
