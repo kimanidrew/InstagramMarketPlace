@@ -12158,3 +12158,65 @@ html body .sokolink-reel-play { -webkit-tap-highlight-color:transparent; }
   html body .sokolink-reel-details { min-height:46dvh; padding:20px 16px 32px; }
   html body .sokolink-reel-play { width:64px; height:64px; }
 }
+
+/* Listing modal: keep the media column fixed while the white details column scrolls. */
+html body .sokolink-listing-modal { overflow:hidden !important; }
+html body .sokolink-listing-modal > div.min-h-full { height:100%; min-height:0; }
+html body .sokolink-listing-modal main.product-detail-page { height:100%; min-height:0; overflow:hidden; }
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  width:100% !important; max-width:none !important; height:100%; min-height:0;
+  padding:20px 28px 20px 20px !important; overflow:hidden;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  display:grid !important; grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);
+  gap:24px !important; height:100%; min-height:0; align-items:stretch !important;
+}
+html body .sokolink-listing-modal .product-gallery-sticky {
+  position:relative !important; top:auto !important; height:100% !important; width:100% !important;
+  min-height:0 !important; margin:0 !important; align-self:stretch;
+}
+html body .sokolink-listing-modal .product-gallery-panel {
+  height:100% !important; width:100% !important; padding:0 !important; border:0 !important;
+  border-radius:18px !important; background:#f5f5f2 !important; box-shadow:none !important;
+}
+html body .sokolink-listing-modal .product-gallery-frame {
+  height:100% !important; width:100% !important; padding:0 !important; border:0 !important;
+  border-radius:18px !important; background:#f5f5f2 !important;
+}
+html body .sokolink-listing-modal .product-carousel-stage { height:100% !important; min-height:0 !important; border-radius:18px !important; }
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  min-width:0; height:100%; min-height:0; overflow-y:auto; overflow-x:hidden;
+  overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#c8c8c3 transparent;
+  padding:8px 12px 28px 0;
+}
+html body .sokolink-listing-modal .product-detail-aside { position:static !important; min-width:0; }
+html body .sokolink-listing-modal .product-info-card { box-shadow:none !important; border-radius:20px !important; }
+html body .sokolink-listing-modal .product-detail-lower-content { margin-top:24px !important; }
+html body .sokolink-listing-modal .product-recommendations { margin-top:24px !important; padding-top:22px !important; }
+html body .sokolink-listing-modal .sokolink-recommendation-scroll {
+  display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:16px 12px !important; max-height:none !important; overflow:visible !important;
+  padding:4px 2px 18px !important;
+}
+html body .sokolink-listing-modal .sokolink-recommendation-scroll > * { min-width:0; width:100%; flex:none !important; }
+html body .sokolink-modal-scroll-controls { right:10px !important; }
+html body .sokolink-modal-scroll-controls button {
+  width:42px; height:42px; border:1px solid rgba(0,0,0,.12) !important;
+  background:rgba(255,255,255,.96) !important; box-shadow:0 8px 28px rgba(0,0,0,.22);
+}
+@media(max-width:900px) {
+ html body .sokolink-listing-modal { overflow-y:auto !important; }
+ html body .sokolink-listing-modal > div.min-h-full,
+ html body .sokolink-listing-modal main.product-detail-page,
+ html body .sokolink-listing-modal .product-detail-page > .shell { height:auto; min-height:0; overflow:visible; }
+ html body .sokolink-listing-modal .product-detail-modal-layout { display:flex !important; flex-direction:column; height:auto; gap:18px !important; }
+ html body .sokolink-listing-modal .product-gallery-sticky { height:min(58vh,560px) !important; min-height:320px !important; }
+ html body .sokolink-listing-modal .product-detail-scroll-area { height:auto; overflow:visible; padding:0 0 28px; }
+ html body .sokolink-listing-modal .product-gallery-panel,
+ html body .sokolink-listing-modal .product-gallery-frame { height:100% !important; }
+}
+@media(max-width:640px) {
+ html body .sokolink-listing-modal .product-detail-page > .shell { padding:62px 14px 24px !important; }
+ html body .sokolink-listing-modal .product-gallery-sticky { height:52vh !important; min-height:280px !important; }
+ html body .sokolink-listing-modal .sokolink-recommendation-scroll { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+}
