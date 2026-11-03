@@ -13784,3 +13784,104 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     max-width: 100% !important;
   }
 }
+
+
+/* FINAL: one native-style scrollbar for the listing popup.
+   The page behind the popup is locked; the fixed 100vh overlay is the sole
+   scroll container, preventing the duplicate document + modal scrollbars. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  height: 100% !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+html.sokolink-modal-open {
+  scrollbar-width: none !important;
+}
+html.sokolink-modal-open::-webkit-scrollbar {
+  display: none !important;
+}
+body.sokolink-modal-open {
+  scrollbar-width: none !important;
+}
+html body .sokolink-listing-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+  scrollbar-gutter: stable !important;
+  background: rgba(0,0,0,.64) !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar {
+  display: block !important;
+  width: 12px !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar-thumb {
+  background: #a9a9a9 !important;
+  border: 3px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar-thumb:hover {
+  background: #858585 !important;
+}
+html body .sokolink-listing-modal {
+  position: relative !important;
+  flex: 0 0 min(1440px, calc(100vw - 112px)) !important;
+  width: min(1440px, calc(100vw - 112px)) !important;
+  max-width: min(1440px, calc(100vw - 112px)) !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+  border-radius: 20px !important;
+  background: #fff !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,.22) !important;
+}
+html body .sokolink-listing-modal > div.min-h-full,
+html body .sokolink-listing-modal main.product-detail-page,
+html body .sokolink-listing-modal .product-detail-page > .shell,
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  scrollbar-width: none !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: none !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+  }
+}
