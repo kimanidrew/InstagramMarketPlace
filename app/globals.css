@@ -12768,3 +12768,27 @@ html body .sokolink-modal-scroll-controls {
     height: 38px !important;
   }
 }
+
+
+/* Reserve a real center column between the gallery and details so the
+   previous/next controls sit in the gap instead of covering either panel. */
+@media (min-width: 1024px) {
+  html body .sokolink-listing-modal .product-detail-modal-layout {
+    grid-template-columns: minmax(0, 1.08fr) 64px minmax(0, .92fr) !important;
+    column-gap: 0 !important;
+  }
+  html body .sokolink-listing-modal .product-modal-navigation-gutter {
+    display: block !important;
+    grid-column: 2 !important;
+    min-width: 64px !important;
+  }
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    grid-column: 3 !important;
+  }
+  html body .sokolink-modal-scroll-controls {
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
