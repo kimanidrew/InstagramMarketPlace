@@ -6,11 +6,16 @@ export const dynamic = "force-dynamic";
 
 export default async function ReelPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const current = await db().instagramPost.findUnique({ where: { productSlug: slug }, select: { id: true, connectionId: true, isProduct: true } });
+  const current = await db().instagramPost.findUnique({ where: { productSlug: slug }, select: { id: true, isProduct: true } });
   if (!current || !current.isProduct) notFound();
   const items = await db().instagramPost.findMany({
     where: { isProduct: true, mediaType: "VIDEO", mediaUrl: { not: null } },
-    select: { id: true, productSlug: true, productTitle: true, mediaUrl: true, thumbnailUrl: true, listingType: true, connection: { select: { username: true, profileImageUrl: true } } },
+    select: {
+      id: true, productSlug: true, productTitle: true, caption: true, mediaUrl: true,
+      thumbnailUrl: true, permalink: true, listingType: true,
+      connection: { select: { username: true, profileImageUrl: true } },
+      reviews: { include: { user: { select: { name: true } } }, orderBy: { createdAt: "desc" }, take: 20 },
+    },
     orderBy: [{ timestamp: "desc" }, { createdAt: "desc" }],
     take: 60,
   });
