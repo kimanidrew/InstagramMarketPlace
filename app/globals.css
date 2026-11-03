@@ -13610,43 +13610,29 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
 }
 
 
-/* Listing modal uses the document's native app scrollbar. The overlay is
-   part of the page's scrollable overflow; it has no independent scrollbar. */
+/* Restore the original product/service modal scrolling behavior:
+   the modal owns one native vertical scrollbar; the page behind it stays locked. */
 html.sokolink-modal-open,
 body.sokolink-modal-open {
-  height: auto !important;
-  min-height: 100% !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior-y: auto !important;
-  scrollbar-width: auto !important;
-  scrollbar-color: auto !important;
+  overflow: hidden !important;
 }
 html body.sokolink-modal-open {
   position: static !important;
 }
 html body .sokolink-listing-overlay {
-  position: absolute !important;
-  inset: 0 0 auto 0 !important;
+  position: fixed !important;
+  inset: 0 !important;
   display: flex !important;
   align-items: flex-start !important;
   justify-content: center !important;
   width: 100% !important;
-  height: auto !important;
-  min-height: 100vh !important;
-  min-height: 100dvh !important;
-  overflow: visible !important;
-  padding: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   scrollbar-width: auto !important;
   scrollbar-color: auto !important;
-}
-html body .sokolink-listing-overlay::-webkit-scrollbar,
-html body .sokolink-listing-overlay::-webkit-scrollbar-track,
-html body .sokolink-listing-overlay::-webkit-scrollbar-thumb {
-  display: none !important;
-  width: auto !important;
-  background: transparent !important;
-  border: 0 !important;
 }
 html body .sokolink-listing-modal {
   position: relative !important;
@@ -13659,15 +13645,6 @@ html body .sokolink-listing-modal {
   max-height: none !important;
   margin: 0 auto !important;
   overflow: visible !important;
-}
-html body .sokolink-listing-modal .product-detail-scroll-area {
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-  scrollbar-width: auto !important;
-}
-html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
-  display: initial !important;
 }
 @media (max-width: 900px) {
   html body .sokolink-listing-modal {
