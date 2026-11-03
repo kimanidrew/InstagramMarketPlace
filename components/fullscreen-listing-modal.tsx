@@ -91,7 +91,7 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
       <div
         ref={scrollRef}
         className="sokolink-listing-modal relative h-[calc(100vh-32px)] w-[min(1440px,calc(100vw-48px))] overflow-hidden rounded-[24px] bg-white shadow-2xl"
-        onTouchStart={(event) => { touchStartY.current = event.touches[0]?.clientY ?? null; }}
+        onTouchStart={(event) => { touchStartY.current = event.target instanceof Element && event.target.closest(".product-detail-scroll-area") ? (event.touches[0]?.clientY ?? null) : null; }}
         onTouchEnd={(event) => {
           if (touchStartY.current === null) return;
           const delta = touchStartY.current - (event.changedTouches[0]?.clientY ?? touchStartY.current);
@@ -99,6 +99,7 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
           if (Math.abs(delta) > 75) navigateListing(delta > 0 ? 1 : -1);
         }}
         onWheel={(event) => {
+          if (!(event.target instanceof Element) || !event.target.closest(".product-detail-scroll-area")) return;
           if (Math.abs(event.deltaY) < 55) return;
           event.preventDefault();
           navigateListing(event.deltaY > 0 ? 1 : -1);
