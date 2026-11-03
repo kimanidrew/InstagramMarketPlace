@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BadgeCheck, Crown, Instagram, MessageCircle, Star, ArrowUpRight } from "lucide-react";
+import { StoreCategoryTabs } from "@/components/store-category-tabs";
 import { db } from "@/lib/prisma";
 import { user } from "@/lib/auth";
 import { OptimizedProductGrid } from "@/components/optimized-product-grid";
@@ -16,10 +17,10 @@ export default async function Store({
   searchParams,
 }: {
   params: Promise<{ username: string }>;
-  searchParams: Promise<{ reviews?: string }>;
+  searchParams: Promise<{ reviews?: string; category?: string }>;
 }) {
   const { username } = await params;
-  const { reviews: reviewsParam } = await searchParams;
+  const { reviews: reviewsParam, category: categoryParam } = await searchParams;
 
   const [store, currentUser] = await Promise.all([
     db().instagramConnection.findUnique({
@@ -66,6 +67,29 @@ export default async function Store({
     await db().instagramConnection.update({ where: { id: store.id }, data: { profileAccentColor: storeAccentColor } }).catch(() => null);
   }
   const posts = await filterAvailableInstagramMedia(store.posts);
+  const categoryEntries = new Map<string, { label: string; slug: string }>();
+  for (const post of posts) {
+    const rawCategory = post.category?.trim();
+    const label = rawCategory || "Other";
+    const slug = label.toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "other";
+    if (!categoryEntries.has(slug)) categoryEntries.set(slug, { label, slug });
+  }
+  if (posts.some((post) => !post.category?.trim()) && !categoryEntries.has("other")) {
+    categoryEntries.set("other", { label: "Other", slug: "other" });
+  }
+  const categories = Array.from(categoryEntries.values()).sort((a, b) =>
+    a.slug === "other" ? 1 : b.slug === "other" ? -1 : a.label.localeCompare(b.label)
+  );
+  const activeCategory = categories.find((category) => category.slug === categoryParam)?.slug || "all";
+  const visiblePosts = activeCategory === "all"
+    ? posts
+    : posts.filter((post) => {
+        const rawCategory = post.category?.trim();
+        const slug = rawCategory
+          ? rawCategory.toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "other"
+          : "other";
+        return slug === activeCategory;
+      });
   const average =
     store.reviews.length > 0
       ? store.reviews.reduce((sum, review) => sum + review.rating, 0) / store.reviews.length
