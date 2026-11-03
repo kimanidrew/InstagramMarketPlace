@@ -152,7 +152,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 <p className="text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
               </div>
             </section>
-          </aside>
+            {relatedProducts.length > 0 && <section className="product-recommendations mt-8 border-t border-[#ededeb] pt-6" aria-label="Recommended products">
+              <div className="sokolink-recommendation-scroll grid grid-cols-2 gap-3">
+                {relatedProducts.map((item) => <ProductCard key={item.id} p={{...item, totalLikes: Number(item.instagramLikeCount || 0) + item.likes.length}} />)}
+              </div>
+            </section>}
+          </aside></div>
         </div>
 
 
