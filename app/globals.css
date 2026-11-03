@@ -12537,37 +12537,43 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   background: #929292 !important;
 }
 
-/* One aligned control rail: close at the top, navigation centered exactly
-   against the viewport height. */
+/* Keep close and previous/next controls on one shared vertical axis. */
 html body .sokolink-modal-control-rail {
+  position: fixed !important;
+  inset-block: 0 !important;
   right: 19px !important;
   width: 44px !important;
-  align-items: center !important;
-}
-html body .sokolink-listing-modal-close {
-  position: static !important;
-  top: auto !important;
-  right: auto !important;
-  margin-top: 18px !important;
-  flex: 0 0 44px !important;
-}
-html body .sokolink-modal-scroll-controls {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  right: auto !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+}
+html body .sokolink-listing-modal-close {
+  position: static !important;
+  inset: auto !important;
+  margin: 18px 0 0 !important;
+  flex: 0 0 44px !important;
+  align-self: center !important;
+}
+html body .sokolink-modal-scroll-controls {
+  position: static !important;
+  inset: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
   gap: 10px !important;
-  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  transform: none !important;
+  align-self: center !important;
 }
 @media (max-width: 900px) {
-  html body .sokolink-modal-control-rail { right: 12px !important; width: 44px !important; }
+  html body .sokolink-modal-control-rail { right: 12px !important; width: 44px !important; gap: 10px !important; }
   html body .sokolink-listing-modal-close { margin-top: 12px !important; }
 }
 @media (max-width: 640px) {
-  html body .sokolink-modal-control-rail { right: 8px !important; width: 38px !important; }
+  html body .sokolink-modal-control-rail { right: 8px !important; width: 38px !important; gap: 8px !important; }
   html body .sokolink-listing-modal-close {
     width: 38px !important;
     height: 38px !important;
