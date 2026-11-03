@@ -14,7 +14,6 @@ export default async function ReelPage({ params }: { params: Promise<{ slug: str
       id: true, productSlug: true, productTitle: true, caption: true, mediaUrl: true,
       thumbnailUrl: true, permalink: true, listingType: true,
       connection: { select: { username: true, profileImageUrl: true } },
-      reviews: { include: { user: { select: { name: true } } }, orderBy: { createdAt: "desc" }, take: 20 },
     },
     orderBy: [{ timestamp: "desc" }, { createdAt: "desc" }],
     take: 60,
