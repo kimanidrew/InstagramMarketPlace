@@ -9,15 +9,11 @@ export async function DELETE(request: Request) {
   const { type, id } = await request.json();
   const prisma = db();
 
-  if (type === "store") {
-    const review = await prisma.storeReview.findUnique({ where: { id: String(id || "") } });
-    if (!review || review.userId !== current.id) return NextResponse.json({ error: "Review not found" }, { status: 404 });
-    await prisma.storeReview.delete({ where: { id: review.id } });
-  } else {
-    const review = await prisma.productReview.findUnique({ where: { id: String(id || "") } });
-    if (!review || review.userId !== current.id) return NextResponse.json({ error: "Review not found" }, { status: 404 });
-    await prisma.productReview.delete({ where: { id: review.id } });
-  }
+  if (type !== "store") return NextResponse.json({ error: "Product reviews are no longer supported." }, { status: 400 });
+
+  const review = await prisma.storeReview.findUnique({ where: { id: String(id || "") } });
+  if (!review || review.userId !== current.id) return NextResponse.json({ error: "Review not found" }, { status: 404 });
+  await prisma.storeReview.delete({ where: { id: review.id } });
 
   return NextResponse.json({ ok: true });
 }
