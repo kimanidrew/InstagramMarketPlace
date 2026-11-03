@@ -8,10 +8,8 @@ import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
-import { ReviewSection } from "@/components/review-section";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
-import { ProductDetailStats } from "@/components/product-detail-stats";
-import { WriteReviewButton } from "@/components/write-review-button";
+import { ListingComments } from "@/components/listing-comments";
 
 export const dynamic = "force-dynamic";
 
@@ -91,66 +89,26 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
           <div className="product-detail-scroll-area min-w-0"><aside className="product-detail-aside min-w-0">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
-              <div className="flex flex-col gap-3">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ededeb] pb-4">
-                  <div className="min-w-0 flex-1">
-                    <ProductDetailStats id={product.id} initialLikes={totalLikes} reviews={product.reviews.length} rating={average} initiallyLiked={product.likes.some((like) => like.userId === currentUser?.id)} reviewUrl={"/product/" + slug + "/reviews"} />
-                  </div>
-                  <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
-                    <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
-                    <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} />
-                  </div>
-                </div>
-                <div className="w-full">
-                  <WriteReviewButton reviewUrl={"/product/" + slug + "/reviews"} />
-                </div>
+              <div className="listing-detail-actions flex items-center gap-2 border-b border-[#ededeb] pb-5">
+                <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
+                <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} />
               </div>
-
-              <div className="product-seller-wrap mt-5"><span className="product-seller-label">SOLD BY</span><Link href={"/stores/" + product.connection.username} className="product-seller-link inline-flex max-w-full items-center gap-3 rounded-2xl border border-[#e9e9e9] bg-white px-3 py-3 text-sm font-bold text-[#222] transition hover:border-black"><span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ee] ring-1 ring-black/5">{product.connection.profileImageUrl ? <img src={product.connection.profileImageUrl} alt={"@" + product.connection.username} className="h-full w-full object-cover" /> : <span className="text-sm font-black text-[#777]">{product.connection.username.slice(0, 1).toUpperCase()}</span>}</span><span className="flex min-w-0 flex-1 flex-col gap-1"><span className="truncate">@{product.connection.username}</span><span className="text-[11px] font-medium text-[#888]">Visit shop profile</span></span>{product.connection.verifiedAt && <ShieldCheck size={17} className="shrink-0 text-[#8a6a16]" />}{product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#f4f4f2] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wide text-[#555]">Pro</span>}<ArrowRight size={16} className="shrink-0 text-[#777]" /></Link></div>
-
-              {product.boostUntil && new Date(product.boostUntil) > new Date() && (
-                <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>
-              )}
-
-              <h1 className="product-detail-title mt-5 break-words text-[20px] font-black leading-[1.6] tracking-[-.055em] text-black">{product.productTitle?.trim() || fullCaption || "Product"}</h1>
-
-              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                <div className="flex gap-0.5 text-[#d4a72c]" aria-label={average ? `Rated ${average.toFixed(1)} out of 5` : "No ratings yet"}>
-                  {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={16} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}
-                </div>
-                <span className="text-sm font-bold text-[#333]">{product.reviews.length ? average.toFixed(1) : "New"}</span>
-                <Link href={"/product/" + slug + "/reviews"} className="text-sm text-[#777] underline-offset-4 hover:underline">({product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"})</Link>
+              {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
+              <div className="mt-5">
+                <h1 className="product-detail-title break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-black">{product.productTitle?.trim() || "Product"}</h1>
+                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5"><div className="flex gap-0.5 text-[#d4a72c]" aria-label={average ? `Rated ${average.toFixed(1)} out of 5` : "No ratings yet"}>{[1,2,3,4,5].map((star) => <Star key={star} size={15} fill={star <= Math.round(average) ? "currentColor" : "none"} />)}</div><span className="text-sm font-bold text-[#333]">{product.reviews.length ? average.toFixed(1) : "New"}</span><span className="text-xs text-[#888]">{product.reviews.length} {product.reviews.length === 1 ? "review" : "reviews"}</span></div>
+                {fullCaption && <p className="mt-5 whitespace-pre-line break-words text-sm leading-7 text-[#555]">{fullCaption}</p>}
               </div>
-
-                            {fullCaption && (
-                <div className="mt-5 border-t border-[#ededeb] pt-4">
-                  <h2 className="mb-2 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">About this product</h2>
-                  <p className="whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>
-                </div>
-              )}
-
-
-
-              {categoryLabels.length > 0 && (
-                <div className="mt-6 flex flex-wrap gap-2" aria-label="Product categories">
-                  {categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}
-                </div>
-              )}
-
-              {product.reviews.length > 0 && (
-                <div className="product-detail-review-preview mt-4 w-full min-w-0 border-t border-[#ededeb] pt-4">
-                  <ReviewSection type="product" presentation="preview" previewLimit={1} reviewUrl={"/product/" + slug + "/reviews"} targetId={product.id} reviews={product.reviews} currentUserId={currentUser?.id} title="Shopper reviews" />
-                </div>
-              )}
-
-              <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 sm:mt-7">
-                <ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />
-                {product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-black hover:bg-[#f7f7f4] hover:text-black hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 sm:gap-2 sm:px-5 sm:py-4 sm:text-sm"><Instagram size={16} className="shrink-0" /> <span>View original post</span> <ArrowUpRight size={14} className="shrink-0" /></a>}
+              <div className="mt-6 grid grid-cols-3 gap-2 border-y border-[#ededeb] py-5">
+                <div className="rounded-2xl bg-[#f7f7f5] p-3"><strong className="block text-lg font-black tabular-nums">{totalLikes.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">Likes</span></div>
+                <div className="rounded-2xl bg-[#f7f7f5] p-3"><strong className="block text-lg font-black tabular-nums">{product.instagramCommentCount.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">IG comments</span></div>
+                <div className="rounded-2xl bg-[#f7f7f5] p-3"><strong className="block text-lg font-black tabular-nums">{product.wishlistItems.length.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">Saved</span></div>
               </div>
-
-              <div className="mt-6 border-t border-black/[0.07] pt-5">
-                <p className="text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
-              </div>
+              {categoryLabels.length > 0 && <div className="mt-5"><h2 className="mb-3 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">Product categories</h2><div className="flex flex-wrap gap-2">{categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}</div></div>}
+              <div className="product-seller-wrap mt-6 border-t border-[#ededeb] pt-5"><span className="product-seller-label mb-3 block">SOLD BY</span><Link href={"/stores/" + product.connection.username} className="product-seller-link inline-flex w-full max-w-full items-center gap-3 rounded-2xl border border-[#e9e9e9] bg-white px-3 py-3 text-sm font-bold text-[#222] transition hover:border-black"><span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ee] ring-1 ring-black/5">{product.connection.profileImageUrl ? <img src={product.connection.profileImageUrl} alt={"@" + product.connection.username} className="h-full w-full object-cover" /> : <span className="text-sm font-black text-[#777]">{product.connection.username.slice(0, 1).toUpperCase()}</span>}</span><span className="flex min-w-0 flex-1 flex-col gap-1"><span className="truncate">@{product.connection.username}</span><span className="text-[11px] font-medium text-[#888]">Visit shop profile</span></span>{product.connection.verifiedAt && <ShieldCheck size={17} className="shrink-0 text-[#8a6a16]" />}{product.connection.proUntil && new Date(product.connection.proUntil) > new Date() && <span className="rounded-full bg-[#f4f4f2] px-2 py-1 text-[9px] font-extrabold uppercase tracking-wide text-[#555]">Pro</span>}<ArrowRight size={16} className="shrink-0 text-[#777]" /></Link></div>
+              <div className="mt-6 border-t border-[#ededeb] pt-5"><ListingComments postId={product.id} /></div>
+              <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 border-t border-[#ededeb] pt-5 sm:mt-7"><ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />{product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] transition hover:border-black hover:bg-[#f7f7f4] sm:px-5 sm:text-sm"><Instagram size={16} className="shrink-0" /><span>Original post</span><ArrowUpRight size={14} className="shrink-0" /></a>}</div>
+              <p className="mt-5 text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
             </section>
             {relatedProducts.length > 0 && <section className="product-recommendations mt-8 border-t border-[#ededeb] pt-6" aria-label="Recommended products">
               <div className="sokolink-recommendation-scroll grid grid-cols-2 gap-3">
