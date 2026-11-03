@@ -55,7 +55,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
       OR: [
         ...(service.category ? [{ category: service.category }] : []),
         ...(service.subcategory ? [{ subcategory: service.subcategory }] : []),
-        ...(service.tags.length ? [{ tags: { some: { name: { in: service.tags.map((tag) => tag.name) } } }] : []),
+        ...(service.tags.length ? [{ tags: { some: { name: { in: service.tags.map((tag) => tag.name) } } } }] : []),
       ],
     },
     include: { connection: true, tags: true, likes: true },
