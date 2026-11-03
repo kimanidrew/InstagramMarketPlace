@@ -12330,3 +12330,79 @@ body.sokolink-modal-open::-webkit-scrollbar-track {
 @media (prefers-reduced-motion: reduce) {
   .store-category-tab, .store-category-tab svg, .store-category-tab-indicator { transition: none; }
 }
+
+
+/* Keep the underlying app scrollbar visible and stationary while the fixed
+   100vh listing modal owns all scrolling interaction. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  height: 100%;
+  overflow-y: scroll !important;
+  overscroll-behavior: none !important;
+  scrollbar-gutter: stable;
+}
+html body.sokolink-modal-open {
+  position: relative;
+}
+html body .sokolink-listing-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+html body .sokolink-listing-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal > div.min-h-full,
+  html body .sokolink-listing-modal main.product-detail-page,
+  html body .sokolink-listing-modal .product-detail-page > .shell {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+  html body .sokolink-listing-modal .product-detail-page > .shell {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  html body .sokolink-listing-modal .product-detail-modal-layout {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+  html body .sokolink-listing-modal .product-gallery-sticky {
+    flex: 0 0 42vh !important;
+    height: 42vh !important;
+    min-height: 190px !important;
+  }
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+@media (max-width: 640px) {
+  html body .sokolink-listing-modal .product-gallery-sticky {
+    flex-basis: 38vh !important;
+    height: 38vh !important;
+    min-height: 170px !important;
+  }
+}
