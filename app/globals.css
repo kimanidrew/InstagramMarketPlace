@@ -12406,3 +12406,109 @@ html body .sokolink-listing-modal {
     min-height: 170px !important;
   }
 }
+
+
+/* Listing detail popup: retain the native app scrollbar and reserve a clear
+   dark gutter for the modal navigation controls. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  overflow-y: scroll !important;
+  scrollbar-width: auto !important;
+}
+html body .sokolink-listing-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  padding: 24px 88px 24px 16px !important;
+  overflow: hidden !important;
+  background: rgba(0,0,0,.64) !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+html body .sokolink-listing-modal {
+  position: relative !important;
+  inset: auto !important;
+  flex: 0 1 1440px !important;
+  width: min(1440px, calc(100vw - 112px)) !important;
+  height: calc(100vh - 48px) !important;
+  height: calc(100dvh - 48px) !important;
+  min-height: 0 !important;
+  max-height: calc(100vh - 48px) !important;
+  max-height: calc(100dvh - 48px) !important;
+  margin: 0 0 0 0 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,.24) !important;
+  border-radius: 22px !important;
+  background: #fff !important;
+  box-shadow: 0 28px 100px rgba(0,0,0,.42) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+html body .sokolink-listing-modal::before { display: none !important; }
+html body .sokolink-listing-modal-close {
+  position: fixed !important;
+  top: 18px !important;
+  right: 19px !important;
+  z-index: 10004 !important;
+  width: 44px !important;
+  height: 44px !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  background: rgba(255,255,255,.96) !important;
+  color: #111 !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.28) !important;
+}
+html body .sokolink-modal-scroll-controls {
+  position: fixed !important;
+  top: 50% !important;
+  right: 19px !important;
+  z-index: 10004 !important;
+  transform: translateY(-50%) !important;
+  gap: 10px !important;
+}
+html body .sokolink-modal-scroll-controls button {
+  width: 44px !important;
+  height: 44px !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  background: rgba(255,255,255,.96) !important;
+  color: #111 !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.28) !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  width: auto !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-overlay {
+    padding: 12px 68px 12px 8px !important;
+  }
+  html body .sokolink-listing-modal {
+    width: calc(100vw - 84px) !important;
+    height: calc(100vh - 24px) !important;
+    height: calc(100dvh - 24px) !important;
+    max-height: calc(100vh - 24px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    border-radius: 18px !important;
+  }
+  html body .sokolink-modal-scroll-controls { right: 12px !important; }
+  html body .sokolink-listing-modal-close { top: 12px !important; right: 12px !important; }
+}
+@media (max-width: 640px) {
+  html body .sokolink-listing-overlay { padding: 10px 58px 10px 6px !important; }
+  html body .sokolink-listing-modal {
+    width: calc(100vw - 70px) !important;
+    height: calc(100dvh - 20px) !important;
+    max-height: calc(100dvh - 20px) !important;
+    border-radius: 16px !important;
+  }
+  html body .sokolink-modal-scroll-controls { right: 8px !important; gap: 8px !important; }
+  html body .sokolink-modal-scroll-controls button { width: 38px !important; height: 38px !important; }
+  html body .sokolink-listing-modal-close { top: 10px !important; right: 8px !important; width: 38px !important; height: 38px !important; }
+}
