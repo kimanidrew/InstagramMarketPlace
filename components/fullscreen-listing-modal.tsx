@@ -1,14 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { X, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function FullscreenListingModal({ children, label }: { children: React.ReactNode; label: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigationLock = useRef(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const navigateListing = useCallback((direction: number) => {
     if (navigationLock.current) return;
@@ -38,12 +39,14 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
 
     navigationLock.current = true;
     const modal = scrollRef.current;
-    modal?.classList.remove("sokolink-page-next", "sokolink-page-previous");
-    void modal?.offsetWidth;
-    modal?.classList.add(direction > 0 ? "sokolink-page-next" : "sokolink-page-previous");
-    window.setTimeout(() => router.replace(target), 150);
-    window.setTimeout(() => { navigationLock.current = false; }, 650);
+    setIsNavigating(true);
+    router.replace(target);
   }, [pathname, router]);
+
+  useEffect(() => {
+    navigationLock.current = false;
+    setIsNavigating(false);
+  }, [pathname]);
   useEffect(() => {
     const body = document.body;
     const html = document.documentElement;
@@ -83,10 +86,11 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
         className="sokolink-listing-modal relative h-[calc(100vh-32px)] w-[min(1440px,calc(100vw-48px))] overflow-hidden rounded-[24px] bg-white shadow-2xl"
       >
       <div className="min-h-full">{children}</div>
+        {isNavigating && <div className="sokolink-listing-navigation-progress" role="status" aria-label="Loading listing"><span /></div>}
         <div className="sokolink-modal-control-rail absolute inset-0 z-[10003]">
-          <div className="sokolink-modal-scroll-controls absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2">
-            <button type="button" onClick={() => navigateListing(-1)} aria-label="Previous product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronUp size={20}/></button>
-            <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronDown size={20}/></button>
+          <div className="sokolink-modal-scroll-controls absolute inset-x-4 top-1/2 flex -translate-y-1/2 items-center justify-between sm:inset-x-6">
+            <button type="button" onClick={() => navigateListing(-1)} aria-label="Previous product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronLeft size={20}/></button>
+            <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronRight size={20}/></button>
           </div>
         </div>
       </div>
