@@ -13065,3 +13065,29 @@ html body .product-carousel-vertical-count i {
   html body .product-carousel-thumbnail,
   html body .product-carousel-vertical-button { transition: none !important; }
 }
+
+
+/* Listing detail scrollbar: sit close to the white panel edge and use a
+   wider, easier-to-grab thumb without crowding the detail content. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  margin-right: -8px !important;
+  padding-right: 12px !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  width: 14px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  min-height: 36px !important;
+  background: #a9a9a9 !important;
+  border: 3px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #858585 !important;
+}
