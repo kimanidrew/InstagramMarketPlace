@@ -3,7 +3,6 @@ import { user } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight, Instagram, ShieldCheck, Package, ShoppingBag, ArrowRight } from "lucide-react";
-import { ProductCard } from "@/components/product-card";
 import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { ProductCarousel } from "@/components/product-carousel";
@@ -106,11 +105,9 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 border-t border-[#ededeb] pt-5 sm:mt-7"><ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />{product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] transition hover:border-black hover:bg-[#f7f7f4] sm:px-5 sm:text-sm"><Instagram size={16} className="shrink-0" /><span>Original post</span><ArrowUpRight size={14} className="shrink-0" /></a>}</div>
               <p className="mt-5 text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
             </section>
-            {relatedProducts.length > 0 && <section className="product-recommendations mt-8 border-t border-[#ededeb] pt-6" aria-label="Recommended products">
-              <div className="sokolink-recommendation-scroll grid grid-cols-2 gap-3">
-                {relatedProducts.map((item) => <ProductCard key={item.id} p={{...item, totalLikes: Number(item.instagramLikeCount || 0) + item.likes.length}} />)}
-              </div>
-            </section>}
+            {relatedProducts.length > 0 && <nav className="sokolink-recommendation-scroll sr-only" aria-label="Listing navigation">
+              {relatedProducts.map((item) => <Link key={item.id} href={"/product/" + item.productSlug}>{item.productTitle || "Product"}</Link>)}
+            </nav>}
           </aside></div>
         </div>
 
