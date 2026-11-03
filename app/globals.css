@@ -13885,3 +13885,12 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     border-radius: 0 !important;
   }
 }
+
+/* Keep the rounded modal as the only white content surface. */
+html body .sokolink-listing-modal .product-info-card,
+html body .sokolink-listing-modal .product-detail-scroll-area > aside > section {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
