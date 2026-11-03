@@ -13202,3 +13202,33 @@ html body .sokolink-modal-control-rail .sokolink-listing-modal-close {
     height: 38px !important;
   }
 }
+
+
+/* Listing detail header actions: seller identity on the left, compact
+   like/save controls grouped consistently on the right. */
+html body .listing-detail-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+}
+html body .listing-seller-action {
+  min-height: 54px !important;
+  max-width: 100% !important;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 3%);
+}
+html body .listing-seller-action:hover {
+  box-shadow: 0 5px 15px rgb(0 0 0 / 6%);
+}
+html body .listing-detail-social-actions {
+  align-items: center !important;
+  gap: 7px !important;
+}
+@media (max-width: 420px) {
+  html body .listing-detail-actions { gap: 7px !important; }
+  html body .listing-seller-action { gap: 7px !important; padding-inline: 7px !important; }
+  html body .listing-seller-action > span:first-child { width: 32px !important; height: 32px !important; }
+  html body .listing-detail-social-actions { gap: 5px !important; }
+}
