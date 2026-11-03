@@ -13232,3 +13232,12 @@ html body .listing-detail-social-actions {
   html body .listing-seller-action > span:first-child { width: 32px !important; height: 32px !important; }
   html body .listing-detail-social-actions { gap: 5px !important; }
 }
+
+
+/* Product gallery frame: remove decorative surface styling. */
+html body .product-gallery-frame {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
