@@ -13984,3 +13984,24 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     gap: 0 !important;
   }
 }
+
+/* Flush the modal content to its rounded panel edges and keep the details
+   scrollbar tight to the panel edge without native scrollbar arrow buttons. */
+html body .sokolink-listing-modal > div.min-h-full,
+html body .sokolink-listing-modal main.product-detail-page,
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  gap: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  scrollbar-gutter: auto !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-corner {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
