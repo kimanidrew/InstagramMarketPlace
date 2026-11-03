@@ -57,7 +57,7 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
                   aria-current={i === index}
                   className={"product-carousel-thumbnail" + (i === index ? " is-active" : "")}
                 >
-                  {thumbnailSrc(item) ? <img src={thumbnailSrc(item)} alt="" loading="lazy" decoding="async" /> : <span className="product-carousel-thumbnail-empty" />}
+                  {item.thumbnailUrl || (!video && item.mediaUrl) ? <img src={item.thumbnailUrl || item.mediaUrl || ""} alt="" loading="lazy" decoding="async" /> : <span className="product-carousel-thumbnail-empty" />}
                   {video && <span className="product-carousel-thumbnail-play"><Play size={12} fill="currentColor" /></span>}
                   <span className="product-carousel-thumbnail-index">{String(i + 1).padStart(2, "0")}</span>
                 </button>
