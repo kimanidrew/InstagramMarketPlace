@@ -12234,3 +12234,24 @@ body.sokolink-modal-open::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
 }
+
+
+/* TikTok-style listing-to-listing transition inside the modal. */
+.sokolink-listing-modal.sokolink-page-next {
+  animation: sokolink-listing-swipe-up .2s cubic-bezier(.2,.75,.25,1);
+}
+.sokolink-listing-modal.sokolink-page-previous {
+  animation: sokolink-listing-swipe-down .2s cubic-bezier(.2,.75,.25,1);
+}
+@keyframes sokolink-listing-swipe-up {
+  from { opacity: .72; transform: translateY(34px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes sokolink-listing-swipe-down {
+  from { opacity: .72; transform: translateY(-34px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sokolink-listing-modal.sokolink-page-next,
+  .sokolink-listing-modal.sokolink-page-previous { animation:none; }
+}
