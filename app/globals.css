@@ -12644,3 +12644,27 @@ html body .sokolink-modal-scroll-controls {
 @media (prefers-reduced-motion: reduce) {
   .listing-comment-composer-footer button, .listing-comment-reply-composer > button { transition: none; }
 }
+
+
+/* Product/service modal: use the exact same vertical scrollbar treatment
+   as the document scrollbar while the modal content owns scrolling. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  background: #b8b8b8 !important;
+  border: 3px solid #fff !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #929292 !important;
+}
