@@ -93,7 +93,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
           <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronRight size={20}/></button>
         </div>
       </div>
-      </div>
     </div>
   );
 }
