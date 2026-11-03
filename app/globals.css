@@ -13608,3 +13608,71 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     min-height: 240px !important;
   }
 }
+
+
+/* Listing modal uses the document's native app scrollbar. The overlay is
+   part of the page's scrollable overflow; it has no independent scrollbar. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
+}
+html body.sokolink-modal-open {
+  position: static !important;
+}
+html body .sokolink-listing-overlay {
+  position: absolute !important;
+  inset: 0 0 auto 0 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: auto !important;
+}
+html body .sokolink-listing-overlay::-webkit-scrollbar,
+html body .sokolink-listing-overlay::-webkit-scrollbar-track,
+html body .sokolink-listing-overlay::-webkit-scrollbar-thumb {
+  display: none !important;
+  width: auto !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+html body .sokolink-listing-modal {
+  position: relative !important;
+  flex: 0 0 min(1440px, calc(100vw - 112px)) !important;
+  width: min(1440px, calc(100vw - 112px)) !important;
+  max-width: min(1440px, calc(100vw - 112px)) !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  scrollbar-width: auto !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: initial !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
