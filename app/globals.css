@@ -13241,3 +13241,16 @@ html body .product-gallery-frame {
   border-radius: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* Keep the listing modal close button in the upper-left overlay gutter. */
+html body .sokolink-modal-control-rail .sokolink-listing-modal-close {
+  left: 20px !important;
+  right: auto !important;
+}
+@media (max-width: 640px) {
+  html body .sokolink-modal-control-rail .sokolink-listing-modal-close {
+    left: 8px !important;
+    right: auto !important;
+  }
+}
