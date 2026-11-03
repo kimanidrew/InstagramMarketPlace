@@ -185,6 +185,7 @@ export function ProductCard({ p }: { p: any }) {
         </div>
 
       </div>
+      <Link href={href} className="sr-only" tabIndex={-1} aria-hidden="true">Open listing</Link>
     </article>
   );
 }
