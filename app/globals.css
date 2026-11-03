@@ -12220,3 +12220,17 @@ html body .sokolink-modal-scroll-controls button {
  html body .sokolink-listing-modal .product-gallery-sticky { height:52vh !important; min-height:280px !important; }
  html body .sokolink-listing-modal .sokolink-recommendation-scroll { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
 }
+
+
+/* Remove the underlying application scrollbar while a listing modal is active. */
+html.sokolink-modal-open,
+body.sokolink-modal-open {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+}
+html.sokolink-modal-open::-webkit-scrollbar,
+body.sokolink-modal-open::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
