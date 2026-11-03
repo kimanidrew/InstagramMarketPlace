@@ -9,6 +9,7 @@ import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { ReviewSection } from "@/components/review-section";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { ProductCard } from "@/components/product-card";
 
 export const dynamic = "force-dynamic";
 
@@ -48,12 +49,26 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
     ? service.reviews.reduce((sum, review) => sum + review.rating, 0) / service.reviews.length
     : 0;
 
+  const relatedServices = await db().instagramPost.findMany({
+    where: {
+      isProduct: true, listingType: "SERVICE", productSlug: { not: slug },
+      OR: [
+        ...(service.category ? [{ category: service.category }] : []),
+        ...(service.subcategory ? [{ subcategory: service.subcategory }] : []),
+        ...(service.tags.length ? [{ tags: { some: { name: { in: service.tags.map((tag) => tag.name) } } }] : []),
+      ],
+    },
+    include: { connection: true, tags: true, likes: true },
+    orderBy: [{ instagramLikeCount: "desc" }, { createdAt: "desc" }],
+    take: 8,
+  });
+
   return (
     <main className="product-detail-page min-h-screen bg-white">
       <AnalyticsTracker connectionId={service.connectionId} postId={service.id} type="VIEW" />
       <div className="shell py-5 sm:py-7 md:py-10">
         <div className="mb-5 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-[#888] sm:mb-7"><BriefcaseBusiness size={14} className="text-black" /> SokoLink <span className="text-[#c4c4c4]">/</span> Service details</div>
-        <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
+        <div className="product-detail-modal-layout grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-stretch">
           <div className="product-gallery-sticky min-w-0">
             <div className="product-gallery-panel rounded-[30px] border border-black/[0.07] bg-[#f5f5f1] p-3 shadow-[0_20px_70px_rgba(0,0,0,0.06)] sm:p-5">
               <div className="product-gallery-frame">
@@ -66,7 +81,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
             </div>
           </div>
 
-          <aside className="lg:sticky lg:top-24">
+          <div className="product-detail-scroll-area min-w-0"><aside>
             <section className="min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 shadow-[0_16px_48px_rgba(0,0,0,0.055)] sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><BriefcaseBusiness size={11} /> Service</span>
@@ -112,6 +127,12 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
               </div>
             </section>
           </aside>
+          {relatedServices.length > 0 && <section className="product-recommendations mt-8 border-t border-[#ededeb] pt-6" aria-label="Recommended services">
+            <div className="sokolink-recommendation-scroll grid grid-cols-2 gap-3">
+              {relatedServices.map((item) => <ProductCard key={item.id} p={{...item, totalLikes: Number(item.instagramLikeCount || 0) + item.likes.length}} />)}
+            </div>
+          </section>}
+          </div>
         </div>
 
         <ReviewSection type="product" targetId={service.id} reviews={service.reviews} currentUserId={currentUser?.id} title="Service reviews" />
