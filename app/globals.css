@@ -12512,3 +12512,68 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   html body .sokolink-modal-scroll-controls button { width: 38px !important; height: 38px !important; }
   html body .sokolink-listing-modal-close { top: 10px !important; right: 8px !important; width: 38px !important; height: 38px !important; }
 }
+
+
+/* Match the listing details scrollbar to the app's native page scrollbar. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  scrollbar-width: thin !important;
+  scrollbar-color: #b8b8b8 #f1f1f1 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  min-height: 32px;
+  background: #b8b8b8 !important;
+  border: 3px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #929292 !important;
+}
+
+/* One aligned control rail: close at the top, navigation centered exactly
+   against the viewport height. */
+html body .sokolink-modal-control-rail {
+  right: 19px !important;
+  width: 44px !important;
+  align-items: center !important;
+}
+html body .sokolink-listing-modal-close {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  margin-top: 18px !important;
+  flex: 0 0 44px !important;
+}
+html body .sokolink-modal-scroll-controls {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 10px !important;
+  transform: translate(-50%, -50%) !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-modal-control-rail { right: 12px !important; width: 44px !important; }
+  html body .sokolink-listing-modal-close { margin-top: 12px !important; }
+}
+@media (max-width: 640px) {
+  html body .sokolink-modal-control-rail { right: 8px !important; width: 38px !important; }
+  html body .sokolink-listing-modal-close {
+    width: 38px !important;
+    height: 38px !important;
+    flex-basis: 38px !important;
+    margin-top: 10px !important;
+  }
+  html body .sokolink-modal-scroll-controls { gap: 8px !important; }
+  html body .sokolink-modal-scroll-controls button { width: 38px !important; height: 38px !important; }
+}
