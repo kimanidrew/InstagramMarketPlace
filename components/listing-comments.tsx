@@ -41,7 +41,7 @@ export function ListingComments({ postId }: { postId: string }) {
   const repliesFor = (id: string) => comments.filter((comment) => comment.parentId === id);
 
   async function submit(parentId: string | null = null) {
-    const body = (parentId ? replyDrafts[parentId] : draft || "").trim();
+    const body = (parentId ? replyDrafts[parentId] || "" : draft).trim();
     if (!body) return;
     setBusy(true);
     setError("");
