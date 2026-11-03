@@ -63,13 +63,16 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") router.back();
     };
+    const closeListingModal = () => router.back();
     window.addEventListener("keydown", onKey);
+    window.addEventListener("sokolink-close-listing-modal", closeListingModal);
     return () => {
       body.classList.remove("sokolink-modal-open");
       html.classList.remove("sokolink-modal-open");
       document.removeEventListener("wheel", preventBackgroundScroll, true);
       document.removeEventListener("touchmove", preventBackgroundScroll, true);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("sokolink-close-listing-modal", closeListingModal);
     };
   }, [router]);
 
@@ -81,9 +84,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
       >
       <div className="min-h-full">{children}</div>
         <div className="sokolink-modal-control-rail absolute inset-0 z-[10003]">
-          <button type="button" onClick={() => router.back()} aria-label="Close details" className="sokolink-listing-modal-close absolute left-[18px] top-[18px] flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black hover:text-white">
-            <X size={20} />
-          </button>
           <div className="sokolink-modal-scroll-controls absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2">
             <button type="button" onClick={() => navigateListing(-1)} aria-label="Previous product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronUp size={20}/></button>
             <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronDown size={20}/></button>
