@@ -14006,9 +14006,10 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   height: 0 !important;
 }
 
-/* Details scrollbar: exactly 10px inset from the panel edge, with no arrows. */
+/* Keep the details scrollbar just 2px inside the modal's right edge. */
 html body .sokolink-listing-modal .product-detail-scroll-area {
-  padding-right: 10px !important;
+  margin-right: 2px !important;
+  padding-right: 0 !important;
   box-sizing: border-box !important;
   scrollbar-gutter: stable !important;
 }
