@@ -12668,3 +12668,29 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
 html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb:hover {
   background: #929292 !important;
 }
+
+
+/* Center the complete modal control column vertically while keeping the
+   close, previous and next buttons on one centered flex axis. */
+html body .sokolink-modal-control-rail {
+  inset-block: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  transform: none !important;
+}
+html body .sokolink-listing-modal-close {
+  align-self: center !important;
+  margin: 0 !important;
+}
+html body .sokolink-modal-scroll-controls {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  margin: 0 !important;
+  transform: none !important;
+}
