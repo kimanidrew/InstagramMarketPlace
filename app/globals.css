@@ -12770,25 +12770,49 @@ html body .sokolink-modal-scroll-controls {
 }
 
 
-/* Reserve a real center column between the gallery and details so the
-   previous/next controls sit in the gap instead of covering either panel. */
-@media (min-width: 1024px) {
-  html body .sokolink-listing-modal .product-detail-modal-layout {
-    grid-template-columns: minmax(0, 1.08fr) 64px minmax(0, .92fr) !important;
-    column-gap: 0 !important;
-  }
-  html body .sokolink-listing-modal .product-modal-navigation-gutter {
-    display: block !important;
-    grid-column: 2 !important;
-    min-width: 64px !important;
-  }
-  html body .sokolink-listing-modal .product-detail-scroll-area {
-    grid-column: 3 !important;
-  }
-  html body .sokolink-modal-scroll-controls {
-    left: 50% !important;
-    right: auto !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-  }
+/* Listing modal navigation: floating controls sit at matching left/right
+   insets above the white panel, with a slim loading indicator at the top. */
+html body .sokolink-modal-control-rail {
+  pointer-events: none !important;
+}
+html body .sokolink-modal-scroll-controls {
+  position: absolute !important;
+  top: 50% !important;
+  left: 16px !important;
+  right: 16px !important;
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+}
+html body .sokolink-modal-scroll-controls button {
+  pointer-events: auto !important;
+  flex: 0 0 44px !important;
+}
+.sokolink-listing-navigation-progress {
+  position: absolute;
+  z-index: 10010;
+  inset: 0 0 auto;
+  height: 3px;
+  overflow: hidden;
+  background: rgb(0 0 0 / 8%);
+  pointer-events: none;
+}
+.sokolink-listing-navigation-progress span {
+  display: block;
+  width: 38%;
+  height: 100%;
+  background: #111;
+  animation: sokolink-navigation-loading 1.1s ease-in-out infinite;
+}
+@keyframes sokolink-navigation-loading {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(370%); }
+}
+@media (max-width: 640px) {
+  html body .sokolink-modal-scroll-controls { left: 10px !important; right: 10px !important; }
+  html body .sokolink-modal-scroll-controls button { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
 }
