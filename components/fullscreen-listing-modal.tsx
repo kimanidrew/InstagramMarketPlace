@@ -42,7 +42,7 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     modal?.classList.remove("sokolink-page-next", "sokolink-page-previous");
     void modal?.offsetWidth;
     modal?.classList.add(direction > 0 ? "sokolink-page-next" : "sokolink-page-previous");
-    window.setTimeout(() => router.push(target), 150);
+    window.setTimeout(() => router.replace(target), 150);
     window.setTimeout(() => { navigationLock.current = false; }, 650);
   }, [pathname, router]);
   useEffect(() => {
