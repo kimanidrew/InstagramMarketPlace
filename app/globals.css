@@ -12281,9 +12281,9 @@ body.sokolink-modal-open::-webkit-scrollbar-track {
 .store-category-tabs::-webkit-scrollbar { display: none; }
 .store-category-tabs-track {
   position: relative;
-  display: flex;
-  width: max-content;
-  min-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--store-tab-count), minmax(0, 1fr));
+  width: max(100%, calc(var(--store-tab-count) * 132px));
   align-items: stretch;
   gap: 5px;
 }
@@ -12291,7 +12291,7 @@ body.sokolink-modal-open::-webkit-scrollbar-track {
   position: relative;
   z-index: 1;
   display: inline-flex;
-  min-width: max-content;
+  min-width: 0;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -12324,8 +12324,8 @@ body.sokolink-modal-open::-webkit-scrollbar-track {
 }
 @media (max-width: 640px) {
   .store-category-tabs { margin: 16px 0 20px; }
-  .store-category-tabs-track { min-width: max-content; }
-  .store-category-tab { padding: 12px 14px 14px; font-size: 11px; gap: 6px; }
+  .store-category-tabs-track { width: max(100%, calc(var(--store-tab-count) * 118px)); }
+  .store-category-tab { padding: 12px 10px 14px; font-size: 11px; gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .store-category-tab, .store-category-tab svg, .store-category-tab-indicator { transition: none; }
