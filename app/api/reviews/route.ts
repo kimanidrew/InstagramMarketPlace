@@ -8,6 +8,7 @@ export async function POST(request: Request) {
 
   const body = await request.json();
   const type = body.type === "store" ? "store" : "product";
+  if (type !== "store") return NextResponse.json({ error: "Product reviews are no longer supported." }, { status: 400 });
   const targetId = String(body.targetId || "");
   const rating = Number(body.rating);
   const reviewBody = String(body.body || "").trim();
@@ -52,15 +53,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ review });
   }
 
-  const product = await prisma.instagramPost.findUnique({ where: { id: targetId } });
-  if (!product || !product.isProduct) return NextResponse.json({ error: "Product not found" }, { status: 404 });
-
-  const review = await prisma.productReview.upsert({
-    where: { userId_postId: { userId: current.id, postId: targetId } },
-    create: { userId: current.id, postId: targetId, rating, body: reviewBody },
-    update: { rating, body: reviewBody },
-    include: { user: { select: { id: true, name: true } } },
-  });
-
-  return NextResponse.json({ review });
+  return NextResponse.json({ error: "Product reviews are no longer supported." }, { status: 400 });
 }
