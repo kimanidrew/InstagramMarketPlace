@@ -78,10 +78,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
     <main className="product-detail-page min-h-screen bg-white">
       <AnalyticsTracker connectionId={product.connectionId} postId={product.id} type="VIEW" />
       <div className="shell py-5 sm:py-7 md:py-10">
-        <div className="product-detail-modal-layout grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-stretch">
+        <div className="product-detail-modal-layout grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_64px_minmax(0,.92fr)] lg:gap-0 lg:items-stretch">
           <div className="product-gallery-sticky min-w-0">
             <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
+
+          <div className="product-modal-navigation-gutter hidden lg:block" aria-hidden="true" />
 
           <div className="product-detail-scroll-area min-w-0"><aside className="product-detail-aside min-w-0">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
