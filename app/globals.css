@@ -12141,3 +12141,20 @@ html body .sokolink-recommendation-scroll { max-height:min(68vh,760px); padding:
  html body .sokolink-modal-scroll-controls button { width:36px; height:36px; }
  html body .sokolink-listing-modal .product-detail-page > .shell { padding-top:64px; }
 }
+
+/* Reel viewer: cinematic video stage with a dedicated listing/reviews sidebar. */
+html body .sokolink-reel-slide { display:flex; min-height:100dvh; }
+html body .sokolink-reel-stage { min-height:100dvh; width:calc(100% - 390px); }
+html body .sokolink-reel-details { scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.2) transparent; }
+html body .sokolink-reel-play { -webkit-tap-highlight-color:transparent; }
+@media(max-width:900px) {
+  html body .sokolink-reel-slide { flex-direction:column; min-height:100dvh; }
+  html body .sokolink-reel-stage { width:100%; min-height:58dvh; height:58dvh; flex:none; }
+  html body .sokolink-reel-details { width:100%; max-width:none; min-height:42dvh; height:auto; overflow:visible; border-left:0; border-top:1px solid rgba(255,255,255,.1); padding:24px 20px 36px; }
+  html body .sokolink-reel-feed { scroll-snap-type:y proximity; }
+}
+@media(max-width:480px) {
+  html body .sokolink-reel-stage { min-height:54dvh; height:54dvh; }
+  html body .sokolink-reel-details { min-height:46dvh; padding:20px 16px 32px; }
+  html body .sokolink-reel-play { width:64px; height:64px; }
+}
