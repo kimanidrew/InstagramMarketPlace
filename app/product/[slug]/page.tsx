@@ -84,12 +84,12 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
     <main className="product-detail-page min-h-screen bg-white">
       <AnalyticsTracker connectionId={product.connectionId} postId={product.id} type="VIEW" />
       <div className="shell py-5 sm:py-7 md:py-10">
-        <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-start">
+        <div className="product-detail-modal-layout grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:gap-8 lg:items-stretch">
           <div className="product-gallery-sticky min-w-0">
             <ProductGallery mediaUrl={mediaUrl} thumbnailUrl={product.thumbnailUrl} isVideo={isVideo} title={product.productTitle || "Product"} mediaItems={carouselItems} />
           </div>
 
-          <aside className="product-detail-aside min-w-0 lg:sticky lg:top-24">
+          <div className="product-detail-scroll-area min-w-0"><aside className="product-detail-aside min-w-0">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ededeb] pb-4">
@@ -155,19 +155,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
           </aside>
         </div>
 
-        <div className="product-detail-lower-content">
-          {relatedProducts.length > 0 && (
-            <section className="product-recommendations mt-12 sm:mt-16" aria-labelledby="related-products-heading">
-              <div className="mb-5 flex items-end justify-between gap-4 sm:mb-7">
-                <div>
-                </div>
-              </div>
-              <div className="sokolink-recommendation-scroll grid grid-cols-2 gap-x-3 gap-y-7 overflow-y-auto sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
-                {relatedProducts.map((item) => <ProductCard key={item.id} p={{...item, totalLikes: Number(item.instagramLikeCount || 0) + item.likes.length}} />)}
-              </div>
-            </section>
-          )}
-        </div>
+
       </div>
     </main>
   );
