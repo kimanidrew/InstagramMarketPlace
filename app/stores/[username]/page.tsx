@@ -145,6 +145,14 @@ export default async function Store({
         </div>
       </section>
 
+      <div className="shell">
+        <StoreCategoryTabs
+          username={store.username}
+          categories={categories}
+          activeCategory={activeCategory}
+        />
+      </div>
+
       <section className="shell store-content">
         <div className="store-content-head">
           <div>
