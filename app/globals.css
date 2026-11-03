@@ -12817,13 +12817,18 @@ html body .sokolink-modal-scroll-controls button {
   html body .sokolink-modal-scroll-controls button { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
 }
 
-/* Keep listing navigation on the dark overlay, outside the white listing panel. */
+/* Keep the white listing panel inset so overlay navigation has clear space
+   on both sides of the content at every viewport size. */
 html body .sokolink-listing-overlay {
   padding: 0 !important;
 }
 html body .sokolink-listing-modal {
-  width: calc(100vw - 160px) !important;
-  max-width: 1440px !important;
+  box-sizing: border-box !important;
+  width: min(1440px, calc(100vw - 176px)) !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 176px) !important;
+  flex: 0 0 auto !important;
+  margin-inline: auto !important;
 }
 html body .sokolink-modal-control-rail {
   position: fixed !important;
@@ -12851,6 +12856,7 @@ html body .sokolink-modal-scroll-controls button {
 @media (max-width: 900px) {
   html body .sokolink-listing-modal {
     width: calc(100vw - 112px) !important;
+    max-width: calc(100vw - 112px) !important;
     height: calc(100dvh - 24px) !important;
     max-height: calc(100dvh - 24px) !important;
   }
@@ -12859,6 +12865,7 @@ html body .sokolink-modal-scroll-controls button {
 @media (max-width: 640px) {
   html body .sokolink-listing-modal {
     width: calc(100vw - 104px) !important;
+    max-width: calc(100vw - 104px) !important;
     height: calc(100dvh - 16px) !important;
     max-height: calc(100dvh - 16px) !important;
     border-radius: 14px !important;
