@@ -14405,3 +14405,9 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   border: 0 !important;
   background: transparent !important;
 }
+
+
+/* Inset the listing details scrollbar track 10px from both vertical ends. */
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  margin-block: 10px !important;
+}
