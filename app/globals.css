@@ -14845,3 +14845,17 @@ html body .sokolink-listing-modal .product-detail-modal-layout {
   border: 0 !important;
   outline: 0 !important;
 }
+
+
+/* Keep equal horizontal inner spacing inside the product information card. */
+html body .sokolink-listing-modal .product-info-card {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 640px) {
+  html body .sokolink-listing-modal .product-info-card {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
