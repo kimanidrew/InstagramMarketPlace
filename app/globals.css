@@ -14831,3 +14831,17 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 html body .sokolink-listing-modal .product-carousel-gallery {
   padding: 0 !important;
 }
+
+
+/* Keep the white listing content panel borderless. */
+html body .sokolink-listing-modal {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18) !important;
+}
+html body .sokolink-listing-modal main.product-detail-page,
+html body .sokolink-listing-modal .product-detail-page > .shell,
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  border: 0 !important;
+  outline: 0 !important;
+}
