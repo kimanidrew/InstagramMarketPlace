@@ -46,6 +46,28 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     navigationLock.current = false;
     setIsNavigating(false);
   }, [pathname]);
+
+  // Keep the listing details scroller flush with the modal's right edge.
+  // The scrollbar track itself is inset 10px from the top and bottom.
+  useEffect(() => {
+    const modal = scrollRef.current;
+    if (!modal) return;
+    const area = modal.querySelector<HTMLElement>(".product-detail-scroll-area");
+    if (!area) return;
+
+    Object.assign(area.style, {
+      width: "100%",
+      maxWidth: "100%",
+      minWidth: "0",
+      marginLeft: "0",
+      marginRight: "0",
+      paddingRight: "0",
+      boxSizing: "border-box",
+      overflowX: "hidden",
+      overflowY: "scroll",
+      scrollbarGutter: "auto",
+    });
+  }, [pathname]);
   useEffect(() => {
     const body = document.body;
     const html = document.documentElement;
@@ -68,6 +90,47 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
 
   return (
     <div className="sokolink-listing-overlay fixed inset-0 z-[10000] flex h-[100vh] items-center justify-center" role="dialog" aria-modal="true" aria-label={label}>
+      <style jsx global>{`
+        .sokolink-listing-modal .product-detail-scroll-area {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-right: 0 !important;
+          box-sizing: border-box !important;
+          overflow-x: hidden !important;
+          overflow-y: scroll !important;
+          scrollbar-gutter: auto !important;
+          scrollbar-width: auto !important;
+          scrollbar-color: #a9a9a9 #f1f1f1 !important;
+        }
+        .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+          display: block !important;
+          width: 10px !important;
+          height: 0 !important;
+        }
+        .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+          margin-block: 10px !important;
+          background: #f1f1f1 !important;
+        }
+        .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button,
+        .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button *,
+        .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-corner {
+          display: none !important;
+          visibility: hidden !important;
+          appearance: none !important;
+          -webkit-appearance: none !important;
+          width: 0 !important;
+          height: 0 !important;
+          min-width: 0 !important;
+          min-height: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          border: 0 !important;
+          background: transparent !important;
+        }
+      `}</style>
       <div
         ref={scrollRef}
         className="sokolink-listing-modal relative h-[calc(100vh-32px)] w-[min(1440px,calc(100vw-48px))] overflow-hidden rounded-[24px] bg-white shadow-2xl"
