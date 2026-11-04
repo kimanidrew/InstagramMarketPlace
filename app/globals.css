@@ -14148,3 +14148,64 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   border: 2px solid #f1f1f1 !important;
   border-radius: 999px !important;
 }
+
+
+/* Final modal scrollbar + gallery surface correction.
+   The detail column has a small internal right inset from its layout; extend
+   only its scroll box into that inset so the scrollbar sits 2px from the
+   outside edge of the white modal, while keeping all text content in place. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  width: calc(100% + 18px) !important;
+  max-width: none !important;
+  margin-right: -18px !important;
+  padding-right: 18px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+  scrollbar-gutter: stable !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+  height: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  background: #a9a9a9 !important;
+  border: 2px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:single-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:start:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:end:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:start:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:end:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-corner {
+  display: none !important;
+  visibility: hidden !important;
+  appearance: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+/* The gallery's thumbnail rail and up/down controls should sit directly on
+   the modal surface; keep the individual thumbnail boxes themselves intact. */
+html body .sokolink-listing-modal .product-gallery-panel,
+html body .sokolink-listing-modal .product-gallery-frame {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
