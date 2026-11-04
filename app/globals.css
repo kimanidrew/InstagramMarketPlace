@@ -14405,3 +14405,44 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   border: 0 !important;
   background: transparent !important;
 }
+
+
+/* Make the primary product/service media fill the full modal height.
+   Keep the thumbnail rail and navigation controls alongside it, but remove
+   all inset spacing and corner rounding from the main image surface. */
+html body .sokolink-listing-modal .product-gallery-sticky,
+html body .sokolink-listing-modal .product-gallery-panel,
+html body .sokolink-listing-modal .product-gallery-frame,
+html body .sokolink-listing-modal .product-carousel,
+html body .sokolink-listing-modal .product-carousel-gallery,
+html body .sokolink-listing-modal .product-carousel-stage-column,
+html body .sokolink-listing-modal .product-carousel-stage {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  box-sizing: border-box !important;
+}
+html body .sokolink-listing-modal .product-gallery-sticky,
+html body .sokolink-listing-modal .product-gallery-panel,
+html body .sokolink-listing-modal .product-gallery-frame,
+html body .sokolink-listing-modal .product-carousel-gallery,
+html body .sokolink-listing-modal .product-carousel-stage-column,
+html body .sokolink-listing-modal .product-carousel-stage {
+  border-radius: 0 !important;
+}
+html body .sokolink-listing-modal .product-gallery-panel,
+html body .sokolink-listing-modal .product-gallery-frame,
+html body .sokolink-listing-modal .product-carousel-gallery {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+html body .sokolink-listing-modal .product-carousel-stage {
+  width: 100% !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+html body .sokolink-listing-modal .product-carousel-slide,
+html body .sokolink-listing-modal .product-carousel-slide img,
+html body .sokolink-listing-modal .product-carousel-slide video {
+  border-radius: 0 !important;
+}
