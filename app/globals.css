@@ -14481,3 +14481,34 @@ html body .sokolink-listing-modal .product-carousel-gallery {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+
+
+/* A single-media listing has no thumbnail rail or arrow rail: let its stage
+   occupy the complete gallery width from the left edge. */
+html body .sokolink-listing-modal .product-carousel-gallery:not(:has(.product-carousel-thumbnails)) {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+}
+html body .sokolink-listing-modal .product-carousel-gallery:not(:has(.product-carousel-thumbnails)) .product-carousel-stage-column {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  justify-self: stretch !important;
+}
+
+/* Keep modal rendering isolated from the surrounding page. */
+.sokolink-listing-overlay {
+  isolation: isolate;
+}
+.sokolink-listing-modal {
+  contain: layout style;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sokolink-listing-modal *,
+  .sokolink-listing-overlay * {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
