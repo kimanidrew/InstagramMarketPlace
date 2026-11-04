@@ -14118,3 +14118,33 @@ html body .sokolink-listing-modal .product-detail-scroll-area {
     margin-right: 0 !important;
   }
 }
+
+
+/* Correct the details scrollbar placement: keep its scroll box inside the
+   white modal's clipping boundary and align its track 2px from the panel edge.
+   Do not extend the scroll column beyond the panel, which clips the scrollbar. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  width: auto !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 2px !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+  scrollbar-gutter: stable !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  background: #a9a9a9 !important;
+  border: 2px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
