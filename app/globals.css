@@ -14061,3 +14061,37 @@ html body .sokolink-listing-modal .product-carousel-thumbnails {
     padding: 3px 2px !important;
   }
 }
+
+
+/* Restore the previous overlay-edge navigation placement. Widen the dark
+   overlay gutters by narrowing the white panel, so the arrows no longer
+   touch or overlap the panel while staying at their original screen insets. */
+html body .sokolink-modal-scroll-controls {
+  position: fixed !important;
+  top: 50% !important;
+  left: 20px !important;
+  right: 20px !important;
+  width: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  transform: translateY(-50%) !important;
+  pointer-events: none !important;
+}
+html body .sokolink-modal-scroll-controls button {
+  pointer-events: auto !important;
+}
+@media (min-width: 901px) {
+  html body .sokolink-listing-modal {
+    flex-basis: min(1440px, calc(100vw - 160px)) !important;
+    width: min(1440px, calc(100vw - 160px)) !important;
+    max-width: min(1440px, calc(100vw - 160px)) !important;
+  }
+}
+@media (max-width: 900px) {
+  html body .sokolink-modal-scroll-controls {
+    left: 8px !important;
+    right: 8px !important;
+  }
+}
