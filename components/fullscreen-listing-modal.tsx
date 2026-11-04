@@ -91,6 +91,14 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
   return (
     <div className="sokolink-listing-overlay fixed inset-0 z-[10000] flex h-[100vh] items-center justify-center" role="dialog" aria-modal="true" aria-label={label}>
       <style jsx global>{`
+        .sokolink-listing-modal .product-carousel-stage {
+          border-radius: 24px !important;
+        }
+        .sokolink-modal-control-rail .sokolink-listing-modal-close,
+        .sokolink-modal-control-rail .sokolink-listing-modal-close:hover,
+        .sokolink-modal-control-rail .sokolink-listing-modal-close:focus-visible {
+          background-color: rgba(0, 0, 0, 0.55) !important;
+        }
         .sokolink-listing-modal .product-detail-scroll-area {
           width: 100% !important;
           max-width: 100% !important;
