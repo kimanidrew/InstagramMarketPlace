@@ -14512,3 +14512,42 @@ html body .sokolink-listing-modal .product-carousel-gallery:not(:has(.product-ca
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Place the listing details scrollbar at the right edge of the white modal.
+   Extend the scroll box into the shell's right inset while restoring that
+   inset as inner padding, so the details content does not shift. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  width: calc(100% + 18px) !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-right: -18px !important;
+  padding-right: 18px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+  height: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  margin-block: 10px !important;
+  background: #f1f1f1 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  background: #a9a9a9 !important;
+  border: 2px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    width: calc(100% + 16px) !important;
+    margin-right: -16px !important;
+    padding-right: 16px !important;
+  }
+}
