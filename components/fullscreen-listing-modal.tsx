@@ -47,27 +47,6 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
     setIsNavigating(false);
   }, [pathname]);
 
-  // Keep the listing details scroller flush with the modal's right edge.
-  // The scrollbar track itself is inset 10px from the top and bottom.
-  useEffect(() => {
-    const modal = scrollRef.current;
-    if (!modal) return;
-    const area = modal.querySelector<HTMLElement>(".product-detail-scroll-area");
-    if (!area) return;
-
-    Object.assign(area.style, {
-      width: "100%",
-      maxWidth: "100%",
-      minWidth: "0",
-      marginLeft: "0",
-      marginRight: "0",
-      paddingRight: "0",
-      boxSizing: "border-box",
-      overflowX: "hidden",
-      overflowY: "scroll",
-      scrollbarGutter: "auto",
-    });
-  }, [pathname]);
   useEffect(() => {
     const body = document.body;
     const html = document.documentElement;
