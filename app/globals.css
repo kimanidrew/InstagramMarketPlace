@@ -14859,3 +14859,10 @@ html body .sokolink-listing-modal .product-info-card {
     padding-right: 16px !important;
   }
 }
+
+
+/* Lighten the surface directly behind product and service images. */
+html body .sokolink-listing-modal .product-carousel-stage,
+html body .sokolink-listing-modal .product-carousel-stage-column {
+  background: #fafaf8 !important;
+}
