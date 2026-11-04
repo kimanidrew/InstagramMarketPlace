@@ -14474,3 +14474,10 @@ html body .sokolink-listing-modal .product-carousel-stage-column {
   box-shadow: none !important;
   overflow: visible !important;
 }
+
+
+/* Remove vertical padding from the listing modal product gallery. */
+html body .sokolink-listing-modal .product-carousel-gallery {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
