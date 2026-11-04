@@ -14724,3 +14724,104 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
     overflow-y: scroll !important;
   }
 }
+
+
+/* Center the complete white listing panel on the overlay and keep the details
+   scrollbar on the panel's actual right edge (not the viewport edge). */
+html body .sokolink-listing-overlay {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+html body .sokolink-listing-overlay > .sokolink-listing-modal {
+  width: min(1440px, calc(100vw - 48px)) !important;
+  height: 90vh !important;
+  min-height: 0 !important;
+  max-height: 90vh !important;
+  margin: auto !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal > div.min-h-full {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal main.product-detail-page {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal .product-detail-page > .shell > .mb-5 {
+  display: none !important;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout > .product-gallery-sticky {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  grid-column: 2 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  scrollbar-gutter: auto !important;
+}
+html body .sokolink-listing-modal .product-detail-aside,
+html body .sokolink-listing-modal .product-detail-scroll-area > aside {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-overlay > .sokolink-listing-modal {
+    width: calc(100vw - 24px) !important;
+    height: 90vh !important;
+    max-height: 90vh !important;
+  }
+  html body .sokolink-listing-modal .product-detail-modal-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 42%) minmax(0, 58%) !important;
+  }
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+  }
+  html body .sokolink-listing-modal .product-detail-modal-layout > .product-gallery-sticky {
+    grid-row: 1 !important;
+  }
+}
