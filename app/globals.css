@@ -14462,3 +14462,15 @@ html body .sokolink-listing-modal .product-carousel-stage-column {
   border-radius: 24px !important;
   overflow: hidden !important;
 }
+
+
+/* Make the carousel stage column fill the white listing content area without a frame. */
+html body .sokolink-listing-modal .product-carousel-stage-column {
+  height: 100% !important;
+  min-height: 0 !important;
+  align-self: stretch !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
