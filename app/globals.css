@@ -14576,3 +14576,33 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   border: 0 !important;
   background: transparent !important;
 }
+
+
+/* Remove the outer right-side gutter around the details scrollbar itself.
+   Keep the details panel scrollable, but make every ancestor on its right
+   edge flush so no blank padded strip remains beyond the scrollbar. */
+html body .sokolink-listing-modal .product-detail-page,
+html body .sokolink-listing-modal .product-detail-page > .shell,
+html body .sokolink-listing-modal .product-detail-modal-layout,
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  right: 0 !important;
+  box-sizing: border-box !important;
+}
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  width: 100% !important;
+  max-width: none !important;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout,
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  padding-left: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  scrollbar-gutter: auto !important;
+}
