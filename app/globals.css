@@ -14095,3 +14095,26 @@ html body .sokolink-modal-scroll-controls button {
     right: 8px !important;
   }
 }
+
+
+/* Pin the details scrollbar to the far right edge of the white modal panel.
+   Extend the scroll column through any inner shell/grid inset so its native
+   scrollbar sits at the panel edge rather than inside the details column. */
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  width: 100% !important;
+  max-width: none !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  width: calc(100% + 26px) !important;
+  max-width: none !important;
+  margin-right: -26px !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+  scrollbar-gutter: stable !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+}
