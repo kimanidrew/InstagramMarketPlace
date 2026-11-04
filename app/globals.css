@@ -14433,3 +14433,9 @@ html body .listing-seller-action .listing-seller-avatar img {
 html body .listing-seller-action:hover .listing-seller-avatar img {
   transform: scale(1.1) !important;
 }
+
+
+/* Remove the left inset from the right-hand product/service details column. */
+html body .sokolink-listing-modal .product-detail-aside {
+  padding-left: 0 !important;
+}
