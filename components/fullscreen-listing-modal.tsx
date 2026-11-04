@@ -105,7 +105,7 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
         .sokolink-modal-control-rail .sokolink-listing-modal-close,
         .sokolink-modal-control-rail .sokolink-listing-modal-close:hover,
         .sokolink-modal-control-rail .sokolink-listing-modal-close:focus-visible {
-          background-color: rgba(0, 0, 0, 0.55) !important;
+          background-color: rgba(0, 0, 0, 0.3) !important;
         }
         .sokolink-listing-modal .product-detail-scroll-area {
           width: 100% !important;
@@ -155,7 +155,7 @@ export function FullscreenListingModal({ children, label }: { children: React.Re
         {isNavigating && <div className="sokolink-listing-navigation-progress" role="status" aria-label="Loading listing"><span /></div>}
       </div>
       <div className="sokolink-modal-control-rail fixed inset-0 z-[10003]">
-        <button type="button" onClick={() => router.back()} aria-label="Close details" className="sokolink-listing-modal-close flex h-11 w-11 items-center justify-center rounded-full border-0 bg-black/55 text-white shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black/75"><X size={20} color="#ffffff" /></button>
+        <button type="button" onClick={() => router.back()} aria-label="Close details" className="sokolink-listing-modal-close flex h-11 w-11 items-center justify-center rounded-full border-0 bg-black/30 text-white shadow-lg backdrop-blur transition hover:scale-105 hover:bg-black/30"><X size={20} color="#ffffff" /></button>
         <div className="sokolink-modal-scroll-controls absolute top-1/2 flex -translate-y-1/2 items-center justify-between">
           <button type="button" onClick={() => navigateListing(-1)} aria-label="Previous product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronLeft size={20}/></button>
           <button type="button" onClick={() => navigateListing(1)} aria-label="Next product or service" className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white/95 text-black shadow-lg backdrop-blur"><ChevronRight size={20}/></button>
