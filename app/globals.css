@@ -14866,3 +14866,23 @@ html body .sokolink-listing-modal .product-carousel-stage,
 html body .sokolink-listing-modal .product-carousel-stage-column {
   background: #fafaf8 !important;
 }
+
+/* Flush the listing details scroll viewport and its scrollbar against the
+   modal's right edge; cancel any inherited inner gutter from older layouts. */
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  position: relative !important;
+  inset-inline-end: 0 !important;
+  width: calc(100% + 10px) !important;
+  max-width: none !important;
+  margin-inline: 0 -10px 0 0 !important;
+  padding-inline: 0 !important;
+  border-inline: 0 !important;
+  box-sizing: border-box !important;
+  scrollbar-gutter: auto !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area > aside {
+  width: calc(100% - 10px) !important;
+  max-width: calc(100% - 10px) !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
