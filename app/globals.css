@@ -14027,3 +14027,37 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   height: 0 !important;
   background: transparent !important;
 }
+
+
+/* Final listing modal alignment: keep listing navigation fully outside the
+   white panel, and inset the gallery thumbnails/stage from the gallery edges. */
+html body .sokolink-modal-scroll-controls {
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 10004 !important;
+}
+html body .sokolink-modal-scroll-controls button {
+  flex: 0 0 44px !important;
+}
+html body .sokolink-listing-modal .product-carousel-gallery {
+  box-sizing: border-box !important;
+  padding: 12px !important;
+  gap: 14px !important;
+}
+html body .sokolink-listing-modal .product-carousel-thumbnails {
+  padding: 4px 3px 4px 2px !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-modal-scroll-controls {
+    left: 8px !important;
+    right: 8px !important;
+  }
+  html body .sokolink-listing-modal .product-carousel-gallery {
+    padding: 8px !important;
+    gap: 10px !important;
+  }
+  html body .sokolink-listing-modal .product-carousel-thumbnails {
+    padding: 3px 2px !important;
+  }
+}
