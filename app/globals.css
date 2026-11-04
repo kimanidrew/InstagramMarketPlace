@@ -14825,3 +14825,9 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     grid-row: 1 !important;
   }
 }
+
+
+/* Remove all inner padding from the product carousel gallery. */
+html body .sokolink-listing-modal .product-carousel-gallery {
+  padding: 0 !important;
+}
