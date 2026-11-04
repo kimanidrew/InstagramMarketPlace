@@ -14455,3 +14455,10 @@ html body .sokolink-listing-modal .product-carousel-stage {
 html body .sokolink-listing-modal .product-carousel-thumbnails {
   padding-top: 12px !important;
 }
+
+
+/* Restore rounded corners on the full-height product carousel stage column. */
+html body .sokolink-listing-modal .product-carousel-stage-column {
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
