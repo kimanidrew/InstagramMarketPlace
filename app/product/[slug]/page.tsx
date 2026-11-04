@@ -84,8 +84,8 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
 
           <div className="product-detail-scroll-area min-w-0"><aside className="product-detail-aside min-w-0">
-            <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-5 sm:rounded-[30px] sm:p-7 md:p-8">
-              <div className="listing-detail-actions flex items-center gap-2 border-b border-[#ededeb] pb-5">
+            <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-4 sm:rounded-[24px] sm:p-5 md:p-5">
+              <div className="listing-detail-actions flex items-center gap-2 pb-3">
                 <Link href={"/stores/" + product.connection.username} className="listing-seller-action group inline-flex w-fit max-w-full flex-none items-center gap-3 bg-transparent py-1 transition-colors duration-200">
                   <span className="listing-seller-avatar flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ed] p-[2px] text-base font-black text-[#666]">{product.connection.profileImageUrl ? <img src={product.connection.profileImageUrl} alt="" className="h-full w-full rounded-full object-cover transition-transform duration-200 group-hover:scale-110" /> : <span className="flex h-full w-full items-center justify-center rounded-full bg-[#e8e8e4]">{product.connection.username.slice(0, 1).toUpperCase()}</span>}</span>
                   <span className="min-w-0 flex-1"><span className="block truncate text-[15px] font-extrabold tracking-[-.02em] text-[#171717]">@{product.connection.username}</span><span className="mt-1 block text-[10px] font-semibold text-[#8b8b84]">Visit shop</span></span>
@@ -96,21 +96,21 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                   <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} />
                 </div>
               </div>
-              {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-5 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
-              <div className="mt-5">
+              {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-3 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
+              <div className="mt-3">
                 <h1 className="product-detail-title break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-black">{product.productTitle?.trim() || "Product"}</h1>
-                {fullCaption && <p className="mt-5 whitespace-pre-line break-words text-sm leading-7 text-[#555]">{fullCaption}</p>}
+                {fullCaption && <p className="mt-2 whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>}
               </div>
-              <div className="mt-6 grid grid-cols-3 gap-2 border-y border-[#ededeb] py-5">
-                <div className="rounded-2xl bg-[#f7f7f5] p-3"><strong className="block text-lg font-black tabular-nums">{totalLikes.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">Likes</span></div>
+              <div className="mt-4 grid grid-cols-3 gap-2 py-3">
+                <div className="rounded-xl bg-[#f7f7f5] p-2"><strong className="block text-lg font-black tabular-nums">{totalLikes.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">Likes</span></div>
                 <div className="rounded-2xl bg-[#f7f7f5] p-3"><strong className="block text-lg font-black tabular-nums">{product.instagramCommentCount.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">IG comments</span></div>
                 <div className="rounded-2xl bg-[#f7f7f5] p-3"><strong className="block text-lg font-black tabular-nums">{product.wishlistItems.length.toLocaleString()}</strong><span className="mt-1 block text-[9px] font-extrabold uppercase tracking-wider text-[#999]">Saved</span></div>
               </div>
-              {categoryLabels.length > 0 && <div className="mt-5"><h2 className="mb-3 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">Product categories</h2><div className="flex flex-wrap gap-2">{categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}</div></div>}
+              {categoryLabels.length > 0 && <div className="mt-3"><h2 className="mb-2 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">Product categories</h2><div className="flex flex-wrap gap-2">{categoryLabels.map((category) => <Link key={category} href={"/shop?category=" + encodeURIComponent(category)} className="rounded-full border border-[#e8e8e8] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#171717] transition hover:border-black hover:bg-black hover:text-white">{category}</Link>)}</div></div>}
 
-              <div className="mt-6 border-t border-[#ededeb] pt-5"><ListingComments postId={product.id} /></div>
-              <div className="product-action-stack mt-6 flex flex-row items-stretch gap-2 border-t border-[#ededeb] pt-5 sm:mt-7"><ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />{product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] transition hover:border-black hover:bg-[#f7f7f4] sm:px-5 sm:text-sm"><Instagram size={16} className="shrink-0" /><span>Original post</span><ArrowUpRight size={14} className="shrink-0" /></a>}</div>
-              <p className="mt-5 text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
+              <div className="mt-4 pt-0"><ListingComments postId={product.id} /></div>
+              <div className="product-action-stack mt-4 flex flex-row items-stretch gap-2 pt-0 sm:mt-4"><ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />{product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] transition hover:border-black hover:bg-[#f7f7f4] sm:px-5 sm:text-sm"><Instagram size={16} className="shrink-0" /><span>Original post</span><ArrowUpRight size={14} className="shrink-0" /></a>}</div>
+              <p className="mt-3 text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
             </section>
             {relatedProducts.length > 0 && <nav className="sokolink-recommendation-scroll sr-only" aria-label="Listing navigation">
               {relatedProducts.map((item) => <Link key={item.id} href={"/product/" + item.productSlug}>{item.productTitle || "Product"}</Link>)}
