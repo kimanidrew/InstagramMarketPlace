@@ -14273,3 +14273,36 @@ html body .sokolink-listing-modal .product-gallery-frame {
     background: transparent !important;
   }
 }
+
+
+/* Product image indicator boxes: square corners, stronger outline, and
+   consistent inner breathing room around each thumbnail image. */
+html body .sokolink-listing-modal .product-carousel-thumbnail {
+  box-sizing: border-box !important;
+  padding: 4px !important;
+  border: 2px solid #d4d4d0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+html body .sokolink-listing-modal .product-carousel-thumbnail img,
+html body .sokolink-listing-modal .product-carousel-thumbnail-empty {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+}
+html body .sokolink-listing-modal .product-carousel-thumbnail.is-active {
+  border: 3px solid #171717 !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
+  box-shadow: none !important;
+}
+@media (max-width: 640px) {
+  html body .sokolink-listing-modal .product-carousel-thumbnail,
+  html body .sokolink-listing-modal .product-carousel-thumbnail.is-active {
+    border-radius: 0 !important;
+  }
+}
