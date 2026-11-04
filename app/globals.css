@@ -14439,3 +14439,19 @@ html body .listing-seller-action:hover .listing-seller-avatar img {
 html body .sokolink-listing-modal .product-detail-aside {
   padding-left: 0 !important;
 }
+
+
+/* Listing modal gallery: full-height square-corner image stage and a top inset for thumbnail indicators. */
+html body .sokolink-listing-modal .product-carousel-stage-column {
+  height: 100% !important;
+  min-height: 0 !important;
+  align-self: stretch !important;
+}
+html body .sokolink-listing-modal .product-carousel-stage {
+  height: 100% !important;
+  min-height: 0 !important;
+  border-radius: 0 !important;
+}
+html body .sokolink-listing-modal .product-carousel-thumbnails {
+  padding-top: 12px !important;
+}
