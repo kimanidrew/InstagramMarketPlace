@@ -86,7 +86,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
           <div className="product-detail-scroll-area min-w-0"><aside className="product-detail-aside min-w-0">
             <section className="product-info-card min-w-0 rounded-[26px] border border-black/[0.07] bg-white p-4 sm:rounded-[24px] sm:p-5 md:p-5">
-              <div className="listing-detail-actions flex items-center gap-2 pb-3">
+              <div className="listing-detail-actions flex items-center gap-2 border-b border-[#ededeb] pb-3">
                 <Link href={"/stores/" + product.connection.username} className="listing-seller-action group inline-flex w-fit max-w-full flex-none items-center gap-3 bg-transparent py-1 transition-colors duration-200">
                   <span className="listing-seller-avatar flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#f0f0ed] p-[2px] text-base font-black text-[#666]">{product.connection.profileImageUrl ? <img src={product.connection.profileImageUrl} alt="" className="h-full w-full rounded-full object-cover transition-transform duration-200 group-hover:scale-110" /> : <span className="flex h-full w-full items-center justify-center rounded-full bg-[#e8e8e4]">{product.connection.username.slice(0, 1).toUpperCase()}</span>}</span>
                   <span className="min-w-0 flex-1"><span className="block truncate text-[15px] font-extrabold tracking-[-.02em] text-[#171717]">@{product.connection.username}</span><span className="mt-1 block text-[10px] font-semibold text-[#8b8b84]">Visit shop</span></span>
