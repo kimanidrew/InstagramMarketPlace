@@ -1,11 +1,12 @@
 "use client";
 
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Play, Volume2, VolumeX } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 
 type MediaItem = { mediaType: string; mediaUrl?: string | null; thumbnailUrl?: string | null };
 
-export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[] | null; fallback: MediaItem; title: string }) {
+export const ProductCarousel = memo(function ProductCarousel({ items, fallback, title }: { items?: MediaItem[] | null; fallback: MediaItem; title: string }) {
   const media = useMemo(() => {
     const valid = (items || []).filter((item) => item?.mediaUrl || item?.thumbnailUrl);
     return valid.length ? valid : [fallback];
@@ -27,7 +28,7 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
 
   useEffect(() => {
     const active = thumbnailRailRef.current?.querySelector<HTMLElement>('[aria-current="true"]');
-    active?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    active?.scrollIntoView({ block: "nearest", behavior: "auto" });
   }, [index]);
 
   function toggleMute() {
@@ -37,7 +38,7 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
     setMuted(video.muted);
   }
 
-  const current = media[index];
+  const current = media[index] || media[0];
   const isVideo = String(current.mediaType || "").toUpperCase() === "VIDEO";
   const thumbnailSrc = (item: MediaItem) => item.thumbnailUrl || item.mediaUrl || "";
 
@@ -57,7 +58,7 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
                   aria-current={i === index}
                   className={"product-carousel-thumbnail" + (i === index ? " is-active" : "")}
                 >
-                  {item.thumbnailUrl || (!video && item.mediaUrl) ? <img src={item.thumbnailUrl || item.mediaUrl || ""} alt="" loading="lazy" decoding="async" /> : <span className="product-carousel-thumbnail-empty" />}
+                  {item.thumbnailUrl || (!video && item.mediaUrl) ? <img src={item.thumbnailUrl || item.mediaUrl || ""} alt="" loading="lazy" decoding="async" sizes="72px" /> : <span className="product-carousel-thumbnail-empty" />}
                   {video && <span className="product-carousel-thumbnail-play"><Play size={12} fill="currentColor" /></span>}
                 </button>
               );
@@ -86,7 +87,7 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
                   </button>
                 </>
               ) : current.mediaUrl || current.thumbnailUrl ? (
-                <img src={current.mediaUrl || current.thumbnailUrl || ""} alt={title + " image " + (index + 1)} className="h-full w-full object-contain object-center" fetchPriority="high" decoding="async" />
+                <img src={current.mediaUrl || current.thumbnailUrl || ""} alt={title + " image " + (index + 1)} className="h-full w-full object-contain object-center" fetchPriority="high" loading="eager" decoding="async" sizes="(max-width: 900px) 100vw, 55vw" />
               ) : (
                 <div className="flex h-full items-center justify-center text-sm text-[#999]">No media available</div>
               )}
@@ -104,4 +105,4 @@ export function ProductCarousel({ items, fallback, title }: { items?: MediaItem[
       </div>
     </div>
   );
-}
+});
