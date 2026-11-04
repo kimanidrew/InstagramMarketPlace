@@ -14514,19 +14514,29 @@ html body .sokolink-listing-modal .product-carousel-gallery:not(:has(.product-ca
 }
 
 
-/* Place the listing details scrollbar at the right edge of the white modal.
-   Extend the scroll box into the shell's right inset while restoring that
-   inset as inner padding, so the details content does not shift. */
+/* Keep the product details independently scrollable, with the scrollbar
+   aligned to the modal edge. Remove horizontal outer insets instead of
+   extending the scroll area with negative margins. */
+html body .sokolink-listing-modal .product-detail-page > .shell,
+html body .sokolink-listing-modal .product-detail-modal-layout,
+html body .sokolink-listing-modal .product-detail-aside,
 html body .sokolink-listing-modal .product-detail-scroll-area {
-  width: calc(100% + 18px) !important;
-  max-width: none !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
   min-width: 0 !important;
-  margin-right: -18px !important;
-  padding-right: 18px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
   overflow-x: hidden !important;
   overflow-y: scroll !important;
-  scrollbar-gutter: stable !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-gutter: auto !important;
   scrollbar-width: auto !important;
   scrollbar-color: #a9a9a9 #f1f1f1 !important;
 }
@@ -14544,10 +14554,25 @@ html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar
   border: 2px solid #f1f1f1 !important;
   border-radius: 999px !important;
 }
-@media (max-width: 900px) {
-  html body .sokolink-listing-modal .product-detail-scroll-area {
-    width: calc(100% + 16px) !important;
-    margin-right: -16px !important;
-    padding-right: 16px !important;
-  }
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button *,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:single-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:start:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:end:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-corner {
+  display: none !important;
+  visibility: hidden !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
 }
