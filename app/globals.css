@@ -14606,3 +14606,121 @@ html body .sokolink-listing-modal .product-detail-scroll-area {
   overflow-y: scroll !important;
   scrollbar-gutter: auto !important;
 }
+
+
+/* Definitive listing-modal scrollbar layout.
+   Earlier rules alternated between hiding the detail scrollbar, making its
+   container overflow visible, and extending it with negative margins. This
+   final layout keeps the right grid column flush with the modal's right edge. */
+html body .sokolink-listing-modal,
+html body .sokolink-listing-modal > div.min-h-full,
+html body .sokolink-listing-modal main.product-detail-page,
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+html body .sokolink-listing-modal .product-detail-page > .shell {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-modal-layout {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr) !important;
+  column-gap: 0 !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area {
+  grid-column: 2 !important;
+  justify-self: stretch !important;
+  align-self: stretch !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-gutter: auto !important;
+  scrollbar-width: auto !important;
+  scrollbar-color: #a9a9a9 #f1f1f1 !important;
+}
+html body .sokolink-listing-modal .product-detail-aside {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+  min-width: 10px !important;
+  height: 0 !important;
+  -webkit-appearance: none !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-track {
+  margin-block: 10px !important;
+  background: #f1f1f1 !important;
+  border: 0 !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-thumb {
+  background: #a9a9a9 !important;
+  border: 2px solid #f1f1f1 !important;
+  border-radius: 999px !important;
+}
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button *,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:single-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:double-button,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:vertical:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:start:decrement,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-button:end:increment,
+html body .sokolink-listing-modal .product-detail-scroll-area::-webkit-scrollbar-corner {
+  display: none !important;
+  visibility: hidden !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+@media (max-width: 900px) {
+  html body .sokolink-listing-modal .product-detail-modal-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 42%) minmax(0, 58%) !important;
+  }
+  html body .sokolink-listing-modal .product-detail-scroll-area {
+    grid-column: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow-y: scroll !important;
+  }
+}
