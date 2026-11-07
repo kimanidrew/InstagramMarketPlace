@@ -5,6 +5,7 @@ import { connect, replaceConnectionToken, sync } from "@/lib/instagram";
 import Link from "next/link";
 import { RefreshCw, ShieldCheck } from "lucide-react";
 import AdminWorkspaceNav from "@/components/admin-workspace-nav";
+import { InstagramSyncButton } from "@/components/instagram-sync-button";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,13 @@ export default async function IG({
     },
     orderBy: { createdAt: "desc" },
   });
+
+  const statusCounts = await Promise.all([
+    db().instagramConnection.count({ where: { status: "ACTIVE" } }),
+    db().instagramConnection.count({ where: { status: "NEEDS_RECONNECT" } }),
+  ]);
+  const redirectUri = process.env.INSTAGRAM_REDIRECT_URI || (process.env.NEXT_PUBLIC_SITE_URL ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "") + "/api/instagram/callback" : "");
+  const envChecks = ["INSTAGRAM_APP_ID", "INSTAGRAM_APP_SECRET", "INSTAGRAM_REDIRECT_URI", "INSTAGRAM_TOKEN_ENCRYPTION_KEY", "CRON_SECRET"];
 
   return (
     <div className="admin-workspace">
@@ -194,7 +202,11 @@ export default async function IG({
       </div>
 
       <div className="card mt-7 max-w-3xl p-7">
-        <h2 className="text-lg font-black">Meta app configuration</h2>
+        <h2 className="text-lg font-black">Instagram integration readiness</h2>
+        <p className="mt-2 text-sm text-[#666]">App mode: <b>{process.env.INSTAGRAM_APP_MODE === "live" ? "LIVE" : "DEVELOPMENT"}</b> · Active connections: <b>{statusCounts[0]}</b> · Needs reconnect: <b className={statusCounts[1] ? "text-amber-700" : ""}>{statusCounts[1]}</b></p>
+        <p className="mt-3 break-all rounded-xl bg-[#f7f7f5] p-3 text-xs text-[#666]">Redirect URI in use: {redirectUri || "Not configured"}</p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">{envChecks.map(key => <div key={key} className="flex items-center justify-between rounded-lg border p-3 text-xs"><b>{key}</b><span className={process.env[key]?.trim() ? "text-emerald-700" : "text-amber-700"}>{process.env[key]?.trim() ? "Present" : "Missing"}</span></div>)}</div>
+        <h2 className="mt-7 text-lg font-black">Meta app configuration</h2>
         <p className="mt-2 text-sm leading-6 text-[#666]">
           Set <b>INSTAGRAM_APP_ID</b>, <b>INSTAGRAM_APP_SECRET</b>, and{" "}
           <b>INSTAGRAM_REDIRECT_URI</b> in Vercel. The App Secret stays
@@ -227,7 +239,7 @@ export default async function IG({
               <div>
                 <b>@{connection.username}</b>
                 <p className="text-xs text-[#888]">
-                  {connection.posts.length} products ·{" "}
+                  {connection.posts.length} products · {connection.accountType || "Account type unknown"} ·{" "}
                   {connection.connectedBy?.name ||
                     connection.connectedBy?.email ||
                     "admin-managed"}{" "}
@@ -237,13 +249,8 @@ export default async function IG({
             </div>
 
             <div className="flex flex-col gap-2 sm:items-end">
-              <form action={go}>
-                <input type="hidden" name="id" value={connection.id} />
-                <button className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm">
-                  <RefreshCw size={14} />
-                  Sync posts
-                </button>
-              </form>
+              {connection.status === "NEEDS_RECONNECT" && <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">Needs reconnect</span>}
+              <InstagramSyncButton connectionId={connection.id} label="Sync now" />
               <form action={replaceToken} className="flex w-full max-w-sm gap-2">
                 <input type="hidden" name="id" value={connection.id} />
                 <input name="token" type="password" required autoComplete="off" placeholder="Replace access token" className="min-w-0 flex-1 rounded-full border px-4 py-2 text-xs outline-none focus:border-black" />
