@@ -54,6 +54,30 @@ export async function ig<T>(
   return d;
 }
 
+export type InstagramProfile = {
+  user_id?: string;
+  id?: string;
+  username?: string;
+  name?: string;
+  biography?: string;
+  profile_picture_url?: string;
+  account_type?: string;
+};
+
+export async function instagramProfile(token: string) {
+  try {
+    return await ig<InstagramProfile>(token, "me", {
+      fields: "user_id,username,name,biography,profile_picture_url,account_type",
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (!/account_type|unsupported.*field|field.*not.*valid/i.test(message)) throw error;
+    return ig<InstagramProfile>(token, "me", {
+      fields: "user_id,username,name,biography,profile_picture_url",
+    });
+  }
+}
+
 async function igNext<T>(url: string, token: string) {
   const u = new URL(url);
   if (!u.searchParams.get("access_token")) {
@@ -182,18 +206,7 @@ export async function exchangeInstagramCode(code: string) {
 }
 
 export async function connect(token: string, connectedByUserId?: string, tokenExpiresAt?: Date | null) {
-  const m = await ig<{
-    user_id?: string;
-    id?: string;
-    username?: string;
-    name?: string;
-    biography?: string;
-    profile_picture_url?: string;
-    account_type?: string;
-  }>(token, "me", {
-    fields:
-      "user_id,username,name,biography,profile_picture_url,account_type",
-  });
+  const m = await instagramProfile(token);
 
   const id = String(m.user_id || m.id || "");
 
@@ -267,18 +280,7 @@ export async function replaceConnectionToken(
     throw new Error("Instagram connection not found.");
   }
 
-  const m = await ig<{
-    user_id?: string;
-    id?: string;
-    username?: string;
-    name?: string;
-    biography?: string;
-    profile_picture_url?: string;
-    account_type?: string;
-  }>(token, "me", {
-    fields:
-      "user_id,username,name,biography,profile_picture_url,account_type",
-  });
+  const m = await instagramProfile(token);
 
   const id = String(m.user_id || m.id || "");
 
@@ -404,15 +406,7 @@ export async function sync(id: string) {
 
   // Refresh the connected profile too, so name, bio and profile image changes
   // on Instagram are reflected in the marketplace on the next reconciliation.
-  const profile = await ig<{
-    username?: string;
-    name?: string;
-    biography?: string;
-    profile_picture_url?: string;
-    account_type?: string;
-  }>(token, "me", {
-    fields: "username,name,biography,profile_picture_url,account_type",
-  });
+  const profile = await instagramProfile(token);
 
   const profileAccentColor = await getProfileAccentColor(profile.profile_picture_url);
 
