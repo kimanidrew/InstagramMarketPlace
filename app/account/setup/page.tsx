@@ -12,5 +12,5 @@ export default async function AccountSetup({searchParams}:{searchParams:Promise<
  const requestedStep=Number(q.step|| (request?.status==="APPROVED"?3:request?.status==="PENDING"?2:1));
  const step=Math.min(4,Math.max(1,Number.isFinite(requestedStep)?requestedStep:1));
  const active=request||{id:"new",username:"new shop",status:"REJECTED" as const};
- return <><SellerSetupPage request={active} connection={connection?{username:connection.username,postsCount:connection.posts.length,profileImageUrl:connection.profileImageUrl}:undefined} initialStep={step}/>{q.error==="invalid"&&<GlobalFeedbackTrigger type="error" title="Invalid Instagram username" message="Please enter a valid Instagram username." />}</>;
+ return <><SellerSetupPage request={active} connection={connection?{username:connection.username,postsCount:connection.posts.length,profileImageUrl:connection.profileImageUrl}:undefined} initialStep={step} appMode={process.env.INSTAGRAM_APP_MODE === "live" ? "live" : "development"}/>{q.error==="invalid"&&<GlobalFeedbackTrigger type="error" title="Invalid Instagram username" message="Please enter a valid Instagram username." />}{q.error==="account_type"&&<GlobalFeedbackTrigger type="error" title="Confirm your Instagram account type" message="Please confirm that your Instagram account is a Business or Creator account before submitting." />}</>;
 }
