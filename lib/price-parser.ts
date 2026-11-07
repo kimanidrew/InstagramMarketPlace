@@ -1,0 +1,27 @@
+export type ParsedPrice = { amount: number; currency: string };
+
+/**
+ * Extract only explicitly marked prices. Unmarked numbers are intentionally
+ * ignored so phone numbers, years, sizes and quantities are not guessed as prices.
+ */
+export function parseCaptionPrice(caption: string | null | undefined): ParsedPrice | null {
+  if (!caption) return null;
+
+  const marker = /(?:\bKES\b|\bKSH\b|\bKsh\b|\bbei\s*:|\bprice\s*:|\/=|\$|@)\s*/gi;
+  const number = /(\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?|\d+(?:\.\d{1,2})?\s*k?)/i;
+  for (const match of caption.matchAll(marker)) {
+    const index = (match.index || 0) + match[0].length;
+    const found = number.exec(caption.slice(index));
+    if (!found || found.index > 3) continue;
+    const raw = found[1].replace(/,/g, "").replace(/\s+/g, "").toLowerCase();
+    const amount = raw.endsWith("k") ? Number(raw.slice(0, -1)) * 1000 : Number(raw);
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 10000000) continue;
+    if (/^\d{4}$/.test(raw) && amount >= 1900 && amount <= 2099) continue;
+    if (/^\d{9,}$/.test(raw)) continue;
+
+    const markerText = match[0].toLowerCase();
+    const currency = markerText.includes("$") ? "USD" : "KES";
+    return { amount, currency };
+  }
+  return null;
+}
