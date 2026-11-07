@@ -30,7 +30,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   ]);
   const connectedIds = new Set(connections.map(c => c.username.toLowerCase()));
   const pendingRequests = requests.filter(r => !connectedIds.has(r.username.toLowerCase()));
-  const approvedRequestsByUsername = new Map(requests.filter(r => r.status === "APPROVED").map(r => [r.username.toLowerCase(), r.id]));
+  const approvedRequestsByUsername = new Map<string, string>(requests.filter(r => r.status === "APPROVED").map(r => [r.username.toLowerCase(), r.id] as [string, string]));
   const productCount = connections.reduce((sum, c) => sum + c.posts.length, 0);
 
   return <main className="account-hub">
