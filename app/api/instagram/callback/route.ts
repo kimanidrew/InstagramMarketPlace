@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { db } from "@/lib/prisma";
-import { connect, exchangeInstagramCode, ig, sync } from "@/lib/instagram";
+import { connect, exchangeInstagramCode, instagramProfile, sync } from "@/lib/instagram";
 
 const secret = () => process.env.AUTH_SECRET || "change-me";
 const permissionErrorMessage = () => process.env.INSTAGRAM_APP_MODE !== "live"
@@ -52,11 +52,7 @@ export async function GET(r: Request) {
     const token = exchanged.accessToken;
     let profile: { user_id?: string; id?: string; username?: string; account_type?: string };
     try {
-      profile = await ig<{ user_id?: string; id?: string; username?: string; account_type?: string }>(
-        token,
-        "me",
-        { fields: "user_id,username,account_type" }
-      );
+      profile = await instagramProfile(token);
     } catch (profileError) {
       const message = profileError instanceof Error ? profileError.message.toLowerCase() : "";
       if (/permission|role|tester|not authorized|access denied/.test(message)) {
