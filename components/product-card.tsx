@@ -7,8 +7,9 @@ import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { recordAnalytics } from "@/lib/analytics-client";
 import { useEffect, useRef, useState } from "react";
+import { ProductPriceEditor } from "@/components/product-price-editor";
 
-export function ProductCard({ p }: { p: any }) {
+export function ProductCard({ p, editablePrice = false }: { p: any; editablePrice?: boolean }) {
   const [likeCount, setLikeCount] = useState(Number(p.totalLikes ?? (Number(p.instagramLikeCount ?? p.like_count ?? 0) + Number(p._count?.likes ?? p.likes?.length ?? 0))));
   const [isLiked, setIsLiked] = useState(Boolean(p.likedByCurrentUser));
   const [wishlistCount, setWishlistCount] = useState(p.wishlistItems?.length || 0);
@@ -131,9 +132,11 @@ export function ProductCard({ p }: { p: any }) {
           </div>
           <WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} />
         </div>
+        {p.priceAmount !== null && p.priceAmount !== undefined && <p className="mb-1 text-sm font-black text-[#171717]">{p.priceCurrency || "KES"} {Number(p.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
         <p className="product-item-caption line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
           {p.productTitle}
         </p>
+        {editablePrice && <ProductPriceEditor postId={p.id} amount={p.priceAmount === null || p.priceAmount === undefined ? null : Number(p.priceAmount)} currency={p.priceCurrency} />}
 
         <Link
           href={"/stores/" + p.connection.username}
