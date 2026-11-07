@@ -100,9 +100,9 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               </div>
               {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-3 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
               <div className="mt-3">
-                {product.priceAmount !== null && product.priceAmount !== undefined && <p className="mb-2 text-xl font-black text-[#171717]">{product.priceCurrency || "KES"} {Number(product.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
-                {currentUser?.id === product.connection.connectedByUserId && <ProductPriceEditor postId={product.id} amount={product.priceAmount === null ? null : Number(product.priceAmount)} currency={product.priceCurrency} />}
                 <h1 className="product-detail-title break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-black">{product.productTitle?.trim() || "Product"}</h1>
+                {product.priceAmount !== null && product.priceAmount !== undefined && <p className="mt-2 text-base font-semibold tracking-[.01em] text-[#a6a6a6]">{product.priceCurrency || "KES"} {Number(product.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
+                {currentUser?.id === product.connection.connectedByUserId && <ProductPriceEditor postId={product.id} amount={product.priceAmount === null ? null : Number(product.priceAmount)} currency={product.priceCurrency} />}
                 {fullCaption && <p className="mt-2 whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>}
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2 py-3">
