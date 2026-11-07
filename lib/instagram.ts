@@ -490,17 +490,11 @@ export async function sync(id: string) {
       }
 
       const parsedPrice = parseCaptionPrice(x.caption || "");
-      const existingPrice = await p.instagramPost.findUnique({
-        where: { id: String(x.id) },
-        select: { priceSource: true },
-      });
-      const parsedPriceFields = existingPrice?.priceSource === "MANUAL"
-        ? {}
-        : {
-            priceAmount: parsedPrice?.amount ?? null,
-            priceCurrency: parsedPrice?.currency ?? null,
-            priceSource: parsedPrice ? "PARSED" as const : "NONE" as const,
-          };
+      const parsedPriceFields = {
+        priceAmount: parsedPrice?.amount ?? null,
+        priceCurrency: parsedPrice?.currency ?? null,
+        priceSource: parsedPrice ? "PARSED" as const : "NONE" as const,
+      };
 
       const post = await p.instagramPost.upsert({
         where: { id: x.id },
@@ -525,7 +519,6 @@ export async function sync(id: string) {
           ...parsedPriceFields,
         },
         update: {
-          ...parsedPriceFields,
           caption: x.caption || null,
           mediaType: x.media_type || "IMAGE",
           mediaUrl: x.media_url,
@@ -542,6 +535,11 @@ export async function sync(id: string) {
           subcategory: classification.subcategory,
           productSlug: slug,
         },
+      });
+
+      await p.instagramPost.updateMany({
+        where: { id: post.id, priceSource: { not: "MANUAL" } },
+        data: parsedPriceFields,
       });
 
       await p.productTag.deleteMany({ where: { postId: post.id } });
