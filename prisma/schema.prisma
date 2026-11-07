@@ -34,6 +34,17 @@ enum ListingType {
   SERVICE
 }
 
+enum InstagramConnectionStatus {
+  ACTIVE
+  NEEDS_RECONNECT
+}
+
+enum PriceSource {
+  PARSED
+  MANUAL
+  NONE
+}
+
 enum GrowthRequestStatus {
   PENDING
   APPROVED
@@ -86,7 +97,12 @@ model InstagramConnection {
   profileAccentColor String?
   encryptedToken    String
   expiresAt          DateTime?
-  lastSyncedAt      DateTime?
+  tokenExpiresAt      DateTime?
+  lastRefreshedAt     DateTime?
+  status              InstagramConnectionStatus @default(ACTIVE)
+  accountType         String?
+  lastManualSyncAt    DateTime?
+  lastSyncedAt        DateTime?
   connectedByUserId String?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
@@ -121,6 +137,9 @@ model InstagramPost {
   isProduct             Boolean             @default(false)
   listingType           ListingType          @default(PRODUCT)
   productTitle          String?
+  priceAmount           Decimal?            @db.Decimal(12, 2)
+  priceCurrency         String?
+  priceSource           PriceSource          @default(NONE)
   category              String?
   subcategory           String?
   productSlug           String?             @unique
