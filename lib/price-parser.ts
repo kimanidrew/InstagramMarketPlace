@@ -20,7 +20,8 @@ export function parseCaptionPrice(caption: string | null | undefined): ParsedPri
     if (/^\d{9,}$/.test(raw)) continue;
 
     const markerText = match[0].toLowerCase();
-    const currency = markerText.includes("$") ? "USD" : "KES";
+    const pricePrefix = caption.slice(index, index + found.index).toLowerCase();
+    const currency = markerText.includes("$") || pricePrefix.includes("$") ? "USD" : "KES";
     return { amount, currency };
   }
 
