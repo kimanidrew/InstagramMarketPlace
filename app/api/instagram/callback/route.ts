@@ -62,7 +62,7 @@ export async function GET(r: Request) {
     }
     const accountType = String(profile.account_type || "").toUpperCase();
     if (accountType && !["BUSINESS", "CREATOR", "MEDIA_CREATOR"].includes(accountType)) {
-      return fail("This is a Personal Instagram account. Switch it to a Business or Creator account in Instagram Settings → Account type and tools, then reconnect.");
+      return fail("This Instagram account type is not supported. Switch it to a Business or Creator account in Instagram Settings → Account type and tools, then reconnect.");
     }
     const username = String(profile.username || "").toLowerCase();
 
