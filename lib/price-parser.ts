@@ -24,11 +24,11 @@ export function parseCaptionPrice(caption: string | null | undefined): ParsedPri
     return { amount, currency };
   }
 
-  const trailingSlashPrice = /(?:^|\\s)(\\d{1,3}(?:,\\d{3})+(?:\\.\\d{1,2})?|\\d+(?:\\.\\d{1,2})?\\s*k?)\\s*\\/=\b/gi;
+  const trailingSlashPrice = /(?:^|\s)(\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?|\d+(?:\.\d{1,2})?\s*k?)\s*\/=\s*/gi;
   for (const match of caption.matchAll(trailingSlashPrice)) {
-    const raw = match[1].replace(/,/g, "").replace(/\\s+/g, "").toLowerCase();
+    const raw = match[1].replace(/,/g, "").replace(/\s+/g, "").toLowerCase();
     const amount = raw.endsWith("k") ? Number(raw.slice(0, -1)) * 1000 : Number(raw);
-    if (Number.isFinite(amount) && amount > 0 && amount <= 10000000 && !/^\\d{4}$/.test(raw)) {
+    if (Number.isFinite(amount) && amount > 0 && amount <= 10000000 && !(/^\d{4}$/.test(raw) && Number(raw) >= 1900 && Number(raw) <= 2099) && !/^\d{9,}$/.test(raw)) {
       return { amount, currency: "KES" };
     }
   }
