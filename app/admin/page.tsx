@@ -81,6 +81,7 @@ export default async function Admin({
   const rejected = requests.filter((request) => request.status === "REJECTED");
 
   function renderRequest(request: (typeof requests)[number]) {
+    const instagramConnection = connections.find(connection => connection.username.toLowerCase() === request.username.toLowerCase());
     return (
       <article className="admin-request-card" key={request.id}>
         <div className="admin-request-top">
@@ -88,6 +89,8 @@ export default async function Admin({
           <div className="admin-request-main">
             <b>@{request.username}</b>
             <span>{request.user.email}</span>
+            {instagramConnection?.accountType && <span className="text-xs font-semibold text-neutral-600">Instagram account type: {instagramConnection.accountType}</span>}
+            {instagramConnection?.status === "NEEDS_RECONNECT" && <span className="mt-1 inline-flex w-fit rounded-full bg-amber-100 px-2 py-1 text-[10px] font-bold text-amber-800">Instagram needs reconnecting</span>}
             <small>
               {request.status === "PENDING"
                 ? "Send the tester invitation first, then approve this store request."
