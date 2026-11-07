@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ProductCard } from "@/components/product-card";
 
-function ViewportProduct({ product }: { product: any }) {
+function ViewportProduct({ product, editablePrice }: { product: any; editablePrice?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -27,7 +27,7 @@ function ViewportProduct({ product }: { product: any }) {
   return (
     <div ref={ref} className="min-w-0 break-inside-avoid">
       {visible ? (
-        <ProductCard p={product} />
+        <ProductCard p={product} editablePrice={editablePrice} />
       ) : (
         <div className="overflow-hidden rounded-[22px] bg-[#f1f1ee] aspect-[4/5] animate-pulse" aria-hidden="true" />
       )}
@@ -35,10 +35,10 @@ function ViewportProduct({ product }: { product: any }) {
   );
 }
 
-export function OptimizedProductGrid({ products }: { products: any[] }) {
+export function OptimizedProductGrid({ products, editablePrice = false }: { products: any[]; editablePrice?: boolean }) {
   return (
     <div className="optimized-product-grid">
-      {products.map((product) => <ViewportProduct key={product.id} product={product} />)}
+      {products.map((product) => <ViewportProduct key={product.id} product={product} editablePrice={editablePrice} />)}
     </div>
   );
 }
