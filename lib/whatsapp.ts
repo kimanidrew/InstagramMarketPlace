@@ -291,7 +291,7 @@ async function processListingSearch(to: string, query: string) {
     await sendWhatsAppText(to, caption);
   }
 
-  await sendWhatsAppText(to, "Reply with a shop username or send another search to see more options. SokoLink doesn't hold stock; please confirm availability and price with the seller.");
+  await sendWhatsAppText(to, "Reply with a shop username or send another search to see more options. SokoLink doesn't hold stock; please confirm availability and delivery details directly with the seller.");
 }
 
 export async function handleWhatsAppMessage(
