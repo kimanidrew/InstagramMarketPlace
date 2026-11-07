@@ -163,7 +163,7 @@ export default async function Store({
         </div>
 
         {posts.length > 0 ? (
-          <OptimizedProductGrid products={posts} />
+          <OptimizedProductGrid products={posts} editablePrice={currentUser?.id === store.connectedByUserId} />
         ) : (
           <div className="store-empty">
             <div className="store-empty-icon"><Instagram size={20} /></div>
