@@ -3,23 +3,11 @@ import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { connect, replaceConnectionToken, sync } from "@/lib/instagram";
 import Link from "next/link";
-import { RefreshCw, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import AdminWorkspaceNav from "@/components/admin-workspace-nav";
 import { InstagramSyncButton } from "@/components/instagram-sync-button";
 
 export const dynamic = "force-dynamic";
-
-async function go(formData: FormData) {
-  "use server";
-  await admin();
-  try {
-    await sync(String(formData.get("id")));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Sync failed";
-    redirect("/admin/instagram?error=" + encodeURIComponent(message));
-  }
-  redirect("/admin/instagram?synced=1");
-}
 
 async function replaceToken(formData: FormData) {
   "use server";
@@ -102,7 +90,7 @@ export default async function IG({
     db().instagramConnection.count({ where: { status: "ACTIVE" } }),
     db().instagramConnection.count({ where: { status: "NEEDS_RECONNECT" } }),
   ]);
-  const redirectUri = process.env.INSTAGRAM_REDIRECT_URI || (process.env.NEXT_PUBLIC_SITE_URL ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "") + "/api/instagram/callback" : "");
+  const redirectUri = process.env.INSTAGRAM_REDIRECT_URI || "Not configured";
   const envChecks = ["INSTAGRAM_APP_ID", "INSTAGRAM_APP_SECRET", "INSTAGRAM_REDIRECT_URI", "INSTAGRAM_TOKEN_ENCRYPTION_KEY", "INSTAGRAM_APP_MODE", "CRON_SECRET"];
 
   return (
@@ -205,7 +193,7 @@ export default async function IG({
         <h2 className="text-lg font-black">Instagram integration readiness</h2>
         <p className="mt-2 text-sm text-[#666]">App mode: <b>{process.env.INSTAGRAM_APP_MODE === "live" ? "LIVE" : "DEVELOPMENT"}</b> · Active connections: <b>{statusCounts[0]}</b> · Needs reconnect: <b className={statusCounts[1] ? "text-amber-700" : ""}>{statusCounts[1]}</b></p>
         <p className="mt-3 break-all rounded-xl bg-[#f7f7f5] p-3 text-xs text-[#666]">Redirect URI in use: {redirectUri || "Not configured"}</p>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">{envChecks.map(key => <div key={key} className="flex items-center justify-between rounded-lg border p-3 text-xs"><b>{key}</b><span className={process.env[key]?.trim() ? "text-emerald-700" : "text-amber-700"}>{process.env[key]?.trim() ? "Present" : "Missing"}</span></div>)}</div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">{envChecks.map(key => <div key={key} className="flex items-center justify-between rounded-lg border p-3 text-xs"><b>{key}</b><span className={process.env[key]?.trim() ? "text-emerald-700" : "text-amber-700"}>{process.env[key]?.trim() ? "Present" : key === "INSTAGRAM_APP_MODE" ? "Default: development" : "Missing"}</span></div>)}</div>
         <h2 className="mt-7 text-lg font-black">Meta app configuration</h2>
         <p className="mt-2 text-sm leading-6 text-[#666]">
           Set <b>INSTAGRAM_APP_ID</b>, <b>INSTAGRAM_APP_SECRET</b>, and{" "}
