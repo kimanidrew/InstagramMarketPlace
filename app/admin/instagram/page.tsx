@@ -103,7 +103,7 @@ export default async function IG({
     db().instagramConnection.count({ where: { status: "NEEDS_RECONNECT" } }),
   ]);
   const redirectUri = process.env.INSTAGRAM_REDIRECT_URI || (process.env.NEXT_PUBLIC_SITE_URL ? process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "") + "/api/instagram/callback" : "");
-  const envChecks = ["INSTAGRAM_APP_ID", "INSTAGRAM_APP_SECRET", "INSTAGRAM_REDIRECT_URI", "INSTAGRAM_TOKEN_ENCRYPTION_KEY", "CRON_SECRET"];
+  const envChecks = ["INSTAGRAM_APP_ID", "INSTAGRAM_APP_SECRET", "INSTAGRAM_REDIRECT_URI", "INSTAGRAM_TOKEN_ENCRYPTION_KEY", "INSTAGRAM_APP_MODE", "CRON_SECRET"];
 
   return (
     <div className="admin-workspace">
