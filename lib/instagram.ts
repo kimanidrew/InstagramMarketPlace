@@ -232,7 +232,7 @@ export async function connect(token: string, connectedByUserId?: string, tokenEx
     encryptedToken: enc(token),
     expiresAt: tokenExpiresAt || null,
     tokenExpiresAt: tokenExpiresAt || null,
-    lastRefreshedAt: null,
+    lastRefreshedAt: new Date(),
     status: "ACTIVE" as const,
     accountType: accountType || null,
     ...(connectedByUserId
@@ -312,7 +312,7 @@ export async function replaceConnectionToken(
       encryptedToken: enc(token),
       expiresAt: null,
       tokenExpiresAt: null,
-      lastRefreshedAt: null,
+      lastRefreshedAt: new Date(),
       status: "ACTIVE",
       accountType: accountType || null,
     },
