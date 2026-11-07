@@ -238,7 +238,7 @@ export default async function IG({
 
             <div className="flex flex-col gap-2 sm:items-end">
               {connection.status === "NEEDS_RECONNECT" && <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">Needs reconnect</span>}
-              <InstagramSyncButton connectionId={connection.id} label="Sync now" />
+              {connection.status === "ACTIVE" && <InstagramSyncButton connectionId={connection.id} label="Sync now" />}
               <form action={replaceToken} className="flex w-full max-w-sm gap-2">
                 <input type="hidden" name="id" value={connection.id} />
                 <input name="token" type="password" required autoComplete="off" placeholder="Replace access token" className="min-w-0 flex-1 rounded-full border px-4 py-2 text-xs outline-none focus:border-black" />
