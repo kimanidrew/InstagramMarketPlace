@@ -9,6 +9,7 @@ import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { ListingComments } from "@/components/listing-comments";
+import { ProductPriceEditor } from "@/components/product-price-editor";
 
 export const dynamic = "force-dynamic";
 
@@ -99,6 +100,8 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
               </div>
               {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-3 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
               <div className="mt-3">
+                {product.priceAmount !== null && product.priceAmount !== undefined && <p className="mb-2 text-xl font-black text-[#171717]">{product.priceCurrency || "KES"} {Number(product.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
+                {currentUser?.id === product.connection.connectedByUserId && <ProductPriceEditor postId={product.id} amount={product.priceAmount === null ? null : Number(product.priceAmount)} currency={product.priceCurrency} />}
                 <h1 className="product-detail-title break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-black">{product.productTitle?.trim() || "Product"}</h1>
                 {fullCaption && <p className="mt-2 whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>}
               </div>
