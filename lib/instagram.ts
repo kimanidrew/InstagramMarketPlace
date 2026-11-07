@@ -3,6 +3,8 @@ import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:
 import { db } from "@/lib/prisma";
 import { classifyProductTags } from "@/lib/ai-tags";
 import { getProfileAccentColor } from "@/lib/profile-color";
+import { parseCaptionPrice } from "@/lib/price-parser";
+import { shouldRefreshInstagramToken } from "@/lib/instagram-refresh";
 
 const V = () => process.env.INSTAGRAM_GRAPH_API_VERSION || "v24.0";
 const key = () =>
@@ -95,6 +97,7 @@ export function instagramOAuthUrl(state: string) {
 type TokenResult = {
   access_token: string;
   expires_in?: number;
+  error?: { message?: string; code?: number; type?: string };
 };
 
 function expiry(expiresIn?: number) {
@@ -118,20 +121,6 @@ async function refreshLongLivedToken(token: string) {
   return d;
 }
 
-async function tokenForStorage(token: string) {
-  try {
-    const r = await refreshLongLivedToken(token);
-    return {
-      token: r.access_token,
-      expiresAt: expiry(r.expires_in),
-    };
-  } catch {
-    return {
-      token,
-      expiresAt: null as Date | null,
-    };
-  }
-}
 
 export async function exchangeInstagramCode(code: string) {
   const app = process.env.INSTAGRAM_APP_ID;
@@ -189,8 +178,7 @@ export async function exchangeInstagramCode(code: string) {
   };
 }
 
-export async function connect(token: string, connectedByUserId?: string) {
-  const stored = await tokenForStorage(token);
+export async function connect(token: string, connectedByUserId?: string, tokenExpiresAt?: Date | null) {
   const m = await ig<{
     user_id?: string;
     id?: string;
@@ -199,7 +187,7 @@ export async function connect(token: string, connectedByUserId?: string) {
     biography?: string;
     profile_picture_url?: string;
     account_type?: string;
-  }>(stored.token, "me", {
+  }>(token, "me", {
     fields:
       "user_id,username,name,biography,profile_picture_url,account_type",
   });
@@ -210,12 +198,9 @@ export async function connect(token: string, connectedByUserId?: string) {
     throw new Error("Token was rejected by Instagram.");
   }
 
-  if (String(m.account_type || "").toUpperCase() !== "BUSINESS") {
-    throw new Error(
-      `This Instagram account is ${String(
-        m.account_type || "not a supported type"
-      ).toLowerCase()}. Marketplace stores must use an Instagram Business account, not a Creator or Personal account.`
-    );
+  const accountType = String(m.account_type || "").toUpperCase();
+  if (accountType && !["BUSINESS", "CREATOR"].includes(accountType)) {
+    throw new Error("This Instagram account is Personal. Switch it to a Business or Creator account in Instagram Settings → Account type and tools, then reconnect.");
   }
 
   const existing = await db().instagramConnection.findUnique({
@@ -241,8 +226,12 @@ export async function connect(token: string, connectedByUserId?: string) {
     biography: m.biography,
     profileImageUrl: m.profile_picture_url,
     profileAccentColor,
-    encryptedToken: enc(stored.token),
-    expiresAt: stored.expiresAt,
+    encryptedToken: enc(token),
+    expiresAt: tokenExpiresAt || null,
+    tokenExpiresAt: tokenExpiresAt || null,
+    lastRefreshedAt: null,
+    status: "ACTIVE" as const,
+    accountType: accountType || null,
     ...(connectedByUserId
       ? { connectedBy: { connect: { id: connectedByUserId } } }
       : {}),
@@ -275,7 +264,6 @@ export async function replaceConnectionToken(
     throw new Error("Instagram connection not found.");
   }
 
-  const stored = await tokenForStorage(token);
   const m = await ig<{
     user_id?: string;
     id?: string;
@@ -284,7 +272,7 @@ export async function replaceConnectionToken(
     biography?: string;
     profile_picture_url?: string;
     account_type?: string;
-  }>(stored.token, "me", {
+  }>(token, "me", {
     fields:
       "user_id,username,name,biography,profile_picture_url,account_type",
   });
@@ -304,10 +292,9 @@ export async function replaceConnectionToken(
     );
   }
 
-  if (String(m.account_type || "").toUpperCase() !== "BUSINESS") {
-    throw new Error(
-      "The replacement token must belong to an Instagram Business account."
-    );
+  const accountType = String(m.account_type || "").toUpperCase();
+  if (accountType && !["BUSINESS", "CREATOR"].includes(accountType)) {
+    throw new Error("The replacement token must belong to an Instagram Business or Creator account.");
   }
 
   const profileAccentColor = await getProfileAccentColor(m.profile_picture_url);
@@ -319,8 +306,12 @@ export async function replaceConnectionToken(
       biography: m.biography,
       profileImageUrl: m.profile_picture_url,
       profileAccentColor,
-      encryptedToken: enc(stored.token),
-      expiresAt: stored.expiresAt,
+      encryptedToken: enc(token),
+      expiresAt: null,
+      tokenExpiresAt: null,
+      lastRefreshedAt: null,
+      status: "ACTIVE",
+      accountType: accountType || null,
     },
   });
 }
@@ -371,33 +362,36 @@ export async function sync(id: string) {
     throw new Error("Connection not found.");
   }
 
+  if (c.status === "NEEDS_RECONNECT") {
+    throw new Error("Instagram access needs to be reconnected by the store owner.");
+  }
+
   let token = dec(c.encryptedToken);
-  let expiresAt = c.expiresAt;
+  let expiresAt = c.tokenExpiresAt || c.expiresAt;
+  const tokenCreatedAt = c.lastRefreshedAt || c.createdAt;
 
-  if (
-    expiresAt &&
-    expiresAt.getTime() - Date.now() < 7 * 24 * 60 * 60 * 1000
-  ) {
-    const currentExpiresAt = expiresAt;
+  if (expiresAt && expiresAt.getTime() <= Date.now() && !shouldRefreshInstagramToken(expiresAt, tokenCreatedAt)) {
+    await p.instagramConnection.update({ where: { id }, data: { status: "NEEDS_RECONNECT" } });
+    throw new Error("Instagram access has expired. Please reconnect the Instagram account.");
+  }
 
+  if (shouldRefreshInstagramToken(expiresAt, tokenCreatedAt)) {
     try {
-      const r = await refreshLongLivedToken(token);
-      token = r.access_token;
-      expiresAt = expiry(r.expires_in);
-
+      const refreshed = await refreshLongLivedToken(token);
+      token = refreshed.access_token;
+      expiresAt = expiry(refreshed.expires_in);
+      const refreshedAt = new Date();
       await p.instagramConnection.update({
         where: { id },
-        data: {
-          encryptedToken: enc(token),
-          expiresAt,
-        },
+        data: { encryptedToken: enc(token), expiresAt, tokenExpiresAt: expiresAt, lastRefreshedAt: refreshedAt, status: "ACTIVE" },
       });
-    } catch {
-      if (currentExpiresAt.getTime() <= Date.now()) {
-        throw new Error(
-          "Instagram access has expired. Please reconnect the Instagram account."
-        );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      if (/invalid|expired|OAuthException|token/i.test(message)) {
+        await p.instagramConnection.update({ where: { id }, data: { status: "NEEDS_RECONNECT" } });
+        throw new Error("Instagram access needs to be reconnected by the store owner.");
       }
+      throw new Error("Instagram token refresh is temporarily unavailable. Sync was skipped; please try again later.");
     }
   }
 
@@ -408,8 +402,9 @@ export async function sync(id: string) {
     name?: string;
     biography?: string;
     profile_picture_url?: string;
+    account_type?: string;
   }>(token, "me", {
-    fields: "username,name,biography,profile_picture_url",
+    fields: "username,name,biography,profile_picture_url,account_type",
   });
 
   const profileAccentColor = await getProfileAccentColor(profile.profile_picture_url);
@@ -421,6 +416,7 @@ export async function sync(id: string) {
       biography: profile.biography,
       profileImageUrl: profile.profile_picture_url,
       profileAccentColor,
+      ...(profile.account_type ? { accountType: profile.account_type.toUpperCase() } : {}),
     },
   });
 
@@ -492,6 +488,19 @@ export async function sync(id: string) {
         }
       }
 
+      const parsedPrice = parseCaptionPrice(x.caption || "");
+      const existingPrice = await p.instagramPost.findUnique({
+        where: { id: String(x.id) },
+        select: { priceSource: true },
+      });
+      const parsedPriceFields = existingPrice?.priceSource === "MANUAL"
+        ? {}
+        : {
+            priceAmount: parsedPrice?.amount ?? null,
+            priceCurrency: parsedPrice?.currency ?? null,
+            priceSource: parsedPrice ? "PARSED" as const : "NONE" as const,
+          };
+
       const post = await p.instagramPost.upsert({
         where: { id: x.id },
         create: {
@@ -512,8 +521,10 @@ export async function sync(id: string) {
           category: classification.category,
           subcategory: classification.subcategory,
           productSlug: slug,
+          ...parsedPriceFields,
         },
         update: {
+          ...parsedPriceFields,
           caption: x.caption || null,
           mediaType: x.media_type || "IMAGE",
           mediaUrl: x.media_url,
@@ -582,6 +593,7 @@ export async function sync(id: string) {
     data: {
       lastSyncedAt: new Date(),
       expiresAt,
+      tokenExpiresAt: expiresAt,
     },
   });
 
