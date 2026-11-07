@@ -113,7 +113,7 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
 
               <div className="mt-4 border-t border-[#ededeb] pt-4"><ListingComments postId={product.id} /></div>
               <div className="product-action-stack mt-4 flex flex-row items-stretch gap-2 pt-0 sm:mt-4"><ProductInquiryButton username={product.connection.username} productTitle={product.productTitle || "this product"} postUrl={product.permalink || ""} />{product.permalink && <a href={product.permalink} target="_blank" rel="noreferrer" className="product-view-button inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-2xl border border-[#dededb] bg-white px-3 py-3.5 text-center text-xs font-bold text-[#171717] transition hover:border-black hover:bg-[#f7f7f4] sm:px-5 sm:text-sm"><Instagram size={16} className="shrink-0" /><span>Original post</span><ArrowUpRight size={14} className="shrink-0" /></a>}</div>
-              <p className="mt-3 text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Ask for the latest price, stock and delivery information before ordering.</p>
+              <p className="mt-3 text-xs leading-5 text-[#777]"><b className="text-black">Shop directly with the seller.</b> Confirm stock and delivery details before ordering, and confirm the price with the seller if no price is shown.</p>
             </section>
             {relatedProducts.length > 0 && <nav className="sokolink-recommendation-scroll sr-only" aria-label="Listing navigation">
               {relatedProducts.map((item) => <Link key={item.id} href={"/product/" + item.productSlug}>{item.productTitle || "Product"}</Link>)}
