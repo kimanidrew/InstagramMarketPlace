@@ -16,6 +16,7 @@ test("uses the lowest value in a marked price range", () => {
 
 test("recognizes dollar prices and ignores phone numbers and years", () => {
   assert.deepEqual(parseCaptionPrice("Sale $25"), { amount: 25, currency: "USD" });
+  assert.deepEqual(parseCaptionPrice("Price: $25"), { amount: 25, currency: "USD" });
   assert.equal(parseCaptionPrice("Call 0712345678, established 2024"), null);
   assert.equal(parseCaptionPrice("New collection 2025"), null);
   assert.equal(parseCaptionPrice("Size 42, item 3"), null);
