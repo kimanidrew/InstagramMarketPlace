@@ -40,7 +40,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
       <div className="account-connect-copy">
         <span className="account-hub-eyebrow"><Instagram size={14}/> YOUR SELLER SPACE</span>
         <h1>Your business,<br/><span>all in one place.</span></h1>
-        <p>Connect your Instagram Business account, manage your shops, and give your best products more visibility — all from one simple dashboard.</p>
+        <p>Connect your Instagram Business or Creator account, manage your shops, and give your best products more visibility — all from one simple dashboard.</p>
         <Link href="/account/setup" className="account-connect-cta"><Instagram size={17}/> Connect your Instagram <ArrowRight size={16}/></Link>
       </div>
       <div className="account-banner-art" aria-hidden="true"><div className="account-art-ring"/><div className="account-art-card"><Instagram size={30}/><span>INSTAGRAM</span><b>Shop connected</b><i><CheckCircle2 size={15}/> Ready to grow</i></div><div className="account-art-spark">✦</div></div>
@@ -66,7 +66,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
         <div className="account-store-avatar"><Instagram size={23}/><span><i/></span></div>
         <div className="account-store-info"><h3>@{c.username}</h3><p>{c.posts.length} marketplace {c.posts.length === 1 ? "product" : "products"}</p><span className="account-connected-status"><CheckCircle2 size={13}/> {c.status === "NEEDS_RECONNECT" ? "Instagram needs reconnection" : "Instagram connected"}</span>{c.status === "NEEDS_RECONNECT" && <span className="mt-2 inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">Reconnect Instagram</span>}</div>
         <div className="account-store-actions">{c.status === "NEEDS_RECONNECT" ? <Link href={approvedRequestsByUsername.has(c.username.toLowerCase()) ? "/api/instagram/connect?requestId="+encodeURIComponent(approvedRequestsByUsername.get(c.username.toLowerCase())!) : "/account/setup"} className="account-manage-button">Reconnect Instagram <ArrowRight size={14}/></Link> : <InstagramSyncButton connectionId={c.id}/>}<Link href={"/stores/"+encodeURIComponent(c.username)} className="account-manage-button">View store <ArrowRight size={14}/></Link><Link href="/account/analytics" className="account-grow-link"><Zap size={14}/> Grow your own shop</Link><AccountTerminateStoreForm connectionId={c.id} username={c.username} /></div>
-      </article>)}</div> : <div className="account-empty-state"><div className="account-empty-icon"><Instagram size={25}/></div><h3>Your connected shops will appear here</h3><p>Start by connecting an Instagram Business account. We’ll guide you through each step and save your progress.</p><Link href="/account/setup" className="account-primary-button">Connect your first shop <ArrowRight size={15}/></Link></div>}
+      </article>)}</div> : <div className="account-empty-state"><div className="account-empty-icon"><Instagram size={25}/></div><h3>Your connected shops will appear here</h3><p>Start by connecting an Instagram Business or Creator account. We’ll guide you through each step and save your progress.</p><Link href="/account/setup" className="account-primary-button">Connect your first shop <ArrowRight size={15}/></Link></div>}
     </section>
 
     {pendingRequests.length > 0 && <section className="account-section">
