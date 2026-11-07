@@ -124,7 +124,12 @@ export function ProductCard({ p, editablePrice = false }: { p: any; editablePric
 </div>
 
       <div className="pt-2 sm:pt-3">
-        <div className="flex items-center justify-between gap-2">
+        <p className="product-item-caption line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
+          {p.productTitle}
+        </p>
+        {p.priceAmount !== null && p.priceAmount !== undefined && <p className="mt-1 text-xs font-medium tracking-[0.01em] text-[#a6a6a6]">{p.priceCurrency || "KES"} {Number(p.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
+        {editablePrice && <ProductPriceEditor postId={p.id} amount={p.priceAmount === null || p.priceAmount === undefined ? null : Number(p.priceAmount)} currency={p.priceCurrency} />}
+        <div className="mt-2 flex items-center justify-between gap-2 border-t border-[#f0f0f0] pt-2">
           <div className={"product-card-like-line min-w-0 " + (likeFlash ? "is-updated" : "")} aria-label={likeCount.toLocaleString() + " likes"}>
             <Heart size={16} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
             <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
@@ -132,11 +137,6 @@ export function ProductCard({ p, editablePrice = false }: { p: any; editablePric
           </div>
           <WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} />
         </div>
-        <p className="product-item-caption line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
-          {p.productTitle}
-        </p>
-        {p.priceAmount !== null && p.priceAmount !== undefined && <p className="mt-1 text-xs font-semibold text-[#858585]">{p.priceCurrency || "KES"} {Number(p.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
-        {editablePrice && <ProductPriceEditor postId={p.id} amount={p.priceAmount === null || p.priceAmount === undefined ? null : Number(p.priceAmount)} currency={p.priceCurrency} />}
 
         <Link
           href={"/stores/" + p.connection.username}
