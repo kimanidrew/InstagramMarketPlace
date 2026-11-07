@@ -44,11 +44,14 @@ export async function ig<T>(
 
   const r = await fetch(u, { cache: "no-store" });
   const d = (await r.json()) as T & {
-    error?: { message?: string };
+    error?: { message?: string; code?: number; type?: string };
   };
 
   if (!r.ok || d.error) {
-    throw new Error(d.error?.message || "Instagram request failed.");
+    const error = new Error(d.error?.message || "Instagram request failed.") as Error & { code?: number; type?: string };
+    error.code = d.error?.code;
+    error.type = d.error?.type;
+    throw error;
   }
 
   return d;
@@ -406,7 +409,17 @@ export async function sync(id: string) {
 
   // Refresh the connected profile too, so name, bio and profile image changes
   // on Instagram are reflected in the marketplace on the next reconciliation.
-  const profile = await instagramProfile(token);
+  let profile: InstagramProfile;
+  try {
+    profile = await instagramProfile(token);
+  } catch (error) {
+    const profileError = error as Error & { code?: number };
+    if (profileError.code === 190 || /invalid|expired|revoked/i.test(profileError.message || "")) {
+      await p.instagramConnection.update({ where: { id }, data: { status: "NEEDS_RECONNECT" } });
+      throw new Error("Instagram access needs to be reconnected by the store owner.");
+    }
+    throw error;
+  }
 
   const profileAccentColor = await getProfileAccentColor(profile.profile_picture_url);
 
