@@ -28,6 +28,10 @@ export async function POST(r: Request) {
     return NextResponse.redirect(new URL("/account?requestCancelled=1", r.url));
   }
 
+  const flow = f.get("flow") === "page" ? "page" : "account";
+  if (f.get("businessCreatorConfirmed") !== "on") {
+    return NextResponse.redirect(new URL(flow === "page" ? "/account/setup?step=1&error=account_type" : "/account?step=1&error=account_type", r.url));
+  }
   const username = String(f.get("username") || "").replace(/^@/, "").trim().toLowerCase();
   if (!/^[a-z0-9._]{1,30}$/i.test(username)) {
     return NextResponse.redirect(new URL(f.get("flow") === "page" ? "/account/setup?step=1&error=invalid" : "/account?step=1&error=invalid", r.url));
