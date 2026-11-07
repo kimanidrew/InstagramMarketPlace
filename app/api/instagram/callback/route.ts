@@ -5,6 +5,9 @@ import { db } from "@/lib/prisma";
 import { connect, exchangeInstagramCode, ig, sync } from "@/lib/instagram";
 
 const secret = () => process.env.AUTH_SECRET || "change-me";
+const permissionErrorMessage = () => process.env.INSTAGRAM_APP_MODE !== "live"
+  ? "Only Instagram accounts added as testers or app roles can connect while the Meta app is in development mode. Ask the SokoLink administrator to invite your exact Instagram username, accept the invitation, and try again."
+  : "Meta denied the requested Instagram permissions. Confirm the app has the required Instagram permissions and that App Review has approved them for live use.";
 
 function verify(v: string) {
   try {
@@ -28,7 +31,7 @@ export async function GET(r: Request) {
   if (error) {
     const details = error.toLowerCase();
     if (/permission|role|tester|not authorized|access denied/.test(details)) {
-      return fail("This Instagram account is not yet allowed to connect. Ask the SokoLink team to add your exact Instagram username as an Instagram tester in Meta, accept the invitation, then try again.");
+      return fail(permissionErrorMessage());
     }
     return fail("Instagram could not authorize this connection. Please check your account type and try again.");
   }
@@ -57,7 +60,7 @@ export async function GET(r: Request) {
     } catch (profileError) {
       const message = profileError instanceof Error ? profileError.message.toLowerCase() : "";
       if (/permission|role|tester|not authorized|access denied/.test(message)) {
-        return fail("Your Instagram account is not permitted to use the SokoLink Meta app yet. Ask an administrator to add you as an Instagram tester, accept the invitation, and reconnect.");
+        return fail(permissionErrorMessage());
       }
       return fail("We could not read this Instagram profile. Make sure it is a Business or Creator account, then switch account type in Instagram Settings → Account type and tools and try again.");
     }
@@ -84,7 +87,7 @@ export async function GET(r: Request) {
   } catch (e) {
     const message = e instanceof Error ? e.message : "";
     if (/permission|role|tester|not authorized|access denied/i.test(message)) {
-      return fail("Only Instagram accounts added as testers or app roles can connect while the Meta app is in development mode. Ask the SokoLink administrator to invite your username, accept it, and try again.");
+      return fail(permissionErrorMessage());
     }
     return fail(message || "Instagram connection failed. Please check that your account is a Business or Creator account.");
   }
