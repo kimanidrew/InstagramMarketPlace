@@ -6,6 +6,7 @@ test("parses supported KES price markers and shorthand", () => {
   assert.deepEqual(parseCaptionPrice("Dress Ksh 2,500"), { amount: 2500, currency: "KES" });
   assert.deepEqual(parseCaptionPrice("Price: 2.5k"), { amount: 2500, currency: "KES" });
   assert.deepEqual(parseCaptionPrice("Bei: 1,200/="), { amount: 1200, currency: "KES" });
+  assert.deepEqual(parseCaptionPrice("Dress 1,200/="), { amount: 1200, currency: "KES" });
   assert.deepEqual(parseCaptionPrice("Only @ 950"), { amount: 950, currency: "KES" });
 });
 
