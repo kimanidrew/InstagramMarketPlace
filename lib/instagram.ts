@@ -216,7 +216,7 @@ export async function connect(token: string, connectedByUserId?: string, tokenEx
 
   const accountType = String(m.account_type || "").toUpperCase();
   if (accountType && !["BUSINESS", "CREATOR", "MEDIA_CREATOR"].includes(accountType)) {
-    throw new Error("This Instagram account is Personal. Switch it to a Business or Creator account in Instagram Settings → Account type and tools, then reconnect.");
+    throw new Error("This Instagram account type is not supported. Switch it to a Business or Creator account in Instagram Settings → Account type and tools, then reconnect.");
   }
 
   const existing = await db().instagramConnection.findUnique({
