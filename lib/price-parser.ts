@@ -4,6 +4,11 @@ export type ParsedPrice = { amount: number; currency: string };
  * Extract only explicitly marked prices. Unmarked numbers are intentionally
  * ignored so phone numbers, years, sizes and quantities are not guessed as prices.
  */
+function phoneLike(raw: string, remainder: string) {
+  const digits = raw.replace(/\\D/g, "");
+  return digits.length >= 9 || /^\\s+\\d{3,4}[\\s-]\\d{3,4}(?:[\\s-]\\d{2,4})?\\b/.test(remainder);
+}
+
 export function parseCaptionPrice(caption: string | null | undefined): ParsedPrice | null {
   if (!caption) return null;
 
