@@ -132,10 +132,10 @@ export function ProductCard({ p, editablePrice = false }: { p: any; editablePric
           </div>
           <WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} />
         </div>
-        {p.priceAmount !== null && p.priceAmount !== undefined && <p className="mb-1 text-sm font-black text-[#171717]">{p.priceCurrency || "KES"} {Number(p.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
         <p className="product-item-caption line-clamp-2 break-words text-xs font-bold leading-5 text-black sm:text-sm sm:leading-6">
           {p.productTitle}
         </p>
+        {p.priceAmount !== null && p.priceAmount !== undefined && <p className="mt-1 text-xs font-semibold text-[#858585]">{p.priceCurrency || "KES"} {Number(p.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
         {editablePrice && <ProductPriceEditor postId={p.id} amount={p.priceAmount === null || p.priceAmount === undefined ? null : Number(p.priceAmount)} currency={p.priceCurrency} />}
 
         <Link
