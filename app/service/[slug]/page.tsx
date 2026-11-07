@@ -100,7 +100,7 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
 
               <div className="mt-6 border-t border-[#ededeb] pt-5"><ListingComments postId={service.id} /></div>
               <div className="mt-6 flex flex-col gap-3 border-t border-[#ededeb] pt-5 sm:mt-7"><ProductInquiryButton username={service.connection.username} productTitle={service.productTitle || "this service"} postUrl={service.permalink || ""} />{service.permalink && <a href={service.permalink} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-black/[0.1] bg-white px-5 py-3.5 text-sm font-bold hover:border-black hover:bg-black hover:text-white"><Instagram size={16}/> View original post <ArrowUpRight size={14}/></a>}</div>
-              <p className="mt-5 text-xs leading-5 text-[#777]"><b className="text-black">Contact the provider directly.</b> Ask for current pricing, availability, location and delivery details before booking.</p>
+              <p className="mt-5 text-xs leading-5 text-[#777]"><b className="text-black">Contact the provider directly.</b> Confirm availability, location and delivery details before booking, and confirm pricing if no price is shown.</p>
             </section>
           </aside>
           {relatedServices.length > 0 && <section className="product-recommendations mt-8 border-t border-[#ededeb] pt-6" aria-label="Recommended services">
