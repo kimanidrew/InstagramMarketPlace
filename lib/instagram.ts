@@ -296,7 +296,7 @@ export async function replaceConnectionToken(
   }
 
   const accountType = String(m.account_type || "").toUpperCase();
-  if (accountType && !["BUSINESS", "CREATOR"].includes(accountType)) {
+  if (accountType && !["BUSINESS", "CREATOR", "MEDIA_CREATOR"].includes(accountType)) {
     throw new Error("The replacement token must belong to an Instagram Business or Creator account.");
   }
 
