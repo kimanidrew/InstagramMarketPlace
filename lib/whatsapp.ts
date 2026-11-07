@@ -28,6 +28,8 @@ type Listing = {
   category: string | null;
   subcategory: string | null;
   listingType: "PRODUCT" | "SERVICE";
+  priceAmount: number | string | null;
+  priceCurrency: string | null;
   connection: { username: string };
   tags: { name: string }[];
 };
@@ -255,7 +257,9 @@ function listingCaption(listing: Listing) {
     `🛍️ ${listing.productTitle || kind}`,
     `Shop: @${listing.connection.username}`,
     category ? `Category: ${category}` : "",
-    "Price: Please check with the seller for current pricing.",
+    listing.priceAmount !== null && listing.priceAmount !== undefined
+      ? `Price: ${listing.priceCurrency || "KES"} ${Number(listing.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}`
+      : "Price: Please confirm current pricing with the seller.",
     `View listing: ${listingUrl(listing)}`,
   ].filter(Boolean);
   return details.join("\n");
