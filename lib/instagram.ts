@@ -115,7 +115,10 @@ async function refreshLongLivedToken(token: string) {
   };
 
   if (!r.ok || !d.access_token) {
-    throw new Error(d.error?.message || "Instagram token refresh failed.");
+    const error = new Error(d.error?.message || "Instagram token refresh failed.") as Error & { code?: number; type?: string };
+    error.code = d.error?.code;
+    error.type = d.error?.type;
+    throw error;
   }
 
   return d;
@@ -199,7 +202,7 @@ export async function connect(token: string, connectedByUserId?: string, tokenEx
   }
 
   const accountType = String(m.account_type || "").toUpperCase();
-  if (accountType && !["BUSINESS", "CREATOR"].includes(accountType)) {
+  if (accountType && !["BUSINESS", "CREATOR", "MEDIA_CREATOR"].includes(accountType)) {
     throw new Error("This Instagram account is Personal. Switch it to a Business or Creator account in Instagram Settings → Account type and tools, then reconnect.");
   }
 
@@ -386,8 +389,12 @@ export async function sync(id: string) {
         data: { encryptedToken: enc(token), expiresAt, tokenExpiresAt: expiresAt, lastRefreshedAt: refreshedAt, status: "ACTIVE" },
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "";
-      if (/invalid|expired|OAuthException|token/i.test(message)) {
+      const refreshError = error as (Error & { code?: number; type?: string });
+      const message = refreshError instanceof Error ? refreshError.message : "";
+      const invalidToken = refreshError.code === 190 ||
+        /invalid|expired|revoked/i.test(message) ||
+        (refreshError.type === "OAuthException" && /access token|expired|invalid/i.test(message));
+      if (invalidToken) {
         await p.instagramConnection.update({ where: { id }, data: { status: "NEEDS_RECONNECT" } });
         throw new Error("Instagram access needs to be reconnected by the store owner.");
       }
