@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { MoreHorizontal, ExternalLink, Store, Pencil, X } from "lucide-react";
+import { MoreHorizontal, ExternalLink, Store, Pencil } from "lucide-react";
 
 export function ProductActionsMenu({ editHref, productHref, storeHref, canEdit = false }: { editHref: string; productHref: string; storeHref: string; canEdit?: boolean }) {
   const [open, setOpen] = useState(false);
