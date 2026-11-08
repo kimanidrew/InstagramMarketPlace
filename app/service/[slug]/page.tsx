@@ -10,7 +10,7 @@ import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { ProductCard } from "@/components/product-card";
 import { ListingComments } from "@/components/listing-comments";
-import { ProductPriceEditor } from "@/components/product-price-editor";
+import { ProductActionsMenu } from "@/components/product-actions-menu";
 
 export const dynamic = "force-dynamic";
 
@@ -88,13 +88,13 @@ export default async function Service({ params }: { params: Promise<{ slug: stri
                 </Link>
                 <div className="listing-detail-social-actions flex shrink-0 items-center gap-2">
                   <LikeButton id={service.id} count={service.likes.length + Number(service.instagramLikeCount || 0)} compact largeCompact initialLiked={service.likes.some((like) => like.userId === currentUser?.id)} />
-                  <WishlistButton id={service.id} count={service.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={service.wishlistItems.length > 0} />
+                  <WishlistButton id={service.id} count={service.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={service.wishlistItems.length > 0} /><ProductActionsMenu editHref={"/account/listings/"+encodeURIComponent(service.id)+"/edit"} productHref={"/service/"+service.productSlug} storeHref={"/stores/"+encodeURIComponent(service.connection.username)} canEdit={currentUser?.id === service.connection.connectedByUserId || currentUser?.role === "ADMIN"} />
                 </div>
               </div>
               <div className="mt-5 flex flex-wrap items-center gap-2"><span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-white"><BriefcaseBusiness size={11} /> Service</span>{service.connection.verifiedAt && <span className="rounded-full bg-[#f5f0df] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-[#8a6a16]">✓ Verified</span>}</div>
               <h1 className="mt-5 break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-[#171717]">{service.productTitle || "Instagram service"}</h1>
               {service.priceAmount !== null && service.priceAmount !== undefined && <p className="mt-2 text-base font-semibold tracking-[.01em] text-[#a6a6a6]">{service.priceCurrency || "KES"} {Number(service.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
-              {currentUser?.id === service.connection.connectedByUserId && <ProductPriceEditor postId={service.id} amount={service.priceAmount === null ? null : Number(service.priceAmount)} currency={service.priceCurrency} />}
+              
               <p className="mt-4 whitespace-pre-line text-sm leading-7 text-[#666]">{cleanCaption || "Discover this service from @" + service.connection.username + " and contact the provider directly on Instagram for pricing, availability and details."}</p>
               <div className="mt-6 grid grid-cols-3 gap-2 border-y border-[#ededeb] py-5"><div className="rounded-2xl bg-[#f7f7f4] p-3"><b className="block text-lg font-black">{(service.instagramLikeCount + service.likes.length).toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Likes</p></div><div className="rounded-2xl bg-[#f7f7f4] p-3"><b className="block text-lg font-black">{service.instagramCommentCount.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">IG comments</p></div><div className="rounded-2xl bg-[#f7f7f4] p-3"><b className="block text-lg font-black">{service.wishlistItems.length.toLocaleString()}</b><p className="mt-1 text-[9px] font-bold uppercase tracking-[.08em] text-[#999]">Saved</p></div></div>
               {(service.category || service.subcategory || tags.length > 0) && <div className="mt-5"><h2 className="mb-3 text-[10px] font-extrabold uppercase tracking-[.14em] text-[#999]">Service categories</h2><div className="flex flex-wrap gap-2">{[service.category, service.subcategory, ...tags.map((tag) => tag.name)].filter((value): value is string => Boolean(value?.trim())).map((tag) => <Link key={tag} href={"/search?tag=" + encodeURIComponent(tag)} className="rounded-full border border-black/[0.08] bg-[#f7f7f4] px-3 py-1.5 text-xs font-semibold text-[#555] transition hover:border-black hover:bg-black hover:text-white">{tag}</Link>)}</div></div>}
