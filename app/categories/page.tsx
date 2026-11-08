@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Layers3 } from "lucide-react";
 import { db } from "@/lib/prisma";
+import { user } from "@/lib/auth";
 import { ProductCard } from "@/components/product-card";
 import { filterAvailableInstagramMedia } from "@/lib/instagram-media";
 
@@ -11,6 +12,7 @@ function slugify(value: string) {
 }
 
 export default async function CategoriesPage() {
+  const [currentUser] = await Promise.all([user()]);
   const prisma = db();
   const grouped = await prisma.instagramPost.groupBy({
     by: ["category"],
@@ -29,7 +31,7 @@ export default async function CategoriesPage() {
         take: 5,
       });
       const available = await filterAvailableInstagramMedia(products);
-      return { name: item.category, slug: slugify(item.category), count: item._count._all, products: available.slice(0, 4) };
+      return { name: item.category, slug: slugify(item.category), count: item._count._all, products: available.slice(0, 4).map((product: any) => ({ ...product, canEditListing: currentUser?.id === product.connection.connectedByUserId || currentUser?.role === "ADMIN" })) };
     }));
 
   const visible = categories.filter((category) => category.products.length > 0);
