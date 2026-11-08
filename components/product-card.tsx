@@ -7,7 +7,7 @@ import { LikeButton } from "@/components/like-button";
 import { WishlistButton } from "@/components/wishlist-button";
 import { recordAnalytics } from "@/lib/analytics-client";
 import { useEffect, useRef, useState } from "react";
-import { ProductPriceEditor } from "@/components/product-price-editor";
+import { ProductActionsMenu } from "@/components/product-actions-menu";
 
 export function ProductCard({ p, editablePrice = false }: { p: any; editablePrice?: boolean }) {
   const [likeCount, setLikeCount] = useState(Number(p.totalLikes ?? (Number(p.instagramLikeCount ?? p.like_count ?? 0) + Number(p._count?.likes ?? p.likes?.length ?? 0))));
@@ -128,14 +128,14 @@ export function ProductCard({ p, editablePrice = false }: { p: any; editablePric
           {p.productTitle}
         </p>
         {p.priceAmount !== null && p.priceAmount !== undefined && <p className="mt-1 text-xs font-medium tracking-[0.01em] text-[#a6a6a6]">{p.priceCurrency || "KES"} {Number(p.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
-        {editablePrice && <ProductPriceEditor postId={p.id} amount={p.priceAmount === null || p.priceAmount === undefined ? null : Number(p.priceAmount)} currency={p.priceCurrency} />}
+        
         <div className="mt-2 flex items-center justify-between gap-2 border-t border-[#f0f0f0] pt-2">
           <div className={"product-card-like-line min-w-0 " + (likeFlash ? "is-updated" : "")} aria-label={likeCount.toLocaleString() + " likes"}>
             <Heart size={16} strokeWidth={2.4} fill={isLiked ? "currentColor" : "none"} className={"product-card-like-line-icon " + (isLiked ? "text-[#ff3b6b]" : "") + (likeFlash ? " is-animated" : "")} aria-hidden="true" />
             <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
             <span>likes</span>
           </div>
-          <WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} />
+          <div className="flex shrink-0 items-center gap-1"><WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} /><ProductActionsMenu editHref={"/account/listings/"+encodeURIComponent(p.id)+"/edit"} productHref={href} storeHref={"/stores/"+encodeURIComponent(p.connection.username)} canEdit={editablePrice} /></div>
         </div>
 
         <Link
