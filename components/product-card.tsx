@@ -135,7 +135,7 @@ export function ProductCard({ p, editablePrice = false }: { p: any; editablePric
             <b className={"interaction-stat-value " + (likeFlash ? "is-count-updated" : "")}>{likeCount.toLocaleString()}</b>
             <span>likes</span>
           </div>
-          <div className="flex shrink-0 items-center gap-1"><WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} /><ProductActionsMenu editHref={"/account/listings/"+encodeURIComponent(p.id)+"/edit"} productHref={href} storeHref={"/stores/"+encodeURIComponent(p.connection.username)} canEdit={editablePrice} /></div>
+          <div className="flex shrink-0 items-center gap-1"><WishlistButton key={p.id + "-" + String(wishlistSaved)} id={p.id} count={wishlistCount} compact inlineStyle wishlisted={wishlistSaved} /><ProductActionsMenu editHref={"/account/listings/"+encodeURIComponent(p.id)+"/edit"} productHref={href} storeHref={"/stores/"+encodeURIComponent(p.connection.username)} canEdit={editablePrice || Boolean(p.canEditListing)} /></div>
         </div>
 
         <Link
