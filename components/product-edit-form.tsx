@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Check, Loader2, Save } from "lucide-react";
@@ -18,7 +18,7 @@ export function ProductEditForm({ listing }: { listing: Listing }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  async function save(event: React.FormEvent<HTMLFormElement>) {
+  async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy) return;
     setBusy(true); setError("");
