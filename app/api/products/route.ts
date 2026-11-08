@@ -56,6 +56,7 @@ export async function GET(request: Request) {
     const hasMore = ranked.length > page * limit + limit;
     const products = ranked.slice(page * limit, page * limit + limit).map((post: any) => ({
       ...post,
+      canEditListing: currentUser?.id === post.connection.connectedByUserId || currentUser?.role === "ADMIN",
       totalLikes: Number(post.instagramLikeCount || 0) + Number(post._count?.likes ?? post.likes?.length ?? 0),
       likedByCurrentUser: currentUser ? post.likes.some((like: any) => like.userId === currentUser.id) : false,
       wishlistedByCurrentUser: currentUser ? post.wishlistItems.some((item: any) => item.userId === currentUser.id) : false,
@@ -130,6 +131,7 @@ export async function GET(request: Request) {
   const availableProducts = rankedPosts.slice(pageStart, pageStart + limit);
   const products = availableProducts.map((post: any) => ({
     ...post,
+      canEditListing: currentUser?.id === post.connection.connectedByUserId || currentUser?.role === "ADMIN",
       totalLikes: Number(post.instagramLikeCount || 0) + Number(post._count?.likes ?? post.likes?.length ?? 0),
     likedByCurrentUser: currentUser ? post.likes.some((like: any) => like.userId === currentUser.id) : false,
     wishlistedByCurrentUser: currentUser ? post.wishlistItems.some((item: any) => item.userId === currentUser.id) : false,
