@@ -9,7 +9,7 @@ import { ProductCarousel } from "@/components/product-carousel";
 import { ProductInquiryButton } from "@/components/product-inquiry-button";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { ListingComments } from "@/components/listing-comments";
-import { ProductPriceEditor } from "@/components/product-price-editor";
+import { ProductActionsMenu } from "@/components/product-actions-menu";
 
 export const dynamic = "force-dynamic";
 
@@ -95,14 +95,14 @@ export default async function Product({ params }: { params: Promise<{ slug: stri
                 </Link>
                 <div className="listing-detail-social-actions flex shrink-0 items-center gap-2">
                   <LikeButton id={product.id} count={totalLikes} compact largeCompact initialLiked={product.likes.some((like) => like.userId === currentUser?.id)} />
-                  <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} />
+                  <WishlistButton id={product.id} count={product.wishlistItems.length} compact largeCompact productDetailStyle wishlisted={product.wishlistItems.length > 0} /><ProductActionsMenu editHref={"/account/listings/"+encodeURIComponent(product.id)+"/edit"} productHref={"/product/"+product.productSlug} storeHref={"/stores/"+encodeURIComponent(product.connection.username)} canEdit={currentUser?.id === product.connection.connectedByUserId || currentUser?.role === "ADMIN"} />
                 </div>
               </div>
               {product.boostUntil && new Date(product.boostUntil) > new Date() && <div className="mt-3 inline-flex rounded-full bg-[#111] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-white">Promoted</div>}
               <div className="mt-3">
                 <h1 className="product-detail-title break-words text-[clamp(1.65rem,3vw,2.3rem)] font-black leading-[1.12] tracking-[-.055em] text-black">{product.productTitle?.trim() || "Product"}</h1>
                 {product.priceAmount !== null && product.priceAmount !== undefined && <p className="mt-2 text-base font-semibold tracking-[.01em] text-[#a6a6a6]">{product.priceCurrency || "KES"} {Number(product.priceAmount).toLocaleString("en-KE", { maximumFractionDigits: 2 })}</p>}
-                {currentUser?.id === product.connection.connectedByUserId && <ProductPriceEditor postId={product.id} amount={product.priceAmount === null ? null : Number(product.priceAmount)} currency={product.priceCurrency} />}
+                
                 {fullCaption && <p className="mt-2 whitespace-pre-line break-words text-sm leading-6 text-[#555]">{fullCaption}</p>}
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2 py-3">
