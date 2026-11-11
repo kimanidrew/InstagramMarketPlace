@@ -229,7 +229,7 @@ export async function Products({
             <div className="shop-category-grid">
               {shopCategories.map((category, index) => (
                 <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className={"shop-category-card shop-category-card-" + (index + 1)}>
-                  <span className="shop-category-card-top"><span className="shop-category-icon">{category.icon}</span><span className="shop-category-index">0{index + 1}</span></span>
+                  <span className="shop-category-card-top"><span className="shop-category-icon">{category.icon}</span></span>
                   <span className="shop-category-card-label">{category.label}</span>
                   <span className="shop-category-card-bottom"><span>Discover collection</span><ChevronRight size={15} /></span>
                   <span className="shop-category-card-art" aria-hidden="true"><i /><i /><i /></span>
