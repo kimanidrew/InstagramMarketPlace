@@ -211,8 +211,9 @@ export async function Products({
         <section className="shop-by-category shop-category-showcase relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden" aria-label="Shop by category">
           <div className="shell shop-category-inner">
             <div className="shop-category-heading">
+              <span className="shop-category-heading-icon" aria-hidden="true"><Grid2X2 size={17} strokeWidth={2.5} /></span>
               <div className="shop-category-heading-copy">
-                <h1><span className="shop-category-heading-icon"><Grid2X2 size={17} strokeWidth={2.5} /></span><span>Shop by category</span></h1>
+                <h1>Shop by category</h1>
                 <p className="shop-category-subtext">Discover your style, find your favourites, and explore more.</p>
               </div>
               <Link href="/categories" className="shop-category-view-all">View all <ChevronRight size={15} /></Link>
