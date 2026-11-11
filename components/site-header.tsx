@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound, Compass, Heart, CircleHelp, ShoppingBag, BriefcaseBusiness } from "lucide-react";
+import { ArrowRight, Bookmark, Search, X, Sparkles, Store, UserRound, Compass, Heart, CircleHelp, BriefcaseBusiness } from "lucide-react";
 import { NotificationBell } from "@/components/notification-center";
 import { BrandWordmark } from "@/components/brand-wordmark";
 
@@ -123,7 +123,6 @@ export function SiteHeader({ user }: { user: any }) {
   const serviceSuggestions = searchSuggestions.filter((item: any) => String(item.listingType || "").toUpperCase() === "SERVICE");
 
   const searchablePages = [
-    { title: "Shop", description: "Browse all products and listings", href: "/shop", terms: "shop products marketplace listings browse", icon: ShoppingBag },
     { title: "For You", description: "Personalised picks and recommendations", href: "/for-you", terms: "for you personalised recommendations interests", icon: Compass },
     { title: "Stores", description: "Discover Instagram shops and sellers", href: "/stores", terms: "stores shops sellers instagram businesses", icon: Store },
     { title: "Categories", description: "Explore products by category", href: "/categories", terms: "categories types collections explore", icon: Sparkles },
@@ -169,14 +168,13 @@ export function SiteHeader({ user }: { user: any }) {
 
         <nav className="hidden items-center gap-1 lg:flex">
           {[
-            ["/shop", "Shop"],
             ["/for-you", "For You"],
             ["/stores", "Stores"],
             ["/categories", "Categories"],
             ["/how-it-works", "How it works"],
             ["/about", "About"],
           ].map(([href, label]) => {
-            const active = pathname === href || (href !== "/shop" && pathname.startsWith(href + "/"));
+            const active = pathname === href || pathname.startsWith(href + "/");
             return (
               <Link key={href} href={href} className={"nav-link" + (active ? " is-active" : "")} aria-current={active ? "page" : undefined}>{label}</Link>
             );
