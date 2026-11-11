@@ -15581,3 +15581,27 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   .shop-category-heading h1 { font-size:14px !important; }
   .shop-category-subtext { font-size:8px !important; }
 }
+
+
+/* Flat deep-red category section */
+.shop-by-category.shop-category-showcase {
+  background:linear-gradient(115deg,#3b080d 0%,#570b14 48%,#35070c 100%) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  outline:0 !important;
+}
+.shop-by-category.shop-category-showcase::before,
+.shop-by-category.shop-category-showcase::after,
+.shop-category-inner,
+.shop-category-heading,
+.shop-category-heading-copy,
+.shop-category-grid {
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+.shop-by-category.shop-category-showcase,
+.shop-by-category.shop-category-showcase * {
+  border-top-color:transparent;
+  border-bottom-color:transparent;
+}
