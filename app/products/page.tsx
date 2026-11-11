@@ -213,6 +213,7 @@ export async function Products({
             <div className="shop-category-heading">
               <div className="shop-category-heading-copy">
                 <h1><span className="shop-category-heading-icon"><Grid2X2 size={17} strokeWidth={2.5} /></span><span>Shop by category</span></h1>
+                <p className="shop-category-subtext">Discover your style, find your favourites, and explore more.</p>
               </div>
               <Link href="/categories" className="shop-category-view-all">View all <ChevronRight size={15} /></Link>
             </div>
