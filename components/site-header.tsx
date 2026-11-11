@@ -161,6 +161,24 @@ export function SiteHeader({ user }: { user: any }) {
 
   return (
     <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "") + (atTop ? " is-at-top" : "")}>
+      <div className="sokolink-marquee" role="region" aria-label="What SokoLink offers">
+        <div className="sokolink-marquee-track">
+          <div className="sokolink-marquee-content">
+            <span>Discover products from real Instagram stores</span><i>✦</i>
+            <span>Explore services and unique finds</span><i>✦</i>
+            <span>Connect directly with sellers</span><i>✦</i>
+            <span>Save favourites and discover new brands</span><i>✦</i>
+            <span>Grow your business with SokoLink</span><i>✦</i>
+          </div>
+          <div className="sokolink-marquee-content" aria-hidden="true">
+            <span>Discover products from real Instagram stores</span><i>✦</i>
+            <span>Explore services and unique finds</span><i>✦</i>
+            <span>Connect directly with sellers</span><i>✦</i>
+            <span>Save favourites and discover new brands</span><i>✦</i>
+            <span>Grow your business with SokoLink</span><i>✦</i>
+          </div>
+        </div>
+      </div>
       <div className="shell flex h-[74px] items-center gap-4">
         <Link href="/" className="brand shrink-0">
           <BrandWordmark />
