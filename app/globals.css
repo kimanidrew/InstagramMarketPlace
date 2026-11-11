@@ -15492,3 +15492,36 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   .shop-category-heading-icon { width:24px !important; height:24px !important; }
   .shop-category-view-all { font-size:9px !important; padding:5px 6px !important; }
 }
+
+
+/* Supporting copy beneath the centered category title */
+.shop-category-heading {
+  min-height:58px !important;
+  align-items:center !important;
+}
+.shop-category-heading-copy {
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:3px !important;
+}
+.shop-category-heading h1 {
+  margin:0 !important;
+  line-height:1.15 !important;
+}
+.shop-category-subtext {
+  margin:0 !important;
+  color:rgba(255,255,255,.66) !important;
+  font-size:11px !important;
+  font-weight:500 !important;
+  letter-spacing:.015em !important;
+  line-height:1.35 !important;
+  text-align:center !important;
+}
+@media (max-width:520px) {
+  .shop-category-heading { min-height:54px !important; }
+  .shop-category-subtext {
+    max-width:230px !important;
+    font-size:9px !important;
+  }
+}
