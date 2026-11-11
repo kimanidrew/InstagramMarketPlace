@@ -212,7 +212,6 @@ export async function Products({
           <div className="shell shop-category-inner">
             <div className="shop-category-heading">
               <div className="shop-category-heading-copy">
-                <span className="shop-category-kicker"><span /> EXPLORE SOKOLINK</span>
                 <h1>Shop by category</h1>
               </div>
               <Link href="/categories" className="shop-category-view-all">View all <ChevronRight size={15} /></Link>
