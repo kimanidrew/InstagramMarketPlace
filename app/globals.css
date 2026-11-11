@@ -14916,3 +14916,14 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   margin-right: 0 !important;
   padding-right: 0 !important;
 }
+
+
+/* Slim animated brand marquee above the main navigation. */
+.sokolink-marquee { height:30px; display:flex; align-items:center; overflow:hidden; background:#fff5f6; border-bottom:1px solid #f3e1e4; color:#8f2942; }
+.sokolink-marquee-track { display:flex; width:max-content; min-width:max-content; animation:sokolink-marquee-scroll 38s linear infinite; will-change:transform; }
+.sokolink-marquee-content { display:flex; flex:0 0 auto; align-items:center; gap:28px; padding-right:28px; white-space:nowrap; font-size:10px; line-height:1; font-weight:750; letter-spacing:.055em; text-transform:uppercase; }
+.sokolink-marquee-content i { color:#c34a64; font-size:12px; font-style:normal; }
+.sokolink-marquee:hover .sokolink-marquee-track { animation-play-state:paused; }
+@keyframes sokolink-marquee-scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@media (max-width:640px) { .sokolink-marquee { height:27px; } .sokolink-marquee-content { gap:20px; padding-right:20px; font-size:9px; } }
+@media (prefers-reduced-motion:reduce) { .sokolink-marquee-track { animation:none; } .sokolink-marquee-track > .sokolink-marquee-content[aria-hidden="true"] { display:none; } }
