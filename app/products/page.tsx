@@ -212,7 +212,7 @@ export async function Products({
           <div className="shell shop-category-inner">
             <div className="shop-category-heading">
               <div className="shop-category-heading-copy">
-                <h1>Shop by category</h1>
+                <h1><span className="shop-category-heading-icon"><Grid2X2 size={17} strokeWidth={2.5} /></span><span>Shop by category</span></h1>
               </div>
               <Link href="/categories" className="shop-category-view-all">View all <ChevronRight size={15} /></Link>
             </div>
