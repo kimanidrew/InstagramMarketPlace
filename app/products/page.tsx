@@ -209,34 +209,23 @@ export async function Products({
     <main className="shop-page shell py-0">
       {showDiscovery && (
         <section className="shop-by-category shop-category-showcase relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden" aria-label="Shop by category">
-          <div className="shop-category-backdrop" aria-hidden="true">
-            <span className="shop-category-orbit shop-category-orbit-one" />
-            <span className="shop-category-orbit shop-category-orbit-two" />
-            <span className="shop-category-float shop-category-float-one" />
-            <span className="shop-category-float shop-category-float-two" />
-            <span className="shop-category-float shop-category-float-three" />
-            <span className="shop-category-grid-pattern" />
-          </div>
           <div className="shell shop-category-inner">
             <div className="shop-category-heading">
               <div className="shop-category-heading-copy">
-                <span className="shop-category-kicker"><span /> THE SOKOLINK EDIT</span>
-                <h1><Grid2X2 size={20} strokeWidth={2.5} /> Find your next favourite.</h1>
-                <p>Six ways to discover something worth sharing.</p>
+                <span className="shop-category-kicker"><span /> EXPLORE SOKOLINK</span>
+                <h1>Shop by category</h1>
               </div>
-              <Link href="/categories" className="shop-category-view-all">Explore all categories <ChevronRight size={16} /></Link>
+              <Link href="/categories" className="shop-category-view-all">View all <ChevronRight size={15} /></Link>
             </div>
             <div className="shop-category-grid">
               {shopCategories.map((category, index) => (
                 <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className={"shop-category-card shop-category-card-" + (index + 1)}>
-                  <span className="shop-category-card-top"><span className="shop-category-icon">{category.icon}</span></span>
+                  <span className="shop-category-icon">{category.icon}</span>
                   <span className="shop-category-card-label">{category.label}</span>
-                  <span className="shop-category-card-bottom"><span>Discover collection</span><ChevronRight size={15} /></span>
-                  <span className="shop-category-card-art" aria-hidden="true"><i /><i /><i /></span>
+                  <ChevronRight className="shop-category-arrow" size={15} />
                 </Link>
               ))}
             </div>
-            <div className="shop-category-footnote"><span className="shop-category-footnote-dot" /> Curated finds. Independent sellers. One place to explore.</div>
           </div>
         </section>
       )}
