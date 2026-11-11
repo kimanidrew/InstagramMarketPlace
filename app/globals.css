@@ -15008,3 +15008,9 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   .shop-category-card,.shop-category-view-all,.shop-category-card-bottom svg { transition:none; }
   .shop-category-card:hover,.shop-category-view-all:hover { transform:none; }
 }
+
+
+/* Category tiles are intentionally borderless and unnumbered. */
+.shop-category-card { border:0 !important; }
+.shop-category-card:hover { border:0 !important; }
+.shop-category-index { display:none !important; }
