@@ -42,15 +42,11 @@ export default async function Layout({ children, modal }: { children: React.Reac
                   <p className="sokolink-footer-description">
                     Discover products from real Instagram stores, find your next favourite, and connect directly with the people behind every shop.
                   </p>
-                  <Link href="/shop" className="sokolink-footer-discover">
-                    Explore the marketplace <span aria-hidden="true">↗</span>
-                  </Link>
                 </div>
 
                 <div className="sokolink-footer-links">
                   <div className="sokolink-footer-link-group">
                     <p className="sokolink-footer-heading">Explore</p>
-                    <Link href="/shop">Discover shops</Link>
                     <Link href="/products">All products</Link>
                     <Link href="/stores">Stores</Link>
                     <Link href="/categories">Categories</Link>
