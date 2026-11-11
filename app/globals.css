@@ -15220,3 +15220,41 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   .shop-category-card { transition:none !important; }
   .shop-category-card:hover { transform:none !important; }
 }
+
+
+/* Refined compact pill categories */
+.shop-category-card {
+  width:100% !important;
+  min-width:0 !important;
+  height:42px !important;
+  min-height:42px !important;
+  padding:6px 10px !important;
+  border-radius:999px !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+.shop-category-card-label {
+  width:100% !important;
+  text-align:center !important;
+  font-size:13px !important;
+  line-height:1.1 !important;
+  font-weight:800 !important;
+}
+@media (max-width:900px) {
+  .shop-category-card {
+    width:max-content !important;
+    min-width:0 !important;
+    max-width:none !important;
+    flex:0 0 auto !important;
+    height:38px !important;
+    min-height:38px !important;
+    padding:5px 14px !important;
+    justify-content:center !important;
+  }
+  .shop-category-card-label {
+    width:auto !important;
+    font-size:12px !important;
+    white-space:nowrap !important;
+  }
+}
