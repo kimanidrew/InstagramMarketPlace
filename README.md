@@ -14,18 +14,9 @@ Shlip is a social shopping marketplace where approved Instagram accounts become 
 9. Every imported Instagram post is automatically represented as a marketplace product.
 10. Hashtags on posts become searchable marketplace categories.
 
-## Brand identity environment
+## Brand identity
 
-The visible brand name, gradient colours and wordmark font are configured with these environment variables (set them in `.env.local` and Vercel):
-
-```env
-NEXT_PUBLIC_BRAND_NAME="Shlip"
-NEXT_PUBLIC_BRAND_COLOR_START="#00C2A8"
-NEXT_PUBLIC_BRAND_COLOR_END="#7C3AED"
-NEXT_PUBLIC_BRAND_FONT_FAMILY="Space Grotesk"
-```
-
-The gradient runs from `NEXT_PUBLIC_BRAND_COLOR_START` to `NEXT_PUBLIC_BRAND_COLOR_END`. The font is loaded from Google Fonts using the family name configured in `NEXT_PUBLIC_BRAND_FONT_FAMILY`. Restart the dev server after changing local environment variables and redeploy after changing Vercel variables.
+The application brand is **Shlip**. The wordmark and interface use Space Grotesk with a crimson-to-charcoal palette. The brand identity is defined in the application so older deployment environment variables cannot restore the previous name.
 
 ## Instagram OAuth environment
 Set these in Vercel/server environment variables:
