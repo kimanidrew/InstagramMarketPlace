@@ -15968,3 +15968,10 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .shop-page .shop-by-category.shop-category-showcase .shop-category-heading-shortcuts a:hover {
   box-shadow:none !important;
 }
+
+/* Shlip navbar link typography */
+.site-header .nav-link{
+  font-size:15px!important;
+  font-weight:850!important;
+  text-transform:capitalize;
+}
