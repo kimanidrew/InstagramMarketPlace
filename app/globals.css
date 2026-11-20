@@ -15945,3 +15945,12 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     animation:none !important;
   }
 }
+
+
+/* Remove the pulsing outline around homepage quick-shopping buttons. */
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link::before,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link::before {
+  content:none !important;
+  display:none !important;
+  animation:none !important;
+}
