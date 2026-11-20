@@ -16531,3 +16531,39 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
 .shop-page .shop-category-grid > .shop-category-card:not(.shop-category-view-all) {
   order:1 !important;
 }
+
+
+/* Homepage-only transparent navbar at the very top of the page. */
+.site-header.is-homepage-top {
+  background:transparent !important;
+  background-color:transparent !important;
+  border-bottom-color:transparent !important;
+  box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+.site-header.is-homepage-top nav .nav-link,
+.site-header.is-homepage-top nav .nav-link:hover,
+.site-header.is-homepage-top nav .nav-link:focus,
+.site-header.is-homepage-top nav .nav-link:focus-visible,
+.site-header.is-homepage-top nav .nav-link:active,
+.site-header.is-homepage-top nav .nav-link.is-active {
+  color:#fff !important;
+}
+.site-header.is-homepage-top nav .nav-link::after {
+  background:#fff !important;
+}
+.site-header.is-homepage-top .icon-btn,
+.site-header.is-homepage-top .icon-btn:hover,
+.site-header.is-homepage-top .icon-btn.active {
+  background:transparent !important;
+  background-color:transparent !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+.site-header.is-homepage-top .icon-btn svg,
+.site-header.is-homepage-top .notification-bell-wrap > .notification-bell,
+.site-header.is-homepage-top .notification-bell-wrap > .notification-bell svg {
+  color:#fff !important;
+  stroke:#fff !important;
+}
