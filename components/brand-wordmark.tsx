@@ -1,7 +1,7 @@
 const DEFAULT_NAME = "Shlip";
 const DEFAULT_START = "#D7263D";
 const DEFAULT_END = "#241D29";
-const DEFAULT_FONT = "Space Grotesk";
+const DEFAULT_FONT = "Plus Jakarta Sans";
 
 export function BrandWordmark() {
   const name = DEFAULT_NAME;
