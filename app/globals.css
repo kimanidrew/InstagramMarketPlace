@@ -16600,3 +16600,9 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
   color:#fff !important;
   stroke:#fff !important;
 }
+
+
+/* Slightly smaller primary navigation labels. */
+.site-header nav .nav-link {
+  font-size:13px !important;
+}
