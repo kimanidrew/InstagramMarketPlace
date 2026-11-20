@@ -16606,3 +16606,9 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
 .site-header nav .nav-link {
   font-size:13px !important;
 }
+
+
+/* Increase spacing between primary navbar link letters. */
+.site-header nav .nav-link {
+  letter-spacing: .06em !important;
+}
