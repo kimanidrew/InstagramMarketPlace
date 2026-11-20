@@ -16168,3 +16168,13 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .shop-page .shop-category-grid > .shop-category-view-all .shop-category-card-label {
   font-weight:600 !important;
 }
+
+/* Slightly smaller labels across the Deals / Trending / New In / Most Loved row. */
+.shop-page .shop-category-heading-shortcuts > a,
+.shop-page .shop-category-heading-shortcuts > a > span {
+  font-size:12px !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link {
+  font-size:12px !important;
+}
