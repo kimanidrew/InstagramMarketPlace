@@ -15954,3 +15954,17 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   display:none !important;
   animation:none !important;
 }
+
+
+/* Keep the entire Shop by Category area white and all category buttons flat. */
+.shop-page .shop-by-category.shop-category-showcase,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-inner {
+  background:#fff !important;
+  box-shadow:none !important;
+}
+.shop-page .shop-by-category.shop-category-showcase .shop-category-card,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-card:hover,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-heading-shortcuts a,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-heading-shortcuts a:hover {
+  box-shadow:none !important;
+}
