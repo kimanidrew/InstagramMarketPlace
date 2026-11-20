@@ -9,8 +9,8 @@ import { BrandWordmark } from "@/components/brand-wordmark";
 import { GlobalFeedbackProvider } from "@/components/global-feedback-provider";
 import { NavigationProgress } from "@/components/navigation-progress";
 
-const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "Shlip";
-const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Space Grotesk").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
+const brandName = "Shlip";
+const brandFont = "Space Grotesk";
 const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:wght@400;500;600;700&display=swap`;
 
 export const metadata: Metadata = {
