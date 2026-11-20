@@ -16118,3 +16118,13 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     min-width:116px !important;
   }
 }
+
+/* Keep View all fixed at position zero before personalized category suggestions. */
+.shop-page .shop-category-grid > .shop-category-view-all {
+  order:0 !important;
+  grid-column:1 !important;
+  grid-row:1 !important;
+}
+.shop-page .shop-category-grid > .shop-category-card:not(.shop-category-view-all) {
+  order:1 !important;
+}
