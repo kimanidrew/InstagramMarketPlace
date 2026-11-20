@@ -15754,3 +15754,18 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   .shop-category-deals-spark { animation: none; }
   .shop-category-deals-link, .shop-category-deals-arrow { transition: none; }
 }
+
+
+/* Compact category section header after removing the title and View all action. */
+.shop-page .shop-category-heading-shortcuts {
+  display:flex !important;
+  grid-template-columns:none !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  min-height:40px !important;
+  margin-bottom:16px !important;
+  gap:0 !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link {
+  justify-self:start !important;
+}
