@@ -15969,9 +15969,10 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   box-shadow:none !important;
 }
 
-/* Shlip navbar link typography */
-.site-header .nav-link{
+/* Shlip navbar link typography — override earlier uppercase navbar rule */
+.site-header nav .nav-link{
   font-size:15px!important;
   font-weight:850!important;
-  text-transform:none;
+  text-transform:none!important;
+  letter-spacing:0!important;
 }
