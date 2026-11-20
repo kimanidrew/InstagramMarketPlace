@@ -15913,3 +15913,18 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     min-height:46px !important;
   }
 }
+
+
+/* Keep homepage quick-shopping buttons flat, without drop shadows. */
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link {
+  box-shadow:none !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link:hover,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link:hover {
+  box-shadow:none !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-icon-wrap,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-icon {
+  box-shadow:none !important;
+}
