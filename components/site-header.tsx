@@ -160,7 +160,7 @@ export function SiteHeader({ user }: { user: any }) {
   }, []);
 
   return (
-    <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "") + (atTop ? " is-at-top" : "")}>
+    <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "") + (atTop ? " is-at-top" : "") + (pathname === "/" ? " is-homepage" : "") + (pathname === "/" && atTop ? " is-homepage-top" : "")}>
       <div className="sokolink-marquee" role="region" aria-label="What Shlip offers">
         <div className="sokolink-marquee-track">
           <div className="sokolink-marquee-content">
