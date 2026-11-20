@@ -203,6 +203,43 @@ export async function Products({
     .sort((a, b) => b.items.length - a.items.length || a.label.localeCompare(b.label))
     .map((group) => ({ ...group, items: group.items.slice(0, 10) }));
 
+  const categoryKeywords: Record<string, string[]> = {
+    fashion: ["fashion", "clothing", "clothes", "apparel", "shoes", "footwear", "bags", "accessories", "jewellery", "jewelry"],
+    beauty: ["beauty", "skincare", "skin care", "cosmetics", "makeup", "hair", "salon", "perfume"],
+    home: ["home", "living", "furniture", "decor", "kitchen", "bedding", "household"],
+    electronics: ["electronics", "phone", "phones", "computer", "laptop", "gadgets", "tech", "audio"],
+    food: ["food", "groceries", "grocery", "snacks", "drinks", "bakery", "catering"],
+    services: ["service", "services", "photography", "cleaning", "repairs", "events", "consulting"],
+  };
+  const categoryAffinity = new Map<string, number>();
+  const addCategoryAffinity = (post: any, weight: number) => {
+    const values = [post.category, post.subcategory, ...(post.tags || []).map((tag: any) => tag.name)]
+      .filter(Boolean).map((value: any) => String(value).toLowerCase());
+    for (const [tag, keywords] of Object.entries(categoryKeywords)) {
+      if (values.some((value) => keywords.some((keyword) => value.includes(keyword)))) {
+        categoryAffinity.set(tag, (categoryAffinity.get(tag) || 0) + weight);
+      }
+    }
+  };
+  recentlyViewedProducts.forEach((post: any, index: number) => addCategoryAffinity(post, Math.max(2, 8 - index)));
+  wishlistProducts.forEach((post: any, index: number) => addCategoryAffinity(post, Math.max(3, 10 - index)));
+  const popularCategoryCounts = new Map<string, number>();
+  for (const post of categoryProductsRaw as any[]) addCategoryAffinity(post, 0);
+  for (const post of categoryProductsRaw as any[]) {
+    const values = [post.category, post.subcategory, ...(post.tags || []).map((tag: any) => tag.name)]
+      .filter(Boolean).map((value: any) => String(value).toLowerCase());
+    for (const [tag, keywords] of Object.entries(categoryKeywords)) {
+      if (values.some((value) => keywords.some((keyword) => value.includes(keyword)))) {
+        popularCategoryCounts.set(tag, (popularCategoryCounts.get(tag) || 0) + 1);
+      }
+    }
+  }
+  const personalizedCategories = [...shopCategories].sort((a, b) => {
+    const scoreA = categoryAffinity.get(a.tag) || (popularCategoryCounts.get(a.tag) || 0) * 0.01;
+    const scoreB = categoryAffinity.get(b.tag) || (popularCategoryCounts.get(b.tag) || 0) * 0.01;
+    return scoreB - scoreA;
+  });
+
   const showDiscovery = !text;
 
   return (
@@ -217,8 +254,13 @@ export async function Products({
               <Link href="/search?sort=likes" className="shop-category-quick-link shop-category-quick-loved"><span className="shop-category-quick-icon">♡</span><span>Most Loved</span></Link>
             </nav>
             <div className="shop-category-grid">
-              {shopCategories.map((category, index) => (
-                <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className={"shop-category-card shop-category-card-" + (index + 1)}>
+              <Link href="/categories" className="shop-category-card shop-category-view-all" aria-label="View all shopping categories">
+                <span className="shop-category-view-all-icon" aria-hidden="true">✦</span>
+                <span className="shop-category-card-label">View all</span>
+                <span className="shop-category-view-all-caption">Explore every category <span aria-hidden="true">↗</span></span>
+              </Link>
+              {personalizedCategories.map((category, index) => (
+                <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className={"shop-category-card shop-category-card-" + ((index % 6) + 1)}>
                   <span className="shop-category-card-label">{category.label}</span>
                 </Link>
               ))}
