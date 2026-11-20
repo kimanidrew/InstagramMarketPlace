@@ -15855,3 +15855,48 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     font-size:10px !important;
   }
 }
+
+
+/* Distinct motion for each quick-shopping shortcut icon. */
+.shop-page .shop-category-deals-link .shop-category-deals-icon {
+  animation:quickDealsFlame 1.05s ease-in-out infinite !important;
+}
+.shop-page .shop-category-quick-trending .shop-category-quick-icon {
+  animation:quickTrendingRise 1.45s ease-in-out infinite;
+}
+.shop-page .shop-category-quick-new .shop-category-quick-icon {
+  animation:quickNewSpark 1.8s cubic-bezier(.4,0,.2,1) infinite;
+}
+.shop-page .shop-category-quick-loved .shop-category-quick-icon {
+  animation:quickLovedBeat 1.25s ease-in-out infinite;
+}
+@keyframes quickDealsFlame {
+  0%,100% { transform:translateY(0) rotate(-7deg) scale(1); }
+  35% { transform:translateY(-3px) rotate(7deg) scale(1.13); }
+  65% { transform:translateY(-1px) rotate(-4deg) scale(1.06); }
+}
+@keyframes quickTrendingRise {
+  0%,100% { transform:translateY(2px) scale(.96); }
+  50% { transform:translateY(-4px) scale(1.1); }
+}
+@keyframes quickNewSpark {
+  0%,100% { transform:rotate(0) scale(1); }
+  25% { transform:rotate(-12deg) scale(1.08); }
+  55% { transform:rotate(12deg) scale(1.14); }
+  75% { transform:rotate(-5deg) scale(1.04); }
+}
+@keyframes quickLovedBeat {
+  0%,100% { transform:scale(1); }
+  14% { transform:scale(1.2); }
+  28% { transform:scale(1); }
+  42% { transform:scale(1.14); }
+  58% { transform:scale(1); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .shop-page .shop-category-deals-link .shop-category-deals-icon,
+  .shop-page .shop-category-quick-trending .shop-category-quick-icon,
+  .shop-page .shop-category-quick-new .shop-category-quick-icon,
+  .shop-page .shop-category-quick-loved .shop-category-quick-icon {
+    animation:none !important;
+  }
+}
