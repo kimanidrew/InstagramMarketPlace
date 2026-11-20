@@ -15605,3 +15605,58 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   border-top-color:transparent;
   border-bottom-color:transparent;
 }
+
+
+/* SokoLink homepage shop categories: clean white surface with high-contrast typography. */
+.shop-page .shop-by-category.shop-category-showcase {
+  background:#fff !important;
+  color:#171717 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+.shop-page .shop-category-heading h1 {
+  color:#171717 !important;
+}
+.shop-page .shop-category-heading h1 svg,
+.shop-page .shop-category-heading-icon,
+.shop-page .shop-category-heading-icon svg {
+  color:#9f1239 !important;
+}
+.shop-page .shop-category-subtext {
+  color:#666 !important;
+}
+.shop-page .shop-category-view-all {
+  color:#9f1239 !important;
+  background:#fff !important;
+  border:1px solid #e5e5e5 !important;
+}
+.shop-page .shop-category-view-all:hover {
+  color:#7f102f !important;
+  background:#fff7f8 !important;
+  border-color:#d6a0ae !important;
+}
+.shop-page .shop-category-card {
+  color:#171717 !important;
+  background:#fafafa !important;
+  border:1px solid #e7e7e7 !important;
+  box-shadow:none !important;
+}
+.shop-page .shop-category-card-label {
+  color:#171717 !important;
+}
+.shop-page .shop-category-card:hover {
+  background:#fff7f8 !important;
+  border-color:#c78a9b !important;
+  box-shadow:0 8px 22px rgba(83, 12, 31, .08) !important;
+}
+.shop-page .shop-category-card-art i {
+  border-color:rgba(159,18,57,.18) !important;
+  background:rgba(159,18,57,.035) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shop-page .shop-category-card,
+  .shop-page .shop-category-view-all {
+    transition:none !important;
+  }
+}
