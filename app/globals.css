@@ -16160,3 +16160,11 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     max-height:38px !important;
   }
 }
+
+/* Use a lighter typographic weight on shop category pills. */
+.shop-page .shop-category-grid > .shop-category-card,
+.shop-page .shop-category-grid > .shop-category-card .shop-category-card-label,
+.shop-page .shop-category-grid > .shop-category-view-all,
+.shop-page .shop-category-grid > .shop-category-view-all .shop-category-card-label {
+  font-weight:600 !important;
+}
