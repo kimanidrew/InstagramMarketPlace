@@ -16511,3 +16511,12 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
   display:none !important;
   animation:none !important;
 }
+
+
+/* Quick-shopping shortcut labels: smaller, heavier and more widely tracked. */
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link {
+  font-size:10px !important;
+  font-weight:850 !important;
+  letter-spacing:.09em !important;
+}
