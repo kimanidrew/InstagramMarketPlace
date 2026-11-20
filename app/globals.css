@@ -181,7 +181,7 @@
 
 
 @font-face {
-  font-family: "Plus Jakarta Sans";
+  font-family: "Space Grotesk";
   src: url("/fonts/PlusJakartaSans-Variable.ttf") format("truetype");
   font-style: normal;
   font-weight: 200 800;
@@ -190,7 +190,7 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:#fff;color:#111;font-family:"Plus Jakarta Sans",Arial,Helvetica,sans-serif;font-weight:500;letter-spacing:-.012em}
+body{margin:0;background:#fff;color:#111;font-family:"Space Grotesk",Arial,Helvetica,sans-serif;font-weight:500;letter-spacing:-.012em}
 a{text-decoration:none;color:inherit}
 button,input,textarea{font:inherit}button:not(:disabled){cursor:pointer}button:disabled{cursor:not-allowed}h1,h2,h3,h4,h5,h6{font-weight:800;letter-spacing:-.045em}strong,b{font-weight:800}
 .shell{width:min(1180px,calc(100% - 32px));margin:auto}
@@ -375,7 +375,7 @@ a.bg-black:hover,button.bg-black:hover,a[class*="bg-[#111]"]:hover,button[class*
 .how-works-section .how-works-slide .bg-gradient-to-t{color:#fff}
 
 
-.community-showcase{background:linear-gradient(135deg,#ff4d6d 0%,#ff7a3d 34%,#7c3aed 72%,#4f46e5 100%);color:#fff;isolation:isolate}
+.community-showcase{background:linear-gradient(135deg,#ff4d6d 0%,#ff7a3d 34%,#241d29 72%,#4f46e5 100%);color:#fff;isolation:isolate}
 .community-showcase:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.22),transparent 25%),radial-gradient(circle at 85% 75%,rgba(255,215,80,.2),transparent 28%);pointer-events:none}
 .community-kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 14px;background:rgba(255,255,255,.12);backdrop-filter:blur(14px);font-size:10px;font-weight:950;letter-spacing:.16em;text-transform:uppercase;color:#fff;box-shadow:0 12px 35px rgba(0,0,0,.12)}
 .community-title{font-size:clamp(3rem,6vw,6rem);font-weight:950;line-height:.86;letter-spacing:-.075em;color:#fff}
@@ -1295,7 +1295,7 @@ hr{border-color:#ece5fa}
   padding:0 20px!important;
   border:1px solid rgba(17,17,17,.14)!important;
   border-radius:999px!important;
-  font-family:"Plus Jakarta Sans",Arial,Helvetica,sans-serif!important;
+  font-family:"Space Grotesk",Arial,Helvetica,sans-serif!important;
   font-size:14px!important;
   font-weight:700!important;
   line-height:1!important;
@@ -1866,7 +1866,7 @@ select:focus-visible,
 /* Step 4: polished connection panel and celebratory confetti */
 .seller-setup-page .seller-step-card.seller-step-done{position:relative;overflow:hidden;background:radial-gradient(ellipse at 85% 5%,rgba(168,125,255,.16),transparent 42%),linear-gradient(145deg,#fff 0%,#fbf8ff 100%);border-radius:26px;box-shadow:0 24px 70px rgba(62,35,102,.09)}
 .seller-setup-page .seller-step-card.seller-step-done .seller-step-media{filter:saturate(1.08)}
-.seller-setup-page .seller-step-card.seller-step-done .seller-step-number{background:linear-gradient(135deg,#7c3aed,#c084fc);color:#fff;box-shadow:0 8px 24px rgba(124,58,237,.25)}
+.seller-setup-page .seller-step-card.seller-step-done .seller-step-number{background:linear-gradient(135deg,#241d29,#c084fc);color:#fff;box-shadow:0 8px 24px rgba(124,58,237,.25)}
 .seller-celebration{position:relative;isolation:isolate;overflow:hidden;margin-top:24px;padding:28px 22px 22px;border:1px solid #e9ddff;border-radius:23px;background:linear-gradient(150deg,rgba(255,255,255,.97),rgba(248,243,255,.94));text-align:center}
 .seller-confetti{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 .seller-confetti span{position:absolute;top:-18px;left:calc((var(--i,0) * 3.7%) + 2%);width:7px;height:13px;border-radius:2px;background:#a78bfa;opacity:0;animation:sellerConfettiFall 3.8s cubic-bezier(.2,.7,.3,1) infinite;transform:rotate(20deg)}
@@ -1879,7 +1879,7 @@ select:focus-visible,
 .seller-confetti span:nth-child(7n){left:87%;background:#eab308;animation-delay:-1.8s}
 .seller-confetti span:nth-child(3n){width:5px;height:8px;border-radius:50%}
 @keyframes sellerConfettiFall{0%{top:-5%;opacity:0;transform:translate3d(0,-10px,0) rotate(0deg)}12%{opacity:.9}85%{opacity:.85}100%{top:110%;opacity:0;transform:translate3d(22px,0,0) rotate(640deg)}}
-.seller-celebration-icon{display:grid;place-items:center;width:74px;height:74px;margin:0 auto 14px;border:1px solid #e5d5ff;border-radius:24px;background:linear-gradient(145deg,#f1e8ff,#fff);color:#7c3aed;box-shadow:0 12px 32px rgba(124,58,237,.14);animation:sellerSuccessPop .7s cubic-bezier(.2,1.5,.5,1) both}
+.seller-celebration-icon{display:grid;place-items:center;width:74px;height:74px;margin:0 auto 14px;border:1px solid #e5d5ff;border-radius:24px;background:linear-gradient(145deg,#f1e8ff,#fff);color:#241d29;box-shadow:0 12px 32px rgba(124,58,237,.14);animation:sellerSuccessPop .7s cubic-bezier(.2,1.5,.5,1) both}
 @keyframes sellerSuccessPop{from{opacity:0;transform:scale(.45) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
 .seller-celebration-eyebrow{margin:0 0 7px;color:#8b5cf6;font-size:9px;font-weight:950;letter-spacing:.2em}
 .seller-celebration h3{margin:0;color:#21152f;font-size:clamp(23px,4vw,32px);font-weight:950;letter-spacing:-.06em}
@@ -1903,8 +1903,8 @@ select:focus-visible,
 
 
 /* Instagram profile photo in the Step 4 completion celebration */
-.seller-celebration-profile{position:relative;width:104px;height:104px;margin:0 auto 16px;padding:5px;border:2px solid #c4a5fd;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f0abfc,#f59e0b);box-shadow:0 12px 30px rgba(124,58,237,.2);animation:sellerSuccessPop .7s cubic-bezier(.2,1.5,.5,1) both}
-.seller-celebration-profile>img,.seller-celebration-profile-fallback{display:grid;width:100%;height:100%;place-items:center;border:3px solid #fff;border-radius:50%;background:#f3e8ff;color:#7c3aed;object-fit:cover}
+.seller-celebration-profile{position:relative;width:104px;height:104px;margin:0 auto 16px;padding:5px;border:2px solid #c4a5fd;border-radius:50%;background:linear-gradient(135deg,#241d29,#f0abfc,#f59e0b);box-shadow:0 12px 30px rgba(124,58,237,.2);animation:sellerSuccessPop .7s cubic-bezier(.2,1.5,.5,1) both}
+.seller-celebration-profile>img,.seller-celebration-profile-fallback{display:grid;width:100%;height:100%;place-items:center;border:3px solid #fff;border-radius:50%;background:#f3e8ff;color:#241d29;object-fit:cover}
 .seller-celebration-profile>span{position:absolute;right:-1px;bottom:2px;display:grid;width:31px;height:31px;place-items:center;border:3px solid #fff;border-radius:50%;background:#16a34a;color:#fff;box-shadow:0 4px 12px rgba(22,163,74,.25)}
 @media(max-width:640px){.seller-celebration-profile{width:90px;height:90px}}
 
@@ -2136,7 +2136,7 @@ select:focus-visible,
 
 
 /* Environment-configurable SokoLink brand wordmark and typography. */
-.brand-wordmark{display:inline-block;background-image:linear-gradient(105deg,var(--brand-color-start,#00c2a8),var(--brand-color-end,#7c3aed));background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--brand-font-family,"Plus Jakarta Sans"),sans-serif;font-size:inherit;font-weight:900;font-style:normal;letter-spacing:-.035em;line-height:1;white-space:nowrap}
+.brand-wordmark{display:inline-block;background-image:linear-gradient(105deg,var(--brand-color-start,#d7263d),var(--brand-color-end,#241d29));background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--brand-font-family,"Space Grotesk"),sans-serif;font-size:inherit;font-weight:900;font-style:normal;letter-spacing:-.035em;line-height:1;white-space:nowrap}
 .brand{display:inline-flex;align-items:center;min-width:0}
 .footer-brand-link{display:inline-flex;align-items:center;font-size:28px;font-weight:800;letter-spacing:-.06em}
 
@@ -2802,7 +2802,7 @@ body:has(.site-header.is-hidden) .shop-page .shop-tabs{
 /* Keep the Saved for later link independent from broad /wishlist typography rules. */
 /* This targeted rule intentionally outranks the broad /wishlist anchor typography. */
 .shop-page a.saved-for-later-link[href="/wishlist"]{
-  font-family:"Plus Jakarta Sans",Arial,Helvetica,sans-serif!important;
+  font-family:"Space Grotesk",Arial,Helvetica,sans-serif!important;
   font-size:12px!important;
   font-weight:900!important;
   line-height:20px!important;
