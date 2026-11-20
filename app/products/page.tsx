@@ -212,9 +212,9 @@ export async function Products({
           <div className="shell shop-category-inner">
             <nav className="shop-category-heading shop-category-heading-shortcuts" aria-label="Quick shopping links">
               <Link href="/deals" className="shop-category-deals-link" aria-label="Explore deals"><span className="shop-category-deals-icon-wrap"><Flame className="shop-category-deals-icon" size={19} strokeWidth={2.6} /><span className="shop-category-deals-spark">✦</span></span><span>Deals</span></Link>
-              <Link href="/trending" className="shop-category-quick-link shop-category-quick-trending"><ChartNoAxesCombined className="shop-category-quick-icon" size={19} strokeWidth={2.6} /><span>Trending</span><span className="shop-category-quick-arrow" aria-hidden="true">→</span></Link>
-              <Link href="/search?sort=newest" className="shop-category-quick-link shop-category-quick-new"><span className="shop-category-quick-icon">✧</span><span>New In</span><span className="shop-category-quick-arrow" aria-hidden="true">→</span></Link>
-              <Link href="/search?sort=likes" className="shop-category-quick-link shop-category-quick-loved"><span className="shop-category-quick-icon">♡</span><span>Most Loved</span><span className="shop-category-quick-arrow" aria-hidden="true">→</span></Link>
+              <Link href="/trending" className="shop-category-quick-link shop-category-quick-trending"><ChartNoAxesCombined className="shop-category-quick-icon" size={19} strokeWidth={2.6} /><span>Trending</span></Link>
+              <Link href="/search?sort=newest" className="shop-category-quick-link shop-category-quick-new"><span className="shop-category-quick-icon">✧</span><span>New In</span></Link>
+              <Link href="/search?sort=likes" className="shop-category-quick-link shop-category-quick-loved"><span className="shop-category-quick-icon">♡</span><span>Most Loved</span></Link>
             </nav>
             <div className="shop-category-grid">
               {shopCategories.map((category, index) => (
