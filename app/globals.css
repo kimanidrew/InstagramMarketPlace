@@ -15900,3 +15900,16 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
     animation:none !important;
   }
 }
+
+
+/* Slightly taller homepage quick-shopping buttons for a roomier tap target. */
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link {
+  min-height:46px !important;
+}
+@media (max-width:640px) {
+  .shop-page .shop-category-heading-shortcuts .shop-category-deals-link,
+  .shop-page .shop-category-heading-shortcuts .shop-category-quick-link {
+    min-height:46px !important;
+  }
+}
