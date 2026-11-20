@@ -16202,3 +16202,54 @@ body:has(main.shop-page) {
   backdrop-filter: blur(24px) saturate(145%);
 }
 
+/* Homepage hero atmosphere: rich Shlip crimson, with all section wrappers transparent. */
+body:has(main.shop-page) {
+  background-color:#fff !important;
+  background-image:
+    radial-gradient(ellipse 82% 430px at 12% 0%, rgb(255 87 112 / 22%), transparent 70%),
+    radial-gradient(ellipse 68% 390px at 92% 8%, rgb(105 18 43 / 62%), transparent 72%),
+    radial-gradient(ellipse 85% 360px at 52% 54%, rgb(150 25 53 / 44%), transparent 76%),
+    linear-gradient(180deg,#390b1b 0,#5a1028 330px,#74152f 650px,#fff 1050px,#fff 100%);
+  background-repeat:no-repeat;
+}
+body:has(main.shop-page) .site-header,
+.site-header:has(+ main.shop-page) {
+  background:rgb(47 7 21 / 72%) !important;
+  border-bottom:1px solid rgb(255 255 255 / 13%) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+  backdrop-filter:blur(24px) saturate(145%);
+}
+body:has(main.shop-page) .site-header nav .nav-link,
+body:has(main.shop-page) .site-header nav .nav-link:hover,
+body:has(main.shop-page) .site-header nav .nav-link:focus,
+body:has(main.shop-page) .site-header nav .nav-link:focus-visible,
+body:has(main.shop-page) .site-header nav .nav-link:active,
+body:has(main.shop-page) .site-header nav .nav-link.is-active {
+  color:#fff !important;
+}
+body:has(main.shop-page) main.shop-page,
+body:has(main.shop-page) main.shop-page > section,
+body:has(main.shop-page) main.shop-page .shop-by-category,
+body:has(main.shop-page) main.shop-page .shop-category-inner,
+body:has(main.shop-page) main.shop-page .shop-tabs-wrap,
+body:has(main.shop-page) main.shop-page .shop-tabs-wrap > div {
+  background-color:transparent !important;
+  background-image:none !important;
+  box-shadow:none;
+}
+body:has(main.shop-page) main.shop-page .shop-by-category.shop-category-showcase {
+  color:#fff !important;
+}
+body:has(main.shop-page) main.shop-page .shop-category-heading-shortcuts a,
+body:has(main.shop-page) main.shop-page .shop-category-card-label {
+  color:#fff !important;
+}
+body:has(main.shop-page) main.shop-page .shop-category-view-all {
+  background:rgb(255 255 255 / 10%) !important;
+  border:1px solid rgb(255 255 255 / 22%) !important;
+  color:#fff !important;
+}
+body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-card-label {
+  color:#fff !important;
+}
+
