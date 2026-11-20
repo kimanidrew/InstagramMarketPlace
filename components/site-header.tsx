@@ -189,7 +189,6 @@ export function SiteHeader({ user }: { user: any }) {
             ["/for-you", "For You"],
             ["/stores", "Stores"],
             ["/categories", "Categories"],
-            ["/how-it-works", "How it works"],
             ["/about", "About"],
           ].map(([href, label]) => {
             const active = pathname === href || pathname.startsWith(href + "/");
