@@ -254,16 +254,16 @@ export async function Products({
               <Link href="/search?sort=likes" className="shop-category-quick-link shop-category-quick-loved"><span className="shop-category-quick-icon">♡</span><span>Most Loved</span></Link>
             </nav>
             <div className="shop-category-grid">
-              <Link href="/categories" className="shop-category-card shop-category-view-all" aria-label="View all shopping categories">
-                <span className="shop-category-view-all-icon" aria-hidden="true">✦</span>
-                <span className="shop-category-card-label">View all</span>
-                <span className="shop-category-view-all-caption">Explore every category <span aria-hidden="true">↗</span></span>
-              </Link>
               {personalizedCategories.map((category, index) => (
                 <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className={"shop-category-card shop-category-card-" + ((index % 6) + 1)}>
                   <span className="shop-category-card-label">{category.label}</span>
                 </Link>
               ))}
+              <Link href="/categories" className="shop-category-card shop-category-view-all" aria-label="View all shopping categories">
+                <span className="shop-category-view-all-icon" aria-hidden="true">✦</span>
+                <span className="shop-category-card-label">View all</span>
+                <span className="shop-category-view-all-caption">Explore every category <span aria-hidden="true">↗</span></span>
+              </Link>
             </div>
           </div>
         </section>
