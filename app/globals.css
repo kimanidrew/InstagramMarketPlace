@@ -16288,3 +16288,17 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
   border-color:rgba(255,255,255,.3) !important;
   box-shadow:none !important;
 }
+
+
+/* Remove the white panel behind the entire Shop by Category section, not just its buttons. */
+.shop-page .shop-by-category.shop-category-showcase,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-inner,
+.shop-page .shop-by-category.shop-category-showcase::before,
+.shop-page .shop-by-category.shop-category-showcase::after,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-inner::before,
+.shop-page .shop-by-category.shop-category-showcase .shop-category-inner::after {
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+}
