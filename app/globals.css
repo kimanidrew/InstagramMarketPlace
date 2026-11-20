@@ -16455,3 +16455,31 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
     transition:none !important;
   }
 }
+
+
+/* Shlip quick-shopping shortcuts: richer tones and refined typography only.
+   Preserve existing dimensions, layout, icons, borders, shadows and motion. */
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link {
+  background:linear-gradient(110deg,#8f1738 0%,#68132f 52%,#4b1027 100%) !important;
+  color:#fff !important;
+  font-weight:700 !important;
+  letter-spacing:.02em !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-trending {
+  background:linear-gradient(110deg,#263b62 0%,#1e3153 55%,#172744 100%) !important;
+  color:#fff !important;
+  font-weight:700 !important;
+  letter-spacing:.02em !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-new {
+  background:linear-gradient(110deg,#285b4a 0%,#1e493c 55%,#16372f 100%) !important;
+  color:#fff !important;
+  font-weight:700 !important;
+  letter-spacing:.02em !important;
+}
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-loved {
+  background:linear-gradient(110deg,#57305e 0%,#45264f 55%,#321d3d 100%) !important;
+  color:#fff !important;
+  font-weight:700 !important;
+  letter-spacing:.02em !important;
+}
