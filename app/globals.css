@@ -16502,3 +16502,12 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
     grid-template-columns:repeat(2,minmax(0,1fr)) !important;
   }
 }
+
+
+/* Disable animated outline/border effects on quick-shopping shortcuts. */
+.shop-page .shop-category-heading-shortcuts .shop-category-deals-link::before,
+.shop-page .shop-category-heading-shortcuts .shop-category-quick-link::before {
+  content:none !important;
+  display:none !important;
+  animation:none !important;
+}
