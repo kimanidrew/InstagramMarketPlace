@@ -15995,3 +15995,61 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .site-header nav .nav-link.is-active {
   color: #171717 !important;
 }
+
+/* Distinct first tile for the all-categories destination. */
+.shop-page .shop-category-view-all {
+  min-height:150px !important;
+  justify-content:center !important;
+  gap:12px !important;
+  padding:20px !important;
+  border:1px solid rgba(255,255,255,.72) !important;
+  border-radius:20px !important;
+  background:linear-gradient(145deg,#fff 0%,#fff2f4 58%,#fce3e8 100%) !important;
+  color:#241d29 !important;
+  box-shadow:0 10px 28px rgba(36,29,41,.09) !important;
+}
+.shop-page .shop-category-view-all:hover {
+  transform:translateY(-4px) !important;
+  background:linear-gradient(145deg,#fff 0%,#ffe8ed 100%) !important;
+  box-shadow:0 16px 34px rgba(36,29,41,.14) !important;
+}
+.shop-page .shop-category-view-all-icon {
+  display:flex;
+  width:38px;
+  height:38px;
+  align-items:center;
+  justify-content:center;
+  border-radius:13px;
+  background:#d7263d;
+  color:#fff;
+  font-size:22px;
+  box-shadow:0 7px 16px rgba(215,38,61,.22);
+}
+.shop-page .shop-category-view-all .shop-category-card-label {
+  margin:0 !important;
+  color:#241d29 !important;
+  font-size:clamp(15px,1.5vw,18px) !important;
+  font-weight:900 !important;
+}
+.shop-page .shop-category-view-all-caption {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#766b75;
+  font-size:10px;
+  font-weight:750;
+}
+.shop-page .shop-category-view-all-caption span {
+  color:#d7263d;
+  font-size:14px;
+  transition:transform .2s ease;
+}
+.shop-page .shop-category-view-all:hover .shop-category-view-all-caption span {
+  transform:translate(2px,-2px);
+}
+@media(max-width:760px) {
+  .shop-page .shop-category-view-all { min-height:132px !important; padding:14px !important; }
+  .shop-page .shop-category-view-all-icon { width:32px; height:32px; border-radius:11px; }
+  .shop-page .shop-category-view-all .shop-category-card-label { font-size:14px !important; }
+  .shop-page .shop-category-view-all-caption { font-size:9px; }
+}
