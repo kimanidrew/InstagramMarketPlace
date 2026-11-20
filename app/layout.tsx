@@ -9,9 +9,9 @@ import { BrandWordmark } from "@/components/brand-wordmark";
 import { GlobalFeedbackProvider } from "@/components/global-feedback-provider";
 import { NavigationProgress } from "@/components/navigation-progress";
 
-const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "SokoLink";
-const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Montserrat").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
-const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:ital,wght@1,400;1,500;1,600;1,700;1,800&display=swap`;
+const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "Shlip";
+const brandFont = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || "Space Grotesk").replace(/[^a-zA-Z0-9 -]/g, "").trim() || "Space Grotesk";
+const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:wght@400;500;600;700&display=swap`;
 
 export const metadata: Metadata = {
   title: `${brandName} | Social Shopping`,
@@ -52,7 +52,7 @@ export default async function Layout({ children, modal }: { children: React.Reac
                     <Link href="/categories">Categories</Link>
                   </div>
                   <div className="sokolink-footer-link-group">
-                    <p className="sokolink-footer-heading">Your SokoLink</p>
+                    <p className="sokolink-footer-heading">Your Shlip</p>
                     <Link href="/wishlist">Saved favourites</Link>
                     <Link href="/how-it-works">How it works</Link>
                     <Link href="/signup">Create an account</Link>
