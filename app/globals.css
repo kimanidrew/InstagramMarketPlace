@@ -15669,9 +15669,9 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  min-height: 44px;
-  padding: 0 15px 0 10px;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 10px 0 7px;
   overflow: visible;
   border: 1px solid #ffb4c2;
   border-radius: 999px;
