@@ -15928,3 +15928,20 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .shop-page .shop-category-heading-shortcuts .shop-category-quick-icon {
   box-shadow:none !important;
 }
+
+
+/* Trending chart icon: a smooth forward sweep with a subtle pulse. */
+.shop-page .shop-category-quick-trending .shop-category-quick-icon {
+  animation:quickTrendingSweep 1.8s cubic-bezier(.4,0,.2,1) infinite !important;
+  transform-origin:50% 55%;
+}
+@keyframes quickTrendingSweep {
+  0%,100% { transform:translateX(0) rotate(0deg) scale(1); }
+  30% { transform:translateX(2px) rotate(5deg) scale(1.06); }
+  60% { transform:translateX(-1px) rotate(-3deg) scale(1.02); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .shop-page .shop-category-quick-trending .shop-category-quick-icon {
+    animation:none !important;
+  }
+}
