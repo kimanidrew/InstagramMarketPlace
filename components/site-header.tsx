@@ -186,6 +186,7 @@ export function SiteHeader({ user }: { user: any }) {
 
         <nav className="hidden items-center gap-1 lg:flex">
           {[
+            ["/", "Home"],
             ["/for-you", "For You"],
             ["/stores", "Stores"],
             ["/categories", "Categories"],
