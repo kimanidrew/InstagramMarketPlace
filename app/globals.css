@@ -15973,5 +15973,5 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .site-header .nav-link{
   font-size:15px!important;
   font-weight:850!important;
-  text-transform:capitalize;
+  text-transform:none;
 }
