@@ -16,7 +16,7 @@ Shlip is a social shopping marketplace where approved Instagram accounts become 
 
 ## Brand identity
 
-The application brand is **Shlip**. The wordmark and interface use Space Grotesk with a crimson-to-charcoal palette. The brand identity is defined in the application so older deployment environment variables cannot restore the previous name.
+The application brand is **Shlip**. The wordmark and interface use Plus Jakarta Sans with a crimson-to-charcoal palette. The brand identity is defined in the application so older deployment environment variables cannot restore the previous name.
 
 ## Instagram OAuth environment
 Set these in Vercel/server environment variables:
