@@ -1,6 +1,6 @@
-# SokoLink
+# Shlip
 
-SokoLink is a social shopping marketplace where approved Instagram accounts become stores and their Instagram posts are automatically linked as marketplace products.
+Shlip is a social shopping marketplace where approved Instagram accounts become stores and their Instagram posts are automatically linked as marketplace products.
 
 ## Flow
 1. User signs up.
@@ -19,7 +19,7 @@ SokoLink is a social shopping marketplace where approved Instagram accounts beco
 The visible brand name, gradient colours and wordmark font are configured with these environment variables (set them in `.env.local` and Vercel):
 
 ```env
-NEXT_PUBLIC_BRAND_NAME="SokoLink"
+NEXT_PUBLIC_BRAND_NAME="Shlip"
 NEXT_PUBLIC_BRAND_COLOR_START="#00C2A8"
 NEXT_PUBLIC_BRAND_COLOR_END="#7C3AED"
 NEXT_PUBLIC_BRAND_FONT_FAMILY="Space Grotesk"
@@ -81,9 +81,9 @@ Set `CRON_SECRET` in Vercel. The scheduled route `/api/cron/instagram-sync` requ
 Store owners and admins can also use **Sync now**. Manual sync is limited to once every 15 minutes per store and calls the same reconciliation function as the cron. A failed or incomplete media read never triggers the deletion pass. Instagram tokens are refreshed when they are within 10 days of expiry and at least 24 hours old; invalid/expired tokens are marked `NEEDS_RECONNECT`, skipped by sync, and their existing products are preserved. Owners see a reconnect prompt on their account dashboard.
 
 
-## SokoLink WhatsApp shopping assistant
+## Shlip WhatsApp shopping assistant
 
-The WhatsApp Cloud API webhook is available at `/api/whatsapp/webhook`. It searches existing SokoLink product and service listings, sends up to three matching results, and sends each listing's image as a WhatsApp image message when a publicly reachable HTTPS image URL is available. Video listings use a thumbnail. If Meta cannot fetch an image, the bot falls back to listing text and a link.
+The WhatsApp Cloud API webhook is available at `/api/whatsapp/webhook`. It searches existing Shlip product and service listings, sends up to three matching results, and sends each listing's image as a WhatsApp image message when a publicly reachable HTTPS image URL is available. Video listings use a thumbnail. If Meta cannot fetch an image, the bot falls back to listing text and a link.
 
 Configure these server-side environment variables in local `.env.local` and in Vercel Project Settings → Environment Variables:
 
@@ -103,7 +103,7 @@ OPENAI_MODEL=gpt-4o-mini
 - `WHATSAPP_VERIFY_TOKEN`: a long random string you create; use the exact same value when subscribing the webhook in Meta.
 - `WHATSAPP_APP_SECRET`: the Meta app secret used to validate webhook signatures.
 - `WHATSAPP_GRAPH_API_VERSION`: a Graph API version supported by your Meta app.
-- `NEXT_PUBLIC_SITE_URL`: the canonical public SokoLink origin used in listing links.
+- `NEXT_PUBLIC_SITE_URL`: the canonical public Shlip origin used in listing links.
 - `OPENAI_API_KEY` (optional): enables AI extraction of search terms and product/service intent. Without it, the assistant falls back to keyword search. Keep this key server-side only.
 
 After setting the variables, redeploy on Vercel. In Meta for Developers, open your app → WhatsApp → Configuration, set the callback URL to `https://YOUR-DOMAIN/api/whatsapp/webhook`, enter the same verify token, verify the callback, and subscribe to the `messages` webhook field. Use the app's actual App Secret in Vercel. Send a message to the configured WhatsApp number to test.
@@ -115,14 +115,14 @@ An admin-only checklist and environment readiness view is available at `/admin/w
 
 ## Instagram account requirements and Meta app readiness
 
-SokoLink accepts Instagram **Business** and **Creator** accounts. Personal accounts must be switched in the Instagram app: Profile → ☰ → Settings and privacy → Account type and tools → Switch to professional account → choose Business or Creator. The seller must confirm the account type before submitting a store request.
+Shlip accepts Instagram **Business** and **Creator** accounts. Personal accounts must be switched in the Instagram app: Profile → ☰ → Settings and privacy → Account type and tools → Switch to professional account → choose Business or Creator. The seller must confirm the account type before submitting a store request.
 
-When `INSTAGRAM_APP_MODE` is unset, SokoLink defaults to `development`. In development mode, only people invited as Instagram testers or added to app roles can authorize the app. The admin readiness checklist is at `/admin/instagram`; it shows environment-variable presence only (never secret values), the active redirect URI, app mode, and connection status counts.
+When `INSTAGRAM_APP_MODE` is unset, Shlip defaults to `development`. In development mode, only people invited as Instagram testers or added to app roles can authorize the app. The admin readiness checklist is at `/admin/instagram`; it shows environment-variable presence only (never secret values), the active redirect URI, app mode, and connection status counts.
 
 ### Before switching the Meta app to Live
 
 1. **Permissions:** configure and request App Review for the Instagram API permissions used by the OAuth flow: `instagram_business_basic` and `instagram_business_manage_comments`. Confirm the current Meta product/API requirements for the app before submission.
-2. **Privacy policy:** publish a public privacy policy URL describing the Instagram data accessed, how SokoLink uses/stores it, retention, security, and user rights; add that URL in Meta App Settings → Basic.
+2. **Privacy policy:** publish a public privacy policy URL describing the Instagram data accessed, how Shlip uses/stores it, retention, security, and user rights; add that URL in Meta App Settings → Basic.
 3. **Data deletion:** implement and configure a publicly reachable Meta data deletion callback URL. It must verify Meta's signed request, identify the user, delete or anonymize associated Instagram-derived data and tokens, and return Meta's required confirmation response. Add the callback URL in Meta App Settings → Data deletion requests.
 4. **App Review:** complete the Meta business/app details, provide screencast/test credentials and a clear explanation of the Instagram connection and marketplace sync, submit the required permissions for review, and wait for approval.
 5. **Go live:** after Meta approves the app and all production URLs/legal pages are in place, set `INSTAGRAM_APP_MODE=live` in Vercel and redeploy.
