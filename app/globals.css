@@ -16128,3 +16128,12 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .shop-page .shop-category-grid > .shop-category-card:not(.shop-category-view-all) {
   order:1 !important;
 }
+
+/* Pill-shaped category buttons across desktop and mobile. */
+.shop-page .shop-category-grid > .shop-category-card,
+.shop-page .shop-category-grid > .shop-category-view-all {
+  border-radius:9999px !important;
+}
+.shop-page .shop-category-view-all-icon {
+  border-radius:9999px !important;
+}
