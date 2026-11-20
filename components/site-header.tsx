@@ -126,8 +126,8 @@ export function SiteHeader({ user }: { user: any }) {
     { title: "For You", description: "Personalised picks and recommendations", href: "/for-you", terms: "for you personalised recommendations interests", icon: Compass },
     { title: "Stores", description: "Discover Instagram shops and sellers", href: "/stores", terms: "stores shops sellers instagram businesses", icon: Store },
     { title: "Categories", description: "Explore products by category", href: "/categories", terms: "categories types collections explore", icon: Sparkles },
-    { title: "About", description: "Our mission and how SokoLink works", href: "/about", terms: "company mission about story social shopping", icon: CircleHelp },
-    { title: "How it works", description: "Learn how SokoLink works", href: "/how-it-works", terms: "help guide how it works getting started", icon: CircleHelp },
+    { title: "About", description: "Our mission and how Shlip works", href: "/about", terms: "company mission about story social shopping", icon: CircleHelp },
+    { title: "How it works", description: "Learn how Shlip works", href: "/how-it-works", terms: "help guide how it works getting started", icon: CircleHelp },
     { title: "Wishlist", description: "Return to your saved listings", href: "/wishlist", terms: "wishlist saved favourites favorites", icon: Heart },
     ...(user ? [{ title: "Grow your own shop", description: "Manage your shop growth and analytics", href: "/account/analytics", terms: "grow shop seller analytics promotions insights", icon: BriefcaseBusiness }] : []),
   ];
@@ -161,21 +161,21 @@ export function SiteHeader({ user }: { user: any }) {
 
   return (
     <header className={"site-header sticky top-0 z-50 " + (searchOpen ? "search-overlay-open" : headerHidden ? "is-hidden" : "") + (atTop ? " is-at-top" : "")}>
-      <div className="sokolink-marquee" role="region" aria-label="What SokoLink offers">
+      <div className="sokolink-marquee" role="region" aria-label="What Shlip offers">
         <div className="sokolink-marquee-track">
           <div className="sokolink-marquee-content">
             <span>Discover products from real Instagram stores</span><i>✦</i>
             <span>Explore services and unique finds</span><i>✦</i>
             <span>Connect directly with sellers</span><i>✦</i>
             <span>Save favourites and discover new brands</span><i>✦</i>
-            <span>Grow your business with SokoLink</span><i>✦</i>
+            <span>Grow your business with Shlip</span><i>✦</i>
           </div>
           <div className="sokolink-marquee-content" aria-hidden="true">
             <span>Discover products from real Instagram stores</span><i>✦</i>
             <span>Explore services and unique finds</span><i>✦</i>
             <span>Connect directly with sellers</span><i>✦</i>
             <span>Save favourites and discover new brands</span><i>✦</i>
-            <span>Grow your business with SokoLink</span><i>✦</i>
+            <span>Grow your business with Shlip</span><i>✦</i>
           </div>
         </div>
       </div>
@@ -235,8 +235,8 @@ export function SiteHeader({ user }: { user: any }) {
               name="q"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search anything on SokoLink..."
-              aria-label="Search anything on SokoLink"
+              placeholder="Search anything on Shlip..."
+              aria-label="Search anything on Shlip"
               tabIndex={searchOpen ? 0 : -1}
             />
             {searchQuery.length > 0 && (
@@ -295,7 +295,7 @@ export function SiteHeader({ user }: { user: any }) {
                 </aside>
                 <div className="header-suggestion-results">
               <div className="header-suggestions-label">
-                {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Services" ? "SERVICE MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : activeSuggestionTab === "Stores" ? "MATCHING STORES" : "SOKOLINK PAGES"}
+                {suggestionsLoading ? "Finding matches…" : activeSuggestionTab === "Products" ? "PRODUCT MATCHES" : activeSuggestionTab === "Services" ? "SERVICE MATCHES" : activeSuggestionTab === "Categories" ? "MATCHING CATEGORIES" : activeSuggestionTab === "Stores" ? "MATCHING STORES" : "SHLIP PAGES"}
               </div>
               {suggestionsLoading ? (
                 <div className="header-suggestions-loading"><span /><span /><span /></div>
@@ -328,7 +328,7 @@ export function SiteHeader({ user }: { user: any }) {
                   );
                 })}</div> : <p className="header-suggestions-empty">No matching services yet. Try another search.</p>
               ) : activeSuggestionTab === "Pages" ? (
-                pageSuggestions.length ? pageSuggestions.map((page: any) => { const Icon = page.icon; return <a key={page.href} href={page.href} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}><span className="header-suggestion-image header-suggestion-category-icon"><Icon size={19} /></span><span className="header-suggestion-copy"><strong>{page.title}</strong><small>{page.description}</small></span><ArrowRight size={16} className="header-suggestion-arrow" /></a>; }) : <p className="header-suggestions-empty">No matching SokoLink pages. Try another search.</p>
+                pageSuggestions.length ? pageSuggestions.map((page: any) => { const Icon = page.icon; return <a key={page.href} href={page.href} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}><span className="header-suggestion-image header-suggestion-category-icon"><Icon size={19} /></span><span className="header-suggestion-copy"><strong>{page.title}</strong><small>{page.description}</small></span><ArrowRight size={16} className="header-suggestion-arrow" /></a>; }) : <p className="header-suggestions-empty">No matching Shlip pages. Try another search.</p>
               ) : activeSuggestionTab === "Categories" ? (
                 categorySuggestions.length ? categorySuggestions.map((category: any) => (
                   <a key={category.name} href={`/search?tag=${encodeURIComponent(category.name)}`} className="header-suggestion-item header-suggestion-category" onClick={() => setSearchOpen(false)}>
