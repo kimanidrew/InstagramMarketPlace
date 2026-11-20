@@ -210,9 +210,13 @@ export async function Products({
       {showDiscovery && (
         <section className="shop-by-category shop-category-showcase relative left-1/2 mb-0 w-screen -translate-x-1/2 overflow-hidden" aria-label="Shop by category">
           <div className="shell shop-category-inner">
-            <div className="shop-category-heading shop-category-heading-shortcuts">
+            <nav className="shop-category-heading shop-category-heading-shortcuts" aria-label="Quick shopping links">
               <Link href="/deals" className="shop-category-deals-link" aria-label="Explore deals"><span className="shop-category-deals-icon-wrap"><Flame className="shop-category-deals-icon" size={19} strokeWidth={2.6} /><span className="shop-category-deals-spark">✦</span></span><span>Deals</span><span className="shop-category-deals-arrow" aria-hidden="true">→</span></Link>
-            </div>
+              <Link href="/trending" className="shop-category-quick-link"><span className="shop-category-quick-icon">↗</span><span>Trending</span></Link>
+              <Link href="/search?sort=newest" className="shop-category-quick-link"><span className="shop-category-quick-icon">✧</span><span>New In</span></Link>
+              <Link href="/search?sort=likes" className="shop-category-quick-link"><span className="shop-category-quick-icon">♡</span><span>Most Loved</span></Link>
+              <Link href="/stores" className="shop-category-quick-link"><span className="shop-category-quick-icon">⌂</span><span>Shops</span></Link>
+            </nav>
             <div className="shop-category-grid">
               {shopCategories.map((category, index) => (
                 <Link key={category.tag} href={category.tag === "services" ? "/search?type=service" : "/search?tag=" + encodeURIComponent(category.tag)} className={"shop-category-card shop-category-card-" + (index + 1)}>
