@@ -16567,3 +16567,36 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
   color:#fff !important;
   stroke:#fff !important;
 }
+
+
+/* Header icon controls: consistent borderless surfaces and inherited typography. */
+.site-header .icon-btn,
+.site-header .notification-bell-wrap > .notification-bell {
+  border:0 !important;
+  outline-offset:3px;
+  font-family:inherit !important;
+  font-size:inherit !important;
+  font-weight:inherit !important;
+  letter-spacing:inherit !important;
+  line-height:inherit !important;
+}
+.site-header .notification-bell-wrap > .notification-bell {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.site-header.is-homepage-top .icon-btn,
+.site-header.is-homepage-top .notification-bell-wrap > .notification-bell,
+.site-header.is-homepage-top .icon-btn:hover,
+.site-header.is-homepage-top .notification-bell-wrap > .notification-bell:hover {
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#fff !important;
+}
+.site-header.is-homepage-top .notification-bell-wrap > .notification-bell svg {
+  color:#fff !important;
+  stroke:#fff !important;
+}
