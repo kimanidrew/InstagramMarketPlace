@@ -10,7 +10,7 @@ import { GlobalFeedbackProvider } from "@/components/global-feedback-provider";
 import { NavigationProgress } from "@/components/navigation-progress";
 
 const brandName = "Shlip";
-const brandFont = "Space Grotesk";
+const brandFont = "Plus Jakarta Sans";
 const brandFontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(brandFont).replace(/%20/g, "+")}:wght@400;500;600;700&display=swap`;
 
 export const metadata: Metadata = {
