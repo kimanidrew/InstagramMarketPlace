@@ -16178,3 +16178,9 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .shop-page .shop-category-heading-shortcuts .shop-category-quick-link {
   font-size:12px !important;
 }
+
+/* Further reduce typography across every quick-shopping button label. */
+.shop-page .shop-category-heading-shortcuts > a,
+.shop-page .shop-category-heading-shortcuts > a span {
+  font-size:11px !important;
+}
