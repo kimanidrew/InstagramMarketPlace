@@ -16520,3 +16520,14 @@ body:has(main.shop-page) main.shop-page .shop-category-view-all .shop-category-c
   font-weight:850 !important;
   letter-spacing:.09em !important;
 }
+
+
+/* Final placement override: View all must follow every personalized category. */
+.shop-page .shop-category-grid > .shop-category-view-all {
+  order:9999 !important;
+  grid-column:auto !important;
+  grid-row:auto !important;
+}
+.shop-page .shop-category-grid > .shop-category-card:not(.shop-category-view-all) {
+  order:1 !important;
+}
