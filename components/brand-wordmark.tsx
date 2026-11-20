@@ -3,15 +3,11 @@ const DEFAULT_START = "#D7263D";
 const DEFAULT_END = "#241D29";
 const DEFAULT_FONT = "Space Grotesk";
 
-function safeColor(value: string | undefined, fallback: string) {
-  return value && /^#[0-9a-fA-F]{3,8}$/.test(value) ? value : fallback;
-}
-
 export function BrandWordmark() {
-  const name = process.env.NEXT_PUBLIC_BRAND_NAME?.trim() || DEFAULT_NAME;
-  const start = safeColor(process.env.NEXT_PUBLIC_BRAND_COLOR_START, DEFAULT_START);
-  const end = safeColor(process.env.NEXT_PUBLIC_BRAND_COLOR_END, DEFAULT_END);
-  const font = (process.env.NEXT_PUBLIC_BRAND_FONT_FAMILY || DEFAULT_FONT).replace(/[^a-zA-Z0-9 -]/g, "").trim() || DEFAULT_FONT;
+  const name = DEFAULT_NAME;
+  const start = DEFAULT_START;
+  const end = DEFAULT_END;
+  const font = DEFAULT_FONT;
   return (
     <span
       className="brand-wordmark"
