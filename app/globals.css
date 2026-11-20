@@ -16137,3 +16137,26 @@ html body .sokolink-listing-modal .product-detail-scroll-area > aside {
 .shop-page .shop-category-view-all-icon {
   border-radius:9999px !important;
 }
+
+/* Reduce the height of the pill-shaped shop category buttons. */
+.shop-page .shop-category-grid > .shop-category-card,
+.shop-page .shop-category-grid > .shop-category-view-all {
+  height:40px !important;
+  min-height:40px !important;
+  max-height:40px !important;
+  padding-top:5px !important;
+  padding-bottom:5px !important;
+}
+.shop-page .shop-category-view-all-icon {
+  width:23px !important;
+  height:23px !important;
+  flex-basis:23px !important;
+}
+@media (max-width:900px) {
+  .shop-page .shop-category-grid > .shop-category-card,
+  .shop-page .shop-category-grid > .shop-category-view-all {
+    height:38px !important;
+    min-height:38px !important;
+    max-height:38px !important;
+  }
+}
